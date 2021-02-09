@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Provider/onboarding_provider.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/ClientTaxiApp/Provider/onboarding_provider.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';

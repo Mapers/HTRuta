@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 
 class IconAction extends StatelessWidget {
   final IconData icon;

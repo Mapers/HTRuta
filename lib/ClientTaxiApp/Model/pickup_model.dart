@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:flutter_map_booking/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/request_model.dart';
 
 PickUpRequest pickUpRequestFromJson(String str) => PickUpRequest.fromJson(json.decode(str));
 

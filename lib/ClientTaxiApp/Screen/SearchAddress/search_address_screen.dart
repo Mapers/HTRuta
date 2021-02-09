@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Blocs/place_bloc.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/SearchAddress/search_address_view.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Blocs/place_bloc.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/SearchAddress/search_address_view.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:provider/provider.dart';
 
 class SearchAddressScreen extends StatelessWidget {

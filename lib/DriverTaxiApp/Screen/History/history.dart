@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'detail.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:cached_network_image/cached_network_image.dart';

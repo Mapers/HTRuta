@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/marca_carro_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/modelo_carro_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/marca_carro_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/modelo_carro_model.dart';
 
 class RegistroProvider with ChangeNotifier{
 

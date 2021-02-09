@@ -1,10 +1,10 @@
 
-import 'package:flutter_map_booking/ClientTaxiApp/Model/pickup_model.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/pickupdriver_model.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/request_model.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/exceptions.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/pickup_model.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/pickupdriver_model.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/exceptions.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/request_model.dart';
 
 import '../../config.dart';
 import 'package:http/http.dart' as http;

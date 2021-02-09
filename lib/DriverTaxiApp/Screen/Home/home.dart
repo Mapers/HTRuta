@@ -1,16 +1,14 @@
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/dialogs.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/session.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Api/registro_conductor_api.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Request/requestDetail.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/data/Model/mapTypeModel.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/data/Model/placeItem.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/dialogs.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/DriverTaxiApp/Api/registro_conductor_api.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Request/requestDetail.dart';
+import 'package:HTRuta/DriverTaxiApp/data/Model/mapTypeModel.dart';
+import 'package:HTRuta/DriverTaxiApp/data/Model/placeItem.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -274,8 +272,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     setState(() {
       showPersBottomSheetCallBack = null;
     });
-    _controller = await _scaffoldKey.currentState
-        .showBottomSheet((context) {
+    _controller = _scaffoldKey.currentState.showBottomSheet((context) {
       return new Container(
         height: 300.0,
         child: Container(

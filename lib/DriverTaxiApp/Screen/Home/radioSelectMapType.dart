@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/data/Model/mapTypeModel.dart';
+import 'package:HTRuta/DriverTaxiApp/data/Model/mapTypeModel.dart';
 
 class MapTypeItem extends StatelessWidget {
   final MapTypeModel _item;

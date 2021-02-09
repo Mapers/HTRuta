@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 
 class ListsMenu extends StatelessWidget {
   @required final String title;

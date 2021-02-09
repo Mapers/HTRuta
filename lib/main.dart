@@ -1,8 +1,7 @@
-import 'package:flutter_map_booking/ClientTaxiApp/Provider/onboarding_provider.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Home/register_driver.dart';
+import 'package:HTRuta/ClientTaxiApp/Provider/onboarding_provider.dart';
+import 'package:HTRuta/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:provider/provider.dart';
 
 import 'ClientTaxiApp/Apis/push_notification.dart';

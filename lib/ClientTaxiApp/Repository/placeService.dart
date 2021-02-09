@@ -1,8 +1,8 @@
 //import 'dart:async';
 //import 'package:dio/dio.dart';
 //import 'package:flutter/material.dart';
-//import 'package:flutter_map_booking/Model/place_model.dart';
-//import 'package:flutter_map_booking/config.dart';
+//import 'package:HTRuta/Model/place_model.dart';
+//import 'package:HTRuta/config.dart';
 //
 //class PlaceBloc with ChangeNotifier {
 //  StreamController<Place> locationController = StreamController<Place>.broadcast();

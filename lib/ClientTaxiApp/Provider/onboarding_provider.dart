@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/onboarding_model.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/onboarding_model.dart';
 
 class OnBoardingProvider extends ChangeNotifier{
   List<Pantallas> _listItem;

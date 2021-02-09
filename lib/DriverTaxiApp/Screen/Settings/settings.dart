@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/listMenu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/MyProfile/profile.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/listMenu.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/MyProfile/profile.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'inviteFriends.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

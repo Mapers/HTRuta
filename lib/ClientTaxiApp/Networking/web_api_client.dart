@@ -92,7 +92,7 @@ abstract class WebApiClient {
   }) async {
     try {
       int lastPercent = 0;
-      final response = await _httpClient.download(
+      await _httpClient.download(
         url,
         filePath,
         queryParameters: queryParameters,

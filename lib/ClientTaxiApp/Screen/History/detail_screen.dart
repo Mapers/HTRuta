@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../app_router.dart';
@@ -228,10 +228,24 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                 allowHalfRating: true,
                                 itemSize: 25.0,
                                 glowColor: whiteColor,
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
+                                ratingWidget: RatingWidget(
+                                  empty: Icon(
+                                    Icons.star_border_outlined,
+                                    color: Colors.amber,
+                                  ),
+                                  full: Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  half: Icon(
+                                    Icons.star_half_outlined,
+                                    color: Colors.amber,
+                                  ) 
                                 ),
+                                // itemBuilder: (context, _) => Icon(
+                                //   Icons.star,
+                                //   color: Colors.amber,
+                                // ),
                                 onRatingUpdate: (rating) {
                                   ratingScore = rating;
                                   print(rating);

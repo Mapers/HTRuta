@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/validations.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Home/home.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/validations.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Home/home.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override

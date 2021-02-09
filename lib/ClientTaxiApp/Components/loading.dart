@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/responsive.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/responsive.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingBuilder extends StatelessWidget {

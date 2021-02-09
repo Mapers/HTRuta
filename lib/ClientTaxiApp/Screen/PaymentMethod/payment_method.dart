@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PaymentMethodScreen extends StatefulWidget {

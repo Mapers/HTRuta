@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:flutter_map_booking/ClientTaxiApp/utils/exceptions.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/documento_rechazado_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/estado_chofer_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/marca_carro_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/modelo_carro_model.dart';
-import 'package:flutter_map_booking/config.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/exceptions.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/documento_rechazado_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/estado_chofer_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/marca_carro_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/modelo_carro_model.dart';
+import 'package:HTRuta/config.dart';
 import 'package:http/http.dart' as http;
 
 class RegistroConductorApi{

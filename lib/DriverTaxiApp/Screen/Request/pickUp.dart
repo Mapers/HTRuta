@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/loading.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/data/Model/get_routes_request_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/loading.dart';
+import 'package:HTRuta/DriverTaxiApp/data/Model/get_routes_request_model.dart';
 import '../../../google_map_helper.dart';
 import '../../theme/style.dart';
 import '../../Components/slidingUpPanel.dart';

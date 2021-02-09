@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/tabla_codigo.dart';
-import 'package:flutter_map_booking/config.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/tabla_codigo.dart';
+import 'package:HTRuta/config.dart';
 import 'package:http/http.dart' as http;
 
 class TablaApi{

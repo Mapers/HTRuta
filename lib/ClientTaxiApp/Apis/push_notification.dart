@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
 
 class PushNotificationProvider{
   
@@ -26,7 +26,7 @@ class PushNotificationProvider{
     );
 
   _firebaseMessaging.configure(
-    onMessage: (info) {
+    onMessage: (info) async {
       print('============= On Message ==========');
       print('${info['notification']['title']}');
       print(info);
@@ -37,7 +37,7 @@ class PushNotificationProvider{
       }
       _mensajesStreamController.sink.add(argumento);
     },
-    onLaunch: (info) {
+    onLaunch: (info) async {
       print('============= On Launch ==========');
       print(info);
       print('${info['notification']['title']}');
@@ -47,7 +47,7 @@ class PushNotificationProvider{
       }
       _mensajesStreamController.sink.add(argumento);
     },
-    onResume: (info){
+    onResume: (info) async {
       print('============= On Resume ==========');
       print('${info['notification']['title']}');
       String argumento = 'no-data';

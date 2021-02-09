@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/app_router.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class PhoneVerification extends StatefulWidget {

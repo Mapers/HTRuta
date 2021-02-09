@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Apis/onboarding_api.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/onboarding_model.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Provider/onboarding_provider.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/session.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
-import 'package:flutter_map_booking/app_router.dart';
+import 'package:HTRuta/ClientTaxiApp/Apis/onboarding_api.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/onboarding_model.dart';
+import 'package:HTRuta/ClientTaxiApp/Provider/onboarding_provider.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +27,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState(){
     super.initState();
     animationController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+      duration: Duration(milliseconds: 1000),
+      vsync: this
+    );
 
     animation = Tween(begin: 0.0, end: 0.0).animate(CurvedAnimation(
         parent: animationController,

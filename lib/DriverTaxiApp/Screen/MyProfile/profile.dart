@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/MyProfile/myProfile.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/MyProfile/myProfile.dart';
 import '../../theme/style.dart';
 import 'chart.dart';
 import 'package:cached_network_image/cached_network_image.dart';

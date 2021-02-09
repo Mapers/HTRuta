@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -236,9 +236,19 @@ class _HistoryDetailState extends State<HistoryDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           RatingBar(
-                            itemBuilder: (context, index) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                            ratingWidget: RatingWidget(
+                              empty: Icon(
+                                Icons.star_border_outlined,
+                                color: Colors.amber,
+                              ),
+                              full: Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              half: Icon(
+                                Icons.star_half_outlined,
+                                color: Colors.amber,
+                              ) 
                             ),
                             itemSize: 20.0,
                             itemCount: 5,

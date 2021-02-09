@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 
 class HistoryTrip extends StatelessWidget {
   final String fromAddress,toAddress;

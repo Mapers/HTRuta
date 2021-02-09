@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/responsive.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/responsive.dart';
 
 class Dialogs{
   static void alert(BuildContext context, {title = '', message= '', VoidCallback onConfirm  }){

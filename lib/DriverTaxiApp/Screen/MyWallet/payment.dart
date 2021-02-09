@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PaymentMethodDriver extends StatefulWidget {

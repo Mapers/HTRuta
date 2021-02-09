@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_map_booking/DriverTaxiApp/Repository/placeService.dart';
+import 'package:HTRuta/DriverTaxiApp/Repository/placeService.dart';
 
 class PlaceBloc {
   var _placeController = StreamController();

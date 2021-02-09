@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/app_router.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/app_router.dart';
 
 import 'package:grouped_buttons/grouped_buttons.dart';
 

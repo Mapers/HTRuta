@@ -1,5 +1,5 @@
-import 'package:flutter_map_booking/ClientTaxiApp/Model/onboarding_model.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/exceptions.dart';
+import 'package:HTRuta/ClientTaxiApp/Model/onboarding_model.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/exceptions.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config.dart';
@@ -17,7 +17,6 @@ class OnBoardingApi{
         return null;
       }
     }catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }

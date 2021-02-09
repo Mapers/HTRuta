@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'bubble_chat_widget.dart';

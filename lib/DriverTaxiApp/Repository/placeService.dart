@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_map_booking/DriverTaxiApp/data/Model/placeItem.dart';
+import 'package:HTRuta/DriverTaxiApp/data/Model/placeItem.dart';
 
 import '../../config.dart';
 

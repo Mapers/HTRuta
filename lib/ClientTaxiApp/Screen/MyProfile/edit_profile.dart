@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/inputDropdown.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/inputDropdown.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -216,7 +216,8 @@ class _EditProfileState extends State<EditProfile> {
                                             TextEditingValue(
                                               text: "Nombres",
                                               selection: TextSelection.collapsed(
-                                                  offset: 11),
+                                                offset: 11
+                                              ),
                                             ),
                                           ),
                                           onChanged: (String _firstName) {
@@ -239,7 +240,8 @@ class _EditProfileState extends State<EditProfile> {
                                             TextEditingValue(
                                               text: "Apellidos",
                                               selection: TextSelection.collapsed(
-                                                  offset: 11),
+                                                offset: 11
+                                              ),
                                             ),
                                           ),
                                           onChanged: (String _lastName) {
@@ -290,7 +292,8 @@ class _EditProfileState extends State<EditProfile> {
                                           TextEditingValue(
                                             text: "03584565656",
                                             selection: TextSelection.collapsed(
-                                                offset: 11),
+                                              offset: 11
+                                            ),
                                           ),
                                         ),
                                         onChanged: (String _phone) {
@@ -334,7 +337,8 @@ class _EditProfileState extends State<EditProfile> {
                                           TextEditingValue(
                                             text: "abc@example.com",
                                             selection: TextSelection.collapsed(
-                                                offset: 11),
+                                              offset: 11
+                                            ),
                                           ),
                                         ),
                                         onChanged: (String _email) {

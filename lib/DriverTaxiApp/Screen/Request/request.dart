@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/dialogs.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/exceptions.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/shared_preferences.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/request_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/dialogs.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/exceptions.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
@@ -266,10 +266,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   }
 
   Widget historyItem(int index) {
-    final screenSize = MediaQuery.of(context).size;
     final requestActual = requestTaxi[index];
-
-    
 
     return Card(
         margin: EdgeInsets.all(10.0),

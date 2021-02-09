@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Login/login.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Walkthrough/walkthrough.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Login/login.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Walkthrough/walkthrough.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class PhoneVerification extends StatefulWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Model/request_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/requestDriver_model.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/requestDriver_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/request_model.dart';
 
 class PedidoProvider extends ChangeNotifier{
   //TODO implementar datos de pedido -> punto inicial, punto final, precio y observaciones

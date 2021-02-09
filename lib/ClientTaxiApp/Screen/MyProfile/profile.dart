@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/session.dart';
 import '../../theme/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'edit_profile.dart';

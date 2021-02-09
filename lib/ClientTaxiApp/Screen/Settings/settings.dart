@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/ink_well_custom.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/listMenu.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/MyProfile/edit_profile.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/listMenu.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/MyProfile/edit_profile.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'invite_friends.dart';
 
 class SettingsScreen extends StatefulWidget {

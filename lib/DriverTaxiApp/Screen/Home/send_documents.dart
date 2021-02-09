@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/dialogs.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/responsive.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Api/registro_conductor_api.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Model/documento_rechazado_model.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/dialogs.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/responsive.dart';
+import 'package:HTRuta/DriverTaxiApp/Api/registro_conductor_api.dart';
+import 'package:HTRuta/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/documento_rechazado_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';

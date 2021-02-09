@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/MyProfile/profile.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/utils/session.dart';
-import 'package:flutter_map_booking/app_router.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/MyProfile/profile.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuItems {

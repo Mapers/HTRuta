@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/Screen/Notification/itemNotification.dart';
-import 'package:flutter_map_booking/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Notification/itemNotification.dart';
+import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'detail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

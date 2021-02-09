@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Components/animation_list_view.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Components/animation_list_view.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Blocs/place_bloc.dart';
+import 'package:HTRuta/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'directions_view.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:flutter_map_booking/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io' show Platform;
 import 'package:geolocator/geolocator.dart';
