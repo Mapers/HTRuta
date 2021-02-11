@@ -63,7 +63,7 @@ class PickupApi{
     }
   }
 
-  Future<bool> actionTravel(String idChofer,String idsolicitud,String vchLatInicial,String vchLatFinal,String vchLongInicial,String vchLongFinal,String mPropina,String mPrecio,String iTipoViaje,String vchOrigenReferencia, String vchDestinoReferencia,String vchObservacion,String vchNombreInicial, String vchNombreFinal,String iEstado)async{
+  Future<bool> actionTravel(String idChofer,String idsolicitud, double vchLatInicial, double vchLatFinal, double vchLongInicial, double vchLongFinal,String mPropina,double mPrecio,String iTipoViaje,String vchOrigenReferencia, String vchDestinoReferencia,String vchObservacion,String vchNombreInicial, String vchNombreFinal,String iEstado)async{
     //idsolicitud(esta lo obtenies de la ruta donde se lista),vchLatInicial,vchLatFinal,vchLongInicial,vchLongFinal,mPrecio(este puede ser el precio q propone el chofer),mPropina,iTipoViaje,dFecReg,vchOrigenReferencia,vchDestinoReferencia,vchObservacion
     final url = '${Config.nuevaRutaApi}/registro-viaje-chofer';
     try{

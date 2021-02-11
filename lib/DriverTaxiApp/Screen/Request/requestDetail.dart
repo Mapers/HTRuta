@@ -258,7 +258,19 @@ class _RequestDetailState extends State<RequestDetail> {
                           Dialogs.openLoadingDialog(context);
                           final _prefs = PreferenciaUsuario();
                           await _prefs.initPrefs();
-                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,widget.requestItem.vchLatInicial,widget.requestItem.vchLatFinal,widget.requestItem.vchLongInicial,widget.requestItem.vchLongFinal,"",(double.parse(widget.requestItem.mPrecio) + 0.5).toString(),widget.requestItem.iTipoViaje,'','','', widget.requestItem.vchNombreInicial, widget.requestItem.vchNombreFinal, "1");
+                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
+                            double.parse(widget.requestItem.vchLatInicial),
+                            double.parse(widget.requestItem.vchLatFinal),
+                            double.parse(widget.requestItem.vchLongInicial),
+                            double.parse(widget.requestItem.vchLongFinal),
+                            "",
+                            (double.parse(widget.requestItem.mPrecio) + 0.5),
+                            widget.requestItem.iTipoViaje,
+                            '','','',
+                            widget.requestItem.vchNombreInicial,
+                            widget.requestItem.vchNombreFinal,
+                            "1"
+                          );
                           Navigator.pop(context);
                           Navigator.pop(context);
                         }, 
@@ -271,7 +283,19 @@ class _RequestDetailState extends State<RequestDetail> {
                           Dialogs.openLoadingDialog(context);
                           final _prefs = PreferenciaUsuario();
                           await _prefs.initPrefs();
-                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,widget.requestItem.vchLatInicial,widget.requestItem.vchLatFinal,widget.requestItem.vchLongInicial,widget.requestItem.vchLongFinal,"",(double.parse(widget.requestItem.mPrecio) + 1.0).toString(),widget.requestItem.iTipoViaje,'','','', widget.requestItem.vchNombreInicial, widget.requestItem.vchNombreFinal, "1");
+                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
+                            double.parse(widget.requestItem.vchLatInicial),
+                            double.parse(widget.requestItem.vchLatFinal),
+                            double.parse(widget.requestItem.vchLongInicial),
+                            double.parse(widget.requestItem.vchLongFinal),
+                            "",
+                            (double.parse(widget.requestItem.mPrecio) + 1.0),
+                            widget.requestItem.iTipoViaje,
+                            '','','',
+                            widget.requestItem.vchNombreInicial,
+                            widget.requestItem.vchNombreFinal,
+                            "1"
+                          );
                           Navigator.pop(context);
                           Navigator.pop(context);
                         }, 
@@ -284,7 +308,19 @@ class _RequestDetailState extends State<RequestDetail> {
                           Dialogs.openLoadingDialog(context);
                           final _prefs = PreferenciaUsuario();
                           await _prefs.initPrefs();
-                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,widget.requestItem.vchLatInicial,widget.requestItem.vchLatFinal,widget.requestItem.vchLongInicial,widget.requestItem.vchLongFinal,"",(double.parse(widget.requestItem.mPrecio) + 1.5).toString(),widget.requestItem.iTipoViaje,'','','', widget.requestItem.vchNombreInicial, widget.requestItem.vchNombreFinal, "1");
+                          await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
+                            double.parse(widget.requestItem.vchLatInicial),
+                            double.parse(widget.requestItem.vchLatFinal),
+                            double.parse(widget.requestItem.vchLongInicial),
+                            double.parse(widget.requestItem.vchLongFinal),
+                            "",
+                            (double.parse(widget.requestItem.mPrecio) + 1.5),
+                            widget.requestItem.iTipoViaje,
+                            '','','',
+                            widget.requestItem.vchNombreInicial,
+                            widget.requestItem.vchNombreFinal,
+                            "1"
+                          );
                           Navigator.pop(context);
                           Navigator.pop(context);
                         }, 

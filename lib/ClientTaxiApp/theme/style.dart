@@ -104,6 +104,15 @@ ThemeData appTheme = new ThemeData(
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
   ),
+  appBarTheme: AppBarTheme(
+    centerTitle: true,
+    iconTheme: IconThemeData(
+      color: Colors.white
+    ),
+    actionsIconTheme: IconThemeData(
+      color: Colors.white
+    )
+  ),
   textTheme: _buildTextTheme(base.textTheme),
   primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
   accentTextTheme: _buildTextTheme(base.accentTextTheme),

@@ -10,9 +10,9 @@ String estadoChoferToJson(EstadoChofer data) => json.encode(data.toJson());
 
 class EstadoChofer {
     EstadoChofer({
-        this.message,
-        this.success,
-        this.data,
+      this.message,
+      this.success,
+      this.data,
     });
 
     String message;
@@ -20,30 +20,30 @@ class EstadoChofer {
     List<DataEstadoChofer> data;
 
     factory EstadoChofer.fromJson(Map<String, dynamic> json) => EstadoChofer(
-        message: json["message"],
-        success: json["success"],
-        data: List<DataEstadoChofer>.from(json["data"].map((x) => DataEstadoChofer.fromJson(x))),
+      message: json["message"],
+      success: json["success"],
+      data: List<DataEstadoChofer>.from(json["data"].map((x) => DataEstadoChofer.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      "message": message,
+      "success": success,
+      "data": List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
 class DataEstadoChofer {
-    DataEstadoChofer({
-        this.iEstado,
-    });
+  DataEstadoChofer({
+    this.iEstado,
+  });
 
-    String iEstado;
+  String iEstado;
 
-    factory DataEstadoChofer.fromJson(Map<String, dynamic> json) => DataEstadoChofer(
-        iEstado: json["iEstado"],
-    );
+  factory DataEstadoChofer.fromJson(Map<String, dynamic> json) => DataEstadoChofer(
+    iEstado: json["iEstado"],
+  );
 
-    Map<String, dynamic> toJson() => {
-        "iEstado": iEstado,
-    };
+  Map<String, dynamic> toJson() => {
+    "iEstado": iEstado,
+  };
 }

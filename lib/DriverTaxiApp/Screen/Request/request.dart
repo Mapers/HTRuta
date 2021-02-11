@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:HTRuta/DriverTaxiApp/Model/interprovincial_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Model/taxi_model.dart';
+import 'package:HTRuta/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/ClientTaxiApp/Provider/pedido_provider.dart';
@@ -9,6 +12,7 @@ import 'package:HTRuta/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/DriverTaxiApp/theme/style.dart';
+import 'package:HTRuta/utils/extensions/datetime_extension.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
@@ -156,7 +160,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
       pedidoProvider.request = Request(id: data[0]['iIdViaje'],iIdUsuario: data[0]['iIdUsuario'],dFecReg: '',iTipoViaje: data[0]['iTipoViaje'],mPrecio: data[0]['mPrecio'],vchDni: data[0]['dni'],vchCelular: data[0]['celular'],vchCorreo: data[0]['correo'],vchLatInicial: data[0]['vchLatInicial'],vchLatFinal: data[0]['vchLatFinal'],vchLongInicial: data[0]['vchLongInicial'],vchLongFinal: data[0]['vchLongFinal'],vchNombreInicial: data[0]['vchNombreInicial'],vchNombreFinal: data[0]['vchNombreFinal'],vchNombres: data[0]['vchNombres'],idSolicitud: data[0]['IdSolicitud']);
       Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
-     });
+    });
   }
 
   @override
@@ -169,7 +173,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             'Solicitudes',
             style: TextStyle(color: blackColor),
           ),
-          elevation: 2.0,
+          elevation: 2,
           iconTheme: IconThemeData(color: blackColor),
           bottom: TabBar(tabs: [
             Tab(child: Text('TAXI', style: TextStyle(color: Colors.white,fontSize: 11),),),
@@ -177,21 +181,21 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             Tab(child: Text('CARGA', style: TextStyle(color: Colors.white,fontSize: 11),))
           ]),
         ),
-        drawer: new MenuDriverScreens(activeScreenName: screenName),
+        drawer: MenuDriverScreens(activeScreenName: screenName),
         body: TabBarView(
           children: [
             Container(
               child: Scrollbar(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: requestTaxi.length,
+                  itemCount: 1,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
                         print('$index');
-                        navigateToDetail(requestTaxi[index]);
+                        // navigateToDetail(requestTaxi[index]);
                       },
-                      child: historyItem(index)
+                      child: cardTaxi(TaxiModel.empty())
                     );
                   }
                 ),
@@ -208,7 +212,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         print('$index');
                         navigateToDetail(requestTaxi[index]);
                       },
-                      child: historyItem2()
+                      child: cardInterprovincial(InterprovincialModel.empty())
                     );
                   }
                 ),
@@ -261,224 +265,244 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   //   }
   // }
 
-  Future<double> calcularDistancia(Request requestActual)async{
-    return await _locationService.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
-  }
-
-  Widget historyItem(int index) {
-    final requestActual = requestTaxi[index];
-
+  Widget cardTaxi(TaxiModel taxi){
     return Card(
-        margin: EdgeInsets.all(10.0),
-        elevation: 10.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-        ),
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  )
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
-                        child: CachedNetworkImage(
-                          imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                          fit: BoxFit.cover,
-                          width: 40.0,
-                          height: 40.0,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10,),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(requestActual.vchNombres,style: textBoldBlack,),
-                          Text(requestActual.dFecReg, style: textGrey,),
-                          // Container(
-                          //   child: Row(
-                          //     children: <Widget>[
-                          //       Container(
-                          //         height: 25.0,
-                          //         padding: EdgeInsets.all(5.0),
-                          //         alignment: Alignment.center,
-                          //         decoration: BoxDecoration(
-                          //           borderRadius: BorderRadius.circular(10.0),
-                          //           color: primaryColor
-                          //         ),
-                          //         child: Text('ApplePay',style: textBoldWhite,),
-                          //       ),
-                          //       SizedBox(width: 10),
-                          //       Container(
-                          //         height: 25.0,
-                          //         padding: EdgeInsets.all(5.0),
-                          //         alignment: Alignment.center,
-                          //         decoration: BoxDecoration(
-                          //             borderRadius: BorderRadius.circular(10.0),
-                          //             color: primaryColor
-                          //         ),
-                          //         child: Text('Descuento',style: textBoldWhite,),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text("S/.${double.parse(requestActual.mPrecio).toStringAsFixed(2)}",style: textBoldBlack,),
-                          FutureBuilder<double>(
-                            future: calcularDistancia(requestActual),
-                            builder: (context, snapshot) {
-                              if(snapshot.hasData){
-                                return Text("${snapshot.data.toStringAsPrecision(1)} Km",style: textGrey,);
-                              }else{
-                                return CircularProgressIndicator();
-                              }
-                            }
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Recoger".toUpperCase(),style: textGreyBold,),
-                          Text(requestActual.vchNombreInicial,style: textStyle,),
-
-                        ],
-                      ),
-                    ),
-                    Divider(),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Destino".toUpperCase(),style: textGreyBold,),
-                          Text(requestActual.vchNombreFinal,style: textStyle,),
-
-                        ],
-                      ),
-                    ),
-                  ],
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
                 )
               ),
-              Row(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: ButtonTheme(
-                        height: 45.0,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                          elevation: 0.0,
-                          color: Colors.redAccent,
-                          child: Text('Rechazar',style: headingWhite,
-                          ),
-                          onPressed: ()async{
-                            try{
-                              final _prefs = PreferenciaUsuario();
-                              await _prefs.initPrefs();
-                              Dialogs.openLoadingDialog(context);
-                              final dato = await pickupApi.actionTravel(_prefs.idChofer,requestActual.id, requestActual.vchLatInicial, requestActual.vchLatFinal, requestActual.vchLongInicial, requestActual.vchLongFinal, '', requestActual.mPrecio, requestActual.iTipoViaje, '', '', '',requestActual.vchNombreInicial,requestActual.vchNombreFinal, rechazar);
-                              Navigator.pop(context);
-                              if(dato){
-                                //Esperar solicitud
-                              }else{
-                                Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-                              }
-                            }on ServerException catch(e){
-                              Navigator.pop(context);
-                               Dialogs.alert(context,title: 'Error', message: e.message);
-                            }
-                            //navigateToDetail(requestActual);
-                          },
-                        ),
+                  Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                        fit: BoxFit.cover,
+                        width: 40,
+                        height: 40,
                       ),
                     ),
                   ),
+                  SizedBox(width: 10,),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: ButtonTheme(
-                        height: 45.0,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                          elevation: 0.0,
-                          color: primaryColor,
-                          child: Text('Aceptar',style: headingWhite,
-                          ),
-                          onPressed: ()async{
-                            try{
-                              final _prefs = PreferenciaUsuario();
-                              await _prefs.initPrefs();
-                              Dialogs.openLoadingDialog(context);
-                              final dato = await pickupApi.actionTravel(_prefs.idChofer,requestActual.id, requestActual.vchLatInicial, requestActual.vchLatFinal, requestActual.vchLongInicial, requestActual.vchLongFinal, '', requestActual.mPrecio, requestActual.iTipoViaje, '', '', '',requestActual.vchNombreInicial,requestActual.vchNombreFinal, aceptar);
-                              Navigator.pop(context);
-                              if(dato){
-                                //Esperar solicitud
-                              }else{
-                                Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-                              }
-                            }on ServerException catch(e){
-                              Navigator.pop(context);
-                               Dialogs.alert(context,title: 'Error', message: e.message);
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(taxi.names,style: textBoldBlack,),
+                        Text(taxi.registeredAt.toString(), style: textGrey,),
+                        // Container(
+                        //   child: Row(
+                        //     children: <Widget>[
+                        //       Container(
+                        //         height: 25,
+                        //         padding: EdgeInsets.all(5),
+                        //         alignment: Alignment.center,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10),
+                        //           color: primaryColor
+                        //         ),
+                        //         child: Text('ApplePay',style: textBoldWhite,),
+                        //       ),
+                        //       SizedBox(width: 10),
+                        //       Container(
+                        //         height: 25,
+                        //         padding: EdgeInsets.all(5),
+                        //         alignment: Alignment.center,
+                        //         decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(10),
+                        //             color: primaryColor
+                        //         ),
+                        //         child: Text('Descuento',style: textBoldWhite,),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text("S/.${taxi.price.toStringAsFixed(2)}",style: textBoldBlack,),
+                        FutureBuilder<double>(
+                          future: taxi.calculateDistance,
+                          builder: (context, snapshot) {
+                            if(snapshot.hasData){
+                              return Text("${snapshot.data.toStringAsPrecision(1)} Km",style: textGrey,);
+                            }else{
+                              return CircularProgressIndicator();
                             }
-                            //navigateToDetail(requestActual);
-                          },
+                          }
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
               ),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Recoger".toUpperCase(),style: textGreyBold,),
+                        Text(taxi.startName,style: textStyle,),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Destino".toUpperCase(),style: textGreyBold,),
+                        Text(taxi.finalname, style: textStyle,),
 
-            ],
-          ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ButtonTheme(
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        elevation: 0,
+                        color: Colors.redAccent,
+                        child: Text('Rechazar',style: headingWhite,
+                        ),
+                        onPressed: ()async{
+                          try{
+                            final _prefs = PreferenciaUsuario();
+                            await _prefs.initPrefs();
+                            Dialogs.openLoadingDialog(context);
+                            final dato = await pickupApi.actionTravel(
+                              _prefs.idChofer,
+                              taxi.id,
+                              taxi.initialLat,
+                              taxi.finalLat,
+                              taxi.initialLong,
+                              taxi.finalLong, '',
+                              taxi.price,
+                              taxi.typeTravel,
+                              '', '', '',
+                              taxi.startName,
+                              taxi.finalname,
+                              rechazar
+                            );
+                            Navigator.pop(context);
+                            if(dato){
+                              //Esperar solicitud
+                            }else{
+                              Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                            }
+                          }on ServerException catch(e){
+                            Navigator.pop(context);
+                            Dialogs.alert(context,title: 'Error', message: e.message);
+                          }
+                          //navigateToDetail(requestActual);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ButtonTheme(
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        elevation: 0,
+                        color: primaryColor,
+                        child: Text('Aceptar',style: headingWhite,
+                        ),
+                        onPressed: ()async{
+                          try{
+                            final _prefs = PreferenciaUsuario();
+                            await _prefs.initPrefs();
+                            Dialogs.openLoadingDialog(context);
+                            final dato = await pickupApi.actionTravel(
+                              _prefs.idChofer,
+                              taxi.id,
+                              taxi.initialLat,
+                              taxi.finalLat,
+                              taxi.initialLong,
+                              taxi.finalLong,
+                              '',
+                              taxi.price,
+                              taxi.typeTravel,
+                              '', '', '',
+                              taxi.startName,
+                              taxi.finalname,
+                              aceptar
+                            );
+                            Navigator.pop(context);
+                            if(dato){
+                              //Esperar solicitud
+                            }else{
+                              Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                            }
+                          }on ServerException catch(e){
+                            Navigator.pop(context);
+                            Dialogs.alert(context,title: 'Error', message: e.message);
+                          }
+                          //navigateToDetail(requestActual);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+          ],
         ),
-      );
+      ),
+    );
   }
 
-  Widget historyItem2() {
+  Widget cardInterprovincial(InterprovincialModel interprovincial) {
     final screenSize = MediaQuery.of(context).size;
     return Card(
-        margin: EdgeInsets.all(10.0),
-        elevation: 10.0,
+        margin: EdgeInsets.all(10),
+        elevation: 10,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
+          borderRadius: BorderRadius.circular(10)
         ),
         child: Container(
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: backgroundColor,
                   borderRadius: BorderRadius.only(
@@ -491,12 +515,12 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   children: <Widget>[
                     Container(
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(50),
                         child: CachedNetworkImage(
-                          imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                          imageUrl: interprovincial.userUrlPhoto,
                           fit: BoxFit.cover,
-                          width: 40.0,
-                          height: 40.0,
+                          width: 40,
+                          height: 40,
                         ),
                       ),
                     ),
@@ -506,31 +530,21 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Moises Alcantara',style: textBoldBlack,),
-                          Text("21 Ago 2020 12:00 PM", style: textGrey,),
+                          Text(interprovincial.userNames,style: textBoldBlack),
+                          Text(interprovincial.registeredAt.fullFormatToCard, style: textGrey),
                           Container(
                             child: Row(
                               children: <Widget>[
-                                Container(
-                                  height: 25.0,
-                                  padding: EdgeInsets.all(5.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: primaryColor
-                                  ),
-                                  child: Text('Crédito',style: textBoldWhite,),
+                                Chip(
+                                  backgroundColor: primaryColor,
+                                  padding: EdgeInsets.all(5),
+                                  label: Text('Crédito',style: textBoldWhite,),
                                 ),
                                 SizedBox(width: 10),
-                                Container(
-                                  height: 25.0,
-                                  padding: EdgeInsets.all(5.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: primaryColor
-                                  ),
-                                  child: Text('Descuento',style: textBoldWhite,),
+                                Chip(
+                                  backgroundColor: primaryColor,
+                                  padding: EdgeInsets.all(5),
+                                  label: Text('Descuento',style: textBoldWhite,),
                                 ),
                               ],
                             ),
@@ -539,11 +553,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("S/.250.0",style: textBoldBlack,),
+                          Text("S/. " + interprovincial.price.toStringAsFixed(2),style: textBoldBlack,),
                           Text("160.2 Km",style: textGrey,),
                         ],
                       ),
@@ -561,8 +575,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text("Recoger".toUpperCase(),style: textGreyBold,),
-                          Text("Av. America 345, Trujillo",style: textStyle,),
-
+                          Text(interprovincial.currentAddress,style: textStyle,),
                         ],
                       ),
                     ),
@@ -572,8 +585,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text("Destino".toUpperCase(),style: textGreyBold,),
-                          Text("Chiclayo",style: textStyle,),
-
+                          Text(interprovincial.destination, style: textStyle,),
                         ],
                       ),
                     ),
@@ -581,20 +593,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                 )
               ),
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10),
                 child: ButtonTheme(
                   minWidth: screenSize.width ,
-                  height: 45.0,
+                  height: 45,
                   child: RaisedButton(
-                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                    elevation: 0,
                     color: primaryColor,
-                    child: Text('Aceptar',style: headingWhite,
-                    ),
-                    onPressed: (){
-//                      Navigator.of(context).pushReplacementNamed('/history');
-                      navigateToDetail(requestTaxi[0]);
-                    },
+                    child: Text('Aceptar',style: headingWhite.copyWith(fontSize: 16)),
+                    onPressed: () => navigateToInterprovincial(interprovincial)
                   ),
                 ),
               ),
@@ -603,6 +611,10 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           ),
         ),
       );
+  }
+
+  navigateToInterprovincial(InterprovincialModel interprovincial) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => InterprovincialPage(interprovincial: interprovincial)));
   }
 
   Widget historyItemCarga() {
