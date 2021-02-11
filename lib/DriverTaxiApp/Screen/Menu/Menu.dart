@@ -197,162 +197,70 @@ class MenuDriverScreens extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'home_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("HOME") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.home,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Inicio',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("HOME") == 0,
+                            icon: FontAwesomeIcons.home,
+                            text: 'Inicio'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'request_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("REQUEST") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.firstOrder,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Solicitudes',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("REQUEST") == 0,
+                            icon: FontAwesomeIcons.firstOrder,
+                            text: 'Solicitudes'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'my_wallet_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("MY WALLET") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.wallet,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Mi billetera',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("MY WALLET") == 0,
+                            icon: FontAwesomeIcons.wallet,
+                            text: 'Mi billetera'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'history_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("HISTORY") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.history,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Historial',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("HISTORY") == 0,
+                            icon: FontAwesomeIcons.history,
+                            text: 'Historial'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'notification_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("NOTIFICATIONS") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.bell,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Notificaciones',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("NOTIFICATIONS") == 0,
+                            icon: FontAwesomeIcons.bell,
+                            text: 'Notificaciones'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'setting_driver');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: this.activeScreenName.compareTo("SETTINGS") == 0 ? greyColor : whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.cogs,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Configuraciones',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            isSelected: this.activeScreenName.compareTo("SETTINGS") == 0,
+                            icon: FontAwesomeIcons.cogs,
+                            text: 'Configuraciones'
                           ),
-                          new GestureDetector(
+                          getItemMenu(
                             onTap: () async{
-                            
                               await _session.clear();
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'login');
                             },
-                            child: new Container(
-                              height: 60.0,
-                              color: whiteColor,
-                              child: new Row(
-                                children: <Widget>[
-                                  new Expanded(
-                                    flex: 1,
-                                    child: Icon(FontAwesomeIcons.signOutAlt,color: blackColor,),
-                                  ),
-                                  new Expanded(
-                                    flex: 3,
-                                    child: new Text('Salir',style: headingBlack,),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                            isSelected: false,
+                            icon: FontAwesomeIcons.signOutAlt,
+                            text: 'Salir'
+                          )
                         ],
                       ),
                       // The drawer's "details" view.
@@ -362,24 +270,34 @@ class MenuDriverScreens extends StatelessWidget {
               ),
             ),
           ),
-           Container(
-             height: 2.0,
-             color: Colors.blueGrey,
-           ),
-           SizedBox(height: 20.0,),
-           FlatButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
-                            }, 
-                            child: Text('Modo Pasajero',style: TextStyle(color: Colors.white),),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            color: primaryColor,
-                            padding: EdgeInsets.symmetric(horizontal: 30,vertical: 15),
-                          ),
+          Container(
+            height: 2.0,
+            color: Colors.blueGrey,
+          ),
+          SizedBox(height: 20.0,),
+          FlatButton(
+            onPressed: (){
+              Navigator.pop(context);
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
+            }, 
+            child: Text('Modo Pasajero',style: TextStyle(color: Colors.white),),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: primaryColor,
+            padding: EdgeInsets.symmetric(horizontal: 30,vertical: 15),
+          ),
           SizedBox(height: 10.0,),
         ],
       ),
+    );
+  }
+
+  Widget getItemMenu({@required IconData icon, @required String text, @required Function onTap, @required bool isSelected}){
+    return ListTile(
+      onTap: onTap,
+      leading: Icon(icon, color: blackColor,),
+      title: Text(text, style: TextStyle(color: blackColor, fontSize: 16)),
+      selected: isSelected,
+      selectedTileColor: primaryColor.withOpacity(.5),
     );
   }
 }

@@ -80,158 +80,69 @@ class MenuScreens extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            GestureDetector(
+                            getItemMenu(
+                              icon: FontAwesomeIcons.home,
+                              text: 'Inicio',
+                              isSelected: this.activeScreenName.compareTo("HOME") == 0,
                               onTap: () {
                                 Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);},
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("HOME") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.home,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Inicio',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);},
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("HOME2") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.home,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Carros',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).pushNamed(AppRoute.paymentMethodScreen);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
                               },
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("PAYMENT") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.wallet,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Pagos',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-                            GestureDetector(
+                            getItemMenu(
+                              icon: FontAwesomeIcons.car,
+                              text: 'Carros',
+                              isSelected: this.activeScreenName.compareTo("HOME2") == 0,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
+                              },
+                            ),
+                            getItemMenu(
+                              icon: FontAwesomeIcons.wallet,
+                              text: 'Pagos',
+                              isSelected: this.activeScreenName.compareTo("PAYMENT") == 0,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
+                              },
+                            ),
+                            getItemMenu(
+                              icon: FontAwesomeIcons.history,
+                              text: 'Mis viajes',
+                              isSelected: this.activeScreenName.compareTo("HISTORY") == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.historyScreen);
                               },
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("HISTORY") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.history,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Mis viajes',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-                            GestureDetector(
+                            getItemMenu(
+                              icon: FontAwesomeIcons.truck,
+                              text: 'Carga',
+                              isSelected: this.activeScreenName.compareTo("CARGA") == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.cargaScreen);
                               },
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("CARGA") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.truck,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Carga',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-                            GestureDetector(
+                            getItemMenu(
+                              icon: FontAwesomeIcons.cogs,
+                              text: 'Términos y Condiciones',
+                              isSelected: this.activeScreenName.compareTo("TERMS") == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.termsConditionsScreen);
                               },
-                              child: Container(
-                                height: 60.0,
-                                color: this.activeScreenName.compareTo("TERMS") == 0 ? greyColor2 : whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.cogs,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Terminos y Condiciones',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-                            GestureDetector(
-                              onTap: () async{
+                            getItemMenu(
+                              icon: FontAwesomeIcons.signOutAlt,
+                              text: 'Salir',
+                              isSelected: false,
+                              onTap: () async {
                                 await _session.clear();
                                 Navigator.pop(context);
                                 Navigator.of(context).pushReplacementNamed(AppRoute.loginScreen);
                               },
-                              child: Container(
-                                height: 60.0,
-                                color: whiteColor,
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: Icon(FontAwesomeIcons.signOutAlt,color: blackColor,),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text('Salir',style: headingBlack,),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                           ],
                         ),
@@ -244,23 +155,33 @@ class MenuScreens extends StatelessWidget {
             ),
           ),
           Container(
-             height: 2.0,
-             color: Colors.blueGrey,
-           ),
-           SizedBox(height: 20.0,),
-           FlatButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeDriverScreen, (Route<dynamic> route) => false);
-                            }, 
-                            child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            color: primaryColor,
-                            padding: EdgeInsets.symmetric(horizontal: 30,vertical: 15),
-                          ),
+            height: 2.0,
+            color: Colors.blueGrey,
+          ),
+          SizedBox(height: 20.0,),
+          FlatButton(
+            onPressed: (){
+              Navigator.pop(context);
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeDriverScreen, (Route<dynamic> route) => false);
+            }, 
+            child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: primaryColor,
+            padding: EdgeInsets.symmetric(horizontal: 30,vertical: 15),
+          ),
           SizedBox(height: 10.0,),
         ],
       ),
+    );
+  }
+
+  Widget getItemMenu({@required IconData icon, @required String text, @required Function onTap, @required bool isSelected}){
+    return ListTile(
+      onTap: onTap,
+      leading: Icon(icon, color: blackColor,),
+      title: Text(text, style: TextStyle(color: blackColor, fontSize: 16)),
+      selected: isSelected,
+      selectedTileColor: primaryColor.withOpacity(.5),
     );
   }
 }
