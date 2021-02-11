@@ -112,6 +112,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                       //     borderRadius: BorderRadius.circular(10.0)
                       //   ),
                       // );
+
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image.memory(obtenerFile(providerOnBoarding.listItem[index].image64),fit: BoxFit.cover)

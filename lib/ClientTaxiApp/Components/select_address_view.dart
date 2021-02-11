@@ -74,16 +74,10 @@ class _SelectAddressState extends State<SelectAddress> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 5.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      ),
+    return Card(
+      elevation: 5,
       child: Container(
         padding: EdgeInsets.only(top: 10,bottom: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -185,12 +179,11 @@ class _SelectAddressState extends State<SelectAddress> {
                           });
                         },
                         decoration: InputDecoration(
-                          contentPadding:
-                            EdgeInsets.only(left: 15.0),
-                            hintText: 'Ofrezca su tarifa',
-                            hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'Quicksand'
-                            ),
+                          contentPadding: EdgeInsets.only(left: 15.0, bottom: 10),
+                          hintText: 'Ofrezca su tarifa',
+                          hintStyle: TextStyle(
+                            color: Colors.grey, fontFamily: 'Quicksand'
+                          ),
                         )
                       ),
                     ),
@@ -216,12 +209,11 @@ class _SelectAddressState extends State<SelectAddress> {
                           });
                         },
                         decoration: InputDecoration(
-                          contentPadding:
-                            EdgeInsets.only(left: 15.0),
-                            hintText: 'Comentarios y deseos',
-                            hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'Quicksand',
-                            ),
+                          contentPadding: EdgeInsets.only(left: 15.0, bottom: 10),
+                          hintText: 'Comentarios y deseos',
+                          hintStyle: TextStyle(
+                            color: Colors.grey, fontFamily: 'Quicksand',
+                          ),
                         )
                       ),
                     ),

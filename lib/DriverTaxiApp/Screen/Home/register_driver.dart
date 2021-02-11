@@ -105,19 +105,19 @@ class _RegisterDriverPageState extends State<RegisterDriverPage> {
                         )))
                 : Container()),
         body: PageView(
-            pageSnapping: false,
-            physics: NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            children: [
-              PrimeraPagina(onAddButtonTapped),
-              SegundaPagina(onAddButtonTapped),
-              TerceraPagina(onAddButtonTapped),
-              CuartaPagina(onAddButtonTapped),
-              QuintaPagina(onAddButtonTapped),
-              SextaPagina(onAddButtonTapped),
-              SeptimaPagina(onAddButtonTapped),
-              OctavaPagina(onAddButtonTapped)
-            ]));
+          pageSnapping: false,
+          physics: NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: [
+            PrimeraPagina(onAddButtonTapped),
+            SegundaPagina(onAddButtonTapped),
+            TerceraPagina(onAddButtonTapped),
+            CuartaPagina(onAddButtonTapped),
+            QuintaPagina(onAddButtonTapped),
+            SextaPagina(onAddButtonTapped),
+            SeptimaPagina(onAddButtonTapped),
+            OctavaPagina(onAddButtonTapped)
+          ]));
   }
 }
 
@@ -1471,9 +1471,9 @@ class SegundaPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '${error.message}');
                           } catch (error) {
-                            Dialogs.alert(context,
-                                title: 'Error', message: '$error');
+                            Dialogs.alert(context, title: 'Error', message: '$error');
                           }
+                          return Container();
                         })
                   ],
                 ))));
@@ -1539,8 +1539,7 @@ class PrimeraPagina extends StatelessWidget {
                         future: registroConductorApi.obtenerMarca(),
                         builder: (context, snapshot) {
                           try {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
+                            if (snapshot.connectionState == ConnectionState.done) {
                               if (snapshot.hasData) {
                                 return Expanded(
                                   child: ListView.builder(
@@ -1604,6 +1603,7 @@ class PrimeraPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
+                          return Container();
                         })
                   ],
                 ))));

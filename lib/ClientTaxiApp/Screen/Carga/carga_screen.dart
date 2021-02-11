@@ -42,7 +42,7 @@ class _CargaPageState extends State<CargaPage> {
             ]
           ),
         )
-   ),
+      ),
     );
   }
 
@@ -116,34 +116,34 @@ class _CargaPageState extends State<CargaPage> {
 
   Widget misViajesView() {
     return NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll) {
-                overScroll.disallowGlow();
-                return false;
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: ListView.separated(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                    separatorBuilder:(_,int i){
-                      return Divider();
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationListView(
-                          index: index,
-                          child: GestureDetector(
-                              onTap: () {
-                                print('$index');
-                                // navigateToDetail(index.toString());
-                              },
-                              child: rideHistory()
-                          )
-                      );
-                    }
-                ),
-              ),
+      onNotification: (overScroll) {
+        overScroll.disallowGlow();
+        return false;
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: ListView.separated(
+          itemCount: 5,
+          shrinkWrap: true,
+          padding: EdgeInsets.only(left: 10.0, right: 10.0),
+          separatorBuilder:(_,int i){
+            return Divider();
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return AnimationListView(
+              index: index,
+              child: GestureDetector(
+                onTap: () {
+                  print('$index');
+                  // navigateToDetail(index.toString());
+                },
+                child: rideHistory()
+              )
             );
+          }
+        ),
+      ),
+    );
   }
 
   Widget rideHistory(){

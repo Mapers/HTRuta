@@ -54,13 +54,12 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      checkPermission();
       await _initLastKnownLocation();
       await _initCurrentLocation();
       fetchLocation();
       loading = false;
-      setState(() {
-        
-      });
+      setState(() {});
     });
     showPersBottomSheetCallBack = _showBottomSheet;
     sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
@@ -81,12 +80,15 @@ class _HomeViewState extends State<HomeView> {
     } on PlatformException {
       position = null;
     }
-    if (!mounted) {return;}
+    if (!mounted) return;
     _lastKnownPosition = position;
   }
 
   Future<void> checkPermission() async {
     isEnabledLocation = await Permission.location.serviceStatus.isEnabled;
+    if(!isEnabledLocation){
+      await Permission.location.request();
+    }
   }
 
   void fetchLocation(){
@@ -99,23 +101,31 @@ class _HomeViewState extends State<HomeView> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
+    print('1');
+    await _locationService.isLocationServiceEnabled();
     currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-
-      List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-        setState(() {
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-        });
-        widget?.placeBloc?.getCurrentLocation(Place(
-            name: _placemark,
-            formattedAddress: "",
-            lat: currentLocation?.latitude,
-            lng: currentLocation?.longitude
-        ));
-      }
+    print('1.1');
+    List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+    print('2');
+    if (placemarks != null && placemarks.isNotEmpty) {
+    print('3');
+      final Placemark pos = placemarks[0];
+      setState(() {
+        _placemark = pos.name + ', ' + pos.thoroughfare;
+      });
+    print('5');
+      widget?.placeBloc?.getCurrentLocation(Place(
+          name: _placemark,
+          formattedAddress: "",
+          lat: currentLocation?.latitude,
+          lng: currentLocation?.longitude
+      ));
+    }
+    print('6');
     if(currentLocation != null){
+    print('7');
       moveCameraToMyLocation();
+    print('8');
     }
   }
 
@@ -317,7 +327,7 @@ class _HomeViewState extends State<HomeView> {
               left: 20.0,
               right: 20.0,
               child: Container(
-                  height: responsive.hp(31),
+                  height: 230,
                   child: SelectAddress(
                     fromAddress: widget?.placeBloc?.formLocation,
                     toAddress: widget?.placeBloc?.locationSelect,

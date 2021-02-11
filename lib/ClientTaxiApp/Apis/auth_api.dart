@@ -50,9 +50,8 @@ class AuthApi{
   Future<bool> loginUser(String email, String password) async{
     final _prefs = PreferenciaUsuario();
     await _prefs.initPrefs();
-   final token = await _prefs.tokenPush;
+    final token = await _prefs.tokenPush;
     final url = '${Config.apiHost}/api_getLoginUsuario.php?email=$email&clave=$password&tipo=1&token=$token';
-    print(url);
     final response = await http.post(url,body: {'email' : email, 'clave' : password, 'tipo' : '1', 'token' : token});
     final responseUsuario = usuarioFromJson(response.body);
     if(responseUsuario.success){
