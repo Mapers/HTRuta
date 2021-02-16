@@ -18,12 +18,12 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../app_router.dart';
-import '../../../google_map_helper.dart';
 import 'myActivity.dart';
 import 'radioSelectMapType.dart';
 import '../../Components/itemRequest.dart';
 import '../../data/Model/direction_model.dart';
+import '../../../app_router.dart';
+import '../../../google_map_helper.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -152,31 +152,25 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     ];
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> fetchEstadoConductor() async{
     Dialogs.openLoadingDialog(context);
     final session = Session();
     final data = await session.get();
     final estado = await registroConductorApi.obtenerEstadoChofer(data['dni']);
     Navigator.pop(context);
-      if(estado != null){
-        if(estado.iEstado == 'Rechazado'){
-          Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?'
-            ,onConfirm: (){
-              Navigator.pop(context);
-              Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
-            }
-            ,onCancel: (){
-              Navigator.pop(context);
-            }
-          );               
-        }
+    if(estado != null){
+      if(estado.iEstado == 'Rechazado'){
+        Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?'
+          ,onConfirm: (){
+            Navigator.pop(context);
+            Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
+          }
+          ,onCancel: (){
+            Navigator.pop(context);
+          }
+        );
       }
-
+    }
   }
 
   Future<void> checkPermission() async {

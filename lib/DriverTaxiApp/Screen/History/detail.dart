@@ -85,7 +85,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('Olivia Ramos',style: textBoldBlack,),
+                              Text('Olivia Ramos2',style: textBoldBlack,),
                               Text("08 Ene 2019 12:00 PM", style: textGrey,),
                               Container(
                                 child: Row(

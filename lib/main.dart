@@ -50,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
+
         ChangeNotifierProvider(create: (_) => TypeRouteBloc()),
         ChangeNotifierProvider(create: (_) => InterprovincialRouteBloc()),
       ],
