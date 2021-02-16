@@ -25,9 +25,12 @@ class GMapViewHelper {
         polylines: Set<Polyline>.of(polyLines.values),
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
+        indoorViewEnabled: false,
+        mapToolbarEnabled: false,
+        mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: LatLng(currentLocation.latitude, currentLocation.longitude),
-          zoom: 12.0,
+          zoom: 12,
         ),
       ),
     );

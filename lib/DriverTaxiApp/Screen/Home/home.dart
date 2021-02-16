@@ -75,7 +75,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
   @override
   void initState() {
     super.initState();
-   
+
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await _initLastKnownLocation();
       await _initCurrentLocation();
@@ -356,182 +356,180 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        drawer: new MenuDriverScreens(activeScreenName: screenName),
-        body: isLoading ? Center(child: CircularProgressIndicator(),) : Container(
-            color: whiteColor,
-            child: Stack(
-              children: <Widget>[
-                _buildMapLayer(),
-                Positioned(
-                  top: 45,
-                  left: 110,
-                  child: LiteRollingSwitch(
-                    textOn: 'Disponible',
-                    textOff: 'Ocupado',
-                    colorOn: primaryColor,
-                    colorOff: Colors.redAccent[700],
-                    iconOn: FontAwesomeIcons.digitalOcean,
-                    iconOff: FontAwesomeIcons.powerOff,
-                    onChanged: (bool state) async{
-                      if(state){
 
-                        Dialogs.openLoadingDialog(context);
-                        final session = Session();
-                        final data = await session.get();
-                        final estado = await registroConductorApi.obtenerEstadoChofer(data['dni']);
-                        Navigator.pop(context);
-                        if(estado != null){
-                          if(estado.iEstado == 'Pendiente Aprobación'){
-                            Dialogs.alert(context,title: 'Alerta', message: 'Su solicitud aun se encuentra pendiente de aprobación');
-                            isWorking = false;
-                          }else if(estado.iEstado == 'Rechazado'){
-                            Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?'
-                              ,onConfirm: (){
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
-                              }
-                              ,onCancel: (){
-                                Navigator.pop(context);
-                              }
-                            );
-                            isWorking = false;
-                          }else{
-                            isWorking = state;
-                          }
-                          
-                        }else{
-                          Dialogs.confirm(context, title: 'Información', message: 'Para comenzar a ganar con Chasqui debe completar su información personal', 
-                          onCancel: () { 
-                            isWorking = !state;
-                            Navigator.pop(context);
-                          },
-                          onConfirm: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, '/register_driver');
-                          });
-                        } 
-                      }else{
-                        isWorking = state;
-                      }
+    List<Widget> bodyContent = [
+      _buildMapLayer(),
+      Positioned(
+        top: 45,
+        left: 110,
+        child: LiteRollingSwitch(
+          textOn: 'Disponible',
+          textOff: 'Ocupado',
+          colorOn: primaryColor,
+          colorOff: Colors.redAccent[700],
+          iconOn: FontAwesomeIcons.digitalOcean,
+          iconOff: FontAwesomeIcons.powerOff,
+          onChanged: (bool state) async{
+            if(state){
+              Dialogs.openLoadingDialog(context);
+              final session = Session();
+              final data = await session.get();
+              final estado = await registroConductorApi.obtenerEstadoChofer(data['dni']);
+              Navigator.pop(context);
+              if(estado != null){
+                if(estado.iEstado == 'Pendiente Aprobación'){
+                  Dialogs.alert(context,title: 'Alerta', message: 'Su solicitud aun se encuentra pendiente de aprobación');
+                  isWorking = false;
+                }else if(estado.iEstado == 'Rechazado'){
+                  Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?',
+                    onConfirm: (){
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
                     },
-                    value: isWorking,
-                  )
-                ),
-                Positioned(
-                  bottom: isShowDefault == false ? 330 : 250,
-                  right: 16,
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100.0),),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.my_location,size: 20.0,color: blackColor,),
-                      onPressed: (){
-                        _initCurrentLocation();
-                      },
-                    ),
-                  )
-                ),
-                Positioned(
-                  top: 50,
-                  right: 10,
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100.0),),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.layers,size: 20.0,color: blackColor,),
-                      onPressed: (){
-                        _showBottomSheet();
-                      },
-                    ),
-                  )
-                ),
-                Positioned(
-                    top: 50,
-                    left: 10,
-                    child: Container(
-                      height: 40.0,
-                      width: 40.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(100.0),),
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.menu,size: 20.0,color: blackColor,),
-                        onPressed: (){
-                          _scaffoldKey.currentState.openDrawer();
-                        },
-                      ),
-                    )
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: isShowDefault == false ?
-                  Container(
-                    height: 330,
-                    child: TinderSwapCard(
-                        orientation: AmassOrientation.TOP,
-                        totalNum: listRequest.length,
-                        stackNum: 3,
-                        maxWidth: MediaQuery.of(context).size.width,
-                        minWidth: MediaQuery.of(context).size.width * 0.9,
-                        maxHeight: MediaQuery.of(context).size.width * 0.9,
-                        minHeight: MediaQuery.of(context).size.width * 0.85,
-                        cardBuilder: (context, index) => ItemRequest(
-                          avatar: listRequest[index]['avatar'],
-                          userName: listRequest[index]['userName'],
-                          date: listRequest[index]['date'],
-                          price: listRequest[index]['price'].toString(),
-                          distance: listRequest[index]['distance'],
-                          addFrom: listRequest[index]['addFrom'],
-                          addTo: listRequest[index]['addTo'],
-                          locationForm: listRequest[index]['locationForm'],
-                          locationTo: listRequest[index]['locationTo'],
-                          onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail()));
-                          },
-                        ),
-                        swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
-                          /// Get swiping card's position
-//                          print(details);
-                        },
-                        swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
-                          /// Get orientation & index of swiped card!
-                          print('index $index');
-                          print('aaa ${listRequest.length}');
-                          setState(() {
-                            if(index == listRequest.length-1){
-                              setState(() {
-                                isShowDefault = true;
-                              });
-                            }else{
-                              addMarker(listRequest[index+1]['locationForm'], listRequest[index+1]['locationTo']);
-                            }
-                          });
-                        }
-                      ),
-                  ): MyActivity(
-                    userImage: 'https://source.unsplash.com/1600x900/?portrait',
-                    userName: 'Naomi Cespedes',
-                    level: 'Level basico',
-                    totalEarned: 'S/.250',
-                    hoursOnline: 10.5,
-                    totalDistance: '22Km',
-                    totalJob: 8,
-                  ),
-                )
-              ],
+                    onCancel: (){
+                      Navigator.pop(context);
+                    }
+                  );
+                  isWorking = false;
+                }else{
+                  isWorking = state;
+                }
+                
+              }else{
+                Dialogs.confirm(context, title: 'Información', message: 'Para comenzar a ganar con Chasqui debe completar su información personal', 
+                onCancel: () { 
+                  isWorking = !state;
+                  Navigator.pop(context);
+                },
+                onConfirm: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/register_driver');
+                });
+              } 
+            }else{
+              isWorking = state;
+            }
+          },
+          value: isWorking,
+        )
+      ),
+      Positioned(
+        bottom: isShowDefault == false ? 330 : 250,
+        right: 16,
+        child: Container(
+          height: 40.0,
+          width: 40.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(100.0),),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.my_location,size: 20.0,color: blackColor,),
+            onPressed: () => _initCurrentLocation(),
+          ),
+        )
+      ),
+      Positioned(
+        top: 50,
+        right: 10,
+        child: Container(
+          height: 40.0,
+          width: 40.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(100.0),),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.layers,size: 20.0,color: blackColor,),
+            onPressed: (){
+              _showBottomSheet();
+            },
+          ),
+        )
+      ),
+      Positioned(
+          top: 50,
+          left: 10,
+          child: Container(
+            height: 40.0,
+            width: 40.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(100.0),),
             ),
+            child: IconButton(
+              icon: Icon(Icons.menu,size: 20.0,color: blackColor,),
+              onPressed: (){
+                _scaffoldKey.currentState.openDrawer();
+              },
+            ),
+          )
+      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: isShowDefault == false ?
+        Container(
+          height: 330,
+          child: TinderSwapCard(
+              orientation: AmassOrientation.TOP,
+              totalNum: listRequest.length,
+              stackNum: 3,
+              maxWidth: MediaQuery.of(context).size.width,
+              minWidth: MediaQuery.of(context).size.width * 0.9,
+              maxHeight: MediaQuery.of(context).size.width * 0.9,
+              minHeight: MediaQuery.of(context).size.width * 0.85,
+              cardBuilder: (context, index) => ItemRequest(
+                avatar: listRequest[index]['avatar'],
+                userName: listRequest[index]['userName'],
+                date: listRequest[index]['date'],
+                price: listRequest[index]['price'].toString(),
+                distance: listRequest[index]['distance'],
+                addFrom: listRequest[index]['addFrom'],
+                addTo: listRequest[index]['addTo'],
+                locationForm: listRequest[index]['locationForm'],
+                locationTo: listRequest[index]['locationTo'],
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail()));
+                },
+              ),
+              swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
+                /// Get swiping card's position
+//                          print(details);
+              },
+              swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
+                /// Get orientation & index of swiped card!
+                print('index $index');
+                print('aaa ${listRequest.length}');
+                setState(() {
+                  if(index == listRequest.length-1){
+                    setState(() {
+                      isShowDefault = true;
+                    });
+                  }else{
+                    addMarker(listRequest[index+1]['locationForm'], listRequest[index+1]['locationTo']);
+                  }
+                });
+              }
+            ),
+        ): MyActivity(
+          userImage: 'https://source.unsplash.com/1600x900/?portrait',
+          userName: 'Naomi Cespedes',
+          level: 'Level basico',
+          totalEarned: 'S/. 250.00',
+          hoursOnline: 10.5,
+          totalDistance: '22Km',
+          totalJob: 8,
         ),
+      )
+    ];
+
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: new MenuDriverScreens(activeScreenName: screenName),
+      body: isLoading ? Center(child: CircularProgressIndicator(),) : Container(
+        color: whiteColor,
+        child: Stack(children: bodyContent)
+      ),
     );
   }
 
@@ -539,15 +537,16 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: _gMapViewHelper.buildMapView(
-          context: context,
-          onMapCreated: _onMapCreated,
-          currentLocation: LatLng(
-              currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
-              currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
-          markers: _markers,
-          polyLines: _polyLines,
-          onTap: (_){
-          }
+        context: context,
+        onMapCreated: _onMapCreated,
+        currentLocation: LatLng(
+          currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
+          currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0
+        ),
+        markers: _markers,
+        polyLines: _polyLines,
+        onTap: (_){
+        }
       ),
     );
   }

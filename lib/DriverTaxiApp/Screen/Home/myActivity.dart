@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../theme/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../theme/style.dart';
 
 class MyActivity extends StatelessWidget {
 
@@ -12,18 +12,16 @@ class MyActivity extends StatelessWidget {
   final String totalDistance;
   final int totalJob;
 
-  const MyActivity(
-      {Key key,
-        this.userImage,
-        this.userName,
-        this.level,
-        this.totalEarned,
-        this.hoursOnline,
-        this.totalDistance,
-        this.totalJob,
-
-      })
-      : super(key: key);
+  const MyActivity({
+    Key key,
+    this.userImage,
+    this.userName,
+    this.level,
+    this.totalEarned,
+    this.hoursOnline,
+    this.totalDistance,
+    this.totalJob,
+  }) : super(key: key);
 
 
   @override
@@ -31,7 +29,7 @@ class MyActivity extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(20.0),
       padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-      height: 220,
+      height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: whiteColor,
@@ -72,7 +70,7 @@ class MyActivity extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[

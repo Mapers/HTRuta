@@ -14,12 +14,10 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   google_maps_flutter: ^0.5.26+4
-  location: ^2.3.5
   http: ^0.12.1
   font_awesome_flutter: ^8.5.0
   flutter_spinkit: ^4.1.1+1
   flutter_rating_bar: ^3.0.0+1
-  intro_views_flutter: ^2.8.0
   pin_code_text_field: ^1.5.1
   image_picker: ^0.6.7+12
   geolocator: ^5.3.1 #Use this version packages to get the best performance
@@ -44,8 +42,6 @@ dependencies:
   flutter_calendar_carousel: ^1.4.10
   flutter_tindercard: ^0.1.8
   flutter_html: ^0.11.0
-  shimmer: ^1.0.1
-  flutter_compass: ^0.3.4
   lite_rolling_switch: ^0.1.1
 
   firebase_auth: ^0.18.4+1
@@ -55,7 +51,6 @@ dependencies:
   firebase_messaging: ^7.0.3
   shared_preferences: ^0.5.12+4
   image_cropper: ^1.2.3
-  mime: ^0.9.7
   firebase_database: ^4.4.0
   firebase_core: ^0.5.0+1
   pusher_websocket_flutter: ^0.2.0

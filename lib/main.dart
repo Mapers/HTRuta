@@ -2,6 +2,8 @@ import 'package:HTRuta/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
+import 'package:HTRuta/DriverTaxiApp/Blocs/interprovincial_route_bloc.dart';
+import 'package:HTRuta/DriverTaxiApp/Blocs/type_route_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'ClientTaxiApp/Apis/push_notification.dart';
@@ -47,7 +49,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => RegistroProvider()),
         ChangeNotifierProvider(create: (_) => PlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
-        ChangeNotifierProvider(create: (_) => OnBoardingProvider(),)
+        ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
+        ChangeNotifierProvider(create: (_) => TypeRouteBloc()),
+        ChangeNotifierProvider(create: (_) => InterprovincialRouteBloc()),
       ],
       child: MaterialApp(
         title: 'Taxi App',
