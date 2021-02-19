@@ -1,5 +1,6 @@
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelecctionOriginDestination extends StatefulWidget {
   const SelecctionOriginDestination({Key key}) : super(key: key);
@@ -16,7 +17,14 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
     return Scaffold(
       body: Stack(
         children: [
-          _gMapViewHelper.buildMapView(context: context, markers: null, currentLocation: null)
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(-11.1072, -77.6103),
+              zoom: 12,
+            ),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+          )
         ],
       ),
     );
