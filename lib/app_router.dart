@@ -69,6 +69,7 @@ class AppRoute {
   static const String homeDriverScreen = '/home_driver';
   static const String requestDriverScreen = '/request_driver';
   static const String walletDriverScreen = '/my_wallet_driver';
+  // static const String walletDriverScreen = '/my_wallet_driver';
   static const String historyDriverScreen = '/history_driver';
   static const String notificationDriverScreen = '/notification_driver';
   static const String settingsDriverScreen = '/setting_driver';

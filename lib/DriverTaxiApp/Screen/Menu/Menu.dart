@@ -1,3 +1,4 @@
+import 'package:HTRuta/features_driver/route_drive/presentation/router_drive_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/ClientTaxiApp/utils/session.dart';
@@ -223,6 +224,14 @@ class MenuDriverScreens extends StatelessWidget {
                             isSelected: this.activeScreenName.compareTo("MY WALLET") == 0,
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
+                          ),
+                          getItemMenu(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> RouterDrivePage() ));
+                            },
+                            isSelected: this.activeScreenName.compareTo("Rutas") == 0,
+                            icon: FontAwesomeIcons.wallet,
+                            text: 'Mis Rutas'
                           ),
                           getItemMenu(
                             onTap: () {
