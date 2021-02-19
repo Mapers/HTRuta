@@ -7,12 +7,19 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.
 import 'package:HTRuta/features/DriverTaxiApp/Blocs/interprovincial_route_bloc.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Blocs/type_route_bloc.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:HTRuta/injection_container.dart' as ij;
 
 import 'app_router.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ij.init();
+  runApp( MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -54,12 +61,19 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => TypeRouteBloc()),
         ChangeNotifierProvider(create: (_) => InterprovincialRouteBloc()),
       ],
-      child: MaterialApp(
-        title: 'Taxi App',
-        theme: appTheme,
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: AppRoute.generateRoute,
-        home: SplashScreen(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<RouteDriveBloc>(
+          create: (_) => ij.sl<RouteDriveBloc>()
+        ),
+        ],
+        child: MaterialApp(
+          title: 'Taxi App',
+          theme: appTheme,
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: AppRoute.generateRoute,
+          home: SplashScreen(),
+        ),
       )
     );
   }

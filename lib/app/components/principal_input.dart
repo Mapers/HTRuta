@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class PrincipalInput extends StatelessWidget {
+  final IconData icon;
   final String hinText;
-  const PrincipalInput({Key key, this.hinText}) : super(key: key);
+  const PrincipalInput({Key key, this.hinText, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class PrincipalInput extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          icon: Icon(Icons.person_outline,),
+          icon: Icon(icon),
           // labelText: "Nombre",
           hintText: hinText,
           hintStyle: TextStyle(color: Colors.grey),

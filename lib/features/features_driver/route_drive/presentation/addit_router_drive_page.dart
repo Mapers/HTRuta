@@ -5,6 +5,7 @@ import 'package:HTRuta/features/features_driver/route_drive/presentation/selecct
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class AdditRouterDrivePage extends StatefulWidget {
   AdditRouterDrivePage({Key key}) : super(key: key);
 
@@ -27,7 +28,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
             padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 20),
             child: Column(
               children: [
-                PrincipalInput(hinText: "Nombre",),
+                PrincipalInput(hinText: "Nombre",icon: FontAwesomeIcons.mapMarkedAlt,),
                 SizedBox(height: 10,),
                 PrincipalButton(
                   onPressed: (){

@@ -231,7 +231,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
                             },
                             isSelected: this.activeScreenName.compareTo("Rutas") == 0,
-                            icon: FontAwesomeIcons.wallet,
+                            icon: FontAwesomeIcons.mapMarkedAlt,
                             text: 'Mis Rutas'
                           ),
                           getItemMenu(
