@@ -1,35 +1,34 @@
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Carga/carga_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/screens/cancellation_reasons_screen/cancellation_reasons_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/screens/chat_screen/chat_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/History/driver_detail.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/History/history_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home2.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/travel_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/login.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/phone_verification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/profile.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Notification/notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/PaymentMethod/payment_method.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/ReviewTrip/review_trip_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/settings.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/terms_conditions_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/signup.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/intro_screen/intro_screen.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/History/history.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/home.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/register_driver.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/send_documents.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/MyProfile/profile.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/myWallet.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Notification/notification.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/request.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Settings/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:HTRuta/ClientTaxiApp/Screen/Home/travel_screen.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/History/history.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Home/home.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Home/register_driver.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Home/send_documents.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/MyProfile/profile.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/MyWallet/myWallet.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/MyWallet/payment.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Notification/notification.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Request/request.dart';
-import 'package:HTRuta/DriverTaxiApp/Screen/Settings/settings.dart';
-
-import 'ClientTaxiApp/Screen/Carga/carga_screen.dart';
-import 'ClientTaxiApp/Screen/Directions/screens/cancellation_reasons_screen/cancellation_reasons_screen.dart';
-import 'ClientTaxiApp/Screen/Directions/screens/chat_screen/chat_screen.dart';
-import 'ClientTaxiApp/Screen/History/driver_detail.dart';
-import 'ClientTaxiApp/Screen/History/history_screen.dart';
-import 'ClientTaxiApp/Screen/Home/home2.dart';
-import 'ClientTaxiApp/Screen/Home/home_screen.dart';
-import 'ClientTaxiApp/Screen/Login/login.dart';
-import 'ClientTaxiApp/Screen/Login/phone_verification.dart';
-import 'ClientTaxiApp/Screen/MyProfile/profile.dart';
-import 'ClientTaxiApp/Screen/Notification/notification.dart';
-import 'ClientTaxiApp/Screen/PaymentMethod/payment_method.dart';
-import 'ClientTaxiApp/Screen/ReviewTrip/review_trip_screen.dart';
-import 'ClientTaxiApp/Screen/Settings/settings.dart';
-import 'ClientTaxiApp/Screen/Settings/terms_conditions_screen.dart';
-import 'ClientTaxiApp/Screen/SignUp/signup.dart';
-import 'ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
-import 'ClientTaxiApp/Screen/intro_screen/intro_screen.dart';
 
 class PageViewTransition<T> extends MaterialPageRoute<T> {
   PageViewTransition({ WidgetBuilder builder, RouteSettings settings })
@@ -81,8 +80,6 @@ class AppRoute {
   static const String sendDocumentScreen = '/send_document';
   static const String travelScreen = '/travelScreen';
   static const String travelDriverScreen = '/travelDriverScreen';
-  
-  
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {

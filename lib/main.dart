@@ -1,14 +1,14 @@
-import 'package:HTRuta/ClientTaxiApp/Provider/onboarding_provider.dart';
-import 'package:HTRuta/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:HTRuta/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
-import 'package:HTRuta/ClientTaxiApp/theme/style.dart';
-import 'package:HTRuta/DriverTaxiApp/Blocs/interprovincial_route_bloc.dart';
-import 'package:HTRuta/DriverTaxiApp/Blocs/type_route_bloc.dart';
+import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Blocs/interprovincial_route_bloc.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Blocs/type_route_bloc.dart';
+import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'ClientTaxiApp/Apis/push_notification.dart';
-import 'ClientTaxiApp/Blocs/place_bloc.dart';
-import 'DriverTaxiApp/providers/registro_provider.dart';
 import 'app_router.dart';
 import 'package:flutter/material.dart';
 
@@ -24,11 +24,11 @@ class _MyAppState extends State<MyApp> {
   PushNotificationProvider pushProvider;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     pushProvider = new PushNotificationProvider();
     pushProvider.initNotifications();
-    pushProvider.mensajes.listen((argumento) async{ 
+    pushProvider.mensajes.listen((argumento) async{
       if(argumento.contains('Rechazados')){
         Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
       }
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     pushProvider.dispose();
     super.dispose();
   }
