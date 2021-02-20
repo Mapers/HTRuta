@@ -219,8 +219,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child: new Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text("Facturación total", style: heading18Black,),
-                              new Text("S/.7.49", style: heading18Black,),
+                              new Text("Facturación total", style: textStyleHeading18Black,),
+                              new Text("S/.7.49", style: textStyleHeading18Black,),
                             ],
                           ),
                         ),

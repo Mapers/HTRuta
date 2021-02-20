@@ -108,7 +108,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 ),
                 Container(
                   padding: new EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                  child: Text("Aliqua mollit esse officia ad non elit eiusmod quis qui velit.",style: heading18Black,),
+                  child: Text("Aliqua mollit esse officia ad non elit eiusmod quis qui velit.",style: textStyleHeading18Black,),
                 ),
                 new Container(
                   padding: new EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),

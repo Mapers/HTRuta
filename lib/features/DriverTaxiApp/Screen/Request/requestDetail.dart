@@ -240,8 +240,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child: new Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            new Text("Ganancia total", style: heading18Black,),
-                            new Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: heading18Black,),
+                            new Text("Ganancia total", style: textStyleHeading18Black,),
+                            new Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textStyleHeading18Black,),
                           ],
                         ),
                       ),

@@ -168,7 +168,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
             flex: 2,
             child: Container(
               alignment: Alignment.centerRight,
-              child: Text(balance, style: heading18Black,)
+              child: Text(balance, style: textStyleHeading18Black,)
             ),
           ),
         ],

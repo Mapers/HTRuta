@@ -1,15 +1,16 @@
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/placeItem.dart';
+import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/utils/location_util.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
@@ -21,46 +22,32 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'myActivity.dart';
-import 'radioSelectMapType.dart';
-import '../../Components/itemRequest.dart';
-import '../../data/Model/direction_model.dart';
 import 'package:flutter/cupertino.dart';
 
 
-class HomeDriverScreen extends StatefulWidget {
+class TaxiDriverServiceScreen extends StatefulWidget {
+  final GlobalKey<ScaffoldState> parentScaffoldKey;
+  TaxiDriverServiceScreen({@required this.parentScaffoldKey});
+
   @override
-  _HomeDriverScreenState createState() => _HomeDriverScreenState();
+  _TaxiDriverServiceScreenState createState() => _TaxiDriverServiceScreenState();
 }
 
-class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProviderStateMixin {
-  final String screenName = "HOME";
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
-  CircleId selectedCircle;
   GoogleMapController _mapController;
 
   String currentLocationName;
   String newLocationName;
-  String _placemark = '';
-  GoogleMapController mapController;
-  PlaceItemRes fromAddress;
-  PlaceItemRes toAddress;
   bool checkPlatform = Platform.isIOS;
-  double distance = 0;
   bool nightMode = false;
-  VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData = new List<MapTypeModel>();
-  PersistentBottomSheetController _controller;
   List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
 
-  List<Routes> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   Map<PolylineId, Polyline> _polyLines = <PolylineId, Polyline>{};
-  PolylineId selectedPolyline;
   bool isShowDefault = false;
-  Position currentLocation;
+  LatLng currentLocation;
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
 
@@ -107,13 +94,6 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
         }
       }
     });
-    showPersBottomSheetCallBack = _showBottomSheet;
-    sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
-    sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
-    sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
-    sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
-    sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
 
     listRequest = [
       {"id": '0',
@@ -206,19 +186,12 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-
-      List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-        setState(() {
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
-          currentLocationName = _placemark;
-        });
-      }
+    LocationEntity locationEntity = await LocationUtil.currentLocation();
+    setState(() {
+      currentLocation = locationEntity.latLang;
+      currentLocationName = locationEntity.name;
+    });
     if(currentLocation != null){
-
       moveCameraToMyLocation();
     }
   }
@@ -263,71 +236,6 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     }
   }
 
-  void _showBottomSheet() async {
-    setState(() {
-      showPersBottomSheetCallBack = null;
-    });
-    _controller = _scaffoldKey.currentState.showBottomSheet((context) {
-      return new Container(
-        height: 300.0,
-        child: Container(
-          padding: EdgeInsets.all(4.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text("Tipo de mapa",style: heading18Black,),
-                  ),
-                  Container(
-                    child: IconButton(
-                      icon: Icon(Icons.close,color: blackColor,),
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child:
-                new GridView.builder(
-                  itemCount: sampleData.length,
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    return new InkWell(
-                      highlightColor: primaryColor,
-                      splashColor: Colors.blueAccent,
-                      onTap: () {
-                        _closeModalBottomSheet();
-                        sampleData.forEach((element) => element.isSelected = false);
-                        sampleData[index].isSelected = true;
-                        changeMapType(sampleData[index].id, sampleData[index].fileName);
-
-                      },
-                      child: new MapTypeItem(sampleData[index]),
-                    );
-                  },
-                ),
-              )
-
-            ],
-          ),
-        )
-      );
-    });
-  }
-
-  void _closeModalBottomSheet() {
-    if (_controller != null) {
-      _controller.close();
-      _controller = null;
-    }
-  }
-
   addMarker(LatLng locationForm, LatLng locationTo){
     _markers.clear();
     final MarkerId _markerFrom = MarkerId("fromLocation");
@@ -345,7 +253,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
       lat: locationTo.latitude,
       lng: locationTo.longitude,
     );
-    _gMapViewHelper?.cameraMove(fromLocation: locationForm,toLocation: locationTo,mapController: _mapController);
+    _gMapViewHelper?.cameraMove(fromLocation: locationForm, toLocation: locationTo, mapController: _mapController);
   }
 
 
@@ -355,8 +263,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     List<Widget> bodyContent = [
       _buildMapLayer(),
       Positioned(
-        top: 45,
-        left: 110,
+        top: 110,
         child: LiteRollingSwitch(
           textOn: 'Disponible',
           textOff: 'Ocupado',
@@ -424,42 +331,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
           ),
         )
       ),
-      Positioned(
-        top: 50,
-        right: 10,
-        child: Container(
-          height: 40.0,
-          width: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(100.0),),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.layers,size: 20.0,color: blackColor,),
-            onPressed: (){
-              _showBottomSheet();
-            },
-          ),
-        )
-      ),
-      Positioned(
-          top: 50,
-          left: 10,
-          child: Container(
-            height: 40.0,
-            width: 40.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(100.0),),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.menu,size: 20.0,color: blackColor,),
-              onPressed: (){
-                _scaffoldKey.currentState.openDrawer();
-              },
-            ),
-          )
-      ),
+      ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
       Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
@@ -488,8 +360,6 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
                 },
               ),
               swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
-                /// Get swiping card's position
-//                          print(details);
               },
               swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
                 /// Get orientation & index of swiped card!
@@ -518,13 +388,12 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
       )
     ];
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: new MenuDriverScreens(activeScreenName: screenName),
-      body: isLoading ? Center(child: CircularProgressIndicator(),) : Container(
-        color: whiteColor,
-        child: Stack(children: bodyContent)
-      ),
+    return isLoading ? Center(child: CircularProgressIndicator(),) : Container(
+      color: whiteColor,
+      child: Stack(
+        children: bodyContent,
+        alignment: Alignment.center,
+      )
     );
   }
 

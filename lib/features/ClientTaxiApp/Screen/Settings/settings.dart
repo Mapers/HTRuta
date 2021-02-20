@@ -81,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         child: Text("Steve Armas",style: textBoldBlack,),
                                       ),
                                       Container(
-                                          child: Text("\$25.0",style: heading18Black,)
+                                          child: Text("\$25.0",style: textStyleHeading18Black,)
                                       ),
                                     ],
                                   ),

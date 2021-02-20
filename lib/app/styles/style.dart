@@ -60,7 +60,7 @@ TextStyle heading18 = style(
   fontSize: 18,
   fontWeight: FontWeight.bold,
 );
-TextStyle heading18Black = style(
+TextStyle textStyleHeading18Black = style(
   color: blackColor,
   fontSize: 18,
   fontWeight: FontWeight.bold,

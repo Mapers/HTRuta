@@ -102,16 +102,16 @@ class AppState with ChangeNotifier {
   void sendRequest({String txtOrigen,String txtDestination }) async {
     print(txtOrigen);
     print(txtDestination);
-    List<Placemark> placemarkDestination = await Geolocator().placemarkFromAddress(txtDestination);
-    double latitude = placemarkDestination[0].position.latitude;
-    double longitude = placemarkDestination[0].position.longitude;
+    // List<Placemark> placemarkDestination = await Geolocator().placemarkFromAddress(txtDestination);
+    // double latitude = placemarkDestination[0].position.latitude;
+    // double longitude = placemarkDestination[0].position.longitude;
 
-    List<Placemark> placemarkOrigen = await Geolocator().placemarkFromAddress(txtDestination);
-    double latitudeOrigen = placemarkOrigen[0].position.latitude;
-    double longitudeOrigen = placemarkOrigen[0].position.longitude;
+    // List<Placemark> placemarkOrigen = await Geolocator().placemarkFromAddress(txtOrigen);
+    // double latitudeOrigen = placemarkOrigen[0].position.latitude;
+    // double longitudeOrigen = placemarkOrigen[0].position.longitude;
     
-    LatLng origen = LatLng(latitudeOrigen, longitudeOrigen);
-    LatLng destination = LatLng(latitude, longitude);
+    // LatLng origen = LatLng(latitudeOrigen, longitudeOrigen);
+    // LatLng destination = LatLng(latitude, longitude);
     
     // _addMarker(origen, txtOrigen);
     // _addMarker(destination, txtDestination);

@@ -13,7 +13,8 @@ class SelecctionOriginDestination extends StatefulWidget {
 
 class _SelecctionOriginDestinationState extends State<SelecctionOriginDestination> {
 
-
+  String origin = "";
+  String destination = "";
   @override
   void initState() {
     super.initState();
@@ -61,7 +62,13 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 cursorColor: Colors.black,
                 // controller: appState.locationController,
                 onSubmitted: (value) {
-                  appState.sendRequest(txtOrigen: value,);
+                  origin = value;
+                  if(destination == ""){
+                    print("entre XDDD");
+                    print(origin);
+                    print(destination);
+                    // appState.sendRequest(txtOrigen: origin,txtDestination: destination);
+                  }
                 },
                 decoration: InputDecoration(
                   icon: Container(
@@ -103,7 +110,13 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 controller: appState.destinationController,
                 textInputAction: TextInputAction.go,
                 onSubmitted: (value) {
-                  appState.sendRequest(txtDestination: value);
+                  destination = value;
+                  if(origin == ""){
+                    print("entre XDDD");
+                    print(origin);
+                    print(destination);
+                    // appState.sendRequest(txtDestination: destination, txtOrigen: origin);
+                  }
                 },
                 decoration: InputDecoration(
                   icon: Container(
