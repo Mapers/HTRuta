@@ -1,5 +1,4 @@
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
@@ -7,9 +6,8 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/radioSelectMapType.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +41,6 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
   String _placemark = '';
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
-  VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData = new List<MapTypeModel>();
   PersistentBottomSheetController _controller;
   List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
 
@@ -98,13 +94,6 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
         }
       }
     });
-    showPersBottomSheetCallBack = _showBottomSheet;
-    sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
-    sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
-    sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
-    sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
-    sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
 
     listRequest = [
       {"id": '0',
@@ -254,71 +243,6 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
     }
   }
 
-  void _showBottomSheet() async {
-    setState(() {
-      showPersBottomSheetCallBack = null;
-    });
-    _controller = widget.parrentScaffoldKey.currentState.showBottomSheet((context) {
-      return new Container(
-        height: 300.0,
-        child: Container(
-          padding: EdgeInsets.all(4.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text("Tipo de mapa",style: heading18Black,),
-                  ),
-                  Container(
-                    child: IconButton(
-                      icon: Icon(Icons.close,color: blackColor,),
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child:
-                new GridView.builder(
-                  itemCount: sampleData.length,
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    return new InkWell(
-                      highlightColor: primaryColor,
-                      splashColor: Colors.blueAccent,
-                      onTap: () {
-                        _closeModalBottomSheet();
-                        sampleData.forEach((element) => element.isSelected = false);
-                        sampleData[index].isSelected = true;
-                        changeMapType(sampleData[index].id, sampleData[index].fileName);
-
-                      },
-                      child: new MapTypeItem(sampleData[index]),
-                    );
-                  },
-                ),
-              )
-
-            ],
-          ),
-        )
-      );
-    });
-  }
-
-  void _closeModalBottomSheet() {
-    if (_controller != null) {
-      _controller.close();
-      _controller = null;
-    }
-  }
-
   addMarker(LatLng locationForm, LatLng locationTo){
     _markers.clear();
     final MarkerId _markerFrom = MarkerId("fromLocation");
@@ -414,24 +338,7 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
           ),
         )
       ),
-      Positioned(
-        top: 50,
-        right: 10,
-        child: Container(
-          height: 40.0,
-          width: 40.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(100.0),),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.layers,size: 20.0,color: blackColor,),
-            onPressed: (){
-              _showBottomSheet();
-            },
-          ),
-        )
-      ),
+      ButtonLayerWidget(parrentScaffoldKey: widget.parrentScaffoldKey, changeMapType: changeMapType),
       Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
@@ -460,8 +367,6 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
                 },
               ),
               swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
-                /// Get swiping card's position
-//                          print(details);
               },
               swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
                 /// Get orientation & index of swiped card!

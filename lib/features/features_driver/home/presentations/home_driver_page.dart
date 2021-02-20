@@ -1,9 +1,9 @@
-import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/widgets/taxi_widgets.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/features/DriverTaxiApp/enums/type_service_driver_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,24 +35,7 @@ class _HomeDriverPageState extends State<HomeDriverPage> {
               return Text('Otro pe :c');
             },
           ),
-          Positioned(
-            top: 50,
-            left: 10,
-            child: Container(
-              height: 40.0,
-              width: 40.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(100.0),),
-              ),
-              child: IconButton(
-                icon: Icon(Icons.menu,size: 20.0,color: blackColor),
-                onPressed: (){
-                  _scaffoldKey.currentState.openDrawer();
-                },
-              ),
-            )
-          ),
+          MenuButtonWidget(parrentScaffoldKey: _scaffoldKey),
           ChangeServiceDriverWidget(),
         ],
       ),
