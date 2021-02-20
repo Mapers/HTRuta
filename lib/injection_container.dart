@@ -1,3 +1,4 @@
+import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/local/router_drive_local_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
@@ -17,5 +18,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<RouterDriveLocalDataSoruce>(
     () => RouterDriveLocalDataSoruce()
+  );
+
+  sl.registerLazySingleton<DriverServiceBloc>(
+    () => DriverServiceBloc()
   );
 }

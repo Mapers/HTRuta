@@ -5,10 +5,11 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/radioSelectMapType.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
 import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/placeItem.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -21,44 +22,34 @@ import 'dart:io' show Platform;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'myActivity.dart';
-import 'radioSelectMapType.dart';
-import '../../Components/itemRequest.dart';
-import '../../data/Model/direction_model.dart';
 import 'package:flutter/cupertino.dart';
 
 
-class HomeDriverScreen extends StatefulWidget {
+class TaxiHomeDriverScreen extends StatefulWidget {
+  final GlobalKey<ScaffoldState> parrentScaffoldKey;
+  TaxiHomeDriverScreen({@required this.parrentScaffoldKey});
+
   @override
-  _HomeDriverScreenState createState() => _HomeDriverScreenState();
+  _TaxiHomeDriverScreenState createState() => _TaxiHomeDriverScreenState();
 }
 
-class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProviderStateMixin {
-  final String screenName = "HOME";
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with TickerProviderStateMixin {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
-  CircleId selectedCircle;
   GoogleMapController _mapController;
 
   String currentLocationName;
   String newLocationName;
   String _placemark = '';
-  GoogleMapController mapController;
-  PlaceItemRes fromAddress;
-  PlaceItemRes toAddress;
   bool checkPlatform = Platform.isIOS;
-  double distance = 0;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData = new List<MapTypeModel>();
   PersistentBottomSheetController _controller;
   List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
 
-  List<Routes> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   Map<PolylineId, Polyline> _polyLines = <PolylineId, Polyline>{};
-  PolylineId selectedPolyline;
   bool isShowDefault = false;
   Position currentLocation;
   Position _lastKnownPosition;
@@ -267,7 +258,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     setState(() {
       showPersBottomSheetCallBack = null;
     });
-    _controller = _scaffoldKey.currentState.showBottomSheet((context) {
+    _controller = widget.parrentScaffoldKey.currentState.showBottomSheet((context) {
       return new Container(
         height: 300.0,
         child: Container(
@@ -355,8 +346,7 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
     List<Widget> bodyContent = [
       _buildMapLayer(),
       Positioned(
-        top: 45,
-        left: 110,
+        top: 110,
         child: LiteRollingSwitch(
           textOn: 'Disponible',
           textOff: 'Ocupado',
@@ -442,24 +432,6 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
           ),
         )
       ),
-      Positioned(
-          top: 50,
-          left: 10,
-          child: Container(
-            height: 40.0,
-            width: 40.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(100.0),),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.menu,size: 20.0,color: blackColor,),
-              onPressed: (){
-                _scaffoldKey.currentState.openDrawer();
-              },
-            ),
-          )
-      ),
       Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
@@ -518,13 +490,12 @@ class _HomeDriverScreenState extends State<HomeDriverScreen> with TickerProvider
       )
     ];
 
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: new MenuDriverScreens(activeScreenName: screenName),
-      body: isLoading ? Center(child: CircularProgressIndicator(),) : Container(
-        color: whiteColor,
-        child: Stack(children: bodyContent)
-      ),
+    return isLoading ? Center(child: CircularProgressIndicator(),) : Container(
+      color: whiteColor,
+      child: Stack(
+        children: bodyContent,
+        alignment: Alignment.center,
+      )
     );
   }
 

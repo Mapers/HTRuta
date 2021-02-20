@@ -18,7 +18,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/signup.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/intro_screen/intro_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/History/history.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/home.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/register_driver.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/send_documents.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
@@ -28,6 +27,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Notification/notification.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/request.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Settings/settings.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/home_driver_page.dart';
 import 'package:flutter/material.dart';
 
 class PageViewTransition<T> extends MaterialPageRoute<T> {
@@ -120,7 +120,7 @@ class AppRoute {
       case cargaScreen:
         return PageViewTransition(builder: (_) => CargaPage());
       case homeDriverScreen:
-        return PageViewTransition(builder: (_) => HomeDriverScreen());
+        return PageViewTransition(builder: (_) => HomeDriverPage());
       case requestDriverScreen:
         return PageViewTransition(builder: (_) => RequestDriverScreen());
       case walletDriverScreen:

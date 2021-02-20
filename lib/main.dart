@@ -4,9 +4,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Blocs/interprovincial_route_bloc.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Blocs/type_route_bloc.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -57,15 +56,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
-
-        ChangeNotifierProvider(create: (_) => TypeRouteBloc()),
-        ChangeNotifierProvider(create: (_) => InterprovincialRouteBloc()),
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<RouteDriveBloc>(
-          create: (_) => ij.sl<RouteDriveBloc>()
-        ),
+          BlocProvider<RouteDriveBloc>(create: (_) => ij.sl<RouteDriveBloc>()),
+          BlocProvider<DriverServiceBloc>(create: (_) => ij.sl<DriverServiceBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',

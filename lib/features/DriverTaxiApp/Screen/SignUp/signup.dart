@@ -1,9 +1,9 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/validations.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/home_driver_page.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/home.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -132,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       icon: new Text(''),
                                                       label: new Text('Registrate', style: headingWhite,),
                                                       onPressed: (){Navigator.of(context).pushReplacement(
-                                                          new MaterialPageRoute(builder: (context) => new HomeDriverScreen()));},
+                                                          new MaterialPageRoute(builder: (context) => new HomeDriverPage()));},
                                                     ),
                                                   ),
                                                 ],
