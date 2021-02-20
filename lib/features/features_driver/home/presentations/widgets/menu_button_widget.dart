@@ -2,8 +2,8 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
 
 class MenuButtonWidget extends StatelessWidget {
-  final GlobalKey<ScaffoldState> parrentScaffoldKey;
-  const MenuButtonWidget({Key key, @required this.parrentScaffoldKey}) : super(key: key);
+  final GlobalKey<ScaffoldState> parentScaffoldKey;
+  const MenuButtonWidget({Key key, @required this.parentScaffoldKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class MenuButtonWidget extends StatelessWidget {
         ),
         child: IconButton(
           icon: Icon(Icons.menu,size: 20.0,color: blackColor),
-          onPressed: () => parrentScaffoldKey.currentState.openDrawer(),
+          onPressed: () => parentScaffoldKey.currentState.openDrawer(),
         ),
       )
     );

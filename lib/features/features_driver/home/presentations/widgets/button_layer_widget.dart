@@ -5,9 +5,9 @@ import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
 import 'package:flutter/material.dart';
 
 class ButtonLayerWidget extends StatefulWidget {
-  final GlobalKey<ScaffoldState> parrentScaffoldKey;
+  final GlobalKey<ScaffoldState> parentScaffoldKey;
   final Function(int id, String fileName) changeMapType;
-  const ButtonLayerWidget({Key key, @required this.parrentScaffoldKey, @required this.changeMapType}) : super(key: key);
+  const ButtonLayerWidget({Key key, @required this.parentScaffoldKey, @required this.changeMapType}) : super(key: key);
 
   @override
   _ButtonLayerWidgetState createState() => _ButtonLayerWidgetState();
@@ -39,7 +39,7 @@ class _ButtonLayerWidgetState extends State<ButtonLayerWidget> {
         child: IconButton(
           icon: Icon(Icons.layers,size: 20.0,color: blackColor),
           onPressed: (){
-            persistentBottomSheetController = widget.parrentScaffoldKey.currentState.showBottomSheet((ctx) => _getContaindBottomSheet());
+            persistentBottomSheetController = widget.parentScaffoldKey.currentState.showBottomSheet((ctx) => _getContaindBottomSheet());
           },
         ),
       )
@@ -59,7 +59,7 @@ class _ButtonLayerWidgetState extends State<ButtonLayerWidget> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text("Tipo de mapa", style: heading18Black),
+                  child: Text("Tipo de mapa", style: textStyleHeading18Black),
                 ),
                 Container(
                   child: IconButton(

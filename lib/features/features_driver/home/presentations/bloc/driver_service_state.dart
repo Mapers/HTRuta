@@ -8,16 +8,16 @@ abstract class DriverServiceState extends Equatable {
 }
 
 class DataDriverServiceState extends DriverServiceState {
-  final TypeServiceDriver typeService;
+  final TypeDriverService typeService;
   DataDriverServiceState({@required this.typeService});
 
   factory DataDriverServiceState.initial(){
     return DataDriverServiceState(
-      typeService: TypeServiceDriver.taxi
+      typeService: TypeDriverService.taxi
     );
   }
 
-  DataDriverServiceState copyWith({TypeServiceDriver typeService}){
+  DataDriverServiceState copyWith({TypeDriverService typeService}){
     return DataDriverServiceState(
       typeService: typeService ?? this.typeService
     );

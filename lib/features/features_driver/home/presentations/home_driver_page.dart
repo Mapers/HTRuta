@@ -1,7 +1,8 @@
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/widgets/taxi_widgets.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:HTRuta/features/DriverTaxiApp/enums/type_service_driver_enum.dart';
+import 'package:HTRuta/features/DriverTaxiApp/enums/type_driver_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/service_screens/interprovincial_screen.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/service_screens/taxi_screen.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +30,17 @@ class _HomeDriverPageState extends State<HomeDriverPage> {
           BlocBuilder<DriverServiceBloc, DriverServiceState>(
             builder: (ctx, state){
               DataDriverServiceState data = state;
-              if(data.typeService == TypeServiceDriver.taxi){
-                return TaxiHomeDriverScreen(parrentScaffoldKey: _scaffoldKey);
+              switch (data.typeService) {
+                case TypeDriverService.taxi:
+                  return TaxiDriverServiceScreen(parentScaffoldKey: _scaffoldKey);
+                case TypeDriverService.taxi:
+                  return InterprovincialScreen(parentScaffoldKey: _scaffoldKey);
+                default:
+                  return Text('Service not found!');
               }
-              return Text('Otro pe :c');
             },
           ),
-          MenuButtonWidget(parrentScaffoldKey: _scaffoldKey),
+          MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
           ChangeServiceDriverWidget(),
         ],
       ),

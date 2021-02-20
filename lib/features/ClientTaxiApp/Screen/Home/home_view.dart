@@ -231,7 +231,7 @@ class _HomeViewState extends State<HomeView> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text("Tipo Mapa",style: heading18Black,),
+                    child: Text("Tipo Mapa",style: textStyleHeading18Black,),
                   ),
                   Container(
                     child: IconButton(

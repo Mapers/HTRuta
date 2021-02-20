@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:HTRuta/features/DriverTaxiApp/enums/type_service_driver_enum.dart';
+import 'package:HTRuta/features/DriverTaxiApp/enums/type_driver_service_enum.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';

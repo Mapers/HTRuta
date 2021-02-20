@@ -1,5 +1,5 @@
 import 'package:HTRuta/app/components/select.dart';
-import 'package:HTRuta/features/DriverTaxiApp/enums/type_service_driver_enum.dart';
+import 'package:HTRuta/features/DriverTaxiApp/enums/type_driver_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +18,11 @@ class ChangeServiceDriverWidget extends StatelessWidget {
             elevation: 20,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Select<TypeServiceDriver>(
+              child: Select<TypeDriverService>(
                 value: data.typeService,
                 showPlaceholder: false,
-                items: TypeServiceDriver.values.map((item) => DropdownMenuItem(
-                  child: Center(child: Text(getTextByTypeServiceDriver(item))),
+                items: TypeDriverService.values.map((item) => DropdownMenuItem(
+                  child: Center(child: Text(getTextByTypeDriverService(item))),
                   value: item
                 )).toList(),
                 onChanged: (newItem){

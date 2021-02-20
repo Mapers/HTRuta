@@ -23,15 +23,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 
 
-class TaxiHomeDriverScreen extends StatefulWidget {
-  final GlobalKey<ScaffoldState> parrentScaffoldKey;
-  TaxiHomeDriverScreen({@required this.parrentScaffoldKey});
+class TaxiDriverServiceScreen extends StatefulWidget {
+  final GlobalKey<ScaffoldState> parentScaffoldKey;
+  TaxiDriverServiceScreen({@required this.parentScaffoldKey});
 
   @override
-  _TaxiHomeDriverScreenState createState() => _TaxiHomeDriverScreenState();
+  _TaxiDriverServiceScreenState createState() => _TaxiDriverServiceScreenState();
 }
 
-class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with TickerProviderStateMixin {
+class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   GoogleMapController _mapController;
@@ -41,7 +41,6 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
   String _placemark = '';
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
-  PersistentBottomSheetController _controller;
   List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
 
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
@@ -338,7 +337,7 @@ class _TaxiHomeDriverScreenState extends State<TaxiHomeDriverScreen> with Ticker
           ),
         )
       ),
-      ButtonLayerWidget(parrentScaffoldKey: widget.parrentScaffoldKey, changeMapType: changeMapType),
+      ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
       Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
