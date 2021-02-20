@@ -7,8 +7,10 @@ import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
+import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/utils/location_util.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
@@ -38,7 +40,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   String currentLocationName;
   String newLocationName;
-  String _placemark = '';
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
@@ -46,7 +47,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   Map<PolylineId, Polyline> _polyLines = <PolylineId, Polyline>{};
   bool isShowDefault = false;
-  Position currentLocation;
+  LatLng currentLocation;
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
 
@@ -185,19 +186,12 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-
-      List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-        setState(() {
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
-          currentLocationName = _placemark;
-        });
-      }
+    LocationEntity locationEntity = await LocationUtil.currentLocation();
+    setState(() {
+      currentLocation = locationEntity.latLang;
+      currentLocationName = locationEntity.name;
+    });
     if(currentLocation != null){
-
       moveCameraToMyLocation();
     }
   }
@@ -259,7 +253,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       lat: locationTo.latitude,
       lng: locationTo.longitude,
     );
-    _gMapViewHelper?.cameraMove(fromLocation: locationForm,toLocation: locationTo,mapController: _mapController);
+    _gMapViewHelper?.cameraMove(fromLocation: locationForm, toLocation: locationTo, mapController: _mapController);
   }
 
 
