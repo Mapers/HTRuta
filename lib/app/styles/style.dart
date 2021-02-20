@@ -126,52 +126,20 @@ TextTheme _buildTextTheme(TextTheme base) {
 }
 final ThemeData base = ThemeData.light();
 
-ThemeData appTheme = new ThemeData(
+ThemeData appTheme = ThemeData(
   fontFamily: "MYRIADPRO",
   primaryColor: primaryColor,
+  accentColor: primaryColor,
   buttonColor: primaryColor,
   indicatorColor: Colors.white,
   splashColor: Colors.white24,
-  splashFactory: InkRipple.splashFactory,
-  accentColor: const Color(0xFF13B9FD),
   canvasColor: Colors.white,
   scaffoldBackgroundColor: Colors.white,
   backgroundColor: Colors.white,
   errorColor: const Color(0xFFB00020),
-  highlightColor: activeColor,
-  iconTheme: new IconThemeData(color: primaryColor),
-  buttonTheme: const ButtonThemeData(
-    textTheme: ButtonTextTheme.primary,
-  ),
-  textTheme: _buildTextTheme(base.textTheme),
-  primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-  accentTextTheme: _buildTextTheme(base.accentTextTheme),
-
-);
-
-ThemeData appThemeCli = new ThemeData(
-  primaryColor: primaryColor,
-  buttonColor: primaryColor,
-  indicatorColor: Colors.white,
-  splashColor: Colors.white24,
-  splashFactory: InkRipple.splashFactory,
-  accentColor: Color(0xFF13B9FD),
-  canvasColor: Colors.white,
-  scaffoldBackgroundColor: Colors.white,
-  backgroundColor: Colors.white,
-  errorColor: Color(0xFFB00020),
-  iconTheme: new IconThemeData(color: primaryColor),
+  iconTheme: IconThemeData(color: primaryColor),
   buttonTheme: ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
-  ),
-  appBarTheme: AppBarTheme(
-    centerTitle: true,
-    iconTheme: IconThemeData(
-      color: Colors.white
-    ),
-    actionsIconTheme: IconThemeData(
-      color: Colors.white
-    )
   ),
   textTheme: _buildTextTheme(base.textTheme),
   primaryTextTheme: _buildTextTheme(base.primaryTextTheme),

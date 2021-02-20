@@ -1,3 +1,4 @@
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:flutter/material.dart';
 
 class RoutesInterprovincialCardWidget extends StatelessWidget {

@@ -6,6 +6,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/widgets/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         providers: [
           BlocProvider<RouteDriveBloc>(create: (_) => ij.sl<RouteDriveBloc>()),
           BlocProvider<DriverServiceBloc>(create: (_) => ij.sl<DriverServiceBloc>()),
+          BlocProvider<InterprovincialBloc>(create: (_) => ij.sl<InterprovincialBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',
