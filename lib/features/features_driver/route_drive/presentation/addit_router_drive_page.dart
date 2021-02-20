@@ -6,6 +6,7 @@ import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 class AdditRouterDrivePage extends StatefulWidget {
   AdditRouterDrivePage({Key key}) : super(key: key);
 
@@ -31,8 +32,9 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                 PrincipalInput(hinText: "Nombre",icon: FontAwesomeIcons.mapMarkedAlt,),
                 SizedBox(height: 10,),
                 PrincipalButton(
-                  onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination()));
+                  onPressed: ()async{
+                    final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,)));
                   },
                   text: "Selecionar ruta",
                   color: Colors.black,

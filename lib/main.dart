@@ -8,6 +8,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Blocs/interprovincial_route_bloc.d
 import 'package:HTRuta/features/DriverTaxiApp/Blocs/type_route_bloc.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/widgets/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -60,6 +61,7 @@ class _MyAppState extends State<MyApp> {
 
         ChangeNotifierProvider(create: (_) => TypeRouteBloc()),
         ChangeNotifierProvider(create: (_) => InterprovincialRouteBloc()),
+        ChangeNotifierProvider.value(value: AppState(),)
       ],
       child: MultiBlocProvider(
         providers: [
