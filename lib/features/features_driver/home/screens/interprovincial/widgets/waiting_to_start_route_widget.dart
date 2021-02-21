@@ -1,7 +1,9 @@
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/dark_card_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_info_route_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WaitingToStartRouteWidget extends StatelessWidget {
   final InterprovincialRouteEntity route;
@@ -40,7 +42,10 @@ class WaitingToStartRouteWidget extends StatelessWidget {
           ),
           RaisedButton(
             child: Text('Sí, iniciar', style: TextStyle(color: Colors.white, fontSize: 16)),
-            onPressed: () => _showModal(context),
+            onPressed: (){
+              Navigator.of(context).pop();
+              BlocProvider.of<InterprovincialBloc>(context).add(StartRouteInterprovincialEvent());
+            },
           ),
         ],
       )

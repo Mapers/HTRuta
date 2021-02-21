@@ -15,7 +15,11 @@ class PositionedInfoRouteWidget extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 30),
           decoration: BoxDecoration(
-            color: Colors.white
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            )
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

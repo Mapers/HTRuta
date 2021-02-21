@@ -25,6 +25,14 @@ class DataInterprovincialState extends InterprovincialState {
     );
   }
 
+  DataInterprovincialState copyWith({String loadingMessage, InterprovincialStatus status, InterprovincialRouteEntity route,}){
+    return DataInterprovincialState(
+      loadingMessage: loadingMessage ?? this.loadingMessage,
+      status: status ?? this.status,
+      route: route ?? this.route,
+    );
+  }
+
   @override
   List<Object> get props => [route, status, loadingMessage];
 }

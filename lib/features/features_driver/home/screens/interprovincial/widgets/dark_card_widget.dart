@@ -16,7 +16,7 @@ class DarkCardWidget extends StatelessWidget {
         child: Container(
           width: 320,
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Text(text, style: TextStyle(color: Colors.white)),
+          child: Text(text, style: TextStyle(color: Colors.white, fontSize: 12)),
         )
       ),
     );

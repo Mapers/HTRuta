@@ -16,3 +16,5 @@ class SelectRouteInterprovincialEvent extends InterprovincialEvent {
   @override
   List<Object> get props => [route];
 }
+
+class StartRouteInterprovincialEvent extends InterprovincialEvent {}
