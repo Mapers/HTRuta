@@ -24,7 +24,7 @@ class Apis {
   Future<JsonMessage> getRoutes({@required GetRoutesRequestModel getRoutesRequest}) async {
     return await _gmapClient.fetch(
       url: domain,
-      key: Config.apiKey,
+      key: Config.googleMapsApiKey,
       queryParameters: getRoutesRequest.toJson(),
     );
   }

@@ -11,7 +11,7 @@ class PlaceService {
   static Future<List<PlaceItemRes>> searchPlace(String keyword) async {
     String language = Config.language;
     String region = Config.region;
-    String apiKey = Config.apiKey;
+    String apiKey = Config.googleMapsApiKey;
     String url =
         "https://maps.googleapis.com/maps/api/place/textsearch/json?key=$apiKey&language=$language&region=$region&query=" +Uri.encodeQueryComponent(keyword);
     HttpClient client = new HttpClient();

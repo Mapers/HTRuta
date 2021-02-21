@@ -24,6 +24,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
   LatLng currentLocation;
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
+  Map<PolylineId, Polyline> polylines = {};
 
   @override
   void initState() { 
@@ -59,7 +60,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
     });
   }
 
-  void _addFromToMarkers(DataInterprovincialState data){
+  void _addFromToMarkers(DataInterprovincialState data) async{
     InterprovincialRouteEntity route = data.route;
 
     if([InterprovincialStatus.loading, InterprovincialStatus.notEstablished].contains(data.status)){
@@ -76,9 +77,13 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
       nameMarkerId: 'TO_POSITION_MARKER',
       icon: toPinLocationIcon,
     );
+
+    Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', route.fromLocation, route.toLocation);
+
     setState(() {
       _markers[markerFrom.markerId] = markerFrom;
       _markers[markerTo.markerId] = markerTo;
+      polylines[polyline.polylineId] = polyline;
     });
   }
 
@@ -104,7 +109,8 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
       child: _mapViewerUtil.build(
         height: MediaQuery.of(context).size.height,
         currentLocation: location?.latLang,
-        markers: _markers
+        markers: _markers,
+        polyLines: polylines
       )
     );
   }

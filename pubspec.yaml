@@ -58,6 +58,7 @@ dependencies:
   flutter_bloc: ^6.1.2
   get_it: ^5.0.6
   google_maps_webservice: ^0.0.19
+  flutter_polyline_points: ^0.2.4
 
 dev_dependencies:
   flutter_test:
