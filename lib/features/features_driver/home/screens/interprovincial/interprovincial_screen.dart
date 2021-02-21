@@ -2,6 +2,7 @@ import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/waiting_to_start_route_widget.dart';
@@ -41,6 +42,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
       alignment: Alignment.center,
       children: [
         _buildMapLayer(),
+        ChangeServiceDriverWidget(),
         BlocBuilder<InterprovincialBloc, InterprovincialState>(
           builder: (context, state) {
             if(state is DataInterprovincialState){
@@ -49,7 +51,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
               }else if(state.status == InterprovincialStatus.notEstablished){
                 return RoutesInterprovincialCardWidget();
               }else if(state.status == InterprovincialStatus.waiting){
-                return WaitingToStartRouteWidget();
+                return WaitingToStartRouteWidget(route: state.route);
               }
             }
             return Container();

@@ -1,7 +1,6 @@
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/features/DriverTaxiApp/enums/type_driver_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/interprovincial_screen.dart';
 import 'package:HTRuta/features/features_driver/home/screens/taxi/taxi_screen.dart';
@@ -41,7 +40,6 @@ class _HomeDriverPageState extends State<HomeDriverPage> {
             },
           ),
           MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
-          ChangeServiceDriverWidget(),
         ],
       ),
     );

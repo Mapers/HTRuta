@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DarkCardWidget extends StatelessWidget {
   final double top;
   final String text;
-  const DarkCardWidget({Key key, this.top = 100, @required this.text}) : super(key: key);
+  const DarkCardWidget({Key key, this.top = 120, @required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

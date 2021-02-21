@@ -24,6 +24,7 @@ class MapViewerUtil {
         myLocationButtonEnabled: false,
         indoorViewEnabled: false,
         mapToolbarEnabled: false,
+        zoomControlsEnabled: false,
         mapType: MapType.normal,
         initialCameraPosition: _getCurrentPosition(currentLocation),
       ),
