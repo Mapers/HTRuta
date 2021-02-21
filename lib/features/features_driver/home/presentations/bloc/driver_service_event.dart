@@ -7,7 +7,6 @@ abstract class DriverServiceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
 class ChangeDriverServiceEvent extends DriverServiceEvent {
   final TypeDriverService type;
   ChangeDriverServiceEvent({@required this.type});

@@ -1,3 +1,4 @@
+import 'package:HTRuta/core/utils/colors_util.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 TextStyle textStyle = style();
@@ -117,64 +118,24 @@ TextStyle style({
     fontFamily:  fontFamily,
   );
 }
-TextTheme _buildTextTheme(TextTheme base) {
-  var copyWith = base.copyWith(
-    title: base.title.copyWith(
-    ),
-  );
-  return copyWith;
-}
-final ThemeData base = ThemeData.light();
 
-ThemeData appTheme = new ThemeData(
+ThemeData appTheme = ThemeData(
   fontFamily: "MYRIADPRO",
+  primarySwatch: MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor)),
   primaryColor: primaryColor,
-  buttonColor: primaryColor,
+  accentColor: primaryColor,
+  scaffoldBackgroundColor: Colors.white,
   indicatorColor: Colors.white,
   splashColor: Colors.white24,
-  splashFactory: InkRipple.splashFactory,
-  accentColor: const Color(0xFF13B9FD),
   canvasColor: Colors.white,
-  scaffoldBackgroundColor: Colors.white,
-  backgroundColor: Colors.white,
-  errorColor: const Color(0xFFB00020),
-  highlightColor: activeColor,
-  iconTheme: new IconThemeData(color: primaryColor),
-  buttonTheme: const ButtonThemeData(
-    textTheme: ButtonTextTheme.primary,
-  ),
-  textTheme: _buildTextTheme(base.textTheme),
-  primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-  accentTextTheme: _buildTextTheme(base.accentTextTheme),
-
-);
-
-ThemeData appThemeCli = new ThemeData(
-  primaryColor: primaryColor,
-  buttonColor: primaryColor,
-  indicatorColor: Colors.white,
-  splashColor: Colors.white24,
-  splashFactory: InkRipple.splashFactory,
-  accentColor: Color(0xFF13B9FD),
-  canvasColor: Colors.white,
-  scaffoldBackgroundColor: Colors.white,
   backgroundColor: Colors.white,
   errorColor: Color(0xFFB00020),
-  iconTheme: new IconThemeData(color: primaryColor),
+  iconTheme: IconThemeData(color: primaryColor),
+  buttonColor: primaryColor,
   buttonTheme: ButtonThemeData(
+    buttonColor: primaryColor,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     textTheme: ButtonTextTheme.primary,
   ),
-  appBarTheme: AppBarTheme(
-    centerTitle: true,
-    iconTheme: IconThemeData(
-      color: Colors.white
-    ),
-    actionsIconTheme: IconThemeData(
-      color: Colors.white
-    )
-  ),
-  textTheme: _buildTextTheme(base.textTheme),
-  primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-  accentTextTheme: _buildTextTheme(base.accentTextTheme),
 
 );
