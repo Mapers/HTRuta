@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapViewerUtil {
+  MarkerId markerLocation = MarkerId('DRIVER_LOCATION');
+  MarkerId markerFrom = MarkerId('DRIVER_FROM_LOCATION');
+  MarkerId markerTo = MarkerId('DRIVER_TO_LOCATION');
+
   GoogleMapController googleMapController;
 
   Widget build({
@@ -42,10 +46,7 @@ class MapViewerUtil {
     );
   }
 
-  void cameraMoveLatLngZoom(
-    LatLng location,
-    {double zoom = 14}
-  ) async {
+  void cameraMoveLatLngZoom(LatLng location, {double zoom = 16}) async {
     return googleMapController?.animateCamera(
       CameraUpdate?.newLatLngZoom(
         location,
@@ -90,5 +91,17 @@ class MapViewerUtil {
         120,
       ),
     );
+  }
+
+  Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
+    MarkerId markerId = MarkerId(nameMarkerId);
+    Marker marker = Marker(
+      markerId: markerId,
+      position: latLng,
+      draggable: false,
+      icon: icon,
+      onTap: onTap
+    );
+    return marker;
   }
 }

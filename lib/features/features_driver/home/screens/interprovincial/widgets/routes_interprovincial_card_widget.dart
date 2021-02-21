@@ -31,7 +31,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 30,
+      bottom: 10,
       left: 20,
       right: 20,
       child: Card(

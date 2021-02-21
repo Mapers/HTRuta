@@ -30,6 +30,7 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   Container(
                     width: 13,
                     height: 13,
+                    margin: EdgeInsets.symmetric(horizontal: 2),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black45, width: 2),
                       borderRadius: BorderRadius.circular(50)

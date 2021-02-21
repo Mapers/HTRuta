@@ -160,7 +160,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _onMapCreated(GoogleMapController controller) async {
-    _mapController = controller;
     MarkerId markerId = MarkerId(_markerIdVal());
     LatLng position = LatLng(currentLocation?.latitude,currentLocation?.longitude);
     Marker marker = Marker(
@@ -172,6 +171,7 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _markers[markerId] = marker;
     });
+    _mapController = controller;
     Future.delayed(Duration(milliseconds: 200), () async {
       _mapController = controller;
       controller?.animateCamera(
