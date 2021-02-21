@@ -67,7 +67,6 @@ class MapViewerUtil {
     return marker;
   }
 
-
   Future<Polyline> generatePolyline(String namePolylineId, LocationEntity from, LocationEntity to, {MaterialColor color = Colors.blue}) async{
     PolylinePoints polylinePoints = PolylinePoints();
     PointLatLng fromPoint = PointLatLng(from.latLang.latitude, from.latLang.longitude);
