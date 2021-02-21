@@ -4,6 +4,7 @@ import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/waiting_to_start_route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -47,6 +48,8 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
                 return LoadingPositioned(label: state.loadingMessage);
               }else if(state.status == InterprovincialStatus.notEstablished){
                 return RoutesInterprovincialCardWidget();
+              }else if(state.status == InterprovincialStatus.waiting){
+                return WaitingToStartRouteWidget();
               }
             }
             return Container();

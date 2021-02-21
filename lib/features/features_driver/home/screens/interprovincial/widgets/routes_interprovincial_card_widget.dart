@@ -1,6 +1,8 @@
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RoutesInterprovincialCardWidget extends StatefulWidget {
   RoutesInterprovincialCardWidget({Key key}) : super(key: key);
@@ -75,29 +77,6 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
           )
         ],
       ),
-      // subtitle: Column(
-      //   children: [
-      //     Row(
-      //       children: [
-      //         Icon(Icons.my_location, size: 18,),
-      //         SizedBox(width: 3),
-      //         Expanded(
-      //           child: Text(interprovincialRoute.fromLocation.name)
-      //         )
-      //       ],
-      //     ),
-      //     SizedBox(height: 3),
-      //     Row(
-      //       children: [
-      //         Icon(Icons.beenhere, size: 18,),
-      //         SizedBox(width: 3),
-      //         Expanded(
-      //           child: Text(interprovincialRoute.toLocation.name),
-      //         )
-      //       ],
-      //     ),
-      //   ],
-      // ),
       onTap: () => _showModalConfirmationRoute(interprovincialRoute),
     );
   }
@@ -115,7 +94,10 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
           ),
           RaisedButton(
             child: Text('Iniciar ruta', style: TextStyle(color: Colors.white)),
-            onPressed: (){},
+            onPressed: (){
+              Navigator.of(context).pop();
+              BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(route: interprovincialRoute));
+            },
           )
         ],
       )
