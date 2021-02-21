@@ -1,10 +1,10 @@
+import 'package:HTRuta/config.dart';
+import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapViewerUtil {
-  MarkerId markerLocation = MarkerId('DRIVER_LOCATION');
-  MarkerId markerFrom = MarkerId('DRIVER_FROM_LOCATION');
-  MarkerId markerTo = MarkerId('DRIVER_TO_LOCATION');
 
   GoogleMapController googleMapController;
 
@@ -55,44 +55,6 @@ class MapViewerUtil {
     );
   }
 
-  void cameraMoveBound({
-    @required LatLng fromLocation,
-    @required LatLng toLocation,
-  }) async {
-    var _latFrom = fromLocation.latitude;
-    var _lngFrom = fromLocation.longitude;
-    var _latTo = toLocation.latitude;
-    var _lngTo = toLocation.longitude;
-    var sLat, sLng, nLat, nLng;
-
-    if(_latFrom <= _latTo) {
-      sLat = _latFrom;
-      nLat = _latTo;
-    } else {
-      sLat = _latTo;
-      nLat = _latFrom;
-    }
-
-    if(_lngFrom <= _lngTo) {
-      sLng = _lngFrom;
-      nLng = _lngTo;
-    } else {
-      sLng = _lngTo;
-      nLng = _lngFrom;
-    }
-
-
-    return googleMapController?.animateCamera(
-      CameraUpdate?.newLatLngBounds(
-        LatLngBounds(
-          southwest: LatLng(sLat, sLng),
-          northeast: LatLng(nLat, nLng),
-        ),
-        120,
-      ),
-    );
-  }
-
   Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
     MarkerId markerId = MarkerId(nameMarkerId);
     Marker marker = Marker(
@@ -103,5 +65,26 @@ class MapViewerUtil {
       onTap: onTap
     );
     return marker;
+  }
+
+
+  Future<Polyline> generatePolyline(String namePolylineId, LocationEntity from, LocationEntity to, {MaterialColor color = Colors.blue}) async{
+    PolylinePoints polylinePoints = PolylinePoints();
+    PointLatLng fromPoint = PointLatLng(from.latLang.latitude, from.latLang.longitude);
+    PointLatLng toPoint = PointLatLng(to.latLang.latitude, to.latLang.longitude);
+    List<LatLng> polylineCoordinates = [];
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      Config.googleMapsApiKey,
+      fromPoint, toPoint
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+      PolylineId id = PolylineId(namePolylineId);
+      Polyline polyline = Polyline(polylineId: id, color: color, points: polylineCoordinates, width: 3);
+      return polyline;
+    }
+    return null;
   }
 }
