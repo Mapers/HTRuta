@@ -21,6 +21,8 @@ class AppState with ChangeNotifier {
   Set<Marker> get markers => _markers;
   Set<Polyline> get polyLines => _polyLines;
 
+  FocusNode _focus = new FocusNode();
+
   AppState() {
     _getUserLocation();
     _loadingInitialPosition();
@@ -30,8 +32,22 @@ class AppState with ChangeNotifier {
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
     _initialPosition = LatLng(position.latitude, position.longitude);
-    locationController.text = placemark[0].locality;
+    // locationController.text = placemark[0].locality;
     notifyListeners();
+  }
+
+  createpoint({LatLng pos, bool inputSelecter}) async{
+    print(inputSelecter);
+    if(inputSelecter){
+      List<Placemark> placeMarkOrigin= await Geolocator().placemarkFromCoordinates(pos.latitude, pos.longitude);
+      _addMarker(pos,placeMarkOrigin[0].locality);
+      locationController.text = placeMarkOrigin[0].locality;
+    }else{
+      print("entre");
+      List<Placemark> placeMarkDestination= await Geolocator().placemarkFromCoordinates(pos.latitude, pos.longitude);
+      destinationController.text = placeMarkDestination[0].locality;
+    }
+    // print(markers.length);
   }
 
   // ! TO CREATE ROUTE
@@ -40,17 +56,18 @@ class AppState with ChangeNotifier {
         polylineId: PolylineId(_lastPosition.toString()),
         width: 5,
         points: _convertToLatLng(_decodePoly(encondedPoly)),
-        color: Colors.amber));
+        color: Colors.red));
     notifyListeners();
   }
 
   // ! ADD A MARKER ON THE MAO
   void _addMarker(LatLng location, String address) {
     _markers.add(Marker(
-        markerId: MarkerId(_lastPosition.toString()),
-        position: location,
-        infoWindow: InfoWindow(title: address, snippet: "go here"),
-        icon: BitmapDescriptor.defaultMarker));
+      markerId: MarkerId(_lastPosition.toString()),
+      position: location,
+      infoWindow: InfoWindow(title: address, snippet: "go here"),
+      icon: BitmapDescriptor.defaultMarker)
+    );
     notifyListeners();
   }
 

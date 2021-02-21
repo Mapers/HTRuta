@@ -13,12 +13,24 @@ class SelecctionOriginDestination extends StatefulWidget {
 }
 
 class _SelecctionOriginDestinationState extends State<SelecctionOriginDestination> {
+  FocusNode _focus = new FocusNode();
   final formKey = new GlobalKey<FormState>();
   String origin = "";
   String destination = "";
+  bool inputSelecter= true ;
   @override
   void initState() {
+    _focus.addListener(_onFocusChange);
     super.initState();
+  }
+  void _onFocusChange(){
+    if(_focus.hasFocus){
+      inputSelecter = true;
+      setState(() {});
+    }else{
+      inputSelecter =false;
+      setState(() {});
+    }
   }
 
   @override
@@ -34,6 +46,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 target: appState.initialPosition,
                 zoom: 12,
               ),
+              onTap: (pos){
+                appState.createpoint(pos: pos,inputSelecter:inputSelecter);
+                print(inputSelecter);
+              },
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
               onMapCreated: appState.onCreated,
@@ -62,9 +78,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   ],
                 ),
                 child: TextField(
+                  
+                  focusNode: _focus,
                   cursorColor: Colors.black,
-                  // controller: appState.locationController,
-                  // textInputAction: TextInputAction.go,
+                  controller: appState.locationController,
                   onChanged: (val){
                     origin = val;
                   },
@@ -78,18 +95,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                     }
                   },
                   decoration: InputDecoration(
-                    icon: Container(
-                      margin: EdgeInsets.only(left: 20,),
-                      width: 10,
-                      height: 10,
-                      child: Icon(
-                        Icons.location_on,
-                        color: Colors.black,
-                      ),
-                    ),
-                    hintText: "Origen",
+                    suffixIcon:  inputSelecter ?Icon(Icons.radio_button_checked):null,
+                    labelText:"Origen" ,
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15, top: 5),
+                    contentPadding: EdgeInsets.only(left: 15,),
                   ),
                 ),
               ),
@@ -114,7 +123,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 ),
                 child: TextField(
                   cursorColor: Colors.black,
-                  // controller: appState.destinationController,
+                  controller: appState.destinationController,
                   onChanged: (val){
                     destination = val;
                   },
@@ -129,16 +138,8 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                     }
                   },
                   decoration: InputDecoration(
-                    icon: Container(
-                      margin: EdgeInsets.only(left: 20),
-                      width: 10,
-                      height: 10,
-                      child: Icon(
-                        Icons.local_taxi,
-                        color: Colors.black,
-                      ),
-                    ),
-                    hintText: "Destino",
+                    suffixIcon: !inputSelecter?Icon(Icons.radio_button_checked):null,
+                    labelText:"Destino" ,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15, top: 5),
                   ),
