@@ -45,6 +45,7 @@ class AppState with ChangeNotifier {
     }else{
       print("entre");
       List<Placemark> placeMarkDestination= await Geolocator().placemarkFromCoordinates(pos.latitude, pos.longitude);
+      _addMarker(pos,placeMarkDestination[0].locality);
       destinationController.text = placeMarkDestination[0].locality;
     }
     // print(markers.length);
