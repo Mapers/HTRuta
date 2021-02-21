@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
@@ -10,7 +11,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart'
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
-import 'package:HTRuta/utils/location_util.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
@@ -67,32 +67,31 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await _initLastKnownLocation();
       await _initCurrentLocation();
+      _locationService.getPositionStream().listen((event) async{
+        double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+        if(diferencia > 5){
+          final _prefs = PreferenciaUsuario();
+          await _prefs.initPrefs();
+          final data = await referenceDatabase.child('Coordenada').child(_prefs.idChofer).once();
+          if(data.value != null && data.value!= ''){
+            referenceDatabase.child('Coordenada').child(_prefs.idChofer).update({
+              'latitud' : event.latitude,
+              'longitud': event.longitude
+            });
+          }else{
+            referenceDatabase.child('Coordenada').child(_prefs.idChofer).set({
+              'idConductor' : _prefs.idChofer,
+              'latitud' : event.latitude,
+              'longitud': event.longitude
+            });
+          }
+        }
+      });
       fetchLocation();
       fetchEstadoConductor();
       isLoading = false;
       setState(() {
-        
       });
-    });
-    _locationService.getPositionStream().listen((event) async{
-      double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(diferencia > 5){
-        final _prefs = PreferenciaUsuario();
-        await _prefs.initPrefs();
-        final data = await referenceDatabase.child('Coordenada').child(_prefs.idChofer).once();
-        if(data.value != null && data.value!= ''){
-          referenceDatabase.child('Coordenada').child(_prefs.idChofer).update({
-            'latitud' : event.latitude,
-            'longitud': event.longitude
-          });
-        }else{
-          referenceDatabase.child('Coordenada').child(_prefs.idChofer).set({
-            'idConductor' : _prefs.idChofer,
-            'latitud' : event.latitude,
-            'longitud': event.longitude
-          });
-        }
-      }
     });
 
     listRequest = [

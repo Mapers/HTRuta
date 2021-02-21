@@ -1,3 +1,4 @@
+import 'package:HTRuta/core/utils/colors_util.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 TextStyle textStyle = style();
@@ -117,32 +118,24 @@ TextStyle style({
     fontFamily:  fontFamily,
   );
 }
-TextTheme _buildTextTheme(TextTheme base) {
-  var copyWith = base.copyWith(
-    title: base.title.copyWith(
-    ),
-  );
-  return copyWith;
-}
-final ThemeData base = ThemeData.light();
 
 ThemeData appTheme = ThemeData(
   fontFamily: "MYRIADPRO",
+  primarySwatch: MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor)),
   primaryColor: primaryColor,
   accentColor: primaryColor,
-  buttonColor: primaryColor,
+  scaffoldBackgroundColor: Colors.white,
   indicatorColor: Colors.white,
   splashColor: Colors.white24,
   canvasColor: Colors.white,
-  scaffoldBackgroundColor: Colors.white,
   backgroundColor: Colors.white,
-  errorColor: const Color(0xFFB00020),
+  errorColor: Color(0xFFB00020),
   iconTheme: IconThemeData(color: primaryColor),
+  buttonColor: primaryColor,
   buttonTheme: ButtonThemeData(
+    buttonColor: primaryColor,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     textTheme: ButtonTextTheme.primary,
   ),
-  textTheme: _buildTextTheme(base.textTheme),
-  primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-  accentTextTheme: _buildTextTheme(base.accentTextTheme),
 
 );

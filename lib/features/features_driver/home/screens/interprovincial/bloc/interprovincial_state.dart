@@ -7,4 +7,24 @@ abstract class InterprovincialState extends Equatable {
   List<Object> get props => [];
 }
 
-class DataInterprovincialState extends InterprovincialState {}
+enum InterprovincialStatus {
+  loading, notEstablished, waiting, inRoute, 
+}
+
+class DataInterprovincialState extends InterprovincialState {
+  final String loadingMessage;
+  final InterprovincialStatus status;
+  final InterprovincialRouteEntity route;
+  DataInterprovincialState({@required this.route, @required this.status, this.loadingMessage});
+
+  factory DataInterprovincialState.initial({String loadingMessage}){
+    return DataInterprovincialState(
+      status: InterprovincialStatus.loading,
+      route: null,
+      loadingMessage: loadingMessage ?? 'Cargando'
+    );
+  }
+
+  @override
+  List<Object> get props => [route, status, loadingMessage];
+}
