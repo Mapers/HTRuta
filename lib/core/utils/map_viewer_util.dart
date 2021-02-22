@@ -87,4 +87,23 @@ class MapViewerUtil {
     }
     return null;
   }
+  Future<Polyline> generatePolylineXd(String namePolylineId, LatLng from, LatLng to, {MaterialColor color = Colors.blue}) async{
+    PolylinePoints polylinePoints = PolylinePoints();
+    PointLatLng fromPoint = PointLatLng(from.latitude, from.longitude);
+    PointLatLng toPoint = PointLatLng(to.latitude, to.longitude);
+    List<LatLng> polylineCoordinates = [];
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      Config.googleMapsApiKey,
+      fromPoint, toPoint
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+      PolylineId id = PolylineId(namePolylineId);
+      Polyline polyline = Polyline(polylineId: id, color: color, points: polylineCoordinates, width: 3);
+      return polyline;
+    }
+    return null;
+  }
 }

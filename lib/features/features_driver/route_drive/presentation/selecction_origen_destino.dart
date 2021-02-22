@@ -1,6 +1,9 @@
 import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/core/utils/map_viewer_util.dart';
+import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/widgets/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 class SelecctionOriginDestination extends StatefulWidget {
@@ -13,11 +16,24 @@ class SelecctionOriginDestination extends StatefulWidget {
 }
 
 class _SelecctionOriginDestinationState extends State<SelecctionOriginDestination> {
+  MapViewerUtil _mapViewerUtil = MapViewerUtil();
   FocusNode _focus = new FocusNode();
   final formKey = new GlobalKey<FormState>();
+  LocationEntity location = LocationEntity.initalPeruPosition();
+  Map<MarkerId, Marker> _markers = {};
+  Map<PolylineId, Polyline> polylines = {};
   String origin = "";
   String destination = "";
   bool inputSelecter= true ;
+  LatLng currentLocation;
+
+  TextEditingController fromController = TextEditingController();
+  TextEditingController toController = TextEditingController();
+
+  BitmapDescriptor currentPinLocationIcon;
+  BitmapDescriptor fromPinLocationIcon;
+  BitmapDescriptor toPinLocationIcon;
+
   @override
   void initState() {
     _focus.addListener(_onFocusChange);
@@ -32,32 +48,64 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
       setState(() {});
     }
   }
+    LatLng from;
+    LatLng to;
+  void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
+    if(inputSelecter){
+      print("from");
+      from = pos;
+      List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
+      if(placemarkFrom[0].locality != ""){
+        fromController.text = placemarkFrom[0].locality;
+      }
+      Marker markerFrom = _mapViewerUtil.generateMarker(
+        latLng: from,
+        nameMarkerId: 'FROM_POSITION_MARKER',
+      );
+      _markers[markerFrom.markerId] = markerFrom;
+    }else{
+      print("to");
+      to = pos;
+      List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+      if(placemarkTo[0].locality != ""){
+        toController.text = placemarkTo[0].locality;
+      }
+      Marker markerTo = _mapViewerUtil.generateMarker(
+        latLng: to,
+        nameMarkerId: 'TO_POSITION_MARKER',
+      );
+      _markers[markerTo.markerId] = markerTo;
+    }
+
+    if(_markers.length == 2){
+      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', from, to);
+      polylines[polyline.polylineId] = polyline;
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
     return Scaffold(
       body: Form(
         key: formKey,
         child: Stack(
           children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: appState.initialPosition,
-                zoom: 12,
-              ),
-              onTap: (pos){
-                appState.createpoint(pos: pos,inputSelecter:inputSelecter);
-                print(inputSelecter);
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              onMapCreated: appState.onCreated,
-              mapType: MapType.normal,
-              compassEnabled: true,
-              markers: appState.markers,
-              onCameraMove: appState.onCameraMove,
-              polylines: appState.polyLines,
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: _mapViewerUtil.build(
+                height: MediaQuery.of(context).size.height,
+                currentLocation: location?.latLang,
+                markers: _markers,
+                polyLines: polylines,
+                onTap: (pos){
+                  if(inputSelecter){
+                    _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
+                  }else{
+                    _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
+                  }
+                }
+              )
             ),
             Positioned(
               top: 50,
@@ -78,21 +126,13 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   ],
                 ),
                 child: TextField(
-                  
                   focusNode: _focus,
                   cursorColor: Colors.black,
-                  controller: appState.locationController,
-                  onChanged: (val){
-                    origin = val;
-                  },
-                  onSubmitted: (value) {
-                    origin = value;
-                      formKey.currentState.save();
-                      print(origin);
-                      print(destination);
-                    if(destination != ""){
-                      appState.sendRequest(txtOrigen: origin,txtDestination: destination);
-                    }
+                  controller: fromController,
+                  onSubmitted: (value) async{
+                    List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
+                    LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
+                    _addFromToMarkers(pos: pos ,inputSelecter:true );
                   },
                   decoration: InputDecoration(
                     suffixIcon:  inputSelecter ?Icon(Icons.radio_button_checked):null,
@@ -123,19 +163,14 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 ),
                 child: TextField(
                   cursorColor: Colors.black,
-                  controller: appState.destinationController,
+                  controller: toController,
                   onChanged: (val){
                     destination = val;
                   },
-                  onSubmitted: (value) {
-                    destination = value;
-                    formKey.currentState.save();
-                    print(origin);
-                    print(destination);
-                    if(origin != ""){
-                      formKey.currentState.save();
-                      appState.sendRequest(txtDestination: destination, txtOrigen: origin);
-                    }
+                  onSubmitted: (value) async {
+                    List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
+                    LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
+                    _addFromToMarkers(pos: pos ,inputSelecter: false );
                   },
                   decoration: InputDecoration(
                     suffixIcon: !inputSelecter?Icon(Icons.radio_button_checked):null,
