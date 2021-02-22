@@ -1,7 +1,7 @@
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/data/datasources/local/router_drive_local_datasource.dart';
+import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -18,8 +18,8 @@ Future<void> init() async {
     () => RouteDriveRepository(sl())
   );
 
-  sl.registerLazySingleton<RouterDriveLocalDataSoruce>(
-    () => RouterDriveLocalDataSoruce()
+  sl.registerLazySingleton<RouterDriveRemoteDataSoruce>(
+    () => RouterDriveRemoteDataSoruce()
   );
 
   sl.registerLazySingleton<DriverServiceBloc>(

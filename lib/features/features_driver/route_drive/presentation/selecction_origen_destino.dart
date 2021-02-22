@@ -1,12 +1,10 @@
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/fromToEntity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:provider/provider.dart';
 class SelecctionOriginDestination extends StatefulWidget {
   final double la;
   final double lo;
@@ -25,6 +23,8 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
   Map<PolylineId, Polyline> polylines = {};
   bool inputSelecter= true ;
   LatLng currentLocation;
+  String txtFrom;
+  String txtTo;
   LatLng from;
   LatLng to;
   TextEditingController fromController = TextEditingController();
@@ -63,6 +63,9 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
     }else{
       to = pos;
       List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+      print(".......");
+      print(placemarkTo[0].locality);
+      print(".......");
       if(placemarkTo[0].locality != ""){
         toController.text = placemarkTo[0].locality;
       }
@@ -126,6 +129,9 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   focusNode: _focus,
                   cursorColor: Colors.black,
                   controller: fromController,
+                  onChanged: (val){
+                    txtFrom = val;
+                  },
                   onSubmitted: (value) async{
                     List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
                     LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
@@ -161,6 +167,9 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 child: TextField(
                   cursorColor: Colors.black,
                   controller: toController,
+                  onChanged: (val){
+                    txtTo = val;
+                  },
                   onSubmitted: (value) async {
                     List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
                     LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
@@ -179,10 +188,23 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
               top: 500,
               right: 15,
               left: 15,
-              child: PrincipalButton(text: "Guardar",onPressed: (){
+              child: PrincipalButton(text: "Guardar",onPressed: () async {
                 formKey.currentState.save();
-                BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent());
-                Navigator.of(context).pop();
+                List<Placemark> placemarkfrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
+                List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+                // BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(
+                //   provinceFrom: placemarkfrom[0].locality =="" ? txtFrom : placemarkfrom[0].locality,
+                //   provinceTo: placemarkTo[0].locality== ""? txtTo :placemarkTo[0].locality,
+                //   from: from,
+                //   to:to,
+                // ));
+                FromToEntity data =FromToEntity(
+                  provinceFrom: placemarkfrom[0].locality =="" ? txtFrom : placemarkfrom[0].locality,
+                  provinceTo: placemarkTo[0].locality== ""? txtTo :placemarkTo[0].locality,
+                  from: from,
+                  to: to,
+                );
+                Navigator.of(context).pop(data);
               },)
             ),
           ],
