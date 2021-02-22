@@ -1,8 +1,9 @@
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/widgets/app_state.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +23,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
-  String origin = "";
-  String destination = "";
   bool inputSelecter= true ;
   LatLng currentLocation;
-
+  LatLng from;
+  LatLng to;
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
 
@@ -48,11 +48,8 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
       setState(() {});
     }
   }
-    LatLng from;
-    LatLng to;
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     if(inputSelecter){
-      print("from");
       from = pos;
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
       if(placemarkFrom[0].locality != ""){
@@ -64,7 +61,6 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
       );
       _markers[markerFrom.markerId] = markerFrom;
     }else{
-      print("to");
       to = pos;
       List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
       if(placemarkTo[0].locality != ""){
@@ -95,7 +91,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
               height: MediaQuery.of(context).size.height,
               child: _mapViewerUtil.build(
                 height: MediaQuery.of(context).size.height,
-                currentLocation: location?.latLang,
+                currentLocation: LatLng(widget.la, widget.lo),
                 markers: _markers,
                 polyLines: polylines,
                 onTap: (pos){
@@ -119,13 +115,14 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(1, 5),
-                        blurRadius: 10,
-                        spreadRadius: 3)
+                      color: Colors.grey,
+                      offset: Offset(1, 5),
+                      blurRadius: 10,
+                      spreadRadius: 3)
                   ],
                 ),
                 child: TextField(
+                  autofocus: true,
                   focusNode: _focus,
                   cursorColor: Colors.black,
                   controller: fromController,
@@ -164,9 +161,6 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 child: TextField(
                   cursorColor: Colors.black,
                   controller: toController,
-                  onChanged: (val){
-                    destination = val;
-                  },
                   onSubmitted: (value) async {
                     List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
                     LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
@@ -185,10 +179,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
               top: 500,
               right: 15,
               left: 15,
-              child: PrincipalButton(text: "#",onPressed: (){
+              child: PrincipalButton(text: "Guardar",onPressed: (){
                 formKey.currentState.save();
-                  print(origin);
-                  print(destination);
+                BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent());
+                Navigator.of(context).pop();
               },)
             ),
           ],

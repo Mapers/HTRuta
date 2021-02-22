@@ -41,7 +41,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                 ),
                 SizedBox(height: 5),
-                CartDataMap(title: "Orogen", subTitle: "lima",),
+                CartDataMap(title: "Origen", subTitle: "lima",),
                 CartDataMap(title: "Destino", subTitle: "Huacho",),
               ],
             ),

@@ -16,6 +16,8 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
     if (event is GetRouterDrivesEvent) {
       List<RoterDriveEntity> roterDrives = await routeDriveRepository.getRouterDrives();
       yield RouteDriveInitial(roterDrives: roterDrives );
+    }else if (event is AddDrivesRouteDriveEvent) {
+      print("llege perro");
     }
   }
 }

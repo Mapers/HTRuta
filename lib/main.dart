@@ -8,7 +8,6 @@ import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/widgets/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -59,7 +58,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
 
-        ChangeNotifierProvider.value(value: AppState(),)
       ],
       child: MultiBlocProvider(
         providers: [
