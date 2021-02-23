@@ -53,12 +53,14 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                   child: CircularProgressIndicator(),
                 );
               }
+          print("MMMMMMMMMMMM");
+          print(param.roterDrives.length);
           return ListView.builder(
               itemCount: param.roterDrives.length,
               itemBuilder: (BuildContext context, int i) {
                 RoterDriveEntity roterDrive = param.roterDrives[i];
                 return ListTile(
-                    title: Text(roterDrive.name+" "+roterDrive.lastName),
+                    title: Text(roterDrive.name),
                     subtitle: Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +72,10 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                                 padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Icon(FontAwesomeIcons.arrowRight,size: 15, ),
                               ),
-                              Text(roterDrive.destination),
+                              Container(
+                                width: 150,
+                                child: Text(roterDrive.destination)
+                              ),
                             ],
                           ),
                           Row(
