@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class PrincipalInput extends StatelessWidget {
+  final TextEditingController controller;
   final IconData icon;
   final String hinText;
   final void Function(String) onSaved;
@@ -11,7 +12,7 @@ class PrincipalInput extends StatelessWidget {
   final String initialValue;
   final bool isRequired;
   final int maxLines;
-  const PrincipalInput({Key key, this.hinText, this.icon, this.onSaved, this.onChanged, this.validator, this.onFieldSubmitted, this.initialValue, this.isRequired, this.maxLines}) : super(key: key);
+  const PrincipalInput({Key key, this.hinText, this.icon, this.onSaved, this.onChanged, this.validator, this.onFieldSubmitted, this.initialValue, this.isRequired, this.maxLines, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class PrincipalInput extends StatelessWidget {
         borderRadius: BorderRadius.circular(10)
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           icon: Icon(icon),
           // labelText: "Nombre",
@@ -32,17 +34,17 @@ class PrincipalInput extends StatelessWidget {
           hintStyle: TextStyle(color: Colors.grey),
           border: InputBorder.none,
         ),
-        maxLines: this.maxLines,
-        onSaved: this.onSaved,
-        onChanged: this.onChanged,
-        onFieldSubmitted: this.onFieldSubmitted,
-        initialValue: this.initialValue,
+        maxLines: maxLines,
+        onSaved: onSaved,
+        onChanged: onChanged,
+        onFieldSubmitted: onFieldSubmitted,
+        initialValue: initialValue,
         validator: (String _text){
-          if(this.isRequired && _text.isEmpty){
-            return "Requerido.";
+          if(isRequired && _text.isEmpty){
+            return 'Requerido.';
           }
-          if(this.validator != null){
-            return this.validator(_text);
+          if(validator != null){
+            return validator(_text);
           }
           return null;
         }

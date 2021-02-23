@@ -1,7 +1,9 @@
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/fromToEntity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,8 +18,8 @@ class SelecctionOriginDestination extends StatefulWidget {
 
 class _SelecctionOriginDestinationState extends State<SelecctionOriginDestination> {
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
-  FocusNode _focus = new FocusNode();
-  final formKey = new GlobalKey<FormState>();
+  FocusNode _focus = FocusNode();
+  final formKey = GlobalKey<FormState>();
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
@@ -40,6 +42,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
     super.initState();
   }
   void _onFocusChange(){
+    
     if(_focus.hasFocus){
       inputSelecter = true;
       setState(() {});
@@ -51,8 +54,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     if(inputSelecter){
       from = pos;
+      openLoadingDialog(context);
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
-      if(placemarkFrom[0].locality != ""){
+      Navigator.of(context).pop();
+      if(placemarkFrom[0].locality != ''){
         fromController.text = placemarkFrom[0].locality;
       }
       Marker markerFrom = _mapViewerUtil.generateMarker(
@@ -62,11 +67,10 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
       _markers[markerFrom.markerId] = markerFrom;
     }else{
       to = pos;
+      openLoadingDialog(context);
       List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
-      print(".......");
-      print(placemarkTo[0].locality);
-      print(".......");
-      if(placemarkTo[0].locality != ""){
+      Navigator.of(context).pop();
+      if(placemarkTo[0].locality != ''){
         toController.text = placemarkTo[0].locality;
       }
       Marker markerTo = _mapViewerUtil.generateMarker(
@@ -77,7 +81,9 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
     }
 
     if(_markers.length == 2){
+      openLoadingDialog(context);
       Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', from, to);
+      Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
     }
     setState(() {});
@@ -99,15 +105,35 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 polyLines: polylines,
                 onTap: (pos){
                   if(inputSelecter){
+                    FocusScope.of(context).requestFocus( FocusNode());
                     _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
                   }else{
+                    FocusScope.of(context).requestFocus( FocusNode());
                     _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
                   }
                 }
               )
             ),
             Positioned(
-              top: 50,
+              top: 30,
+              left: 15,
+              child: ClipOval(
+                child: Material(
+                  color: backgroundColor, // button color
+                  child: InkWell(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Center(child: Icon(Icons.chevron_left,size: 30,color: Colors.black,))),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              )
+            ),
+            Positioned(
+              top: 80,
               right: 15,
               left: 15,
               child: Container(
@@ -139,7 +165,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   },
                   decoration: InputDecoration(
                     suffixIcon:  inputSelecter ?Icon(Icons.radio_button_checked):null,
-                    labelText:"Origen" ,
+                    labelText:'Origen' ,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15,),
                   ),
@@ -147,7 +173,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
               ),
             ),
             Positioned(
-              top: 110,
+              top: 140,
               right: 15,
               left: 15,
               child: Container(
@@ -177,7 +203,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                   },
                   decoration: InputDecoration(
                     suffixIcon: !inputSelecter?Icon(Icons.radio_button_checked):null,
-                    labelText:"Destino" ,
+                    labelText:'Destino' ,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 15, top: 5),
                   ),
@@ -188,21 +214,15 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
               top: 500,
               right: 15,
               left: 15,
-              child: PrincipalButton(text: "Guardar",onPressed: () async {
+              child: PrincipalButton(text: 'Guardar',onPressed: () async {
                 formKey.currentState.save();
                 List<Placemark> placemarkfrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
                 List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
-                // BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(
-                //   provinceFrom: placemarkfrom[0].locality =="" ? txtFrom : placemarkfrom[0].locality,
-                //   provinceTo: placemarkTo[0].locality== ""? txtTo :placemarkTo[0].locality,
-                //   from: from,
-                //   to:to,
-                // ));
-                FromToEntity data =FromToEntity(
-                  provinceFrom: placemarkfrom[0].locality =="" ? txtFrom : placemarkfrom[0].locality,
-                  provinceTo: placemarkTo[0].locality== ""? txtTo :placemarkTo[0].locality,
-                  from: from,
-                  to: to,
+                RoterDriveEntity data = RoterDriveEntity(
+                  nameFrom: placemarkfrom[0].locality == '' ? txtFrom : placemarkfrom[0].locality,
+                  nameTo: placemarkTo[0].locality== '' ? txtTo :placemarkTo[0].locality,
+                  latLagFrom: from,
+                  latLagTo: to,
                 );
                 Navigator.of(context).pop(data);
               },)

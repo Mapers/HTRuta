@@ -1,8 +1,5 @@
-
-
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/components/button.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/fromToEntity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/selecction_origen_destino.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
@@ -11,25 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 class AdditRouterDrivePage extends StatefulWidget {
-  AdditRouterDrivePage({Key key}) : super(key: key);
+  final RoterDriveEntity roterDrive;
+  final bool statAddEdit;
+  AdditRouterDrivePage({Key key, this.roterDrive, this.statAddEdit}) : super(key: key);
 
   @override
   _AdditRouterDrivePageState createState() => _AdditRouterDrivePageState();
 }
 
 class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   String name;
-  FromToEntity dataFromTo;
-  String from ="";
-  String to ="";
+  RoterDriveEntity roterDrive;
+  String from = '';
+  LatLng latLagFrom;
+  LatLng latLagTo;
+
+  TextEditingController nameConroller = TextEditingController();
+  TextEditingController fromController = TextEditingController();
+  TextEditingController toController = TextEditingController();
+  String to = '';
+  @override
+  void initState() {
+    if(!widget.statAddEdit){
+      nameConroller.text = widget.roterDrive.name;
+      from = widget.roterDrive.nameFrom;
+      to = widget.roterDrive.nameTo;
+      latLagFrom = widget.roterDrive.latLagFrom;
+      latLagTo = widget.roterDrive.latLagTo;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text("Crear ruta"),
+        title: Text('Crear ruta'),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -42,7 +59,8 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                 child: Column(
                   children: [
                     PrincipalInput(
-                      hinText: "Nombre",
+                      controller: nameConroller,
+                      hinText: 'Nombre',
                       icon: FontAwesomeIcons.mapMarkedAlt,
                       onSaved: (val) => name = val,
                     ),
@@ -50,18 +68,18 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                     PrincipalButton(
                       onPressed: ()async{
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                        dataFromTo = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,)));
-                        from = dataFromTo.provinceFrom;
-                        to = dataFromTo.provinceTo;
-                        setState(() {});
+                        roterDrive = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,)));
+                          from = roterDrive.nameFrom;
+                          to = roterDrive.nameTo;
+                          setState(() {});
                       },
-                      text: "Selecionar ruta",
+                      text: 'Selecionar ruta',
                       color: Colors.black,
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    from == "" ? Container():CartDataMap(title: "Origen", subTitle: from,),
-                    to == "" ? Container():CartDataMap(title: "Destino", subTitle: to,),
+                    from == '' ? Container():CartDataMap(title: 'Origen', subTitle: from,),
+                    to == '' ? Container():CartDataMap(title: 'Destino', subTitle: to,),
                   ],
                 ),
               ),
@@ -70,10 +88,29 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                 child: PrincipalButton(
                   onPressed: (){
                     formKey.currentState.save();
-                    Navigator.of(context).pop();
-                    BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(dataFromTo: dataFromTo,name: name));
+                    if( widget.statAddEdit){
+                      RoterDriveEntity roterDrive = RoterDriveEntity(
+                        name: name,
+                        nameFrom: from,
+                        nameTo: to,
+                        latLagFrom: latLagFrom,
+                        latLagTo:  latLagTo
+                      );
+                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(roterDrive: roterDrive));
+                      Navigator.of(context).pop();
+                    }else{
+                      RoterDriveEntity newRoterDrive = RoterDriveEntity(
+                        name: name,
+                        nameFrom: from,
+                        nameTo: to,
+                        latLagFrom: latLagFrom ,
+                        latLagTo:  latLagTo
+                      );
+                      BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(roterDrive: widget.roterDrive, newRoterDrive: newRoterDrive));
+                      Navigator.of(context).pop();
+                    }
                   },
-                  text: "Crear ruta",
+                  text: widget.statAddEdit?'Crear ruta':'Actualizar ruta',
                   color: primaryColor,
                 ),
               ),
@@ -112,3 +149,4 @@ class CartDataMap extends StatelessWidget {
     );
   }
 }
+

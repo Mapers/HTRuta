@@ -23,18 +23,17 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
     super.initState();
   }
 
-  final String screenName = "Rutas";
+  final String screenName = 'Rutas';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Rutas"),
+        title: Text('Rutas'),
         centerTitle: false,
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AdditRouterDrivePage()));
+              Navigator.of(context).push(MaterialPageRoute( builder: (context) => AdditRouterDrivePage(statAddEdit: true,)));
             },
             icon: Icon(
               Icons.add_location_alt_sharp,
@@ -46,50 +45,66 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
       drawer: MenuDriverScreens(activeScreenName: screenName),
       body: BlocBuilder<RouteDriveBloc, RouteDriveState>(
         builder: (context, state) {
-          RouteDriveInitial  param = state;
-          print(param.roterDrives);
-          if (param.roterDrives.length == 0 ) {
+          if (state is LoadingRouteDriveState) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              }
-          print("MMMMMMMMMMMM");
+          }
+          RouteDriveInitial  param = state;
+          print(param.roterDrives);
           print(param.roterDrives.length);
+          if (param.roterDrives.isEmpty) {
+                return Center(
+                  child: Text('falta data '),
+                );
+              }
           return ListView.builder(
-              itemCount: param.roterDrives.length,
-              itemBuilder: (BuildContext context, int i) {
-                RoterDriveEntity roterDrive = param.roterDrives[i];
-                return ListTile(
-                    title: Text(roterDrive.name),
-                    subtitle: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          itemCount: param.roterDrives.length,
+          itemBuilder: (BuildContext context, int i) {
+            RoterDriveEntity roterDrive = param.roterDrives[i];
+            return ListTile(
+                title: Text(roterDrive.name),
+                subtitle: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Text(roterDrive.origin),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                child: Icon(FontAwesomeIcons.arrowRight,size: 15, ),
-                              ),
-                              Container(
-                                width: 150,
-                                child: Text(roterDrive.destination)
-                              ),
-                            ],
+                          Container(
+                            width: 90,
+                            child: Text(roterDrive.nameFrom)
                           ),
-                          Row(
-                            children: [
-                              Icon(Icons.edit, color: Colors.black,),
-                              SizedBox(width: 30,),
-                              Icon(Icons.delete, color: Colors.black,),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(FontAwesomeIcons.arrowRight,size: 15, ),
+                          ),
+                          Container(
+                            width: 90,
+                            child: Text(roterDrive.nameTo)
                           ),
                         ],
                       ),
-                    ),
-                );
-              });
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit, color: Colors.black,),
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute( builder: (context) => AdditRouterDrivePage(roterDrive: roterDrive,statAddEdit: false,)));
+                            }
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.black,),
+                            onPressed: (){
+                              BlocProvider.of<RouteDriveBloc>(context).add(DeleteDrivesRouteDriveEvent(roterDrive: roterDrive));
+                            }
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+            );
+          });
         },
       ),
     );

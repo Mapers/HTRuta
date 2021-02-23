@@ -1,51 +1,57 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 class RoterDriveEntity extends Equatable {
+  final String id;
   final String name;
-  final String origin;
-  final String destination;
+  final String nameFrom;
+  final String nameTo;
+  final LatLng latLagFrom;
+  final LatLng latLagTo;
+
 
   RoterDriveEntity({
-    @required this.name,
-    @required this.origin,
-    @required this.destination,
+    this.id,
+    this.latLagFrom,
+    this.latLagTo,
+    this.name,
+    @required this.nameFrom,
+    @required this.nameTo,
   });
 
   Map<String, dynamic> get toMap => {
-        'name': name,
-        'origin': origin,
-        'destination': destination,
-      };
+    'id': id,
+    'name': name,
+    'nameFrom': nameFrom,
+    'nameTo': nameTo,
+    'latLagFrom': latLagFrom,
+    'latLagTo': latLagTo,
+  };
 
   factory RoterDriveEntity.fromJson(
-      Map<String, dynamic> dataJson) {
+    Map<String, dynamic> dataJson
+  ){
     return RoterDriveEntity(
+      id: dataJson['id'],
       name: dataJson['name'],
-      origin: dataJson['origin'],
-      destination: dataJson['destination'],
+      nameFrom: dataJson['nameFrom'],
+      nameTo: dataJson['nameTo'],
+      latLagFrom: dataJson['latLagFrom'],
+      latLagTo: dataJson['latLagTo'],
     );
   }
   factory RoterDriveEntity.empty({@required int orderBranch}) {
     return RoterDriveEntity(
-      name: "",
-      origin: "",
-      destination: "",
-    );
-  }
-  roterDrivepyWith({
-    String lineId,
-    String plantId,
-    int allotmentId,
-    int moduleId,
-  }) {
-    return RoterDriveEntity(
-        name: allotmentId ?? this.name,
-        origin: lineId ?? this.origin,
-        destination: plantId ?? this.destination,
-
+      id: '',
+      name: '',
+      nameFrom: '',
+      nameTo: '',
+      latLagFrom: null,
+      latLagTo: null,
     );
   }
 
-  List<Object> get props => [name, origin, destination];
+  @override
+  List<Object> get props => [id,name, nameFrom, nameTo,latLagFrom,latLagTo];
 }
