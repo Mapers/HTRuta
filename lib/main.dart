@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    pushProvider = new PushNotificationProvider();
+    pushProvider = PushNotificationProvider();
     pushProvider.initNotifications();
     pushProvider.mensajes.listen((argumento) async{
       if(argumento.contains('Rechazados')){

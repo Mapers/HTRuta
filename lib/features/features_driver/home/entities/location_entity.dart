@@ -1,5 +1,4 @@
 import 'package:HTRuta/features/DriverTaxiApp/data/equatable.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 

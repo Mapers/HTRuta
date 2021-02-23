@@ -14,7 +14,7 @@ class PrincipalButton extends StatelessWidget {
     @required this.text,
     this.color,
     this.margin,
-    this.mainAxisAlignment:MainAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.center,
     this.height,
     this.width
   }) : super(key: key);
@@ -22,9 +22,9 @@ class PrincipalButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: this.margin,
+      margin: margin,
       child: Row(
-        mainAxisAlignment: this.mainAxisAlignment,
+        mainAxisAlignment: mainAxisAlignment,
         children: <Widget>[
           _getButton()
         ]
@@ -33,12 +33,12 @@ class PrincipalButton extends StatelessWidget {
   }
 
   Widget _getButton( ){
-    double _width = this.width;
-    double _height = this.height;
+    double _width = width;
+    double _height = height;
     return ConstrainedBox(
-      constraints: new BoxConstraints(
-        minWidth: _width == null ? 280 : _width ,
-        minHeight: _height == null ? 45 : _height,
+      constraints: BoxConstraints(
+        minWidth: _width ?? 280,
+        minHeight: _height ?? 45,
       ),
       child: RaisedButton(
         color: color,
@@ -46,8 +46,8 @@ class PrincipalButton extends StatelessWidget {
         elevation: 0,
         highlightElevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        onPressed: this.onPressed,
-        child: Text(this.text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14)),
+        onPressed: onPressed,
+        child: Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14)),
       ),
     );
   }

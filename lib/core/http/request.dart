@@ -11,7 +11,7 @@ class RequestHttp{
 
   RequestHttp({@required this.client});
 
-  Future<ResponseHttp> post(String url, { dynamic data = "" }) async {
+  Future<ResponseHttp> post(String url, { dynamic data = '' }) async {
     ResponseHttp response;
     try {
       final result = await client.post(
@@ -26,14 +26,14 @@ class RequestHttp{
           response = ResponseHttp.success(json.decode(result.body));
           return response;
         case 401:
-          response = new ResponseHttp(success: false, data: null, error: 'No autorizado');
+          response = ResponseHttp(success: false, data: null, error: 'No autorizado');
           return response;
         default:
-          response = new ResponseHttp(success: false, data: null, error: 'Algo ha pasado');
+          response = ResponseHttp(success: false, data: null, error: 'Algo ha pasado');
           return response;
       }
     } on SocketException catch (e) {
-      response = new ResponseHttp(success: false, data: null, error: e.toString());
+      response = ResponseHttp(success: false, data: null, error: e.toString());
     }
     return response;
   }

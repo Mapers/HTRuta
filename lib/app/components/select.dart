@@ -13,16 +13,16 @@ class Select<V> extends StatelessWidget {
     @required this.items,
     @required this.value,
     @required this.onChanged,
-    this.placeholder: "Seleccione",
-    this.placeholderIsSelected: true,
-    this.showPlaceholder: true
+    this.placeholder = 'Seleccione',
+    this.placeholderIsSelected = true,
+    this.showPlaceholder = true
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if(showPlaceholder){
       items.insert(0, DropdownMenuItem<V>(
-        child: Text("- " + this.placeholder +" -", style: TextStyle(fontSize: 14, color: Colors.black54)),
+        child: Text('- ' + placeholder +' -', style: TextStyle(fontSize: 14, color: Colors.black54)),
         value: null,
       ));
     }

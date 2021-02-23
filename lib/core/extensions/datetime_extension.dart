@@ -1,24 +1,24 @@
 extension DateTimeExtension on DateTime {
   String get format {
-    return "${this.year}-${this.month.toString().padLeft(2,'0')}-${this.day.toString().padLeft(2,'0')} ${this.hour.toString()}:${this.minute.toString()}";
+    return '${year}-${month.toString().padLeft(2,'0')}-${day.toString().padLeft(2,'0')} ${hour.toString()}:${minute.toString()}';
   }
   String get ddmmyyyy {
-    return "${this.day.toString().padLeft(2,'0')}/${this.month.toString().padLeft(2,'0')}/${this.year}";
+    return '${day.toString().padLeft(2,'0')}/${month.toString().padLeft(2,'0')}/${year}';
   }
   String get mmyyyy {
-    return "${this.month.toString().padLeft(2,'0')}/${this.year}";
+    return '${month.toString().padLeft(2,'0')}/${year}';
   }
   String get formatCodeMapping {
-    return "${this.year}${this.month.toString().padLeft(2,'0')}${this.day.toString().padLeft(2,'0').padLeft(2, '0')}${this.hour.toString().padLeft(2, '0')}${this.minute.toString().padLeft(2, '0')}";
+    return '${year}${month.toString().padLeft(2,'0')}${day.toString().padLeft(2,'0').padLeft(2, '0')}${hour.toString().padLeft(2, '0')}${minute.toString().padLeft(2, '0')}';
   }
   String get formatCodeBranch {
-    return "${this.year}${this.month.toString().padLeft(2,'0')}${this.day.toString().padLeft(2,'0').padLeft(2, '0')}${this.hour.toString().padLeft(2, '0')}${this.minute.toString().padLeft(2, '0')}";
+    return '${year}${month.toString().padLeft(2,'0')}${day.toString().padLeft(2,'0').padLeft(2, '0')}${hour.toString().padLeft(2, '0')}${minute.toString().padLeft(2, '0')}';
   }
   String get formatDateday {
-    return "${this.day} de ${getMonthName(this.month).toLowerCase()} del ${this.year}";
+    return '${day} de ${getMonthName(month).toLowerCase()} del ${year}';
   }
   String get formatDateMonth {
-    return "${getMonthName(this.month)} del ${this.year}";
+    return '${getMonthName(month)} del ${year}';
   }
 
   String  getMonthName(int month){

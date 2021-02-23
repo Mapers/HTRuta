@@ -6,9 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/coordenada_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/map_type_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
@@ -46,7 +44,6 @@ class _TravelScreenState extends State<TravelScreen> {
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData = new List<MapTypeModel>();
-  PersistentBottomSheetController _controller;
 
   Position currentLocation;
   Position _lastKnownPosition;
@@ -77,7 +74,7 @@ class _TravelScreenState extends State<TravelScreen> {
     sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
   }
 
-   Future<void> initPusher()async{ 
+  Future<void> initPusher()async{ 
     try{
       await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
     }catch(e){

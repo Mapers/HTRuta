@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show cos, sqrt, asin;
 
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:geolocator/geolocator.dart';
@@ -45,6 +46,16 @@ class LocationUtil {
 
   void disposeListener(){
     subscription?.cancel();
+  }
+
+  /// In kilometers
+  static double calculateDistance(LatLng from, LatLng to){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((to.latitude - from.latitude) * p)/2 + 
+          c(from.latitude * p) * c(to.latitude * p) * 
+          (1 - c((to.longitude - from.longitude) * p))/2;
+    return 12742 * asin(sqrt(a));
   }
   
 }

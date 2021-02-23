@@ -8,9 +8,9 @@ class IntUtils {
   static String abreviature(int number) {
     String totalViewed;
     if((number / 1000000).round() > 0){
-      totalViewed = (number / 1000000).toStringAsFixed(1) + " M";
+      totalViewed = (number / 1000000).toStringAsFixed(1) + ' M';
     }else if((number / 1000).round() > 0){
-      totalViewed = (number / 1000).toStringAsFixed(1) + " K";
+      totalViewed = (number / 1000).toStringAsFixed(1) + ' K';
     }else {
       totalViewed = number.toString();
     }

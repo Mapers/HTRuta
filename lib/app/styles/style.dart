@@ -16,7 +16,7 @@ TextStyle textBlackItalic = TextStyle(
   fontSize: 14.0,
   fontWeight: FontWeight.normal,
   fontStyle: FontStyle.italic,
-  fontFamily: "OpenSans",
+  fontFamily: 'OpenSans',
 );
 TextStyle textGrey = style( color: Colors.grey );
 TextStyle textGreyBold = style(
@@ -30,13 +30,13 @@ TextStyle textStyleValidate = TextStyle(
   fontSize: 11.0,
   fontWeight: FontWeight.normal,
   fontStyle: FontStyle.italic,
-  fontFamily: "OpenSans",
+  fontFamily: 'OpenSans',
 );
 TextStyle textGreen = style(color: Color(0xFF00c497) );
 TextStyle textStyleSmall = style(
     color: Color.fromRGBO(255, 255, 255, 0.8),
     fontSize: 12,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.bold
 );
 TextStyle headingWhite = style(
@@ -106,10 +106,10 @@ TextStyle heading35BlackNormal = style(
   fontSize: 35,
 );
 TextStyle style({
-    Color color: Colors.black,
-    double fontSize:14,
-    FontWeight fontWeight:FontWeight.normal,
-    String fontFamily: "OpenSans"
+    Color color = Colors.black,
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+    String fontFamily = 'OpenSans'
   }){
   return TextStyle(
     color: color,
@@ -120,7 +120,7 @@ TextStyle style({
 }
 
 ThemeData appTheme = ThemeData(
-  fontFamily: "MYRIADPRO",
+  fontFamily: 'MYRIADPRO',
   primarySwatch: MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor)),
   primaryColor: primaryColor,
   accentColor: primaryColor,

@@ -13,7 +13,7 @@ class LoadingFullScreen {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
             ),
             label != null ? Container(
               margin: EdgeInsets.only(top: 10),

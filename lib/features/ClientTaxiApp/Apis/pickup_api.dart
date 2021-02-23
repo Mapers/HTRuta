@@ -14,7 +14,7 @@ class PickupApi{
   Future<RequestData> registerTravel(String idusuario,String vchLatInicial,String vchLatFinal,String vchLongInicial,String vchLongFinal,String mPrecio,String iTipoViaje,String nombreInicio, String nombreFinal)async{
     final url = '${Config.nuevaRutaApi}/registro-viaje-solicitado';
     try{
-      final response = await http.post(url,body: {"idusuario" : idusuario, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchNombreInicial':nombreInicio,'vchNombreFinal':nombreFinal} );
+      final response = await http.post(url,body: {'idusuario' : idusuario, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchNombreInicial':nombreInicio,'vchNombreFinal':nombreFinal} );
       final responseData = requestDataFromJson(response.body);
       if(responseData.success){
         return responseData;
@@ -67,7 +67,7 @@ class PickupApi{
     //idsolicitud(esta lo obtenies de la ruta donde se lista),vchLatInicial,vchLatFinal,vchLongInicial,vchLongFinal,mPrecio(este puede ser el precio q propone el chofer),mPropina,iTipoViaje,dFecReg,vchOrigenReferencia,vchDestinoReferencia,vchObservacion
     final url = '${Config.nuevaRutaApi}/registro-viaje-chofer';
     try{
-      final response = await http.post(url,body: {'idchofer':idChofer,"idsolicitud" : idsolicitud, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPropina': '','mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
+      final response = await http.post(url,body: {'idchofer':idChofer,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPropina': '','mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -79,7 +79,7 @@ class PickupApi{
   Future<bool> cancelTravel(String idSolicitud)async{
     final url = '${Config.nuevaRutaApi}/actualizar-solicitud-viaje';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud, 'iEstado': '2'} );
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'iEstado': '2'} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -91,7 +91,7 @@ class PickupApi{
   Future<bool> acceptTravelFinish(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/actualizar-viaje';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud, 'idchofer': idChofer} );
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -103,7 +103,7 @@ class PickupApi{
   Future<bool> cancelTravelUser(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/rechazar-viaje';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud, 'idchofer': idChofer} );
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -115,7 +115,7 @@ class PickupApi{
   Future<bool> updatePriceTravelUser(String idSolicitud, String precio)async{
     final url = '${Config.nuevaRutaApi}/actualizar-precio-viaje';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud, 'mPrecio': precio});
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'mPrecio': precio});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -127,7 +127,7 @@ class PickupApi{
   Future<bool> updatePriceTravelDriver(String idSolicitud, String precio, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/actualizar-precio-viaje-chofer';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud, 'mPrecio': precio, 'idchofer': idChofer});
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'mPrecio': precio, 'idchofer': idChofer});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){
@@ -139,7 +139,7 @@ class PickupApi{
   Future<bool> sendNotification(String idSolicitud)async{
     final url = '${Config.nuevaRutaApi}/enviar-notificacion-viaje-chofer';
     try{
-      final response = await http.post(url,body: {"idSolicitud" : idSolicitud});
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     }catch(error){

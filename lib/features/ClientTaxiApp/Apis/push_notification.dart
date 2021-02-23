@@ -12,7 +12,7 @@ class PushNotificationProvider{
   final _mensajesStreamController = StreamController<String>.broadcast();
   Stream<String> get mensajes => _mensajesStreamController.stream;
 
-  initNotifications(){
+  void initNotifications(){
     _firebaseMessaging.requestNotificationPermissions();
     _firebaseMessaging.subscribeToTopic('general');
 
@@ -60,7 +60,7 @@ class PushNotificationProvider{
 
   }
 
-  dispose(){
+  void dispose(){
     _mensajesStreamController.close();
   }
 

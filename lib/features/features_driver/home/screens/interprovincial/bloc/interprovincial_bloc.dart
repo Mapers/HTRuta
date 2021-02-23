@@ -33,7 +33,7 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
       );
     }else if(event is StartRouteInterprovincialEvent){
       DataInterprovincialState data = state;
-      yield data.copyWith(loadingMessage: 'Iniciando ruta');
+      yield data.copyWith(loadingMessage: 'Iniciando ruta', status: InterprovincialStatus.loading);
       await Future.delayed(Duration(seconds: 1));
       yield data.copyWith(
         status: InterprovincialStatus.inRoute

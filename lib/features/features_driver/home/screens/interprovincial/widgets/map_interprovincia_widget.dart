@@ -2,6 +2,8 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,12 +50,22 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
     });
   }
 
-  void _updateMarkerCurrentPosition(LocationEntity _location){
+  void _updateMarkerCurrentPosition(LocationEntity _location) async{
     Marker marker = _mapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon,
+      onTap: (){
+        //! Esto es solo para prueba temporal
+        BlocProvider.of<InterprovincialLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
+      }
     );
+    DataInterprovincialState _data = BlocProvider.of<InterprovincialBloc>(context).state;
+    if(_data.status == InterprovincialStatus.inRoute){
+      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
+      polylines[polyline.polylineId] = polyline;
+    }
+    BlocProvider.of<InterprovincialLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location));
     setState(() {
       location =_location;
       _markers[marker.markerId] = marker;
@@ -96,9 +108,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<InterprovincialBloc, InterprovincialState>(
-      listener: (ctx, state){
-        _addFromToMarkers(state);
-      },
+      listener: (ctx, state) => _addFromToMarkers(state),
       child: _buildMapLayer(),
     );
   }

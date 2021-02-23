@@ -1,28 +1,28 @@
 extension StringValidationExtension on String {
   bool get isEmailAddress {
     String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
     return regExp.hasMatch(this);
   }
 
   bool get isPhone {
-    if(this.length != 9) return false;
+    if(length != 9) return false;
     String p = r'^[0-9]+$';
 
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
 
     return regExp.hasMatch(this);
   }
 
   bool get isSecurePassword {
-    if(this.trim().length < 8) return false;
+    if(trim().length < 8) return false;
     String p = r'^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$';
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
     return regExp.hasMatch(this);
   }
   bool get isAlphanumeric {
     String p = r'^[a-zA-Z0-9&%=]+$';
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
     return regExp.hasMatch(this);
   }
 
@@ -35,12 +35,12 @@ extension StringValidationExtension on String {
 
   bool get isNamePeople {
     String p = r"^[A-Za-z ']+$";
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
     return regExp.hasMatch(this);
   }
   bool get isNameEnterprise {
     String p = r"^[A-Za-z '&0-9]+$";
-    RegExp regExp = new RegExp(p);
+    RegExp regExp = RegExp(p);
     return regExp.hasMatch(this);
   }
 

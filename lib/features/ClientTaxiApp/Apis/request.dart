@@ -8,7 +8,7 @@ class RequestHttp{
 
 
 
-  Future<ResponseHttp> get(String url, { dynamic data = "" }) async {
+  Future<ResponseHttp> get(String url, { dynamic data = '' }) async {
     ResponseHttp response;
     try {
       final result = await http.get(
@@ -22,11 +22,11 @@ class RequestHttp{
           response = ResponseHttp.fromJson(json.decode(result.body));
         } catch (e) {
           print(e.toString());
-          response = ResponseHttp.error("[Format]: Formato no válido.");
+          response = ResponseHttp.error('[Format]: Formato no válido.');
         }
         return response;
       } else {
-        response = ResponseHttp.error("Ruta no encontrada");
+        response = ResponseHttp.error('Ruta no encontrada');
       }
     } on SocketException catch (e) {
       response = ResponseHttp.error(e.toString());
@@ -34,7 +34,7 @@ class RequestHttp{
     return response;
   }
 
-  Future<ResponseHttp> post(String url, { dynamic data = "" }) async {
+  Future<ResponseHttp> post(String url, { dynamic data = '' }) async {
     ResponseHttp response;
     try {
       final result = await http.post(
@@ -51,11 +51,11 @@ class RequestHttp{
           response = ResponseHttp.fromJson(json.decode(result.body));
         } catch (e) {
           print(e.toString());
-          response = ResponseHttp.error("[Format]: Formato no válido.");
+          response = ResponseHttp.error('[Format]: Formato no válido.');
         }
         return response;
       } else {
-        response = ResponseHttp.error("Ruta no encontrada");
+        response = ResponseHttp.error('Ruta no encontrada');
       }
     } on SocketException catch (e) {
       response = ResponseHttp.error(e.toString());
