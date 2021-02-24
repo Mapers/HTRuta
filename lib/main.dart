@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<RouteDriveBloc>(create: (_) => ij.sl<RouteDriveBloc>()),
           BlocProvider<DriverServiceBloc>(create: (_) => ij.sl<DriverServiceBloc>()),
           BlocProvider<InterprovincialBloc>(create: (_) => ij.sl<InterprovincialBloc>()),
+          BlocProvider<InterprovincialBloc>(create: (_) => ij.sl<InterprovincialBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',

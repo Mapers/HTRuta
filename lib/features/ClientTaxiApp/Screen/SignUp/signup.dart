@@ -25,10 +25,10 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey =  GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey =  GlobalKey<ScaffoldState>();
   bool autoValidate = false;
-  Validations validations = new Validations();
+  Validations validations =  Validations();
   bool obscure = true;
   DateTime date = DateTime.now();
   bool _isFetching = false;
@@ -108,7 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       body: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -141,45 +141,45 @@ class _SignupScreenState extends State<SignupScreen> {
                               color: Color(0xFFFEE16D).withOpacity(0.5))),
                     ),
 
-                    new Padding(
+                    Padding(
                         padding: EdgeInsets.fromLTRB(32.0, 50.0, 32.0, 0.0),
                         child: Container(
                             height: MediaQuery.of(context).size.height,
                             width: double.infinity,
-                            child: new Column(
+                            child:  Column(
                               children: <Widget>[
-                                new Container(
+                                Container(
                                   //padding: EdgeInsets.only(top: 100.0),
-                                    child: new Material(
+                                    child:  Material(
                                       borderRadius: BorderRadius.circular(7.0),
                                       elevation: 5.0,
-                                      child: new Container(
+                                      child:  Container(
                                         width: MediaQuery.of(context).size.width - 20.0,
                                         height: MediaQuery.of(context).size.height *0.92,
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.circular(20.0)),
-                                        child: new Form(
+                                        child:  Form(
                                           key: formKey,
-                                            child: new Container(
+                                            child:  Container(
                                               padding: EdgeInsets.all(16.0),
                                               child: ListView(
                                                 shrinkWrap: true,
                                                 children: <Widget>[
-                                                  new Column(
+                                                  Column(
                                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
                                                       Text('Registro', style: heading35Black,
                                                       ),
-                                                      new Column(
+                                                      Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: <Widget>[
                                                           TextFormField(
                                                               keyboardType: TextInputType.text,
                                                               validator: (value){
                                                                 if (value.isEmpty) return 'El nombre es obligatorio.';
-                                                                final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
+                                                                final RegExp nameExp =  RegExp(r'^[A-za-z ]+$');
                                                                 if (!nameExp.hasMatch(value)){
                                                                   return 'Por favor ingrese solo caracteres.';
                                                                 }else{
@@ -206,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               keyboardType: TextInputType.text,
                                                               validator: (value){
                                                                 if (value.isEmpty) return 'El apellido paterno es obligatorio.';
-                                                                final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
+                                                                final RegExp nameExp =  RegExp(r'^[A-za-z ]+$');
                                                                 if (!nameExp.hasMatch(value)){
                                                                   return 'Por favor ingrese solo caracteres.';
                                                                 }else{
@@ -232,7 +232,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               keyboardType: TextInputType.text,
                                                               validator: (value){
                                                                 if (value.isEmpty) return 'El apellido materno es obligatorio.';
-                                                                final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
+                                                                final RegExp nameExp =  RegExp(r'^[A-za-z ]+$');
                                                                 if (!nameExp.hasMatch(value)){
                                                                   return 'Por favor ingrese solo caracteres.';
                                                                 }else{
@@ -256,23 +256,22 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
                                                           TextFormField(
-                                                              keyboardType: TextInputType.number,
-                                                              validator: (value){
-                                                                if (value.isEmpty) return 'El documento de identidad es obligatorio.';
-                                                                else _dni = value;
-                                                                return null;
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.phone,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Documento de identidad',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                                                            
-                                                              )
+                                                            keyboardType: TextInputType.number,
+                                                            validator: (value){
+                                                              if (value.isEmpty) return 'El documento de identidad es obligatorio.';
+                                                              else _dni = value;
+                                                              return null;
+                                                            },
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: Icon(Icons.phone,
+                                                                  color: yellowClear, size: 20.0),
+                                                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                              hintText: 'Documento de identidad',
+                                                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                            )
                                                           ),
                                                           //TODO implementar sexo
                                                           Padding(
@@ -281,31 +280,31 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           FutureBuilder<List<Datum>>(
                                                             future: tablaApi.getSexo(context),
                                                             builder: (context, snapshot) {
-                                                                if(snapshot.hasData){
-                                                                  final dato = snapshot.data;
-                                                                  return Container(
-                                                                    width: double.infinity,
-                                                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(10.0),
-                                                                        border: Border.all()),
-                                                                    child:  DropdownButton(
-                                                                      value: _selectedSexo,
-                                                                          items: snapshot.data
-                                                                            .map((sexo) => DropdownMenuItem(
-                                                                                  child: Text(sexo.vchNombreCodigo),
-                                                                                  value: sexo.vchValor,
-                                                                                ))
-                                                                            .toList(),
-                                                                          onChanged: (value) {
-                                                                            setState(() {
-                                                                              _selectedSexo = value;
-                                                                            }
-                                                                          );
-                                                                        }
-                                                                      ),
-                                                                  );
-                                                                }else{
+                                                              if(snapshot.hasData){
+                                                                final dato = snapshot.data;
+                                                                return Container(
+                                                                  width: double.infinity,
+                                                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius: BorderRadius.circular(10.0),
+                                                                      border: Border.all()),
+                                                                  child:  DropdownButton(
+                                                                    value: _selectedSexo,
+                                                                        items: snapshot.data
+                                                                          .map((sexo) => DropdownMenuItem(
+                                                                                child: Text(sexo.vchNombreCodigo),
+                                                                                value: sexo.vchValor,
+                                                                              ))
+                                                                          .toList(),
+                                                                        onChanged: (value) {
+                                                                          setState(() {
+                                                                            _selectedSexo = value;
+                                                                          }
+                                                                        );
+                                                                      }
+                                                                    ),
+                                                                );
+                                                              }else{
                                                                 return Center(child: CircularProgressIndicator(),);
                                                               }
                                                             },
@@ -315,7 +314,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           ),
                                                           TextFormField(
                                                               keyboardType: TextInputType.text,
-                    
                                                               validator: (value){
                                                                 if (value.isEmpty) return 'La direccion es obligatorio.';
                                                                 else _direccion = value;
@@ -330,54 +328,51 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                                                                 hintText: 'Dirección',
                                                                 hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                                                                
                                                               )
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
                                                           TextFormField(
-                                                              keyboardType: TextInputType.text,
-                                                              validator: (value){
-                                                                if (value.isEmpty) return 'La referencia es obligatorio.';
-                                                                else _referencia = value;
-                                                                return null;
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.email,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Referencia',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                                                            
-                                                              )
+                                                            keyboardType: TextInputType.text,
+                                                            validator: (value){
+                                                              if (value.isEmpty) return 'La referencia es obligatorio.';
+                                                              else _referencia = value;
+                                                              return null;
+                                                            },
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: Icon(Icons.email,
+                                                                  color: yellowClear, size: 20.0),
+                                                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                              hintText: 'Referencia',
+                                                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                            )
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
                                                           TextFormField(
-                                                              keyboardType: TextInputType.text,
-                                                              validator: (value){
-                                                                if (value.length != 9)
-                                                                  return 'El numero de celular debe tener 9 dígitos';
-                                                                else
-                                                                  _celular = value;
-                                                                return null;
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.phone,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Celular',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                                                            
-                                                              )
+                                                            keyboardType: TextInputType.text,
+                                                            validator: (value){
+                                                              if (value.length != 9)
+                                                                return 'El numero de celular debe tener 9 dígitos';
+                                                              else
+                                                                _celular = value;
+                                                              return null;
+                                                            },
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: Icon(Icons.phone,
+                                                                  color: yellowClear, size: 20.0),
+                                                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                              hintText: 'Celular',
+                                                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                            )
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
@@ -407,9 +402,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                               CupertinoDatePicker(
                                                                                 mode: CupertinoDatePickerMode.date,
                                                                                 initialDateTime: date,
-                                                                                onDateTimeChanged: (DateTime newDateTime) {
+                                                                                onDateTimeChanged: (DateTime DateTime) {
                                                                                   setState(() {
-                                                                                    date = newDateTime;
+                                                                                    date = DateTime;
                                                                                   });
                                                                                 },
                                                                               ),
@@ -433,7 +428,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               keyboardType: TextInputType.emailAddress,
                                                               validator: (value){
                                                             Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                                            RegExp regExp = new RegExp(pattern);
+                                                            RegExp regExp =  RegExp(pattern);
                                                             if(regExp.hasMatch(value)){
                                                               _email = value;
                                                               return null;
@@ -456,63 +451,58 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
                                                           TextFormField(
-                                                              keyboardType: TextInputType.text,
-                                                              obscureText: obscure,
-                                                              validator: (text){
-                                                                if(text.isNotEmpty && text.length > 5){
-                                                                  _password = text;
-                                                                  return null;
+                                                            keyboardType: TextInputType.text,
+                                                            obscureText: obscure,
+                                                            validator: (text){
+                                                              if(text.isNotEmpty && text.length > 5){
+                                                                _password = text;
+                                                                return null;
+                                                              }
+                                                              return 'Contraseña mayor a 6 caracteres';
+                                                            },
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: Icon(Icons.email,
+                                                                  color: yellowClear, size: 20.0),
+                                                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                              hintText: 'Contraseña',
+                                                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                              suffixIcon: IconButton(
+                                                                icon: obscure ? Icon(Icons.visibility) : Icon(Icons.visibility_off), 
+                                                                onPressed: (){
+                                                                  setState(() {
+                                                                    obscure = !obscure;
+                                                                  });
                                                                 }
-                                                                return 'Contraseña mayor a 6 caracteres';
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.email,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Contraseña',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                                                                suffixIcon: IconButton(
-                                                                  icon: obscure ? Icon(Icons.visibility) : Icon(Icons.visibility_off), 
-                                                                  onPressed: (){
-                                                                    setState(() {
-                                                                      obscure = !obscure;
-                                                                    });
-                                                                  }
-                                                                )
                                                               )
+                                                            )
                                                           ),
-                                                          
                                                         ],
                                                       ),
-                                                      Padding(
-                                                            padding: EdgeInsets.only(top: 10.0),
-                                                          ),
-                                                      new Container(
-                                                          child: new Row(
+                                                      Padding( padding: EdgeInsets.only(top: 10.0), ),
+                                                      Container(
+                                                          child:  Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: <Widget>[
                                                               InkWell(
-                                                                child: new Text("¿Olvido contraseña?",style: textStyleActive,),
+                                                                child:  Text("¿Olvido contraseña?",style: textStyleActive,),
                                                               ),
                                                             ],
                                                           )
 
                                                       ),
-                                                      Padding(
-                                                            padding: EdgeInsets.only(top: 10.0),
-                                                          ),
-                                                      new ButtonTheme(
+                                                      Padding( padding: EdgeInsets.only(top: 10.0),),
+                                                      ButtonTheme(
                                                         height: 50.0,
                                                         minWidth: MediaQuery.of(context).size.width,
                                                         child: RaisedButton.icon(
-                                                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+                                                          shape:  RoundedRectangleBorder(borderRadius:  BorderRadius.circular(15.0)),
                                                           elevation: 0.0,
                                                           color: primaryColor,
-                                                          icon: new Text(''),
-                                                          label: new Text('Registrarse', style: headingWhite,),
+                                                          icon:  Text(''),
+                                                          label:  Text('Registrarse', style: headingWhite,),
                                                           onPressed: (){
                                                             _submit();
                                                           },
@@ -527,15 +517,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                                     )
                                 ),
-                                new Container(
+                                Container(
                                     padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),
-                                    child: new Row(
+                                    child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        new Text("¿Ya tienes una cuenta? ",style: textGrey,),
-                                        new InkWell(
+                                        Text("¿Ya tienes una cuenta? ",style: textGrey,),
+                                        InkWell(
                                           onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
-                                          child: new Text("Iniciar sesión",style: textStyleActive,),
+                                          child:  Text("Iniciar sesión",style: textStyleActive,),
                                         ),
                                       ],
                                     )
