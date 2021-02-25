@@ -7,6 +7,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home_client/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial/bloc/client_interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +66,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<RouteDriveBloc>(create: (_) => ij.sl<RouteDriveBloc>()),
           BlocProvider<DriverServiceBloc>(create: (_) => ij.sl<DriverServiceBloc>()),
           BlocProvider<InterprovincialBloc>(create: (_) => ij.sl<InterprovincialBloc>()),
-          BlocProvider<InterprovincialBloc>(create: (_) => ij.sl<InterprovincialBloc>()),
+          BlocProvider<ClientServiceBloc>(create: (_) => ij.sl<ClientServiceBloc>()),
+          BlocProvider<ClientInterprovincialBloc>(create: (_) => ij.sl<ClientInterprovincialBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',

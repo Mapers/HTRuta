@@ -1,3 +1,3 @@
-part of 'interprovincial_bloc.dart';
+part of 'client_interprovincial_bloc.dart';
 @immutable
-abstract class InterprovincialEvent {}
+abstract class ClientInterprovincialEvent {}

@@ -1,4 +1,4 @@
-part of 'interprovincial_bloc.dart';
+part of 'client_interprovincial_bloc.dart';
 @immutable
-abstract class InterprovincialState {}
-class InterprovincialInitial extends InterprovincialState {}
+abstract class ClientInterprovincialState {}
+class ClientInterprovincialInitial extends ClientInterprovincialState {}
