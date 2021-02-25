@@ -7,6 +7,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/wid
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/waiting_to_start_route_widget.dart';
 import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/bloc/client_interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/widgets/change_service_client_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -37,7 +38,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         alignment: Alignment.center,
         children: [
           MapInterprovincialWidget(),
-          ChangeServiceDriverWidget(),
+          ChangeServiceClientWidget(),
           BlocBuilder<ClientInterprovincialBloc, ClientInterprovincialState>(
             builder: (context, state) {
               if(state is DataInterprovincialState){
