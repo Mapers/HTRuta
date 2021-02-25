@@ -133,14 +133,14 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   }
 
   void moveCameraToMyLocation(){
-    // _mapController?.animateCamera(
-    //   CameraUpdate?.CameraPosition(
-    //     CameraPosition(
-    //       target: LatLng(currentLocation?.latitude,currentLocation?.longitude),
-    //       zoom: 14.0,
-    //     ),
-    //   ),
-    // );
+    _mapController?.animateCamera(
+      CameraUpdate?.newCameraPosition(
+        CameraPosition(
+          target: LatLng(currentLocation?.latitude,currentLocation?.longitude),
+          zoom: 14.0,
+        ),
+      ),
+    );
   }
 
   /// Get current location name
@@ -289,6 +289,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
         key: _scaffoldKey,
         drawer: MenuScreens(activeScreenName: screenName),
         body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             SizedBox(
               //height: MediaQuery.of(context).size.height - 180,

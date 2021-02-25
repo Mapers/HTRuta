@@ -12,10 +12,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey =  GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey =  GlobalKey<ScaffoldState>();
   bool autovalidate = false;
-  Validations validations = new Validations();
+  Validations validations =  Validations();
 
   submit(){
     final FormState form = formKey.currentState;
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       form.save();
       //code
       Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => PhoneVerification()));
+           MaterialPageRoute(builder: (context) => PhoneVerification()));
     }
   }
 
@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -49,35 +49,35 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       ),
                     ),
-                    new Padding(
+                     Padding(
                         padding: EdgeInsets.fromLTRB(18.0, 150.0, 18.0, 0.0),
                         child: Container(
                             height: MediaQuery.of(context).size.height,
                             width: double.infinity,
-                            child: new Column(
+                            child:  Column(
                               children: <Widget>[
-                                new Container(
+                                Container(
                                   //padding: EdgeInsets.only(top: 100.0),
-                                    child: new Material(
+                                    child:  Material(
                                       borderRadius: BorderRadius.circular(7.0),
                                       elevation: 5.0,
-                                      child: new Container(
+                                      child:  Container(
                                         width: MediaQuery.of(context).size.width - 20.0,
                                         height: MediaQuery.of(context).size.height *0.4,
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.circular(20.0)),
-                                        child: new Form(
+                                        child:  Form(
                                             key: formKey,
-                                            child: new Container(
+                                            child:  Container(
                                               padding: EdgeInsets.all(18.0),
-                                              child: new Column(
+                                              child:  Column(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   Text('Login', style: heading35Black,
                                                   ),
-                                                  new Column(
+                                                  Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
                                                       TextFormField(
@@ -101,15 +101,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       ),
                                                     ],
                                                   ),
-                                                  new ButtonTheme(
+                                                  ButtonTheme(
                                                     height: 50.0,
                                                     minWidth: MediaQuery.of(context).size.width,
                                                     child: RaisedButton.icon(
-                                                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                                                      shape:  RoundedRectangleBorder(borderRadius:  BorderRadius.circular(5.0)),
                                                       elevation: 0.0,
                                                       color: primaryColor,
-                                                      icon: new Text(''),
-                                                      label: new Text('Siguiente', style: headingWhite,),
+                                                      icon:  Text(''),
+                                                      label:  Text('Siguiente', style: headingWhite,),
                                                       onPressed: (){
                                                         submit();
                                                         },
@@ -122,15 +122,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     )
                                 ),
-                                new Container(
+                                Container(
                                     padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                                    child: new Row(
+                                    child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        new Text("Crear cuenta nueva",style: textGrey,),
-                                        new InkWell(
+                                        Text("Crear cuenta nueva",style: textGrey,),
+                                        InkWell(
                                           onTap: () => Navigator.pushNamed(context, '/signup2'),
-                                          child: new Text("Registrarse",style: textStyleActive,),
+                                          child:  Text("Registrarse",style: textStyleActive,),
                                         ),
                                       ],
                                     )

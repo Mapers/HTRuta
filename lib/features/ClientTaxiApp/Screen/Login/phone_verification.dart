@@ -84,6 +84,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         icon: new Text(''),
                         label: new Text('Verificar ahora', style: headingWhite,),
                         onPressed: (){
+                          print('hello world');
                           Navigator.of(context).pushReplacementNamed(AppRoute.introScreen);
                         },
                       ),

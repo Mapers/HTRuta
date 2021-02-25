@@ -158,8 +158,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                         width: MediaQuery.of(context).size.width - 20.0,
                                         height: MediaQuery.of(context).size.height *0.92,
                                         decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20.0)),
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(20.0)),
                                         child:  Form(
                                           key: formKey,
                                             child:  Container(
@@ -177,28 +177,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: <Widget>[
                                                           TextFormField(
-                                                              keyboardType: TextInputType.text,
-                                                              validator: (value){
-                                                                if (value.isEmpty) return 'El nombre es obligatorio.';
-                                                                final RegExp nameExp =  RegExp(r'^[A-za-z ]+$');
-                                                                if (!nameExp.hasMatch(value)){
-                                                                  return 'Por favor ingrese solo caracteres.';
-                                                                }else{
-                                                                  _nombres = value;
-                                                                }
-                                                                return null;
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.account_circle,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Nombres',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                            keyboardType: TextInputType.text,
+                                                            validator: (value){
+                                                              if (value.isEmpty) return 'El nombre es obligatorio.';
+                                                              final RegExp nameExp =  RegExp(r'^[A-za-z ]+$');
+                                                              if (!nameExp.hasMatch(value)){
+                                                                return 'Por favor ingrese solo caracteres.';
+                                                              }else{
+                                                                _nombres = value;
+                                                              }
+                                                              return null;
+                                                            },
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(10.0),
+                                                              ),
+                                                              prefixIcon: Icon(Icons.account_circle,
+                                                                  color: yellowClear, size: 20.0),
+                                                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                              hintText: 'Nombres',
+                                                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
 
-                                                              )
+                                                            )
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
@@ -436,17 +436,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             }
                                                             return 'Correo inválido';
                                                           },
-                                                              decoration: InputDecoration(
-                                                                border: OutlineInputBorder(
-                                                                  borderRadius: BorderRadius.circular(10.0),
-                                                                ),
-                                                                prefixIcon: Icon(Icons.email,
-                                                                    color: yellowClear, size: 20.0),
-                                                                contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'Correo',
-                                                                hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-
-                                                              )
+                                                          decoration: InputDecoration(
+                                                            border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                            prefixIcon: Icon(Icons.email,
+                                                                color: yellowClear, size: 20.0),
+                                                            contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                                            hintText: 'Correo',
+                                                            hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                                                          )
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
@@ -492,7 +491,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               ),
                                                             ],
                                                           )
-
                                                       ),
                                                       Padding( padding: EdgeInsets.only(top: 10.0),),
                                                       ButtonTheme(
@@ -504,7 +502,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           color: primaryColor,
                                                           icon:  Text(''),
                                                           label:  Text('Registrarse', style: headingWhite,),
-                                                          onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeClientPage())),
+                                                          onPressed: () 
+                                                          {
+                                                            print('llege');
+                                                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeClientPage()));
+                                                          }
                                                         ),
                                                       ),
                                                     ],
