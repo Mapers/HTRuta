@@ -1,10 +1,44 @@
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_client_service_enum.dart';
+import 'package:HTRuta/features/features_driver/home_client/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/interprovincial_client_screen.dart';
+import 'package:HTRuta/features/features_driver/home_client/screens/taxi/taxi_clint_screen.dart';
 import 'package:flutter/material.dart';
-class HomeClientPage extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+class HomeClientPage extends StatefulWidget {
   const HomeClientPage({Key key}) : super(key: key);
 
   @override
+  _HomeClientPageState createState() => _HomeClientPageState();
+}
+
+class _HomeClientPageState extends State<HomeClientPage> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final String _screenName = 'HOME';
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: MenuScreens(activeScreenName: _screenName),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          BlocBuilder<ClientServiceBloc, ClientServiceState>(
+            builder: (ctx, state){
+              DataClientServiceState data = state;
+              switch (data.typeService) {
+                case TypeClientService.taxi:
+                  return TaxiClientScreen(parentScaffoldKey: _scaffoldKey);
+                case TypeClientService.interprovincial:
+                  return InterprovincialClientScreen(parentScaffoldKey: _scaffoldKey);
+                default:
+                  return Text('Service not found!');
+              }
+            },
+          ),
+          // MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
+        ],
+      ),
     );
   }
 }

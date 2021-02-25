@@ -1,14 +1,14 @@
-enum TypeDriverService {
+enum TypeClientService {
   taxi, interprovincial, cargo
 }
 
-String getTextByTypeDriverService(TypeDriverService type){
+String getTextByTypeClientService(TypeClientService type){
   switch (type) {
-    case TypeDriverService.taxi:
+    case TypeClientService.taxi:
       return 'Taxi';
-    case TypeDriverService.interprovincial:
+    case TypeClientService.interprovincial:
       return 'Interprovincial';
-    case TypeDriverService.cargo:
+    case TypeClientService.cargo:
       return 'Carga';
   }
   return '';

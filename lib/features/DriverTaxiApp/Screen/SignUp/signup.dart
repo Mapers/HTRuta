@@ -131,8 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       color: primaryColor,
                                                       icon:  Text(''),
                                                       label:  Text('Registrate', style: headingWhite,),
-                                                      onPressed: (){Navigator.of(context).pushReplacement(
-                                                        MaterialPageRoute(builder: (context) =>  HomeDriverPage()));},
+                                                      onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeDriverPage())),
                                                     ),
                                                   ),
                                                 ],

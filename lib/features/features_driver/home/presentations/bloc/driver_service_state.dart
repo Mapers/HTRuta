@@ -2,7 +2,6 @@ part of 'driver_service_bloc.dart';
 
 abstract class DriverServiceState extends Equatable {
   const DriverServiceState();
-  
   @override
   List<Object> get props => [];
 }

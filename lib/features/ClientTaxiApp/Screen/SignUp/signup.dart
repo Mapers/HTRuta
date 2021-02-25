@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/features_driver/home_client/presentation/home_client_page.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -503,9 +504,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           color: primaryColor,
                                                           icon:  Text(''),
                                                           label:  Text('Registrarse', style: headingWhite,),
-                                                          onPressed: (){
-                                                            _submit();
-                                                          },
+                                                          onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeClientPage())),
                                                         ),
                                                       ),
                                                     ],
