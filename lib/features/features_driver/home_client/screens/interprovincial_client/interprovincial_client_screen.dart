@@ -1,3 +1,5 @@
+import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
@@ -35,28 +37,29 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     return BlocProvider(
       create: (_) => ij.sl<InterprovincialLocationBloc>(),
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         children: [
           MapInterprovincialWidget(),
           ChangeServiceClientWidget(),
-          BlocBuilder<ClientInterprovincialBloc, ClientInterprovincialState>(
-            builder: (context, state) {
-              if(state is DataInterprovincialState){
-                // if(state.status == InterprovincialStatus.loading){
-                //   return LoadingPositioned(label: state.loadingMessage);
-                // }else if(state.status == InterprovincialStatus.notEstablished){
-                //   return RoutesInterprovincialCardWidget();
-                // }else if(state.status == InterprovincialStatus.waiting){
-                //   return WaitingToStartRouteWidget(route: state.route);
-                // }else if(state.status == InterprovincialStatus.inRoute){
-                //   return InRouteWidget(route: state.route);
-                // }
-              }
-              return Container();
-            },
-          )
+          Positioned(
+            bottom: 20,
+            child: PrincipalButton(
+              onPressed: (){
+                Navigator.of(context).push(Routes.toChooseRouteTrasportationPage());
+              },
+              text: 'Elegir ruta y trasporte'
+            ),
+          ),
+          // BlocBuilder<ClientInterprovincialBloc, ClientInterprovincialState>(
+          //   builder: (context, state) {
+          //     if(state is DataInterprovincialState){
+          //     }
+          //     return Container();
+          //   },
+          // )
         ],
       )
     );
   }
 }
+

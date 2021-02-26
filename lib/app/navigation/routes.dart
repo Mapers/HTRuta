@@ -1,8 +1,11 @@
+import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/choose_route_trasportation.page.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/router_drive_page.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static Route toRouterDrivePage() => MaterialPageRoute(builder: (context)=> RouterDrivePage());
+  static Route toChooseRouteTrasportationPage() => MaterialPageRoute(builder: (context)=> ChooseRouteTrasportationPage());
+  
   // static Route toLoginPage() => MaterialPageRoute(builder: (context)=> LoginPage());
   // static Route toRecoverPasswordPage() => MaterialPageRoute(builder: (context)=> RecoverPassword());
   // static Route toHomePage() => MaterialPageRoute(builder: (context)=> HomePage());
