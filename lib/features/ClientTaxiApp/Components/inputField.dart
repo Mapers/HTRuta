@@ -11,6 +11,7 @@ class InputField extends StatelessWidget {
   final TextStyle textStyle, hintStyle;
   final validateFunction;
   final  onSaved;
+  @override
   final Key key;
 
   //passing props in the Constructor.

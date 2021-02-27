@@ -15,7 +15,7 @@ class NotificationDriverScreens extends StatefulWidget {
 class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
   final String screenName = 'NOTIFICATIONS';
 
-  List<Map<String, dynamic>> listNotification = List<Map<String, dynamic>>();
+  List<Map<String, dynamic>> listNotification = <Map<String, dynamic>>[];
 
   void navigateToDetail(String id){
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationDetail(id: id,)));

@@ -44,6 +44,7 @@ class GMapViewHelper {
     final Marker marker = Marker(
         markerId: markerId,
         position: LatLng(lat, lng),
+        // ignore: deprecated_member_use
         icon: BitmapDescriptor.fromAsset(icon),
         onTap: onTap
     );

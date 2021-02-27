@@ -43,7 +43,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData =  List<MapTypeModel>();
+  List<MapTypeModel> sampleData =  <MapTypeModel>[];
   PersistentBottomSheetController _controller;
 
   Position currentLocation;
@@ -104,31 +104,23 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    print('1');
     await _locationService.isLocationServiceEnabled();
     currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    print('1.1');
     List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-    print('2');
     if (placemarks != null && placemarks.isNotEmpty) {
-    print('3');
       final Placemark pos = placemarks[0];
       setState(() {
         _placemark = pos.name + ', ' + pos.thoroughfare;
       });
-    print('5');
       widget?.placeBloc?.getCurrentLocation(Place(
-          name: _placemark,
-          formattedAddress: '',
-          lat: currentLocation?.latitude,
-          lng: currentLocation?.longitude
+        name: _placemark,
+        formattedAddress: '',
+        lat: currentLocation?.latitude,
+        lng: currentLocation?.longitude
       ));
     }
-    print('6');
     if(currentLocation != null){
-    print('7');
       moveCameraToMyLocation();
-    print('8');
     }
   }
 
@@ -168,6 +160,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       markerId: markerId,
       position: position,
       draggable: false,
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
@@ -259,7 +252,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                         sampleData.forEach((element) => element.isSelected = false);
                         sampleData[index].isSelected = true;
                         changeMapType(sampleData[index].id, sampleData[index].fileName);
-
                       },
                       child:  SelectMapTypeView(sampleData[index]),
                     );

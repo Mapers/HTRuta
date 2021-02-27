@@ -61,7 +61,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
 
   Channel _channel;
   final pickUpApi = PickupApi();
-  List<RequestDriverData> requestTaxi = List<RequestDriverData>();
+  List<RequestDriverData> requestTaxi = <RequestDriverData>[];
 
 
   void _onMapCreated(GoogleMapController controller) {
@@ -114,6 +114,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       markerId: markerIdFrom,
       position: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),
       infoWindow: InfoWindow(title: 'Recojo', snippet: pedidoProvider.request.vchNombreInicial),
+      // ignore: deprecated_member_use
       icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
       onTap: () {
       },
@@ -123,6 +124,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       markerId: markerIdTo,
       position: LatLng(double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal)),
       infoWindow: InfoWindow(title: 'Dejar', snippet: pedidoProvider.request.vchNombreFinal),
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
       onTap: () {
       },
@@ -214,6 +216,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
     final Marker marker = Marker(
       markerId: markerDriver,
       position: _position,
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/icon_car_32.png') : BitmapDescriptor.fromAsset('assets/image/icon_car_120.png'),
       draggable: false,
       rotation: 0.0,
@@ -304,6 +307,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   //   });
   // }
 
+  // ignore: always_declare_return_types
   dialogInfo(){
     AlertDialog(
       title: Text('Información'),

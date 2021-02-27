@@ -23,7 +23,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   Map<Permission, PermissionStatus> permissionRequestResult;
   PermissionStatus permission;
   bool isGrantedLocation = false;
-  List<Map<String, dynamic>> listItem = List<Map<String,dynamic>>();
+  List<Map<String, dynamic>> listItem = [];
   final _prefs = PreferenciaUsuario();
 
   @override

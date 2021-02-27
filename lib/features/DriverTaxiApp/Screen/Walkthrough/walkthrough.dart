@@ -19,6 +19,7 @@ class WalkthroughScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class WalkthroughScreen2Build extends StatelessWidget {
   final List<Items> itemList;
   BuildContext context;

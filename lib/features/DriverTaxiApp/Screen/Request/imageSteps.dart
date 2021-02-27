@@ -46,9 +46,6 @@ String getImageSteps(var steps) {
       return 'assets/image/directions/roundabout-left.png';
       break;
     case 'roundabout-right':
-      return 'assets/image/directions/fork-right.png';
-      break;
-    case 'roundabout-right':
       return 'assets/image/directions/roundabout-right.png';
       break;
     default:

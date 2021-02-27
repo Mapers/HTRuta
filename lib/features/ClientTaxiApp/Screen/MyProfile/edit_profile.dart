@@ -25,6 +25,7 @@ class _EditProfileState extends State<EditProfile> {
   var _image;
 
   Future getImageLibrary() async {
+    // ignore: deprecated_member_use
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
     setState(() {
       _image = gallery;
@@ -32,6 +33,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future cameraImage() async {
+    // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
     setState(() {
       _image = image;

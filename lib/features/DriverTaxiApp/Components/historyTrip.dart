@@ -50,6 +50,7 @@ class HistoryTrip extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
+                          // ignore: prefer_if_null_operators
                           fromAddress != null ? fromAddress : '',
                           overflow: TextOverflow.ellipsis,
                           style: textStyle,
@@ -71,6 +72,7 @@ class HistoryTrip extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
+                          // ignore: prefer_if_null_operators
                           toAddress != null ? toAddress : '',
                           overflow: TextOverflow.ellipsis,
                           style: textStyle,

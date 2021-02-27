@@ -6,10 +6,10 @@ import 'json_message.dart';
 import 'googleMap_message.dart';
 
 
-typedef JsonMessage OnError(
+typedef OnError = JsonMessage Function(
     {@required int status,
       @required String errorMessage});
-typedef JsonMessage OnResponse({@required Map<String, dynamic> data});
+typedef OnResponse = JsonMessage Function({@required Map<String, dynamic> data});
 
 abstract class WebApiClient {
   static final Dio _httpClient = Dio();
@@ -130,6 +130,7 @@ abstract class WebApiClient {
 }
 
 class GMapClient extends WebApiClient {
+  @override
   final OnResponse onResponse = ({@required Map<String, dynamic> data}) {
     return GMapMessage.fromJson(data);
   };

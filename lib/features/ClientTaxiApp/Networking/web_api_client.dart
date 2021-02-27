@@ -6,10 +6,10 @@ import 'package:meta/meta.dart';
 import 'googleMap_message.dart';
 import 'json_message.dart';
 
-typedef JsonMessage OnError(
+typedef OnError = JsonMessage Function(
     {@required int status,
       @required String errorMessage});
-typedef JsonMessage OnResponse({@required Map<String, dynamic> data});
+typedef OnResponse = JsonMessage Function({@required Map<String, dynamic> data});
 
 abstract class WebApiClient {
   static final Dio _httpClient = Dio();

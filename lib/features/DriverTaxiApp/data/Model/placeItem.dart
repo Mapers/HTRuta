@@ -7,7 +7,7 @@ class PlaceItemRes {
 
   static List<PlaceItemRes> fromJson(Map<String, dynamic> json) {
     print('parse data');
-    List<PlaceItemRes> rs =List();
+    List<PlaceItemRes> rs =[];
 
     var results = json['results'] as List;
     for (var item in results) {

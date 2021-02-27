@@ -66,6 +66,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
 
   Future cameraImage(int index) async {
     try{
+      // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
       await _cropImage(index);
@@ -78,6 +79,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
 
   Future _openGallery(int index) async {
     try {
+      // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
       print('${imagenes[index]}');

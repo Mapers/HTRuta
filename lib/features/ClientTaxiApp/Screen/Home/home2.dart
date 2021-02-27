@@ -161,6 +161,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(lat, lng),
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
       onTap: () {
         // _onMarkerTapped(markerId);

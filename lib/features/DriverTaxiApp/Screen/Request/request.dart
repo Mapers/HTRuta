@@ -14,7 +14,6 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
 import '../../../../app_router.dart';
@@ -29,14 +28,13 @@ class RequestDriverScreen extends StatefulWidget {
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final String screenName = 'REQUEST';
   Channel _channel;
-  List<Request> requestTaxi = List<Request>();
+  List<Request> requestTaxi = [];
   final pickupApi = PickupApi();
   final aceptar = '1';
   final rechazar = '2';
-  var aceptados = List<String>();
-  var rechazados = List<String>();
+  var aceptados = <String>[];
+  var rechazados = <String>[];
   String choferId = '';
-  final Geolocator _locationService = Geolocator();
 
   void navigateToDetail(Request requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
@@ -82,7 +80,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
 
       requestTaxi.removeWhere((element) => removeData.contains(element));
         setState(() {
-          
         });
       }
       await initPusher();
@@ -90,7 +87,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     super.initState();
   }
 
-  Future<void> initPusher()async{ 
+  Future<void> initPusher()async{
     try{
       await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
     }catch(e){
@@ -107,7 +104,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           print(val.currentState);
       },
       onError: (error){
-        
       }
     );
 
@@ -149,10 +145,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       });
 
       requestTaxi.removeWhere((element) => removeData.contains(element));
-
-      setState(() {
-        
-      });
+      setState(() {});
     });
 
 

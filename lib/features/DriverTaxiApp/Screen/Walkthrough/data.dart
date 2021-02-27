@@ -7,7 +7,7 @@ class Items {
 }
 
 class ItemsListBuilder {
-  List<Items> itemList =List();
+  List<Items> itemList =[];
 
   Items item1 =Items(
       pageNo: 'Acepta un trabajo',

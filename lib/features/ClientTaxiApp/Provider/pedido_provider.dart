@@ -3,7 +3,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:flutter/material.dart';
 
 class PedidoProvider extends ChangeNotifier{
-  //TODO implementar datos de pedido -> punto inicial, punto final, precio y observaciones
+  //Datos de pedido -> punto inicial, punto final, precio y observaciones
   String _idSolicitud;
   Request _request;
   int _contador = 0;

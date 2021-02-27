@@ -132,6 +132,7 @@ class _SelectAddressState extends State<SelectAddress> {
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     initialCameraPosition: CameraPosition(
+                      // ignore: prefer_if_null_operators
                       target: LatLng(_currentPosition.latitude != null ? _currentPosition.latitude : 0.0, _currentPosition.longitude != null ? _currentPosition.longitude : 0.0),
                       zoom: 12.0,
                     ),
@@ -149,7 +150,10 @@ class _SelectAddressState extends State<SelectAddress> {
                       }
                     },
                     onCameraIdle: () => getLocationName(
+                        // ignore: prefer_if_null_operators
+                        // ignore: prefer_if_null_operators
                         _position.target.latitude != null ? _position.target.latitude : _currentPosition.latitude,
+                        // ignore: prefer_if_null_operators
                         _position.target.longitude != null ? _position.target.longitude : _currentPosition.longitude
                     ),
                   ),
@@ -190,6 +194,7 @@ class _SelectAddressState extends State<SelectAddress> {
                   _mapController?.animateCamera(
                     CameraUpdate?.newCameraPosition(
                       CameraPosition(
+                        // ignore: prefer_if_null_operators
                         target: LatLng(_currentPosition.latitude != null ? _currentPosition.latitude : 0.0, _currentPosition.longitude != null ? _currentPosition.longitude : 0.0),
                         zoom: 17.0,
                       ),
@@ -209,6 +214,7 @@ class _SelectAddressState extends State<SelectAddress> {
                     backgroundColor: Colors.white,
                     elevation: 0.0,
                     title: _position != null ?
+                    // ignore: prefer_if_null_operators
                     Text(newLocationName != null ? newLocationName : '',style: textStyle)
                         : Text(currentLocationName,style: textStyle,),
                     leading: FlatButton(

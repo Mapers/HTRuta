@@ -20,6 +20,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
     print(widget.id);
   }
 
+  // ignore: always_declare_return_types
   dialogInfo(){
     AlertDialog(
       title: Text('Información'),

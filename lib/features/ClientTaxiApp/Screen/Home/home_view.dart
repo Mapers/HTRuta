@@ -166,6 +166,7 @@ class _HomeViewState extends State<HomeView> {
       markerId: markerId,
       position: position,
       draggable: false,
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
@@ -316,7 +317,9 @@ class _HomeViewState extends State<HomeView> {
                   }
                 },
                 onCameraIdle: () => getLocationName(
+                    // ignore: prefer_if_null_operators
                     _position?.target?.latitude != null ? _position?.target?.latitude : currentLocation?.latitude,
+                    // ignore: prefer_if_null_operators
                     _position?.target?.longitude != null ? _position?.target?.longitude : currentLocation?.longitude
                 ),
               ),

@@ -116,6 +116,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       ),
                       controller: TextEditingController.fromValue(
                         TextEditingValue(
+                          // ignore: prefer_if_null_operators
                           text: formLocation != null ? formLocation :'',
                           selection: TextSelection.collapsed(
                             offset: formLocation != null ? formLocation?.length : 0),
@@ -158,6 +159,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       ),
                       controller: TextEditingController.fromValue(
                         TextEditingValue(
+                          // ignore: prefer_if_null_operators
                           text: toLocation != null ? toLocation :'',
                           selection: TextSelection.collapsed(
                             offset: toLocation != null ? toLocation?.length : 0

@@ -43,7 +43,7 @@ class _TravelScreenState extends State<TravelScreen> {
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData =List<MapTypeModel>();
+  List<MapTypeModel> sampleData = [];
 
   Position currentLocation;
   Position _lastKnownPosition;
@@ -112,6 +112,7 @@ class _TravelScreenState extends State<TravelScreen> {
             markerId: markerId,
             position: position,
             draggable: false,
+            // ignore: deprecated_member_use
             icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
           );
           setState(() {
@@ -123,6 +124,7 @@ class _TravelScreenState extends State<TravelScreen> {
   }
 
   ///Get last known location
+  // ignore: unused_element
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
@@ -207,6 +209,7 @@ class _TravelScreenState extends State<TravelScreen> {
       markerId: markerId,
       position: position,
       draggable: false,
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_marker_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
@@ -272,7 +275,9 @@ class _TravelScreenState extends State<TravelScreen> {
                   // }
                 },
                 onCameraIdle: () => getLocationName(
+                    // ignore: prefer_if_null_operators
                     _position?.target?.latitude != null ? _position?.target?.latitude : currentLocation?.latitude,
+                    // ignore: prefer_if_null_operators
                     _position?.target?.longitude != null ? _position?.target?.longitude : currentLocation?.longitude
                 ),
               ),

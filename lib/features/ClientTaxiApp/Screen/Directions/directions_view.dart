@@ -65,7 +65,7 @@ class _DirectionsViewState extends State<DirectionsView> {
 
   Channel _channel;
   final pickUpApi = PickupApi();
-  List<RequestDriverData> requestTaxi = List<RequestDriverData>();
+  List<RequestDriverData> requestTaxi = [];
 
 
   void _onMapCreated(GoogleMapController controller) {
@@ -106,6 +106,7 @@ class _DirectionsViewState extends State<DirectionsView> {
       markerId: markerIdFrom,
       position: LatLng(widget?.placeBloc?.formLocation?.lat, widget?.placeBloc?.formLocation?.lng),
       infoWindow: InfoWindow(title: widget?.placeBloc?.formLocation?.name, snippet: widget?.placeBloc?.formLocation?.formattedAddress),
+      // ignore: deprecated_member_use
       icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
       onTap: () {
       },
@@ -115,6 +116,8 @@ class _DirectionsViewState extends State<DirectionsView> {
       markerId: markerIdTo,
       position: LatLng(widget?.placeBloc?.locationSelect?.lat, widget?.placeBloc?.locationSelect?.lng),
       infoWindow: InfoWindow(title: widget?.placeBloc?.locationSelect?.name, snippet: widget?.placeBloc?.locationSelect?.formattedAddress),
+      // ignore: deprecated_member_use
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
       onTap: () {
       },
@@ -234,6 +237,7 @@ class _DirectionsViewState extends State<DirectionsView> {
     final Marker marker = Marker(
       markerId: markerDriver,
       position: _position,
+      // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/icon_car_32.png') : BitmapDescriptor.fromAsset('assets/image/icon_car_120.png'),
       draggable: false,
       rotation: 0.0,
