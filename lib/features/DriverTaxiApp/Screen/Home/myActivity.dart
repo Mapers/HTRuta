@@ -105,7 +105,7 @@ class MyActivity extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.access_time,color: greyColor,),
                       Text(hoursOnline.toString() ?? '',style: heading18,),
-                      Text("Horas en linea",style: TextStyle(
+                      Text('Horas en linea',style: TextStyle(
                         fontSize: 11,
                         color: greyColor,
                       ),),
@@ -118,7 +118,7 @@ class MyActivity extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.poll,color: greyColor,),
                       Text(totalDistance ?? '',style: heading18,),
-                      Text("Distancia total",style: TextStyle(
+                      Text('Distancia total',style: TextStyle(
                         fontSize: 11,
                         color: greyColor,
                       ),),
@@ -131,7 +131,7 @@ class MyActivity extends StatelessWidget {
                     children: <Widget>[
                       Icon(Icons.content_paste,color: greyColor,),
                       Text(totalJob.toString() ?? '',style: heading18,),
-                      Text("Trabajo total",style: TextStyle(
+                      Text('Trabajo total',style: TextStyle(
                         fontSize: 11,
                         color: greyColor,
                       ),),

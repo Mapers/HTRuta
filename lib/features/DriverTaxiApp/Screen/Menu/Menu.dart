@@ -65,7 +65,7 @@ class MenuDriverScreens extends StatelessWidget {
                                     width: 50.0,
                                     color: primaryColor,
                                     child: CachedNetworkImage(
-                                      imageUrl: "https://source.unsplash.com/1600x900/?portrait",
+                                      imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
                                       fit: BoxFit.cover,
                                     ),
                                   )
@@ -87,14 +87,14 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text("Naomi Cespedes",style: textBoldWhite,),
+                                    Text('Naomi Cespedes',style: textBoldWhite,),
                                     Container(
                                       padding: EdgeInsets.only(left: 4.0, right: 4.0, top: 2.0, bottom: 2.0),
                                       decoration: BoxDecoration(
                                         color: whiteColor,
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
-                                      child: Text("Miembro Gold",style: TextStyle(
+                                      child: Text('Miembro Gold',style: TextStyle(
                                         fontSize: 11,
                                         color: primaryColor,
                                       ),),
@@ -115,8 +115,8 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Icon(Icons.access_time,color: greyColor,),
-                                    Text("10.2",style: heading18,),
-                                    Text("Horas online",style: TextStyle(
+                                    Text('10.2',style: heading18,),
+                                    Text('Horas online',style: TextStyle(
                                       fontSize: 11,
                                       color: greyColor,
                                     ),),
@@ -128,8 +128,8 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Icon(Icons.poll,color: greyColor,),
-                                    Text("30 KM",style: heading18,),
-                                    Text("Distancia total",style: TextStyle(
+                                    Text('30 KM',style: heading18,),
+                                    Text('Distancia total',style: TextStyle(
                                       fontSize: 11,
                                       color: greyColor,
                                     ),),
@@ -141,8 +141,8 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Icon(Icons.content_paste,color: greyColor,),
-                                    Text("22",style: heading18,),
-                                    Text("Trabajo total",style: TextStyle(
+                                    Text('22',style: heading18,),
+                                    Text('Trabajo total',style: TextStyle(
                                       fontSize: 11,
                                       color: greyColor,
                                     ),),
@@ -166,8 +166,8 @@ class MenuDriverScreens extends StatelessWidget {
 
 //          UserAccountsDrawerHeader(
 //            margin: EdgeInsets.all(0.0),
-//            accountName:Text("John",style: headingWhite,),
-//            accountEmail:Text("100 point - Gold member"),
+//            accountName:Text('John',style: headingWhite,),
+//            accountEmail:Text('100 point - Gold member'),
 //            currentAccountPicture:CircleAvatar(
 //                backgroundColor: Colors.white,
 //                child:Image(
@@ -204,7 +204,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'home_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("HOME") == 0,
+                            isSelected: this.activeScreenName.compareTo('HOME') == 0,
                             icon: FontAwesomeIcons.home,
                             text: 'Inicio'
                           ),
@@ -213,7 +213,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'request_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("REQUEST") == 0,
+                            isSelected: this.activeScreenName.compareTo('REQUEST') == 0,
                             icon: FontAwesomeIcons.firstOrder,
                             text: 'Solicitudes'
                           ),
@@ -222,7 +222,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'my_wallet_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("MY WALLET") == 0,
+                            isSelected: this.activeScreenName.compareTo('MY WALLET') == 0,
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
                           ),
@@ -230,7 +230,7 @@ class MenuDriverScreens extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
                             },
-                            isSelected: this.activeScreenName.compareTo("Rutas") == 0,
+                            isSelected: this.activeScreenName.compareTo('Rutas') == 0,
                             icon: FontAwesomeIcons.mapMarkedAlt,
                             text: 'Mis Rutas'
                           ),
@@ -239,7 +239,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'history_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("HISTORY") == 0,
+                            isSelected: this.activeScreenName.compareTo('HISTORY') == 0,
                             icon: FontAwesomeIcons.history,
                             text: 'Historial'
                           ),
@@ -248,7 +248,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'notification_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("NOTIFICATIONS") == 0,
+                            isSelected: this.activeScreenName.compareTo('NOTIFICATIONS') == 0,
                             icon: FontAwesomeIcons.bell,
                             text: 'Notificaciones'
                           ),
@@ -257,7 +257,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'setting_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo("SETTINGS") == 0,
+                            isSelected: this.activeScreenName.compareTo('SETTINGS') == 0,
                             icon: FontAwesomeIcons.cogs,
                             text: 'Configuraciones'
                           ),
@@ -273,7 +273,7 @@ class MenuDriverScreens extends StatelessWidget {
                           )
                         ],
                       ),
-                      // The drawer's "details" view.
+                      // The drawer's 'details' view.
                     ],
                   ),
                 ],

@@ -23,7 +23,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   dialogInfo(){
     AlertDialog(
-      title: Text("Información"),
+      title: Text('Información'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),
@@ -76,7 +76,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   child:Row(
                     children: <Widget>[
                      Text(
-                        "CDC",
+                        'CDC',
                         style: textBoldBlack,
                       ),
                      Container(
@@ -89,7 +89,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                       ),
                      Expanded(
                           child:Text(
-                            "Hace 1h",
+                            'Hace 1h',
                             style: textBoldBlack,
                           )),
                      GestureDetector(
@@ -102,7 +102,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                                     color: secondary),
                               )),
                           child:Text(
-                            "AMBIENTE",
+                            'AMBIENTE',
                             style: textStyleActive,
                           ),
                         ),
@@ -112,12 +112,12 @@ class _NotificationDetailState extends State<NotificationDetail> {
                 ),
                 Container(
                   padding:EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                  child: Text("Esse ullamco sunt excepteur ipsum ea adipisicing est ullamco ut reprehenderit.",style: textStyleHeading18Black,),
+                  child: Text('Esse ullamco sunt excepteur ipsum ea adipisicing est ullamco ut reprehenderit.',style: textStyleHeading18Black,),
                 ),
                Container(
                   padding:EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
                   child:Text(
-                    "Magna deserunt minim ipsum tempor excepteur. Velit deserunt reprehenderit incididunt aliqua id officia. Do anim cupidatat voluptate id culpa pariatur. Minim pariatur commodo deserunt mollit ut laboris cupidatat commodo adipisicing. Excepteur ex fugiat sit mollit dolor magna officia minim veniam exercitation Lorem do tempor laboris.",
+                    'Magna deserunt minim ipsum tempor excepteur. Velit deserunt reprehenderit incididunt aliqua id officia. Do anim cupidatat voluptate id culpa pariatur. Minim pariatur commodo deserunt mollit ut laboris cupidatat commodo adipisicing. Excepteur ex fugiat sit mollit dolor magna officia minim veniam exercitation Lorem do tempor laboris.',
                     style: textStyle,
                   ),
                 ),

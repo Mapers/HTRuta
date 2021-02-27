@@ -13,7 +13,7 @@ class NotificationDriverScreens extends StatefulWidget {
 }
 
 class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
-  final String screenName = "NOTIFICATIONS";
+  final String screenName = 'NOTIFICATIONS';
 
   List<Map<String, dynamic>> listNotification = List<Map<String, dynamic>>();
 
@@ -29,8 +29,8 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            title: Text("Confirmar"),
-            content: Text("¿Estas seguro de borrar todas las notificaciones ?"),
+            title: Text('Confirmar'),
+            content: Text('¿Estas seguro de borrar todas las notificaciones ?'),
             actions: <Widget>[
               FlatButton(
                   onPressed: (){Navigator.pop(context);},
@@ -54,11 +54,11 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
     // TODO: implement initState
     super.initState();
     listNotification = [
-      {"id": '0',"title" : 'Sistema',"subTitle" : "Se agregaron nuevas funcionalidades", "icon" : Icons.check_circle},
-      {"id": '1',"title" : 'Promoción',"subTitle" : "Invita a tus amigos y obtener 3 cupones", "icon" : MdiIcons.camcorder},
-      {"id": '2',"title" : 'Promoción',"subTitle" : "Invita a tus amigos y obtener 3 cupones", "icon" : MdiIcons.camcorder},
-      {"id": '3',"title" : 'Sistema',"subTitle" : "Reserva #1223 fue cancelado!", "icon" : MdiIcons.cancel},
-      {"id": '3',"title" : 'Sistema',"subTitle" : "Gracias, Tu transacción esta hecha!", "icon" : Icons.check_circle},
+      {'id': '0','title' : 'Sistema','subTitle' : 'Se agregaron nuevas funcionalidades', 'icon' : Icons.check_circle},
+      {'id': '1','title' : 'Promoción','subTitle' : 'Invita a tus amigos y obtener 3 cupones', 'icon' : MdiIcons.camcorder},
+      {'id': '2','title' : 'Promoción','subTitle' : 'Invita a tus amigos y obtener 3 cupones', 'icon' : MdiIcons.camcorder},
+      {'id': '3','title' : 'Sistema','subTitle' : 'Reserva #1223 fue cancelado!', 'icon' : MdiIcons.cancel},
+      {'id': '3','title' : 'Sistema','subTitle' : 'Gracias, Tu transacción esta hecha!', 'icon' : Icons.check_circle},
 
     ];
   }

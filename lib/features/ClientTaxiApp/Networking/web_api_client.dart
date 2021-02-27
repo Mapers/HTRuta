@@ -31,7 +31,7 @@ abstract class WebApiClient {
         queryParameters: queryParameters,
         data: data,
         options: Options(
-          contentType: "application/json",
+          contentType: 'application/json',
           headers: token == null
               ? {
             'x-hasura-admin-secret': 'WTU3BVBR6fEegVZcuDTMtwCXnBsWwHda'
@@ -64,7 +64,7 @@ abstract class WebApiClient {
         url,
         queryParameters: queryParameters,
         options: Options(
-          contentType: "application/json",
+          contentType: 'application/json',
           headers: token == null ? null : {'Authorization': 'Bearer $token'},
         ),
       );
@@ -97,7 +97,7 @@ abstract class WebApiClient {
         filePath,
         queryParameters: queryParameters,
         options: Options(
-          contentType: "application/json",
+          contentType: 'application/json',
           headers: token == null ? null : {'Authorization': 'Bearer $token'},
         ),
         onReceiveProgress: (received, total) {
@@ -115,13 +115,13 @@ abstract class WebApiClient {
       return SuccessMessage();
       //return onResponse(data: response.data);
     } on DioError catch (error) {
-      print("DioError: $error");
+      print('DioError: $error');
       return onError(
         status: error.response.statusCode,
         errorMessage: error.message,
       );
     } catch (error) {
-      print("Error: $error");
+      print('Error: $error');
       return onError(
         status: 500,
         errorMessage: error.toString(),

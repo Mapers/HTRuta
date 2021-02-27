@@ -38,11 +38,11 @@ class GMapMessage extends JsonMessage {
   Map<String, dynamic> toJson() => _$GMapMessageToJson(this);
 
   @override
-  String get errorCode => statusCode == "OK" ? null : statusCode;
+  String get errorCode => statusCode == 'OK' ? null : statusCode;
 
   @override
   ResultData get result => data;
 
   @override
-  int get status => statusCode == "OK" ? 200 : (statusCode == "REQUEST_DENIED" ? 401 : 500);
+  int get status => statusCode == 'OK' ? 200 : (statusCode == 'REQUEST_DENIED' ? 401 : 500);
 }

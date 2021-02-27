@@ -11,12 +11,12 @@ class PaymentMethodScreen extends StatefulWidget {
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
-  final String screenName = "PAYMENT";
+  final String screenName = 'PAYMENT';
 
   List<Map<String, dynamic>> listService = [
-    {"id": '0',"name" : 'VISA',"numberCard" : "**** **** **** 1234","image" : "assets/image/image_visa.png",},
-    {"id": '1',"name" : 'Paypal',"numberCard" : "1234 5678 9123 4569", "image": "assets/image/image_paypal.png"},
-    {"id": '2',"name" : 'Master Card',"numberCard" : "1234 5678 9123 4569","image": "assets/image/image_mastercard.png"},
+    {'id': '0','name' : 'VISA','numberCard' : '**** **** **** 1234','image' : 'assets/image/image_visa.png',},
+    {'id': '1','name' : 'Paypal','numberCard' : '1234 5678 9123 4569', 'image': 'assets/image/image_paypal.png'},
+    {'id': '2','name' : 'Master Card','numberCard' : '1234 5678 9123 4569','image': 'assets/image/image_mastercard.png'},
   ];
 
   @override
@@ -71,7 +71,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                       flex: 5,
                       child: Container(
                           padding: EdgeInsets.only(left: 10.0),
-                          child: Text("Agrega una nueva tarjeta",style: textBoldBlack,)
+                          child: Text('Agrega una nueva tarjeta',style: textBoldBlack,)
                       ),
                     ),
                     Expanded(

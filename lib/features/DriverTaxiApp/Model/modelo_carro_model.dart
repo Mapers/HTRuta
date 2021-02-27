@@ -22,9 +22,9 @@ class ModeloCarro {
   );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "success": success,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    'message': message,
+    'success': success,
+    'data': List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -43,7 +43,7 @@ class DataModelo {
   );
 
   Map<String, dynamic> toJson() => {
-    "iIdModelo": iIdModelo,
-    "vchModelo": vchModelo,
+    'iIdModelo': iIdModelo,
+    'vchModelo': vchModelo,
   };
 }

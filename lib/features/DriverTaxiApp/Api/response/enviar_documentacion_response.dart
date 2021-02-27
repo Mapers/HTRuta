@@ -16,7 +16,7 @@ class DocumentoRechazadoResponse {
     );
 
     Map<String, dynamic> toJson() => {
-        "documentos": List<dynamic>.from(documentos.map((x) => x.toJson())),
+        'documentos': List<dynamic>.from(documentos.map((x) => x.toJson())),
     };
 }
 
@@ -38,8 +38,8 @@ class DocumentoResponse {
     );
 
     Map<String, dynamic> toJson() => {
-        "base": base,
-        "iIdDocumento": iIdDocumento,
-        "iTipoDocumento": iTipoDocumento,
+        'base': base,
+        'iIdDocumento': iIdDocumento,
+        'iTipoDocumento': iTipoDocumento,
     };
 }

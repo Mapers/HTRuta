@@ -17,9 +17,9 @@ class GeocodedWaypoint {
   );
 
   Map<String, dynamic> toJson() => {
-    "geocoder_status": geocoderStatus == null ? null : geocoderStatus,
-    "place_id": placeId == null ? null : placeId,
-    "types": types == null ? null :List<dynamic>.from(types.map((x) => x)),
+    'geocoder_status': geocoderStatus == null ? null : geocoderStatus,
+    'place_id': placeId == null ? null : placeId,
+    'types': types == null ? null :List<dynamic>.from(types.map((x) => x)),
   };
 }
 
@@ -53,13 +53,13 @@ class Routes {
   );
 
   Map<String, dynamic> toJson() => {
-    "bounds": bounds == null ? null : bounds.toJson(),
-    "copyrights": copyrights == null ? null : copyrights,
-    "legs": legs == null ? null :List<dynamic>.from(legs.map((x) => x.toJson())),
-    "overview_polyline": overviewPolyline == null ? null : overviewPolyline.toJson(),
-    "summary": summary == null ? null : summary,
-    "warnings": warnings == null ? null :List<dynamic>.from(warnings.map((x) => x)),
-    "waypoint_order": waypointOrder == null ? null :List<dynamic>.from(waypointOrder.map((x) => x)),
+    'bounds': bounds == null ? null : bounds.toJson(),
+    'copyrights': copyrights == null ? null : copyrights,
+    'legs': legs == null ? null :List<dynamic>.from(legs.map((x) => x.toJson())),
+    'overview_polyline': overviewPolyline == null ? null : overviewPolyline.toJson(),
+    'summary': summary == null ? null : summary,
+    'warnings': warnings == null ? null :List<dynamic>.from(warnings.map((x) => x)),
+    'waypoint_order': waypointOrder == null ? null :List<dynamic>.from(waypointOrder.map((x) => x)),
   };
 }
 
@@ -78,8 +78,8 @@ class Bounds {
   );
 
   Map<String, dynamic> toJson() => {
-    "northeast": northeast == null ? null : northeast.toJson(),
-    "southwest": southwest == null ? null : southwest.toJson(),
+    'northeast': northeast == null ? null : northeast.toJson(),
+    'southwest': southwest == null ? null : southwest.toJson(),
   };
 }
 
@@ -98,8 +98,8 @@ class Northeast {
   );
 
   Map<String, dynamic> toJson() => {
-    "lat": lat == null ? null : lat,
-    "lng": lng == null ? null : lng,
+    'lat': lat == null ? null : lat,
+    'lng': lng == null ? null : lng,
   };
 }
 
@@ -139,15 +139,15 @@ class Leg {
   );
 
   Map<String, dynamic> toJson() => {
-    "distance": distance == null ? null : distance.toJson(),
-    "duration": duration == null ? null : duration.toJson(),
-    "end_address": endAddress == null ? null : endAddress,
-    "end_location": endLocation == null ? null : endLocation.toJson(),
-    "start_address": startAddress == null ? null : startAddress,
-    "start_location": startLocation == null ? null : startLocation.toJson(),
-    "steps": steps == null ? null :List<dynamic>.from(steps.map((x) => x.toJson())),
-    "traffic_speed_entry": trafficSpeedEntry == null ? null :List<dynamic>.from(trafficSpeedEntry.map((x) => x)),
-    "via_waypoint": viaWaypoint == null ? null :List<dynamic>.from(viaWaypoint.map((x) => x)),
+    'distance': distance == null ? null : distance.toJson(),
+    'duration': duration == null ? null : duration.toJson(),
+    'end_address': endAddress == null ? null : endAddress,
+    'end_location': endLocation == null ? null : endLocation.toJson(),
+    'start_address': startAddress == null ? null : startAddress,
+    'start_location': startLocation == null ? null : startLocation.toJson(),
+    'steps': steps == null ? null :List<dynamic>.from(steps.map((x) => x.toJson())),
+    'traffic_speed_entry': trafficSpeedEntry == null ? null :List<dynamic>.from(trafficSpeedEntry.map((x) => x)),
+    'via_waypoint': viaWaypoint == null ? null :List<dynamic>.from(viaWaypoint.map((x) => x)),
   };
 }
 
@@ -166,8 +166,8 @@ class Distance {
   );
 
   Map<String, dynamic> toJson() => {
-    "text": text == null ? null : text,
-    "value": value == null ? null : value,
+    'text': text == null ? null : text,
+    'value': value == null ? null : value,
   };
 }
 
@@ -204,14 +204,14 @@ class Step {
   );
 
   Map<String, dynamic> toJson() => {
-    "distance": distance == null ? null : distance.toJson(),
-    "duration": duration == null ? null : duration.toJson(),
-    "end_location": endLocation == null ? null : endLocation.toJson(),
-    "html_instructions": htmlInstructions == null ? null : htmlInstructions,
-    "polyline": polyline == null ? null : polyline.toJson(),
-    "start_location": startLocation == null ? null : startLocation.toJson(),
-    "travel_mode": travelMode == null ? null : travelMode,
-    "maneuver": maneuver == null ? null : maneuver,
+    'distance': distance == null ? null : distance.toJson(),
+    'duration': duration == null ? null : duration.toJson(),
+    'end_location': endLocation == null ? null : endLocation.toJson(),
+    'html_instructions': htmlInstructions == null ? null : htmlInstructions,
+    'polyline': polyline == null ? null : polyline.toJson(),
+    'start_location': startLocation == null ? null : startLocation.toJson(),
+    'travel_mode': travelMode == null ? null : travelMode,
+    'maneuver': maneuver == null ? null : maneuver,
   };
 }
 
@@ -227,6 +227,6 @@ class Polylines {
   );
 
   Map<String, dynamic> toJson() => {
-    "points": points == null ? null : points,
+    'points': points == null ? null : points,
   };
 }

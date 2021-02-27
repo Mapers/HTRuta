@@ -10,7 +10,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  final String screenName = "HISTORY";
+  final String screenName = 'HISTORY';
 
   navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
@@ -41,7 +41,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         //         pinned: true,
         //         flexibleSpace: FlexibleSpaceBar(
         //           centerTitle: true,
-        //           title: Text("Historial",
+        //           title: Text('Historial',
         //             style: TextStyle(
         //               color: Colors.black,
         //               fontSize: 16.0,
@@ -136,13 +136,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("8 Junio 2019, 18:39",
+                Text('8 Junio 2019, 18:39',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
                 ),
-                Text("Cancelado".toUpperCase(),
+                Text('Cancelado'.toUpperCase(),
                   style: TextStyle(
                     color: redColor,
                     fontWeight: FontWeight.bold,
@@ -167,13 +167,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text("10:24",
+                          Text('10:24',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
                             ),
                           ),
-                          Text("10:50",
+                          Text('10:50',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
@@ -247,13 +247,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("8 Junio 2019, 18:39",
+                Text('8 Junio 2019, 18:39',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
                 ),
-                Text("Realizado".toUpperCase(),
+                Text('Realizado'.toUpperCase(),
                   style: TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -278,14 +278,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text("18:50",
+                          Text('18:50',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
                             ),
                           ),
 
-                          Text("21:36",
+                          Text('21:36',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0

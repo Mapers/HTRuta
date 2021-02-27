@@ -1,8 +1,8 @@
 class IntUtils {
 
-  /// ${number} >= 1000000 ==> ${number} "M"
+  /// ${number} >= 1000000 ==> ${number} 'M"
   ///
-  /// ${number} >= 1000 ==> ${number} "K"
+  /// ${number} >= 1000 ==> ${number} 'K"
   ///
   /// ${number} < 1000 ==> ${number}
   static String abreviature(int number) {

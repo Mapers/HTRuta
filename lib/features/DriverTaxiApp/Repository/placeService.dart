@@ -13,7 +13,7 @@ class PlaceService {
     String region = Config.region;
     String apiKey = Config.googleMapsApiKey;
     String url =
-        "https://maps.googleapis.com/maps/api/place/textsearch/json?key=$apiKey&language=$language&region=$region&query=" +Uri.encodeQueryComponent(keyword);
+        'https://maps.googleapis.com/maps/api/place/textsearch/json?key=$apiKey&language=$language&region=$region&query=' +Uri.encodeQueryComponent(keyword);
     HttpClient client =HttpClient();
 
     //var res = await http.get(url);

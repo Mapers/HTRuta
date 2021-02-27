@@ -53,7 +53,7 @@ class ChatScreenState extends State<ChatScreen> {
                   controller: _textController,
                   onSubmitted: _handleSubmitted,
                   decoration: InputDecoration.collapsed(
-                      hintText: "Enviar un mensaje"),
+                      hintText: 'Enviar un mensaje'),
                 ),
               ),
               Container(
@@ -69,7 +69,7 @@ class ChatScreenState extends State<ChatScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Mensaje")),
+      appBar: AppBar(title: Text('Mensaje')),
       body: GestureDetector(
         //onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         onHorizontalDragDown: (_){

@@ -33,12 +33,12 @@ class MenuScreens extends StatelessWidget {
                   return UserAccountsDrawerHeader(
                     margin: EdgeInsets.all(0.0),
                     accountName: Text(data['nombres'].toString(),style: headingWhite,),
-                    accountEmail: Text("100 puntos - miembro Gold"),
+                    accountEmail: Text('100 puntos - miembro Gold'),
                     currentAccountPicture: CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
                       backgroundImage: CachedNetworkImageProvider(
-                        "https://source.unsplash.com/300x300/?portrait",
+                        'https://source.unsplash.com/300x300/?portrait',
                       )
                     ),
                     onDetailsPressed: (){
@@ -84,7 +84,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.home,
                               text: 'Inicio',
-                              isSelected: this.activeScreenName.compareTo("HOME") == 0,
+                              isSelected: this.activeScreenName.compareTo('HOME') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
@@ -93,7 +93,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.car,
                               text: 'Carros',
-                              isSelected: this.activeScreenName.compareTo("HOME2") == 0,
+                              isSelected: this.activeScreenName.compareTo('HOME2') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
@@ -102,7 +102,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.wallet,
                               text: 'Pagos',
-                              isSelected: this.activeScreenName.compareTo("PAYMENT") == 0,
+                              isSelected: this.activeScreenName.compareTo('PAYMENT') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
@@ -111,7 +111,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.history,
                               text: 'Mis viajes',
-                              isSelected: this.activeScreenName.compareTo("HISTORY") == 0,
+                              isSelected: this.activeScreenName.compareTo('HISTORY') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.historyScreen);
@@ -120,7 +120,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.truck,
                               text: 'Carga',
-                              isSelected: this.activeScreenName.compareTo("CARGA") == 0,
+                              isSelected: this.activeScreenName.compareTo('CARGA') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.cargaScreen);
@@ -129,7 +129,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.cogs,
                               text: 'Términos y Condiciones',
-                              isSelected: this.activeScreenName.compareTo("TERMS") == 0,
+                              isSelected: this.activeScreenName.compareTo('TERMS') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.termsConditionsScreen);
@@ -147,7 +147,7 @@ class MenuScreens extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // The drawer's "details" view.
+                        // The drawer's 'details' view.
                       ],
                     ),
                   ],

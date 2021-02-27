@@ -18,7 +18,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> formKey =GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Map<String, dynamic>> listGender = [{"id": '0',"name" : 'Male',},{"id": '1',"name" : 'Female',}];
+  List<Map<String, dynamic>> listGender = [{'id': '0','name' : 'Male',},{'id': '1','name' : 'Female',}];
   String selectedGender;
   String lastSelectedValue;
   DateTime date = DateTime.now();
@@ -174,12 +174,12 @@ class _EditProfileState extends State<EditProfile> {
                                           width: 80.0,
                                           color: primaryColor,
                                           child: Hero(
-                                            tag: "avatar_profile",
+                                            tag: 'avatar_profile',
                                             child: CircleAvatar(
                                                 radius: 30,
                                                 backgroundColor: Colors.transparent,
                                                 backgroundImage: CachedNetworkImageProvider(
-                                                  "https://source.unsplash.com/300x300/?portrait",
+                                                  'https://source.unsplash.com/300x300/?portrait',
                                                 )
                                             ),
                                           ),
@@ -208,14 +208,14 @@ class _EditProfileState extends State<EditProfile> {
                                               labelStyle: textStyle,
                                               hintStyle: TextStyle(color: Colors.white),
                                               counterStyle: textStyle,
-                                              hintText: "Nombres",
+                                              hintText: 'Nombres',
                                               border: UnderlineInputBorder(
                                                   borderSide:
                                                   BorderSide(color: Colors.white))),
                                           controller:
                                           TextEditingController.fromValue(
                                             TextEditingValue(
-                                              text: "Nombres",
+                                              text: 'Nombres',
                                               selection: TextSelection.collapsed(
                                                 offset: 11
                                               ),
@@ -232,14 +232,14 @@ class _EditProfileState extends State<EditProfile> {
                                               labelStyle: textStyle,
                                               hintStyle: TextStyle(color: Colors.white),
                                               counterStyle: textStyle,
-                                              hintText: "Apellidos",
+                                              hintText: 'Apellidos',
                                               border: UnderlineInputBorder(
                                                   borderSide:
                                                   BorderSide(color: Colors.white))),
                                           controller:
                                           TextEditingController.fromValue(
                                             TextEditingValue(
-                                              text: "Apellidos",
+                                              text: 'Apellidos',
                                               selection: TextSelection.collapsed(
                                                 offset: 11
                                               ),
@@ -270,7 +270,7 @@ class _EditProfileState extends State<EditProfile> {
                                       child: Container(
                                         padding: EdgeInsets.only(right: 10.0),
                                         child: Text(
-                                          "Número de celular",
+                                          'Número de celular',
                                           style: textStyle,
                                         ),
                                       ),
@@ -291,7 +291,7 @@ class _EditProfileState extends State<EditProfile> {
                                         ),
                                         controller: TextEditingController.fromValue(
                                           TextEditingValue(
-                                            text: "03584565656",
+                                            text: '03584565656',
                                             selection: TextSelection.collapsed(
                                               offset: 11
                                             ),
@@ -314,7 +314,7 @@ class _EditProfileState extends State<EditProfile> {
                                       child: Container(
                                         padding: EdgeInsets.only(right: 10.0),
                                         child: Text(
-                                          "Email",
+                                          'Email',
                                           style: textStyle,
                                         ),
                                       ),
@@ -336,7 +336,7 @@ class _EditProfileState extends State<EditProfile> {
                                         ),
                                         controller: TextEditingController.fromValue(
                                           TextEditingValue(
-                                            text: "abc@example.com",
+                                            text: 'abc@example.com',
                                             selection: TextSelection.collapsed(
                                               offset: 11
                                             ),
@@ -359,7 +359,7 @@ class _EditProfileState extends State<EditProfile> {
                                       child: Container(
                                         padding: EdgeInsets.only(right: 10.0),
                                         child: Text(
-                                          "Género",
+                                          'Género',
                                           style: textStyle,
                                         ),
                                       ),
@@ -374,7 +374,7 @@ class _EditProfileState extends State<EditProfile> {
                                               ),
                                               isEmpty: selectedGender == null,
                                               child: DropdownButton<String>(
-                                                hint: Text("Género",style: textStyle,),
+                                                hint: Text('Género',style: textStyle,),
                                                 value: selectedGender,
                                                 isDense: true,
                                                 onChanged: (String newValue) {
@@ -406,7 +406,7 @@ class _EditProfileState extends State<EditProfile> {
                                       child: Container(
                                         padding: EdgeInsets.only(right: 10.0),
                                         child: Text(
-                                          "Fecha de nacimiento",
+                                          'Fecha de nacimiento',
                                           style: textStyle,
                                         ),
                                       ),

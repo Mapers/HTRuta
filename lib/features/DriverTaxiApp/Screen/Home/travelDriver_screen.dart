@@ -105,16 +105,16 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   }
 
   addMakers(){
-    checkPlatform ? print('ios'): print("android");
-    final MarkerId markerIdFrom = MarkerId("from_address");
-    final MarkerId markerIdTo = MarkerId("to_address");
+    checkPlatform ? print('ios'): print('android');
+    final MarkerId markerIdFrom = MarkerId('from_address');
+    final MarkerId markerIdTo = MarkerId('to_address');
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
 
     final Marker marker = Marker(
       markerId: markerIdFrom,
       position: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),
       infoWindow: InfoWindow(title: 'Recojo', snippet: pedidoProvider.request.vchNombreInicial),
-      icon:  checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_dropoff_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_dropoff_96.png"),
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
       onTap: () {
       },
     );
@@ -123,7 +123,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       markerId: markerIdTo,
       position: LatLng(double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal)),
       infoWindow: InfoWindow(title: 'Dejar', snippet: pedidoProvider.request.vchNombreFinal),
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
       onTap: () {
       },
     );
@@ -148,7 +148,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       getRoutesRequest: GetRoutesRequestModel(
           fromLocation: _fromLocation,
           toLocation: _toLocation,
-          mode: "driving"
+          mode: 'driving'
       ),
     ).then((data) {
       if (data != null) {
@@ -156,7 +156,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
         routesData = data?.result?.routes;
       }
     }).catchError((error) {
-      print("GetRoutesRequest > $error");
+      print('GetRoutesRequest > $error');
     });
 
     distance = routesData[0]?.legs[0]?.distance?.text;
@@ -210,11 +210,11 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   }
 
   addMakersDriver(LatLng _position){
-    final MarkerId markerDriver = MarkerId("driver");
+    final MarkerId markerDriver = MarkerId('driver');
     final Marker marker = Marker(
       markerId: markerDriver,
       position: _position,
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/icon_car_32.png") : BitmapDescriptor.fromAsset("assets/image/icon_car_120.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/icon_car_32.png') : BitmapDescriptor.fromAsset('assets/image/icon_car_120.png'),
       draggable: false,
       rotation: 0.0,
       consumeTapEvents: true,
@@ -230,7 +230,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   dialogOption(){
 
     return AlertDialog(
-      title: Text("Opcion"),
+      title: Text('Opcion'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),
@@ -240,7 +240,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             //border: InputBorder.none,
-            hintText: "Ejemplo: Estoy parado frente a la parada del bus...",
+            hintText: 'Ejemplo: Estoy parado frente a la parada del bus...',
             // hideDivider: true
           ),
         ),
@@ -265,7 +265,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
 
   // dialogPromoCode(){
   //   return AlertDialog(
-  //     title: Text("Codigo Promoción"),
+  //     title: Text('Codigo Promoción'),
   //     shape: RoundedRectangleBorder(
   //       borderRadius: BorderRadius.circular(10.0)
   //     ),
@@ -275,7 +275,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   //         keyboardType: TextInputType.text,
   //         decoration: InputDecoration(
   //           //border: InputBorder.none,
-  //           hintText: "Ingresa código de promoción",
+  //           hintText: 'Ingresa código de promoción',
   //           // hideDivider: true
   //         ),
   //       ),
@@ -292,7 +292,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   // }
 
   // handSubmit(){
-  //   print("Enviar");
+  //   print('Enviar');
   //   setState(() {
   //     isLoading = true;
   //   });
@@ -306,7 +306,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
 
   dialogInfo(){
     AlertDialog(
-      title: Text("Información"),
+      title: Text('Información'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),

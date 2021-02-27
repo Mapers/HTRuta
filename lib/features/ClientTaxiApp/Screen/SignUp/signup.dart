@@ -387,7 +387,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   child: Container(
                                                                     padding: EdgeInsets.only(right: 10.0),
                                                                     child: Text(
-                                                                      "Fecha de nacimiento",
+                                                                      'Fecha de nacimiento',
                                                                       style: textStyle,
                                                                     ),
                                                                   ),
@@ -487,7 +487,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: <Widget>[
                                                               InkWell(
-                                                                child:  Text("¿Olvido contraseña?",style: textStyleActive,),
+                                                                child:  Text('¿Olvido contraseña?',style: textStyleActive,),
                                                               ),
                                                             ],
                                                           )
@@ -523,10 +523,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                     child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text("¿Ya tienes una cuenta? ",style: textGrey,),
+                                        Text('¿Ya tienes una cuenta? ',style: textGrey,),
                                         InkWell(
                                           onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
-                                          child:  Text("Iniciar sesión",style: textStyleActive,),
+                                          child:  Text('Iniciar sesión',style: textStyleActive,),
                                         ),
                                       ],
                                     )

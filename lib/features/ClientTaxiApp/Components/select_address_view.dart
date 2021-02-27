@@ -31,10 +31,10 @@ class _SelectAddressState extends State<SelectAddress> {
   FocusNode precioFocus = FocusNode();
   final pickUpApi = PickupApi();
 //   List<Map<String, dynamic>> listAddress = [
-//     {"id": 1, "title": "Trujillo"},
-//     {"id": 2, "title": "La Esperanza"},
-//     {"id": 3,"title": "Porvenir"},
-//     {"id": 4,"title": "Alto Trujillo"},
+//     {'id': 1, 'title': 'Trujillo'},
+//     {'id': 2, 'title': 'La Esperanza'},
+//     {'id': 3,'title': 'Porvenir'},
+//     {'id': 4,'title': 'Alto Trujillo'},
 //   ];
 
 //   Widget getOption() {

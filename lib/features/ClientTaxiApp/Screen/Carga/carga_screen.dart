@@ -13,7 +13,7 @@ class CargaPage extends StatefulWidget {
 }
 
 class _CargaPageState extends State<CargaPage> {
-  final String screenName = "CARGA";
+  final String screenName = 'CARGA';
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _CargaPageState extends State<CargaPage> {
             radius: 20,
             backgroundColor: Colors.transparent,
             backgroundImage: CachedNetworkImageProvider(
-              "https://source.unsplash.com/300x300/?portrait",
+              'https://source.unsplash.com/300x300/?portrait',
             )
           ),
           title: Text('Royer Paúl'),
@@ -162,13 +162,13 @@ class _CargaPageState extends State<CargaPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("8 Junio 2019, 18:39",
+                Text('8 Junio 2019, 18:39',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
                 ),
-                Text("Cancelado".toUpperCase(),
+                Text('Cancelado'.toUpperCase(),
                   style: TextStyle(
                     color: redColor,
                     fontWeight: FontWeight.bold,
@@ -193,14 +193,14 @@ class _CargaPageState extends State<CargaPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text("10:24",
+                          Text('10:24',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
                             ),
                           ),
 
-                          Text("10:50",
+                          Text('10:50',
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0

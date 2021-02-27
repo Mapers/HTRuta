@@ -12,7 +12,7 @@
 //  Stream get placeStream => locationController.stream;
 //
 //  Future<List<Place>> search(String query) async {
-//    String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?key=${Config.apiKey}&language=${Config.language}&region=${Config.region}&query=" +Uri.encodeQueryComponent(query);
+//    String url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?key=${Config.apiKey}&language=${Config.language}&region=${Config.region}&query=' +Uri.encodeQueryComponent(query);
 //    Response response = await Dio().get(url);
 //    print(Place.parseLocationList(response.data));
 //    listPlace = Place.parseLocationList(response.data);

@@ -26,9 +26,9 @@ class DocumentoRechazado {
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -62,13 +62,13 @@ class Documento {
     );
 
     Map<String, dynamic> toJson() => {
-        "iIdUsuario": iIdUsuario,
-        "iIdDocumento": iIdDocumento,
-        "iTipoDocumento": iTipoDocumento,
-        "NombreDocumento": nombreDocumento,
-        "vchRuta": vchRuta,
-        "iEstado": iEstado,
-        "EstadoDoc": estadoDoc,
+        'iIdUsuario': iIdUsuario,
+        'iIdDocumento': iIdDocumento,
+        'iTipoDocumento': iTipoDocumento,
+        'NombreDocumento': nombreDocumento,
+        'vchRuta': vchRuta,
+        'iEstado': iEstado,
+        'EstadoDoc': estadoDoc,
     };
 }
 

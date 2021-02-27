@@ -21,9 +21,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
     print(widget.id);
   }
 
-  dialogInfo(){
+  AlertDialog dialogInfo(){
     return AlertDialog(
-      title: Text("Information"),
+      title: Text('Information'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),
@@ -72,7 +72,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   child:Row(
                     children: <Widget>[
                      Text(
-                        "CDC",
+                        'CDC',
                         style: textBoldBlack,
                       ),
                      Container(
@@ -85,7 +85,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                       ),
                      Expanded(
                           child:Text(
-                            "Hace 1h",
+                            'Hace 1h',
                             style: textBoldBlack,
                           )),
                      GestureDetector(
@@ -98,7 +98,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
                                     color: secondary),
                               )),
                           child:Text(
-                            "Ambiente",
+                            'Ambiente',
                             style: textStyleActive,
                           ),
                         ),
@@ -107,13 +107,13 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   ),
                 ),
                 Container(
-                  padding:EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-                  child: Text("Aliqua mollit esse officia ad non elit eiusmod quis qui velit.",style: textStyleHeading18Black,),
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                  child: Text('Aliqua mollit esse officia ad non elit eiusmod quis qui velit.',style: textStyleHeading18Black,),
                 ),
                Container(
                   padding:EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
                   child:Text(
-                    "Elit mollit fugiat elit elit eu Lorem veniam commodo do incididunt. Reprehenderit culpa minim amet amet et voluptate sit eu commodo minim Lorem nostrud commodo ad. Eiusmod esse ad dolor minim id dolor labore irure ea aliqua et. Esse mollit tempor duis dolore laborum minim. Nostrud eu eiusmod dolor pariatur voluptate. Consequat adipisicing ullamco fugiat esse ad elit adipisicing occaecat nostrud dolore aliquip nulla culpa ullamco.",
+                    'Elit mollit fugiat elit elit eu Lorem veniam commodo do incididunt. Reprehenderit culpa minim amet amet et voluptate sit eu commodo minim Lorem nostrud commodo ad. Eiusmod esse ad dolor minim id dolor labore irure ea aliqua et. Esse mollit tempor duis dolore laborum minim. Nostrud eu eiusmod dolor pariatur voluptate. Consequat adipisicing ullamco fugiat esse ad elit adipisicing occaecat nostrud dolore aliquip nulla culpa ullamco.',
                     style: textStyle,
                   ),
                 ),

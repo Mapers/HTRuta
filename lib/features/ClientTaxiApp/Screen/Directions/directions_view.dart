@@ -98,15 +98,15 @@ class _DirectionsViewState extends State<DirectionsView> {
   }
 
   addMakers(){
-    checkPlatform ? print('ios'): print("android");
-    final MarkerId markerIdFrom = MarkerId("from_address");
-    final MarkerId markerIdTo = MarkerId("to_address");
+    checkPlatform ? print('ios'): print('android');
+    final MarkerId markerIdFrom = MarkerId('from_address');
+    final MarkerId markerIdTo = MarkerId('to_address');
 
     final Marker marker = Marker(
       markerId: markerIdFrom,
       position: LatLng(widget?.placeBloc?.formLocation?.lat, widget?.placeBloc?.formLocation?.lng),
       infoWindow: InfoWindow(title: widget?.placeBloc?.formLocation?.name, snippet: widget?.placeBloc?.formLocation?.formattedAddress),
-      icon:  checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_dropoff_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_dropoff_96.png"),
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
       onTap: () {
       },
     );
@@ -115,7 +115,7 @@ class _DirectionsViewState extends State<DirectionsView> {
       markerId: markerIdTo,
       position: LatLng(widget?.placeBloc?.locationSelect?.lat, widget?.placeBloc?.locationSelect?.lng),
       infoWindow: InfoWindow(title: widget?.placeBloc?.locationSelect?.name, snippet: widget?.placeBloc?.locationSelect?.formattedAddress),
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
       onTap: () {
       },
     );
@@ -137,9 +137,9 @@ class _DirectionsViewState extends State<DirectionsView> {
 
     await apis.getRoutes(
       getRoutesRequest: GetRoutesRequestModel(
-          fromLocation: _fromLocation,
-          toLocation: _toLocation,
-          mode: "driving"
+        fromLocation: _fromLocation,
+        toLocation: _toLocation,
+        mode: 'driving'
       ),
     ).then((data) {
       if (data != null) {
@@ -147,7 +147,7 @@ class _DirectionsViewState extends State<DirectionsView> {
         routesData = data?.result?.routes;
       }
     }).catchError((error) {
-      print("GetRoutesRequest > $error");
+      print('GetRoutesRequest > $error');
     });
 
     distance = routesData[0]?.legs[0]?.distance?.text;
@@ -169,10 +169,10 @@ class _DirectionsViewState extends State<DirectionsView> {
   ///the function will update the driver's position on the map.
 
   double valueRotation;
-  runTrackingDriver(var _listPosition){
+  void runTrackingDriver(var _listPosition){
     int count = 1;
     int two = count;
-    const timeRequest = const Duration(seconds: 2);
+    const timeRequest = Duration(seconds: 2);
     Timer.periodic(timeRequest, (Timer t) {
       LatLng positionDriverBefore = _listPosition[two-1];
       positionDriver = _listPosition[count++];
@@ -229,12 +229,12 @@ class _DirectionsViewState extends State<DirectionsView> {
     });
   }
 
-  addMakersDriver(LatLng _position){
-    final MarkerId markerDriver = MarkerId("driver");
+  void addMakersDriver(LatLng _position){
+    final MarkerId markerDriver = MarkerId('driver');
     final Marker marker = Marker(
       markerId: markerDriver,
       position: _position,
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/icon_car_32.png") : BitmapDescriptor.fromAsset("assets/image/icon_car_120.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/icon_car_32.png') : BitmapDescriptor.fromAsset('assets/image/icon_car_120.png'),
       draggable: false,
       rotation: 0.0,
       consumeTapEvents: true,
@@ -247,10 +247,10 @@ class _DirectionsViewState extends State<DirectionsView> {
     });
   }
 
-  dialogOption(){
+  AlertDialog dialogOption(){
 
     return AlertDialog(
-      title: Text("Opcion"),
+      title: Text('Opcion'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),
@@ -260,7 +260,7 @@ class _DirectionsViewState extends State<DirectionsView> {
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             //border: InputBorder.none,
-            hintText: "Ejemplo: Estoy parado frente a la parada del bus...",
+            hintText: 'Ejemplo: Estoy parado frente a la parada del bus...',
             // hideDivider: true
           ),
         ),
@@ -283,9 +283,9 @@ class _DirectionsViewState extends State<DirectionsView> {
     );
   }
 
-  dialogPromoCode(){
+  AlertDialog dialogPromoCode(){
     return AlertDialog(
-      title: Text("Codigo Promoción"),
+      title: Text('Codigo Promoción'),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0)
       ),
@@ -295,7 +295,7 @@ class _DirectionsViewState extends State<DirectionsView> {
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             //border: InputBorder.none,
-            hintText: "Ingresa código de promoción",
+            hintText: 'Ingresa código de promoción',
             // hideDivider: true
           ),
         ),
@@ -311,8 +311,8 @@ class _DirectionsViewState extends State<DirectionsView> {
     );
   }
 
-  handSubmit(){
-    print("Enviar");
+  void handSubmit(){
+    print('Enviar');
     setState(() {
       isLoading = true;
     });
@@ -324,9 +324,9 @@ class _DirectionsViewState extends State<DirectionsView> {
     });
   }
 
-  dialogInfo(){
-    AlertDialog(
-      title: Text("Información"),
+  AlertDialog dialogInfo(){
+    return AlertDialog(
+      title: Text('Información'),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0)
       ),
@@ -363,7 +363,7 @@ class _DirectionsViewState extends State<DirectionsView> {
           left: responsive.wp(20),
           child: LoadingBuilder(),
         ),
-        requestTaxi.length == 0 ? Container() : Positioned(
+        requestTaxi.isEmpty ? Container() : Positioned(
           top: responsive.hp(12),
           child: Container(
             width: responsive.wp(100),

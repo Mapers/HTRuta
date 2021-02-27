@@ -55,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   autofocus: true,
                   textInputAction: TextInputAction.unspecified,
                   decoration: InputDecoration.collapsed(
-                      hintText: "Aa"),
+                      hintText: 'Aa'),
                 ),
               ),
               Container(
@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mensaje"),
+        title: Text('Mensaje'),
         leading: IconButton(
           icon: Icon(Icons.clear,color: whiteColor,
           ),

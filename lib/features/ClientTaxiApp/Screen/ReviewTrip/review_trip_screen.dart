@@ -91,12 +91,12 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
                             height: 100,
                             width: 100,
                             child: Hero(
-                              tag: "avatar_profile",
+                              tag: 'avatar_profile',
                               child: CircleAvatar(
                                   radius: 30,
                                   backgroundColor: Colors.transparent,
                                   backgroundImage: CachedNetworkImageProvider(
-                                    "https://source.unsplash.com/300x300/?portrait",
+                                    'https://source.unsplash.com/300x300/?portrait',
                                   )
                               ),
                             ),
@@ -141,14 +141,14 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
   Widget buildContent(BuildContext context){
     return Column(
       children: <Widget>[
-        Text("John Wick",
+        Text('John Wick',
           style: TextStyle(
             fontSize: 14,
             color: blackColor,
             fontWeight: FontWeight.w500
           ),
         ),
-        Text("Huyndai(TX32-33567)",
+        Text('Huyndai(TX32-33567)',
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey,
@@ -180,7 +180,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
           },
         ),
         SizedBox(height: 10),
-        Text("¿Cómo son tus viajes?",
+        Text('¿Cómo son tus viajes?',
           style: TextStyle(
               fontSize: 16,
               color: blackColor,
@@ -191,7 +191,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 5.0,),
-        Text("Tus comentarios ayudarán a mejorar la experiencia del conductor",
+        Text('Tus comentarios ayudarán a mejorar la experiencia del conductor',
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey,
@@ -210,7 +210,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
                 fontSize: 14.0,
               ),
               decoration: InputDecoration(
-                hintText: "Comentarios adicionales...",
+                hintText: 'Comentarios adicionales...',
                 hintStyle: TextStyle(
                   color: Colors.black38,
                   fontSize: 14.0,

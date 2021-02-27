@@ -27,7 +27,7 @@ class RequestDriverScreen extends StatefulWidget {
 }
 
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
-  final String screenName = "REQUEST";
+  final String screenName = 'REQUEST';
   Channel _channel;
   List<Request> requestTaxi = List<Request>();
   final pickupApi = PickupApi();
@@ -342,12 +342,12 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text("S/.${taxi.price.toStringAsFixed(2)}",style: textBoldBlack,),
+                        Text('S/.${taxi.price.toStringAsFixed(2)}',style: textBoldBlack,),
                         FutureBuilder<double>(
                           future: taxi.calculateDistance,
                           builder: (context, snapshot) {
                             if(snapshot.hasData){
-                              return Text("${snapshot.data.toStringAsPrecision(1)} Km",style: textGrey,);
+                              return Text('${snapshot.data.toStringAsPrecision(1)} Km',style: textGrey,);
                             }else{
                               return CircularProgressIndicator();
                             }
@@ -368,7 +368,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Recoger".toUpperCase(),style: textGreyBold,),
+                        Text('Recoger'.toUpperCase(),style: textGreyBold,),
                         Text(taxi.startName,style: textStyle,),
                       ],
                     ),
@@ -378,7 +378,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Destino".toUpperCase(),style: textGreyBold,),
+                        Text('Destino'.toUpperCase(),style: textGreyBold,),
                         Text(taxi.finalname, style: textStyle,),
 
                       ],
@@ -558,8 +558,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("S/. " + interprovincial.price.toStringAsFixed(2),style: textBoldBlack,),
-                          Text("160.2 Km",style: textGrey,),
+                          Text('S/. ' + interprovincial.price.toStringAsFixed(2),style: textBoldBlack,),
+                          Text('160.2 Km',style: textGrey,),
                         ],
                       ),
                     ),
@@ -575,7 +575,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Recoger".toUpperCase(),style: textGreyBold,),
+                          Text('Recoger'.toUpperCase(),style: textGreyBold,),
                           Text(interprovincial.currentAddress,style: textStyle,),
                         ],
                       ),
@@ -585,7 +585,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Destino".toUpperCase(),style: textGreyBold,),
+                          Text('Destino'.toUpperCase(),style: textGreyBold,),
                           Text(interprovincial.destination, style: textStyle,),
                         ],
                       ),
@@ -626,7 +626,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                 radius: 20,
                 backgroundColor: Colors.transparent,
                 backgroundImage: CachedNetworkImageProvider(
-                  "https://source.unsplash.com/300x300/?portrait",
+                  'https://source.unsplash.com/300x300/?portrait',
                 )
               ),
               title: Text('Manuel Juarez'),

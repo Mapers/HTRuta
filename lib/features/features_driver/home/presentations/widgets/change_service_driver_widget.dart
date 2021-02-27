@@ -26,7 +26,6 @@ class ChangeServiceDriverWidget extends StatelessWidget {
                   value: item
                 )).toList(),
                 onChanged: (newItem){
-                  print("XD");
                   BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: newItem));
                 },
               ),

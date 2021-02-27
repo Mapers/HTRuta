@@ -22,8 +22,8 @@ class Coordenada {
     );
 
     Map<String, dynamic> toJson() => {
-        "latitud": latitud,
-        "longitud": longitud,
-        "idConductor": idConductor,
+        'latitud': latitud,
+        'longitud': longitud,
+        'idConductor': idConductor,
     };
 }

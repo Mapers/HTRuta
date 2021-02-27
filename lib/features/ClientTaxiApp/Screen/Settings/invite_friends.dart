@@ -46,14 +46,14 @@ class _InviteFriendsState extends State<InviteFriends> {
               ),
             ),
             Container(
-              child: Text("Invita a tus amigos",style: headingBlack,),
+              child: Text('Invita a tus amigos',style: headingBlack,),
             ),
             Container(
-              child: Text("Gana hasta S/.150 por día",style: textStyleHeading18Black,),
+              child: Text('Gana hasta S/.150 por día',style: textStyleHeading18Black,),
             ),
             Container(
               padding: EdgeInsets.only(bottom: 20.0,top: 20.0),
-              child: Text("Cuando su amigo se registre con su código de referencia, puede recibir hasta S/.150 por día",style: textStyle,),
+              child: Text('Cuando su amigo se registre con su código de referencia, puede recibir hasta S/.150 por día',style: textStyle,),
             ),
             Container(
               width: double.infinity,
@@ -63,7 +63,7 @@ class _InviteFriendsState extends State<InviteFriends> {
                 borderRadius:BorderRadius.circular(10.0),
               ),
               child: Center(
-                child: Text("09867656",style: textStyleHeading18Black,),
+                child: Text('09867656',style: textStyleHeading18Black,),
               ),
             ),
             Padding(padding: EdgeInsets.only(top: 10.0),),

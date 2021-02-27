@@ -26,9 +26,9 @@ class EstadoChofer {
     );
 
     Map<String, dynamic> toJson() => {
-      "message": message,
-      "success": success,
-      "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      'message': message,
+      'success': success,
+      'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -44,6 +44,6 @@ class DataEstadoChofer {
   );
 
   Map<String, dynamic> toJson() => {
-    "iEstado": iEstado,
+    'iEstado': iEstado,
   };
 }

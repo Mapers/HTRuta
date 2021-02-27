@@ -34,7 +34,7 @@ class StepsPartView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Html(
-                    data: """ ${instructions.trim()} """,
+                    data: '${instructions.trim()}',
                     linkStyle: textStyle,
                   ),
                   Container(

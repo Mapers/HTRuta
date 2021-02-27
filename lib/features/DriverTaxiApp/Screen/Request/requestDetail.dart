@@ -135,12 +135,12 @@ class _RequestDetailState extends State<RequestDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}",style: textBoldBlack,),
+                            Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}',style: textBoldBlack,),
                             FutureBuilder<double>(
                             future: calcularDistancia(widget.requestItem),
                             builder: (context, snapshot) {
                               if(snapshot.hasData){
-                                return Text("${snapshot.data.toStringAsPrecision(1)} Km",style: textGrey,);
+                                return Text('${snapshot.data.toStringAsPrecision(1)} Km',style: textGrey,);
                               }else{
                                 return CircularProgressIndicator();
                               }
@@ -162,7 +162,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Recoger".toUpperCase(),style: textGreyBold,),
+                              Text('Recoger'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.vchNombreInicial,style: textStyle,),
 
                             ],
@@ -173,7 +173,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Destino".toUpperCase(),style: textGreyBold,),
+                              Text('Destino'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.vchNombreFinal,style: textStyle,),
 
                             ],
@@ -184,8 +184,8 @@ class _RequestDetailState extends State<RequestDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("note".toUpperCase(),style: textGreyBold,),
-                              Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",style: textStyle,),
+                              Text('note'.toUpperCase(),style: textGreyBold,),
+                              Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',style: textStyle,),
                             ],
                           ),
                         ),
@@ -199,14 +199,14 @@ class _RequestDetailState extends State<RequestDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("Detalle de facturación)".toUpperCase(), style: textGreyBold,),
+                      Text('Detalle de facturación)'.toUpperCase(), style: textGreyBold,),
                       Container(
                         padding: EdgeInsets.only(top: 8.0),
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text("Tarifa de taxi", style: textStyle,),
-                           Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textBoldBlack,),
+                           Text('Tarifa de taxi', style: textStyle,),
+                           Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -215,8 +215,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text("Impuestos", style: textStyle,),
-                           Text("S/.0.00", style: textBoldBlack,),
+                           Text('Impuestos', style: textStyle,),
+                           Text('S/.0.00', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -225,8 +225,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text("Descuento", style: textStyle,),
-                           Text("- S/.0.00", style: textBoldBlack,),
+                           Text('Descuento', style: textStyle,),
+                           Text('- S/.0.00', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -240,8 +240,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text("Ganancia total", style: textStyleHeading18Black,),
-                           Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textStyleHeading18Black,),
+                           Text('Ganancia total', style: textStyleHeading18Black,),
+                           Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textStyleHeading18Black,),
                           ],
                         ),
                       ),
@@ -264,13 +264,13 @@ class _RequestDetailState extends State<RequestDetail> {
                             double.parse(widget.requestItem.vchLatFinal),
                             double.parse(widget.requestItem.vchLongInicial),
                             double.parse(widget.requestItem.vchLongFinal),
-                            "",
+                            '',
                             (double.parse(widget.requestItem.mPrecio) + 0.5),
                             widget.requestItem.iTipoViaje,
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            "1"
+                            '1'
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -289,13 +289,13 @@ class _RequestDetailState extends State<RequestDetail> {
                             double.parse(widget.requestItem.vchLatFinal),
                             double.parse(widget.requestItem.vchLongInicial),
                             double.parse(widget.requestItem.vchLongFinal),
-                            "",
+                            '',
                             (double.parse(widget.requestItem.mPrecio) + 1.0),
                             widget.requestItem.iTipoViaje,
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            "1"
+                            '1'
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -314,13 +314,13 @@ class _RequestDetailState extends State<RequestDetail> {
                             double.parse(widget.requestItem.vchLatFinal),
                             double.parse(widget.requestItem.vchLongInicial),
                             double.parse(widget.requestItem.vchLongFinal),
-                            "",
+                            '',
                             (double.parse(widget.requestItem.mPrecio) + 1.5),
                             widget.requestItem.iTipoViaje,
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            "1"
+                            '1'
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);

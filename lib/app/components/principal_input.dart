@@ -29,7 +29,7 @@ class PrincipalInput extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           icon: Icon(icon),
-          // labelText: "Nombre",
+          // labelText: 'Nombre',
           hintText: hinText,
           hintStyle: TextStyle(color: Colors.grey),
           border: InputBorder.none,

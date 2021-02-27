@@ -62,12 +62,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 150,
                                     width: 150,
                                     child: Hero(
-                                      tag: "avatar_profile",
+                                      tag: 'avatar_profile',
                                       child: CircleAvatar(
                                           radius: 30,
                                           backgroundColor: Colors.transparent,
                                           backgroundImage: CachedNetworkImageProvider(
-                                            "https://source.unsplash.com/300x300/?portrait",
+                                            'https://source.unsplash.com/300x300/?portrait',
                                           )
                                       ),
                                     ),
@@ -105,12 +105,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                "${snapshot.data['nombres']} ${snapshot.data['apellidoPaterno']} ${snapshot.data['apellidoMaterno']}",
+                                '${snapshot.data['nombres']} ${snapshot.data['apellidoPaterno']} ${snapshot.data['apellidoMaterno']}',
                                 style: TextStyle( color: blackColor,fontSize: 35.0),
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                "Cliente desde 2020",
+                                'Cliente desde 2020',
                                 style: TextStyle( color: blackColor, fontSize: 13.0),
                               ),
                             ],
@@ -133,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Usuario',style: textStyle,),
-                                    Text("${snapshot.data['nombres']}",style: textGrey,)
+                                    Text('${snapshot.data['nombres']}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Numero de celular',style: textStyle,),
-                                    Text("${snapshot.data['celular']}",style: textGrey,)
+                                    Text('${snapshot.data['celular']}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Email',style: textStyle,),
-                                    Text("${snapshot.data['correo']}",style: textGrey,)
+                                    Text('${snapshot.data['correo']}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -184,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('DNI',style: textStyle,),
-                                    Text("${snapshot.data['dni']}",style: textGrey,)
+                                    Text('${snapshot.data['dni']}',style: textGrey,)
                                   ],
                                 ),
                               ),

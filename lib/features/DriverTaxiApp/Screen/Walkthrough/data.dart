@@ -10,20 +10,20 @@ class ItemsListBuilder {
   List<Items> itemList =List();
 
   Items item1 =Items(
-      pageNo: "Acepta un trabajo",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",
-      image: "assets/image/icon/Layer_4.png",
-      btnDescription: "Skip To App");
+      pageNo: 'Acepta un trabajo',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+      image: 'assets/image/icon/Layer_4.png',
+      btnDescription: 'Skip To App');
   Items item2 =Items(
-      pageNo: "Tracking tiempo real",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industryY",
-      image: "assets/image/icon/Layer_5.png",
-      btnDescription: "Skip To App");
+      pageNo: 'Tracking tiempo real',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industryY',
+      image: 'assets/image/icon/Layer_5.png',
+      btnDescription: 'Skip To App');
   Items item3 =Items(
-      pageNo: "Gana dinero",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",
-      image: "assets/image/icon/Layer_3.png",
-      btnDescription: "Continuar a la aplicacion");
+      pageNo: 'Gana dinero',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+      image: 'assets/image/icon/Layer_3.png',
+      btnDescription: 'Continuar a la aplicacion');
 
   ItemsListBuilder() {
     itemList.add(item1);

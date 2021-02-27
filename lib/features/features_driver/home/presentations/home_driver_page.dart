@@ -16,7 +16,7 @@ class HomeDriverPage extends StatefulWidget {
 
 class _HomeDriverPageState extends State<HomeDriverPage> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-  final String _screenName = "HOME";
+  final String _screenName = 'HOME';
 
   @override
   Widget build(BuildContext context) {

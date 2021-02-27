@@ -13,7 +13,7 @@ class SearchAddressScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: whiteColor,
         elevation: 0.0,
-        title: Text("Buscar dirección",
+        title: Text('Buscar dirección',
           style: TextStyle(color: blackColor),
         ),
         iconTheme: IconThemeData(

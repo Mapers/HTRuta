@@ -113,7 +113,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                         fillColor: whiteColor,
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: greyColor),
-                        hintText: "De",
+                        hintText: 'De',
                       ),
                       controller: TextEditingController.fromValue(
                         TextEditingValue(
@@ -142,7 +142,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       focusNode: nodeTo,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "A",
+                        hintText: 'A',
                         hintStyle: TextStyle(
                             color: greyColor,
                             fontSize: 14
@@ -207,7 +207,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   children: <Widget>[
                     Icon(Icons.home, color: greyColor,),
                     SizedBox(width: 10),
-                    Text("Inicio",
+                    Text('Inicio',
                       style: TextStyle(
                         color: blackColor,
                         fontSize: 14,
@@ -235,7 +235,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   children: <Widget>[
                     Icon(Icons.work, color: greyColor,),
                     SizedBox(width: 10),
-                    Text("Empresa",
+                    Text('Empresa',
                       style: TextStyle(
                           color: blackColor,
                           fontSize: 14,

@@ -13,7 +13,7 @@ class HistoryDriverScreen extends StatefulWidget {
 }
 
 class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
-  final String screenName = "HISTORY";
+  final String screenName = 'HISTORY';
   DateTime selectedDate;
   List<dynamic> event = [];
   String selectedMonth = '';
@@ -98,8 +98,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text("Trabajo",style: heading18,),
-                                  Text("20",style: headingWhite,)
+                                  Text('Trabajo',style: heading18,),
+                                  Text('20',style: headingWhite,)
                                 ],
                               )
                             ),
@@ -125,8 +125,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Text("Ganancia",style: heading18,),
-                                    Text("20",style: headingWhite,)
+                                    Text('Ganancia',style: heading18,),
+                                    Text('20',style: headingWhite,)
                                   ],
                                 )
                             ),
@@ -242,7 +242,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Olivia Ramos',style: textBoldBlack,),
-                          Text("08 Ene 2019 12:00 PM", style: textGrey,),
+                          Text('08 Ene 2019 12:00 PM', style: textGrey,),
                           Container(
                             child: Row(
                               children: <Widget>[
@@ -278,8 +278,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("S/.250.0",style: textBoldBlack,),
-                          Text("2.2 Km",style: textGrey,),
+                          Text('S/.250.0',style: textBoldBlack,),
+                          Text('2.2 Km',style: textGrey,),
                         ],
                       ),
                     ),
@@ -295,8 +295,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Recoger".toUpperCase(),style: textGreyBold,),
-                          Text("Av. Peru 657",style: textStyle,),
+                          Text('Recoger'.toUpperCase(),style: textGreyBold,),
+                          Text('Av. Peru 657',style: textStyle,),
 
                         ],
                       ),
@@ -306,8 +306,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Llegada".toUpperCase(),style: textGreyBold,),
-                          Text("Av. Tupac Amaru 567",style: textStyle,),
+                          Text('Llegada'.toUpperCase(),style: textGreyBold,),
+                          Text('Av. Tupac Amaru 567',style: textStyle,),
 
                         ],
                       ),
@@ -362,7 +362,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Mario Ramos',style: textBoldBlack,),
-                          Text("08 Ene 2019 12:00 PM", style: textGrey,),
+                          Text('08 Ene 2019 12:00 PM', style: textGrey,),
                           Container(
                             child: Row(
                               children: <Widget>[
@@ -398,8 +398,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("S/.250.0",style: textBoldBlack,),
-                          Text("152.2 Km",style: textGrey,),
+                          Text('S/.250.0',style: textBoldBlack,),
+                          Text('152.2 Km',style: textGrey,),
                         ],
                       ),
                     ),
@@ -415,8 +415,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Recoger".toUpperCase(),style: textGreyBold,),
-                          Text("Av. America 456",style: textStyle,),
+                          Text('Recoger'.toUpperCase(),style: textGreyBold,),
+                          Text('Av. America 456',style: textStyle,),
 
                         ],
                       ),
@@ -426,8 +426,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Llegada".toUpperCase(),style: textGreyBold,),
-                          Text("Chiclayo, Lambayeque",style: textStyle,),
+                          Text('Llegada'.toUpperCase(),style: textGreyBold,),
+                          Text('Chiclayo, Lambayeque',style: textStyle,),
 
                         ],
                       ),
@@ -481,7 +481,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Olivia Ramos',style: textBoldBlack,),
-                          Text("08 Ene 2019 12:00 PM", style: textGrey,),
+                          Text('08 Ene 2019 12:00 PM', style: textGrey,),
                           Container(
                             child: Row(
                               children: <Widget>[
@@ -517,8 +517,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text("S/.250.0",style: textBoldBlack,),
-                          Text("2.2 Km",style: textGrey,),
+                          Text('S/.250.0',style: textBoldBlack,),
+                          Text('2.2 Km',style: textGrey,),
                         ],
                       ),
                     ),
@@ -538,8 +538,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Recoger".toUpperCase(),style: textGreyBold,),
-                                Text("Av. Peru 657",style: textStyle,),
+                                Text('Recoger'.toUpperCase(),style: textGreyBold,),
+                                Text('Av. Peru 657',style: textStyle,),
 
                               ],
                             ),
@@ -549,8 +549,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Llegada".toUpperCase(),style: textGreyBold,),
-                                Text("Av. Tupac Amaru 567",style: textStyle,),
+                                Text('Llegada'.toUpperCase(),style: textGreyBold,),
+                                Text('Av. Tupac Amaru 567',style: textStyle,),
 
                               ],
                             ),
@@ -565,7 +565,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Observaciones".toUpperCase(),style: textGreyBold,),
+                          Text('Observaciones'.toUpperCase(),style: textGreyBold,),
                           Text('6 mesas chicas, 20 sillas y un frio y tres vitrinas chiquitas',style: textStyle)
                         ],
                       ),

@@ -210,7 +210,7 @@ class _SelectAddressState extends State<SelectAddress> {
                     backgroundColor: Colors.white,
                     elevation: 0.0,
                     title: _position != null ?
-                    Text(newLocationName != null ? newLocationName : "",style: textStyle)
+                    Text(newLocationName != null ? newLocationName : '',style: textStyle)
                         : Text(currentLocationName,style: textStyle,),
                     leading: FlatButton(
                         onPressed: () {

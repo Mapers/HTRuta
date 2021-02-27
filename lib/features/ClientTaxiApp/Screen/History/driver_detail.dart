@@ -16,7 +16,7 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("Perfil del conductor",
+        title: Text('Perfil del conductor',
           style: TextStyle(color: blackColor),
         ),
       ),
@@ -36,12 +36,12 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
                       height: 70,
                       width: 70,
                       child: Hero(
-                        tag: "avatar_profile",
+                        tag: 'avatar_profile',
                         child: CircleAvatar(
                             radius: 30,
                             backgroundColor: Colors.transparent,
                             backgroundImage: CachedNetworkImageProvider(
-                              "https://source.unsplash.com/300x300/?portrait",
+                              'https://source.unsplash.com/300x300/?portrait',
                             )
                         ),
                       ),
@@ -53,9 +53,9 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          child: Text("Steve Armar",style: textBoldBlack,),
+                          child: Text('Steve Armar',style: textBoldBlack,),
                         ),
-                        Text("08 Enero 2019 15:34",style: textStyle,),
+                        Text('08 Enero 2019 15:34',style: textStyle,),
                       ],
                     ),
                   )
@@ -67,9 +67,9 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  itemInfo1(icon: Icons.star, value: "4.5"),
-                  itemInfo1(icon: Icons.favorite, value: "126"),
-                  itemInfo1(icon: Icons.calendar_today, value: "1 año"),
+                  itemInfo1(icon: Icons.star, value: '4.5'),
+                  itemInfo1(icon: Icons.favorite, value: '126'),
+                  itemInfo1(icon: Icons.calendar_today, value: '1 año'),
 
                 ],
               ),
@@ -139,14 +139,14 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
               labelStyle: TextStyle(color: greyColor),
               hintStyle: TextStyle(color: Colors.white),
               counterStyle: textStyle,
-              labelText: "Miembro desde",
+              labelText: 'Miembro desde',
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white))
             ),
             controller:
             TextEditingController.fromValue(
               TextEditingValue(
-                text: "16/06/2018",
+                text: '16/06/2018',
               ),
             ),
           ),
@@ -158,14 +158,14 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
               labelStyle: TextStyle(color: greyColor),
               hintStyle: TextStyle(color: Colors.white),
               counterStyle: textStyle,
-              labelText: "Tipo de carro",
+              labelText: 'Tipo de carro',
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white))
             ),
             controller:
             TextEditingController.fromValue(
               TextEditingValue(
-                text: "Van",
+                text: 'Van',
               ),
             ),
           ),
@@ -177,14 +177,14 @@ class _DriverDetailScreenState extends State<DriverDetailScreen> {
               labelStyle: TextStyle(color: greyColor),
               hintStyle: TextStyle(color: Colors.white),
               counterStyle: textStyle,
-              labelText: "Numero de placa",
+              labelText: 'Numero de placa',
               border: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white))
             ),
             controller:
             TextEditingController.fromValue(
               TextEditingValue(
-                text: "HS785K",
+                text: 'HS785K',
               ),
             ),
           ),

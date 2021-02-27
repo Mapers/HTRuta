@@ -52,7 +52,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                             radius: 30,
                             backgroundColor: Colors.transparent,
                             backgroundImage: CachedNetworkImageProvider(
-                              "https://source.unsplash.com/1600x900/?portrait",
+                              'https://source.unsplash.com/1600x900/?portrait',
                             )
                           ),
                         ),
@@ -83,11 +83,11 @@ class _ProfileDriverState extends State<ProfileDriver> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Naomi Cespedes",
+                      'Naomi Cespedes',
                       style: TextStyle( color: blackColor,fontSize: 35.0),
                     ),
                     Text(
-                      "Cliente desde 2016",
+                      'Cliente desde 2016',
                       style: TextStyle( color: blackColor, fontSize: 13.0),
                     ),
                   ],
@@ -115,7 +115,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text('Usuario',style: textStyle,),
-                          Text("Oscar Hernandez",style: textGrey,)
+                          Text('Oscar Hernandez',style: textGrey,)
                         ],
                       ),
                     ),
@@ -132,7 +132,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text('Celular',style: textStyle,),
-                          Text("918678567",style: textGrey,)
+                          Text('918678567',style: textGrey,)
                         ],
                       ),
                     ),
@@ -149,7 +149,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text('Email',style: textStyle,),
-                          Text("oscar.hernandez@gmail.com",style: textGrey,)
+                          Text('oscar.hernandez@gmail.com',style: textGrey,)
                         ],
                       ),
                     ),
@@ -166,7 +166,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text('Fecha de nacimiento',style: textStyle,),
-                          Text("27/05/1994",style: textGrey,)
+                          Text('27/05/1994',style: textGrey,)
                         ],
                       ),
                     ),

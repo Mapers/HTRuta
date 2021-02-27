@@ -496,7 +496,7 @@ class PanelController{
   }
 
   /// Shows the sliding panel in its collapsed state
-  /// (i.e. "un-hide" the sliding panel)
+  /// (i.e. 'un-hide' the sliding panel)
   void show(){
     _showListener();
   }

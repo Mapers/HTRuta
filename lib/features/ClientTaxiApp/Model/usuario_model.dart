@@ -26,9 +26,9 @@ class Usuario {
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -71,16 +71,16 @@ class DataUsuario {
     );
 
     Map<String, dynamic> toJson() => {
-        "bAdministrador": bAdministrador,
-        "bInactivo": bInactivo,
-        "vchDni": vchDni,
-        "vchNombres": vchNombres,
-        "vchApellidoP": vchApellidoP,
-        "vchApellidoM": vchApellidoM,
-        "vchCelular": vchCelular,
-        "vchCorreo": vchCorreo,
-        "vchPassword": vchPassword,
-        "iIdUsuario" : iIdUsuario
+        'bAdministrador': bAdministrador,
+        'bInactivo': bInactivo,
+        'vchDni': vchDni,
+        'vchNombres': vchNombres,
+        'vchApellidoP': vchApellidoP,
+        'vchApellidoM': vchApellidoM,
+        'vchCelular': vchCelular,
+        'vchCorreo': vchCorreo,
+        'vchPassword': vchPassword,
+        'iIdUsuario' : iIdUsuario
     };
 }
 

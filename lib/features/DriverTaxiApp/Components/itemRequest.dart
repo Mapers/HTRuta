@@ -133,7 +133,7 @@ class ItemRequest extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Recoger".toUpperCase(),style: textGreyBold,),
+                          Text('Recoger'.toUpperCase(),style: textGreyBold,),
                           Text(addFrom ?? '',
                             style: textStyle,
                             overflow: TextOverflow.ellipsis,
@@ -146,7 +146,7 @@ class ItemRequest extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Destino".toUpperCase(),style: textGreyBold,),
+                          Text('Destino'.toUpperCase(),style: textGreyBold,),
                           Text(addTo ?? '',
                             style: textStyle,
                             overflow: TextOverflow.ellipsis,

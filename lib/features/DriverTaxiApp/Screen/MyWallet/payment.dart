@@ -10,12 +10,12 @@ class PaymentMethodDriver extends StatefulWidget {
 }
 
 class _PaymentMethodDriverState extends State<PaymentMethodDriver> {
-  final String screenName = "MY WALLET";
+  final String screenName = 'MY WALLET';
 
   List<Map<String, dynamic>> listService = [
-    {"id": '0',"name" : 'VISA',"numberCard" : "**** **** **** 1234","image" : "assets/image/icon/visa-pay-logo.png",},
-    {"id": '1',"name" : 'Paypal',"numberCard" : "1234 5678 9123 4569", "image": "assets/image/icon/paypal.png"},
-    {"id": '2',"name" : 'Master Card',"numberCard" : "1234 5678 9123 4569","image": "assets/image/icon/master-card.png"},
+    {'id': '0','name' : 'VISA','numberCard' : '**** **** **** 1234','image' : 'assets/image/icon/visa-pay-logo.png',},
+    {'id': '1','name' : 'Paypal','numberCard' : '1234 5678 9123 4569', 'image': 'assets/image/icon/paypal.png'},
+    {'id': '2','name' : 'Master Card','numberCard' : '1234 5678 9123 4569','image': 'assets/image/icon/master-card.png'},
   ];
 
   @override
@@ -70,7 +70,7 @@ class _PaymentMethodDriverState extends State<PaymentMethodDriver> {
                       flex: 5,
                       child: Container(
                           padding: EdgeInsets.only(left: 10.0),
-                          child: Text("Agregar nueva tarjeta",style: textBoldBlack,)
+                          child: Text('Agregar nueva tarjeta',style: textBoldBlack,)
                       ),
                     ),
                     Expanded(

@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("assets/image/icon/Layer_2.png"),
+                          image: AssetImage('assets/image/icon/Layer_2.png'),
                           fit: BoxFit.cover
                         )
                       ),
@@ -127,10 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text("Crear cuenta nueva",style: textGrey,),
+                                        Text('Crear cuenta nueva',style: textGrey,),
                                         InkWell(
                                           onTap: () => Navigator.pushNamed(context, '/signup2'),
-                                          child:  Text("Registrarse",style: textStyleActive,),
+                                          child:  Text('Registrarse',style: textStyleActive,),
                                         ),
                                       ],
                                     )

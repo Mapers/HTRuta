@@ -7,11 +7,11 @@ class PlaceBloc {
   Stream get placeStream => _placeController.stream;
 
   void searchPlace(String keyword) {
-    _placeController.sink.add("start");
+    _placeController.sink.add('start');
     PlaceService.searchPlace(keyword).then((rs) {
       _placeController.sink.add(rs);
     }).catchError(() {
-//      _placeController.sink.add("stop");
+//      _placeController.sink.add('stop');
     });
   }
 

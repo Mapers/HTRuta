@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isFetching = false;
   bool obscure = true;
 
-  _submit() async{
+  void _submit() async{
     try{
       if(_isFetching) return;
       final isValid = formKey.currentState.validate();

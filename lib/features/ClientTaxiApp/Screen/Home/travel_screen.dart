@@ -29,7 +29,7 @@ class TravelScreen extends StatefulWidget {
 }
 
 class _TravelScreenState extends State<TravelScreen> {
-  final String screenName = "HOME";
+  final String screenName = 'HOME';
   var _scaffoldKey =GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
@@ -113,7 +113,7 @@ class _TravelScreenState extends State<TravelScreen> {
             markerId: markerId,
             position: position,
             draggable: false,
-            icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/car_top_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/car_top_96.png"),
+            icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
           );
           setState(() {
             _markers[markerId] = marker;
@@ -161,7 +161,7 @@ class _TravelScreenState extends State<TravelScreen> {
         });
         // widget?.placeBloc?.getCurrentLocation(Place(
         //     name: _placemark,
-        //     formattedAddress: "",
+        //     formattedAddress: '',
         //     lat: currentLocation?.latitude,
         //     lng: currentLocation?.longitude
         // ));
@@ -192,7 +192,7 @@ class _TravelScreenState extends State<TravelScreen> {
           print(_placemark);
         // widget?.placeBloc?.getCurrentLocation(Place(
         //   name: _placemark,
-        //   formattedAddress: "",
+        //   formattedAddress: '',
         //   lat: lat,
         //   lng: lng
         // ));
@@ -208,7 +208,7 @@ class _TravelScreenState extends State<TravelScreen> {
       markerId: markerId,
       position: position,
       draggable: false,
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_marker_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_96.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_marker_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
       _markers[markerId] = marker;

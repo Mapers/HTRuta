@@ -19,12 +19,12 @@ class GetRoutesRequestModel extends Equatable {
   @JsonKey(name: 'mode')
   String mode;
 
-  GetRoutesRequestModel({this.fromLocation, this.origin, this.toLocation, this.destination, this.mode = "driving"}) : super([origin, destination, mode]){
+  GetRoutesRequestModel({this.fromLocation, this.origin, this.toLocation, this.destination, this.mode = 'driving'}) : super([origin, destination, mode]){
     if(origin == null && fromLocation != null){
-      origin = "${fromLocation?.latitude},${fromLocation.longitude}";
+      origin = '${fromLocation?.latitude},${fromLocation.longitude}';
     }
     if(destination == null && toLocation != null){
-      destination = "${toLocation?.latitude},${toLocation.longitude}";
+      destination = '${toLocation?.latitude},${toLocation.longitude}';
     }
     if(origin != null && fromLocation == null){
       final data = origin.split(',');

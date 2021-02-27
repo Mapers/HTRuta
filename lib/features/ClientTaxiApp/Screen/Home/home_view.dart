@@ -117,7 +117,7 @@ class _HomeViewState extends State<HomeView> {
     print('5');
       widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
-          formattedAddress: "",
+          formattedAddress: '',
           lat: currentLocation?.latitude,
           lng: currentLocation?.longitude
       ));
@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
           print(_placemark);
         widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
-          formattedAddress: "",
+          formattedAddress: '',
           lat: lat,
           lng: lng
         ));
@@ -166,7 +166,7 @@ class _HomeViewState extends State<HomeView> {
       markerId: markerId,
       position: position,
       draggable: false,
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_96.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
       _markers[markerId] = marker;
@@ -231,7 +231,7 @@ class _HomeViewState extends State<HomeView> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text("Tipo Mapa",style: textStyleHeading18Black,),
+                    child: Text('Tipo Mapa',style: textStyleHeading18Black,),
                   ),
                   Container(
                     child: IconButton(

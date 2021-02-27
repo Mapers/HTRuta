@@ -14,7 +14,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final String screenName = "SETTINGS";
+  final String screenName = 'SETTINGS';
 
 
   @override
@@ -78,10 +78,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        child: Text("Steve Armas",style: textBoldBlack,),
+                                        child: Text('Steve Armas',style: textBoldBlack,),
                                       ),
                                       Container(
-                                          child: Text("\$25.0",style: textStyleHeading18Black,)
+                                          child: Text('\$25.0',style: textStyleHeading18Black,)
                                       ),
                                     ],
                                   ),
@@ -94,19 +94,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     ListsMenu(
-                      title: "100 Puntos * Miembro",
+                      title: '100 Puntos * Miembro',
                       onPress: (){
 
                       },
                     ),
                     ListsMenu(
-                      title: "Reseñas",
+                      title: 'Reseñas',
                       onPress: (){
 
                       },
                     ),
                     ListsMenu(
-                      title: "Invitar amigos",
+                      title: 'Invitar amigos',
                       onPress: (){
                         Navigator.of(context).push(new MaterialPageRoute<Null>(
                             builder: (BuildContext context) {
@@ -116,19 +116,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                     ListsMenu(
-                      title: "Notificaciones",
+                      title: 'Notificaciones',
                       onPress: (){
 
                       },
                     ),
                     ListsMenu(
-                      title: "Terminos y condiciones",
+                      title: 'Terminos y condiciones',
                       onPress: (){
 
                       },
                     ),
                     ListsMenu(
-                      title: "Contactanos",
+                      title: 'Contactanos',
                       onPress: (){
 
                       },

@@ -12,12 +12,12 @@ class MyWalletDriver extends StatefulWidget {
 }
 
 class _MyWalletDriverState extends State<MyWalletDriver> {
-  final String screenName = "MY WALLET";
+  final String screenName = 'MY WALLET';
 //IconData icon, String title, String date, String balance
   List<Map<String, dynamic>> listService = [
-    {"id": '0',"icon" : Icons.phone_android, "title" : "Recarga Movil","date" : "22-05-2020","balance" : "S/.+200"},
-    {"id": '1',"icon" : Icons.work, "title" : "Ganancia","date" : "19-05-2019","balance" : "S/.+200,000"},
-    {"id": '2',"icon" : Icons.add_shopping_cart, "title" : "Compra ","date" : "19-05-2019","balance" : "S/. - 20,000"},
+    {'id': '0','icon' : Icons.phone_android, 'title' : 'Recarga Movil','date' : '22-05-2020','balance' : 'S/.+200'},
+    {'id': '1','icon' : Icons.work, 'title' : 'Ganancia','date' : '19-05-2019','balance' : 'S/.+200,000'},
+    {'id': '2','icon' : Icons.add_shopping_cart, 'title' : 'Compra ','date' : '19-05-2019','balance' : 'S/. - 20,000'},
   ];
 
   @override
@@ -90,7 +90,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
                       flex: 5,
                       child: Container(
                           padding: EdgeInsets.only(left: 10.0),
-                          child: Text("Agrega nueva tarjeta",style: textBoldBlack,)
+                          child: Text('Agrega nueva tarjeta',style: textBoldBlack,)
                       ),
                     ),
                     Expanded(

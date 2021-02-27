@@ -45,14 +45,14 @@ class ArrivingDetail extends StatelessWidget {
                               radius: 30,
                               backgroundColor: Colors.transparent,
                               backgroundImage: CachedNetworkImageProvider(
-                                "https://source.unsplash.com/300x300/?portrait",
+                                'https://source.unsplash.com/300x300/?portrait',
                               )
                           ),
                         ),
                       ),
                     ),
                     SizedBox(height: 5),
-                    Text("Patrick",
+                    Text('Patrick',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
@@ -86,7 +86,7 @@ class ArrivingDetail extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text("Volkswagen Jetta",style: textGrey,),
+                      Text('Volkswagen Jetta',style: textGrey,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -135,7 +135,7 @@ class ArrivingDetail extends StatelessWidget {
             child: Container(
               alignment: Alignment.topRight,
               padding: EdgeInsets.all(5.0),
-              child: Text("Saltar"),
+              child: Text('Saltar'),
             ),
           )
         ],

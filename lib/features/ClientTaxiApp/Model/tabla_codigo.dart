@@ -22,9 +22,9 @@ class TablaCodigo {
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -43,7 +43,7 @@ class Datum {
     );
 
     Map<String, dynamic> toJson() => {
-        "vchNombreCodigo": vchNombreCodigo,
-        "vchValor": vchValor,
+        'vchNombreCodigo': vchNombreCodigo,
+        'vchValor': vchValor,
     };
 }

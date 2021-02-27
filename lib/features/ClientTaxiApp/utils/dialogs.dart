@@ -52,7 +52,7 @@ class Dialogs{
         return AlertDialog(
           content: ListTile(
             leading: CircularProgressIndicator(),
-            title: Text("Espere por favor...",style: TextStyle(fontSize: responsive.ip(1.6)),),
+            title: Text('Espere por favor...',style: TextStyle(fontSize: responsive.ip(1.6)),),
           ),
         );
       },

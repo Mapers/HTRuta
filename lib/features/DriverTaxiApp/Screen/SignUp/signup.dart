@@ -31,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage("assets/image/icon/Layer_2.png"),
+                              image: AssetImage('assets/image/icon/Layer_2.png'),
                               fit: BoxFit.cover
                           )
                       ),
@@ -116,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                         children: <Widget>[
                                                           InkWell(
-                                                            child:  Text("¿Olvidaste tu contraseña ?",style: textStyleActive,),
+                                                            child:  Text('¿Olvidaste tu contraseña ?',style: textStyleActive,),
                                                           ),
                                                         ],
                                                       )
@@ -146,10 +146,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text("¿Ya tienes una cuenta? ",style: textGrey,),
+                                        Text('¿Ya tienes una cuenta? ',style: textGrey,),
                                         InkWell(
                                           onTap: () => Navigator.pushNamed(context, '/login'),
-                                          child:  Text("Iniciar sesión",style: textStyleActive,),
+                                          child:  Text('Iniciar sesión',style: textStyleActive,),
                                         ),
                                       ],
                                     )

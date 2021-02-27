@@ -13,7 +13,7 @@ class PhoneVerification extends StatefulWidget {
 
 class _PhoneVerificationState extends State<PhoneVerification> {
   TextEditingController controller = TextEditingController();
-  String thisText = "";
+  String thisText = '';
   int pinLength = 4;
 
   bool hasError = false;
@@ -61,14 +61,14 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         hasTextBorderColor: primaryColor,
                         maxLength: pinLength,
                         hasError: hasError,
-                        maskCharacter: "*",
+                        maskCharacter: '*',
                         onTextChanged: (text) {
                           setState(() {
                             hasError = false;
                           });
                         },
                         onDone: (text){
-                          print("Listo $text");
+                          print('Listo $text');
                         },
                         wrapAlignment: WrapAlignment.start,
                         pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
@@ -97,7 +97,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                           children: <Widget>[
                            InkWell(
                               onTap: () => Navigator.pushNamed(context, '/login2'),
-                              child:Text("No recibí un código",style: textStyleActive,),
+                              child:Text('No recibí un código',style: textStyleActive,),
                             ),
                           ],
                         )

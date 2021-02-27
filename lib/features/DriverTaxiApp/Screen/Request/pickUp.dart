@@ -46,18 +46,18 @@ class _PickUpState extends State<PickUp> {
 
 
   addMarker(){
-    final MarkerId _markerFrom = MarkerId("fromLocation");
-    final MarkerId _markerTo = MarkerId("toLocation");
+    final MarkerId _markerFrom = MarkerId('fromLocation');
+    final MarkerId _markerTo = MarkerId('toLocation');
     markers[_markerFrom] = GMapViewHelper.createMaker(
-      markerIdVal: "fromLocation",
-      icon: checkPlatform ? "assets/image/gps_point_24.png" : "assets/image/gps_point.png",
+      markerIdVal: 'fromLocation',
+      icon: checkPlatform ? 'assets/image/gps_point_24.png' : 'assets/image/gps_point.png',
       lat: fromLocation.latitude,
       lng: fromLocation.longitude,
     );
 
     markers[_markerTo] = GMapViewHelper.createMaker(
-      markerIdVal: "toLocation",
-      icon: checkPlatform ? "assets/image/ic_marker_32.png" : "assets/image/ic_marker_128.png",
+      markerIdVal: 'toLocation',
+      icon: checkPlatform ? 'assets/image/ic_marker_32.png' : 'assets/image/ic_marker_128.png',
       lat: toLocation.latitude,
       lng: toLocation.longitude,
     );
@@ -73,7 +73,7 @@ class _PickUpState extends State<PickUp> {
         getRoutesRequest: GetRoutesRequestModel(
             fromLocation: fromLocation,
           toLocation: toLocation,
-          mode: "driving"
+          mode: 'driving'
         ),
     ).then((data) {
       if (data != null) {
@@ -81,7 +81,7 @@ class _PickUpState extends State<PickUp> {
         routesData = data.result.routes;
       }
     }).catchError((error) {
-      print("DiscoveryActionHandler::GetRoutesRequest > $error");
+      print('DiscoveryActionHandler::GetRoutesRequest > $error');
     });
 
     distance = routesData[0].legs[0].distance.text;
@@ -132,9 +132,9 @@ class _PickUpState extends State<PickUp> {
           ),
           Container(
             padding: EdgeInsets.only(left: 5.0,right: 5.0),
-            child: Text("500 metros",style: textBoldBlack,),
+            child: Text('500 metros',style: textBoldBlack,),
           ),
-          Text("Dirígete hacia el suroeste en Av. Peru 897",style: textStyle,)
+          Text('Dirígete hacia el suroeste en Av. Peru 897',style: textStyle,)
         ],
       ),
     );
@@ -188,7 +188,7 @@ class _PickUpState extends State<PickUp> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    print("Reset");
+                    print('Reset');
                   },
                   child: Container(
                     height: 40,
@@ -229,7 +229,7 @@ class _PickUpState extends State<PickUp> {
 //              children: <Widget>[
 //                GestureDetector(
 //                  onTap: (){
-//                    print("Reset");
+//                    print('Reset');
 //                  },
 //                  child: Container(
 //                    height: 40,
@@ -244,7 +244,7 @@ class _PickUpState extends State<PickUp> {
 //                ),
 //                GestureDetector(
 //                  onTap: (){
-//                    print("Reset");
+//                    print('Reset');
 //                  },
 //                  child: Container(
 //                    height: 40,

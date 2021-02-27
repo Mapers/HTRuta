@@ -29,7 +29,7 @@ class TaxiClientScreen extends StatefulWidget {
 }
 
 class _TaxiClientScreenState extends State<TaxiClientScreen> {
-  final String screenName = "HOME";
+  final String screenName = 'HOME';
   var _scaffoldKey =  GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
@@ -119,7 +119,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     print('5');
       widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
-          formattedAddress: "",
+          formattedAddress: '',
           lat: currentLocation?.latitude,
           lng: currentLocation?.longitude
       ));
@@ -153,7 +153,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
           print(_placemark);
         widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
-          formattedAddress: "",
+          formattedAddress: '',
           lat: lat,
           lng: lng
         ));
@@ -168,7 +168,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       markerId: markerId,
       position: position,
       draggable: false,
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/ic_pick_96.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
     setState(() {
       _markers[markerId] = marker;

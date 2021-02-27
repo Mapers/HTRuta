@@ -43,7 +43,7 @@ class _CancellationReasonsScreenState extends State<CancellationReasonsScreen> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 50),
-              child: Text("Por favor,seleccione la razon por la cual cancela:",
+              child: Text('Por favor,seleccione la razon por la cual cancela:',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold
@@ -58,10 +58,10 @@ class _CancellationReasonsScreenState extends State<CancellationReasonsScreen> {
                   fontSize: 15,
                 ),
                 labels: <String>[
-                  "No deseo compartir",
-                  "No puedo contactar con el conductor",
-                  "El precio no es razonable",
-                  "El sitio de recogo es incorrecto",
+                  'No deseo compartir',
+                  'No puedo contactar con el conductor',
+                  'El precio no es razonable',
+                  'El sitio de recogo es incorrecto',
                 ],
                 onSelected: (String selected) => print(selected)
             ),

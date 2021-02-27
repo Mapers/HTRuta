@@ -22,9 +22,9 @@ class RequestData {
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -40,6 +40,6 @@ class Solicitud {
     );
 
     Map<String, dynamic> toJson() => {
-        "IdSolicitud": idSolicitud,
+        'IdSolicitud': idSolicitud,
     };
 }

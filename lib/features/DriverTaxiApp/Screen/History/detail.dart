@@ -87,7 +87,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text('Olivia Ramos2',style: textBoldBlack,),
-                              Text("08 Ene 2019 12:00 PM", style: textGrey,),
+                              Text('08 Ene 2019 12:00 PM', style: textGrey,),
                               Container(
                                 child: Row(
                                   children: <Widget>[
@@ -123,8 +123,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
-                              Text("S/. 250.0",style: textBoldBlack,),
-                              Text("2.2 Km",style: textGrey,),
+                              Text('S/. 250.0',style: textBoldBlack,),
+                              Text('2.2 Km',style: textGrey,),
                             ],
                           ),
                         ),
@@ -141,8 +141,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Recoger".toUpperCase(),style: textGreyBold,),
-                                Text("Av. Peru 657",style: textStyle,),
+                                Text('Recoger'.toUpperCase(),style: textGreyBold,),
+                                Text('Av. Peru 657',style: textStyle,),
 
                               ],
                             ),
@@ -152,8 +152,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Destino".toUpperCase(),style: textGreyBold,),
-                                Text("Av Tupac Amaru 567",style: textStyle,),
+                                Text('Destino'.toUpperCase(),style: textGreyBold,),
+                                Text('Av Tupac Amaru 567',style: textStyle,),
 
                               ],
                             ),
@@ -163,8 +163,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("note".toUpperCase(),style: textGreyBold,),
-                                Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",style: textStyle,),
+                                Text('note'.toUpperCase(),style: textGreyBold,),
+                                Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',style: textStyle,),
                               ],
                             ),
                           ),
@@ -178,14 +178,14 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Detalles de la factura (pago en efectivo)".toUpperCase(), style: textGreyBold,),
+                        Text('Detalles de la factura (pago en efectivo)'.toUpperCase(), style: textGreyBold,),
                         Container(
                           padding: EdgeInsets.only(top: 8.0),
                           child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                             Text("Tarifa de viaje", style: textStyle,),
-                             Text("S/.10.99", style: textBoldBlack,),
+                             Text('Tarifa de viaje', style: textStyle,),
+                             Text('S/.10.99', style: textBoldBlack,),
                             ],
                           ),
                         ),
@@ -194,8 +194,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                             Text("Impuestos", style: textStyle,),
-                             Text("S/.1.99", style: textBoldBlack,),
+                             Text('Impuestos', style: textStyle,),
+                             Text('S/.1.99', style: textBoldBlack,),
                             ],
                           ),
                         ),
@@ -204,8 +204,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                             Text("Descuento", style: textStyle,),
-                             Text("- S/.5.99", style: textBoldBlack,),
+                             Text('Descuento', style: textStyle,),
+                             Text('- S/.5.99', style: textBoldBlack,),
                             ],
                           ),
                         ),
@@ -219,8 +219,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                             Text("Facturación total", style: textStyleHeading18Black,),
-                             Text("S/.7.49", style: textStyleHeading18Black,),
+                             Text('Facturación total', style: textStyleHeading18Black,),
+                             Text('S/.7.49', style: textStyleHeading18Black,),
                             ],
                           ),
                         ),
@@ -266,7 +266,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                               child: TextField(
                                 style: textStyle,
                                 decoration: InputDecoration(
-                                  hintText: "Escribe tu reseña",
+                                  hintText: 'Escribe tu reseña',
 //                                hintStyle: TextStyle(
 //                                  color: Colors.black38,
 //                                  fontFamily: 'Akrobat-Bold',

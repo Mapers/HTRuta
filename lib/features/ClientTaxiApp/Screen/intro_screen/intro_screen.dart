@@ -38,9 +38,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   }
 
   // List<Map<String, dynamic>> listItem = [
-  //   {"id": '0',"title" : 'Acepta un trabajo',"description" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry","image" : "assets/image/image_taxi_1.png"},
-  //   {"id": '1',"title" : 'Tracking en tiempo real',"description" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry","image" : "assets/image/image_taxi_2.png"},
-  //   {"id": '2',"title" : 'Gana dinero',"description" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry","image" : "assets/image/image_taxi_3.png"},
+  //   {'id': '0','title' : 'Acepta un trabajo','description' : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry','image' : 'assets/image/image_taxi_1.png'},
+  //   {'id': '1','title' : 'Tracking en tiempo real','description' : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry','image' : 'assets/image/image_taxi_2.png'},
+  //   {'id': '2','title' : 'Gana dinero','description' : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry','image' : 'assets/image/image_taxi_3.png'},
   // ];
 
   Future<void> requestPermission() async {
@@ -70,7 +70,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                     // Container(
                     //   padding: EdgeInsets.only(top: 10),
                     //   alignment: Alignment.center,
-                    //   child: Text("${listItem[currentIndex]['description']}",
+                    //   child: Text('${listItem[currentIndex]['description']}',
                     //     style: TextStyle(
                     //       fontSize: 14,
                     //       fontWeight: FontWeight.w500

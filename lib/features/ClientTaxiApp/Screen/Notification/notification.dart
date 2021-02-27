@@ -16,7 +16,7 @@ class NotificationScreens extends StatefulWidget {
 }
 
 class _NotificationScreensState extends State<NotificationScreens> {
-  final String screenName = "NOTIFICATIONS";
+  final String screenName = 'NOTIFICATIONS';
   List<Map<String, dynamic>> listNotification = List<Map<String, dynamic>>();
 
   navigateToDetail(String id) {
@@ -34,8 +34,8 @@ class _NotificationScreensState extends State<NotificationScreens> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            title: Text("Confirmar Borrado"),
-            content: Text("Estas seguro de borrar todas las notificaciones ?"),
+            title: Text('Confirmar Borrado'),
+            content: Text('Estas seguro de borrar todas las notificaciones ?'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
@@ -64,34 +64,34 @@ class _NotificationScreensState extends State<NotificationScreens> {
     super.initState();
     listNotification = [
       {
-        "id": '0',
-        "title": 'Sistema',
-        "subTitle": "Sit amet ullamco qui nostrud adipisicing cupidatat dolor duis sit Lorem.",
-        "icon": Icons.check_circle
+        'id': '0',
+        'title': 'Sistema',
+        'subTitle': 'Sit amet ullamco qui nostrud adipisicing cupidatat dolor duis sit Lorem.',
+        'icon': Icons.check_circle
       },
       {
-        "id": '1',
-        "title": 'Promoción',
-        "subTitle": "Ad mollit nulla eiusmod deserunt adipisicing.",
-        "icon": MdiIcons.camcorder
+        'id': '1',
+        'title': 'Promoción',
+        'subTitle': 'Ad mollit nulla eiusmod deserunt adipisicing.',
+        'icon': MdiIcons.camcorder
       },
       {
-        "id": '2',
-        "title": 'Promoción',
-        "subTitle": "Labore excepteur aliquip exercitation et sint aliqua aliqua dolore.",
-        "icon": MdiIcons.camcorder
+        'id': '2',
+        'title': 'Promoción',
+        'subTitle': 'Labore excepteur aliquip exercitation et sint aliqua aliqua dolore.',
+        'icon': MdiIcons.camcorder
       },
       {
-        "id": '3',
-        "title": 'Sistema',
-        "subTitle": "Deserunt mollit Lorem aliqua duis.",
-        "icon": MdiIcons.cancel
+        'id': '3',
+        'title': 'Sistema',
+        'subTitle': 'Deserunt mollit Lorem aliqua duis.',
+        'icon': MdiIcons.cancel
       },
       {
-        "id": '3',
-        "title": 'Sistema',
-        "subTitle": "Exercitation consequat incididunt qui aliquip exercitation.",
-        "icon": Icons.check_circle
+        'id': '3',
+        'title': 'Sistema',
+        'subTitle': 'Exercitation consequat incididunt qui aliquip exercitation.',
+        'icon': Icons.check_circle
       },
     ];
   }

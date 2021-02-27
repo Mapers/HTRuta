@@ -57,7 +57,7 @@ class _UseMyLocationState extends State<UseMyLocation> with SingleTickerProvider
                           child: FadeTransition(
                               opacity: fadeAnimation,
                               child:
-                              Image.asset("assets/image/6409.jpg",height: 200.0,)
+                              Image.asset('assets/image/6409.jpg',height: 200.0,)
                           ),
                         ),
                         SizedBox(height: 30),

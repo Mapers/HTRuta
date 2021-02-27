@@ -15,7 +15,7 @@ class SettingsDriverScreen extends StatefulWidget {
 }
 
 class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
-  final String screenName = "SETTINGS";
+  final String screenName = 'SETTINGS';
 
 
   @override
@@ -76,10 +76,10 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      child: Text("Steve Armas",style: textBoldBlack,),
+                                      child: Text('Steve Armas',style: textBoldBlack,),
                                     ),
                                     Container(
-                                        child: Text("Miembro Gold",style: TextStyle(
+                                        child: Text('Miembro Gold',style: TextStyle(
                                           fontSize: 12,
                                           color: greyColor2
                                         ),)
@@ -99,13 +99,13 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   ),
                 ),
 //                ListsMenu(
-//                  title: "100 Point * Member",
+//                  title: '100 Point * Member',
 //                  onPress: (){
 //
 //                  },
 //                ),
                 ListsMenu(
-                  title: "Reseñas",
+                  title: 'Reseñas',
                   icon: Icons.star,
                   backgroundIcon: Colors.cyan,
                   onPress: (){
@@ -113,7 +113,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   },
                 ),
                 ListsMenu(
-                  title: "Invitar amigos",
+                  title: 'Invitar amigos',
                   icon: Icons.people,
                   backgroundIcon: primaryColor,
                   onPress: (){
@@ -125,7 +125,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   },
                 ),
                 ListsMenu(
-                  title: "Notificacion",
+                  title: 'Notificacion',
                   icon: Icons.notifications_active,
                   backgroundIcon: primaryColor,
                   onPress: (){
@@ -133,7 +133,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   },
                 ),
                 ListsMenu(
-                  title: "Términos y condiciones",
+                  title: 'Términos y condiciones',
                   icon: Icons.description,
                   backgroundIcon: Colors.deepPurple,
                   onPress: (){
@@ -141,7 +141,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   },
                 ),
                 ListsMenu(
-                  title: "Contactanos",
+                  title: 'Contactanos',
                   icon: Icons.help,
                   backgroundIcon: primaryColor,
                   onPress: (){

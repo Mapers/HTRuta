@@ -22,9 +22,9 @@ class MarcaCarro {
   );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "success": success,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    'message': message,
+    'success': success,
+    'data': List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -43,7 +43,7 @@ class DataMarca {
   );
 
   Map<String, dynamic> toJson() => {
-    "iIdMarca": iIdMarca,
-    "vchMarca": vchMarca,
+    'iIdMarca': iIdMarca,
+    'vchMarca': vchMarca,
   };
 }

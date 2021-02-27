@@ -96,38 +96,38 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     });
 
     listRequest = [
-      {"id": '0',
-        "avatar" : "https://source.unsplash.com/1600x900/?portrait",
-        "userName" : "Olivia Ramos",
-        "date" : '08 Ene 2019 12:00 PM',
-        "price" : 150,
-        "distance" : "21km",
-        "addFrom": "Av. Peru 657",
-        "addTo" : "Av. Tupac Amaru 567",
-        "locationForm" : LatLng(-8.1034303,-79.0206512),
-        "locationTo" : LatLng(-8.0994694,-79.0302491),
+      {'id': '0',
+        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
+        'userName' : 'Olivia Ramos',
+        'date' : '08 Ene 2019 12:00 PM',
+        'price' : 150,
+        'distance' : '21km',
+        'addFrom': 'Av. Peru 657',
+        'addTo' : 'Av. Tupac Amaru 567',
+        'locationForm' : LatLng(-8.1034303,-79.0206512),
+        'locationTo' : LatLng(-8.0994694,-79.0302491),
       },
-      {"id": '1',
-        "avatar" : "https://source.unsplash.com/1600x900/?portrait",
-        "userName" : "Jordan Diaz",
-        "date" : '08 Ene 2019 12:00 PM',
-        "price" : 150,
-        "distance" : "5km",
-        "addFrom": "Av. Juan Pablo II 657",
-        "addTo" : "Av. Tupac Amaru 896",
-        "locationForm" : LatLng(-8.1183595,-79.0414019),
-        "locationTo" : LatLng(-8.0965296,-79.0325108),
+      {'id': '1',
+        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
+        'userName' : 'Jordan Diaz',
+        'date' : '08 Ene 2019 12:00 PM',
+        'price' : 150,
+        'distance' : '5km',
+        'addFrom': 'Av. Juan Pablo II 657',
+        'addTo' : 'Av. Tupac Amaru 896',
+        'locationForm' : LatLng(-8.1183595,-79.0414019),
+        'locationTo' : LatLng(-8.0965296,-79.0325108),
       },
-      {"id": '2',
-        "avatar" : "https://source.unsplash.com/1600x900/?portrait",
-        "userName" : "Olivia Ramos",
-        "date" : '08 Ene 2019 at 12:00 PM',
-        "price" : 152,
-        "distance" : "10km",
-        "addFrom": "Av. America Nte. 657",
-        "addTo" : "Av. Los Incas 345",
-        "locationForm" : LatLng(-8.0966565,-79.0198259),
-        "locationTo" : LatLng(-8.1159328,-79.0250643),
+      {'id': '2',
+        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
+        'userName' : 'Olivia Ramos',
+        'date' : '08 Ene 2019 at 12:00 PM',
+        'price' : 152,
+        'distance' : '10km',
+        'addFrom': 'Av. America Nte. 657',
+        'addTo' : 'Av. Los Incas 345',
+        'locationForm' : LatLng(-8.0966565,-79.0198259),
+        'locationTo' : LatLng(-8.1159328,-79.0250643),
       },
 
     ];
@@ -236,20 +236,20 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     }
   }
 
-  addMarker(LatLng locationForm, LatLng locationTo){
+  void addMarker(LatLng locationForm, LatLng locationTo){
     _markers.clear();
-    final MarkerId _markerFrom = MarkerId("fromLocation");
-    final MarkerId _markerTo = MarkerId("toLocation");
+    final MarkerId _markerFrom = MarkerId('fromLocation');
+    final MarkerId _markerTo = MarkerId('toLocation');
     _markers[_markerFrom] = GMapViewHelper.createMaker(
-      markerIdVal: "fromLocation",
-      icon: checkPlatform ? "assets/image/marker/gps_point_24.png" : "assets/image/marker/gps_point.png",
+      markerIdVal: 'fromLocation',
+      icon: checkPlatform ? 'assets/image/marker/gps_point_24.png' : 'assets/image/marker/gps_point.png',
       lat: locationForm.latitude,
       lng: locationForm.longitude,
     );
 
     _markers[_markerTo] = GMapViewHelper.createMaker(
-      markerIdVal: "toLocation",
-      icon: checkPlatform ? "assets/image/marker/ic_marker_32.png" : "assets/image/marker/ic_marker_128.png",
+      markerIdVal: 'toLocation',
+      icon: checkPlatform ? 'assets/image/marker/ic_marker_32.png' : 'assets/image/marker/ic_marker_128.png',
       lat: locationTo.latitude,
       lng: locationTo.longitude,
     );
