@@ -15,12 +15,16 @@ abstract class JsonMessage {
 }
 
 class SuccessMessage extends JsonMessage {
+  @override
   int get status => 200;
 
+  @override
   String get errorCode => null;
 
+  @override
   String get errorMessage => null;
 
+  @override
   ResultData get result => null;
 }
 

@@ -319,8 +319,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   }
                 },
                 onCameraIdle: () => getLocationName(
-                    _position?.target?.latitude != null ? _position?.target?.latitude : currentLocation?.latitude,
-                    _position?.target?.longitude != null ? _position?.target?.longitude : currentLocation?.longitude
+                    _position?.target?.latitude ?? currentLocation?.latitude,
+                    _position?.target?.longitude ?? currentLocation?.longitude
                 ),
               ),
             ),

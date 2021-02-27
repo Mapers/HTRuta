@@ -43,7 +43,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   String newLocationName;
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
-  List<Map<String, dynamic>> listRequest = List<Map<String, dynamic>>();
+  List<Map<String, dynamic>> listRequest = [];
 
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   Map<PolylineId, Polyline> _polyLines = <PolylineId, Polyline>{};
@@ -209,7 +209,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
 
   void _onMapCreated(GoogleMapController controller) async {
-    this._mapController = controller;
+    _mapController = controller;
     addMarker(listRequest[0]['locationForm'], listRequest[0]['locationTo']);
   }
 

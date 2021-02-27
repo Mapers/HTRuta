@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'googleMap_message.dart';
 import 'json_message.dart';
 
-
 typedef JsonMessage OnError(
     {@required int status,
       @required String errorMessage});

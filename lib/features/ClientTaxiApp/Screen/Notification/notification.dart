@@ -17,45 +17,45 @@ class NotificationScreens extends StatefulWidget {
 
 class _NotificationScreensState extends State<NotificationScreens> {
   final String screenName = 'NOTIFICATIONS';
-  List<Map<String, dynamic>> listNotification = List<Map<String, dynamic>>();
+  List<Map<String, dynamic>> listNotification = [];
 
-  navigateToDetail(String id) {
+  void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NotificationDetail(
               id: id,
             )));
   }
 
-  dialogInfo() {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            title: Text('Confirmar Borrado'),
-            content: Text('Estas seguro de borrar todas las notificaciones ?'),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:Text(
-                    'Cancelar',
-                    style: textGrey,
-                  )),
-              FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      listNotification.clear();
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Text('Ok')),
-            ],
-          );
-        });
+  void dialogInfo() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Text('Confirmar Borrado'),
+          content: Text('Estas seguro de borrar todas las notificaciones ?'),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child:Text(
+                  'Cancelar',
+                  style: textGrey,
+                )),
+            FlatButton(
+                onPressed: () {
+                  setState(() {
+                    listNotification.clear();
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('Ok')),
+          ],
+        );
+      });
   }
 
   @override
@@ -114,17 +114,18 @@ class _NotificationScreensState extends State<NotificationScreens> {
           elevation: 0.0,
           iconTheme: IconThemeData(color: blackColor),
           actions: <Widget>[
-           IconButton(
-                icon: Icon(
-                  Icons.restore_from_trash,
-                  color: blackColor,
-                ),
-                onPressed: () {
-                  dialogInfo();
-                })
+            IconButton(
+              icon: Icon(
+                Icons.restore_from_trash,
+                color: blackColor,
+              ),
+              onPressed: () {
+                dialogInfo();
+              }
+            )
           ]),
       drawer: MenuScreens(activeScreenName: screenName),
-      body: listNotification.length != 0
+      body: listNotification.isNotEmpty
         ? NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (overScroll) {
               overScroll.disallowGlow();
