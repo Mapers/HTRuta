@@ -16,9 +16,9 @@ class MarcaCarro {
   List<DataMarca> data;
 
   factory MarcaCarro.fromJson(Map<String, dynamic> json) => MarcaCarro(
-    message: json["message"],
-    success: json["success"],
-    data: List<DataMarca>.from(json["data"].map((x) => DataMarca.fromJson(x))),
+    message: json['message'],
+    success: json['success'],
+    data: List<DataMarca>.from(json['data'].map((x) => DataMarca.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -38,8 +38,8 @@ class DataMarca {
   String vchMarca;
 
   factory DataMarca.fromJson(Map<String, dynamic> json) => DataMarca(
-    iIdMarca: json["iIdMarca"],
-    vchMarca: json["vchMarca"],
+    iIdMarca: json['iIdMarca'],
+    vchMarca: json['vchMarca'],
   );
 
   Map<String, dynamic> toJson() => {

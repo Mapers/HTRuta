@@ -11,9 +11,9 @@ class GeocodedWaypoint {
   });
 
   factory GeocodedWaypoint.fromJson(Map<String, dynamic> json) =>GeocodedWaypoint(
-    geocoderStatus: json["geocoder_status"] == null ? null : json["geocoder_status"],
-    placeId: json["place_id"] == null ? null : json["place_id"],
-    types: json["types"] == null ? null :List<String>.from(json["types"].map((x) => x)),
+    geocoderStatus: json['geocoder_status'] == null ? null : json['geocoder_status'],
+    placeId: json['place_id'] == null ? null : json['place_id'],
+    types: json['types'] == null ? null :List<String>.from(json['types'].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -43,13 +43,13 @@ class Routes {
   });
 
   factory Routes.fromJson(Map<String, dynamic> json) =>Routes(
-    bounds: json["bounds"] == null ? null : Bounds.fromJson(json["bounds"]),
-    copyrights: json["copyrights"] == null ? null : json["copyrights"],
-    legs: json["legs"] == null ? null :List<Leg>.from(json["legs"].map((x) => Leg.fromJson(x))),
-    overviewPolyline: json["overview_polyline"] == null ? null : Polylines.fromJson(json["overview_polyline"]),
-    summary: json["summary"] == null ? null : json["summary"],
-    warnings: json["warnings"] == null ? null :List<dynamic>.from(json["warnings"].map((x) => x)),
-    waypointOrder: json["waypoint_order"] == null ? null :List<dynamic>.from(json["waypoint_order"].map((x) => x)),
+    bounds: json['bounds'] == null ? null : Bounds.fromJson(json['bounds']),
+    copyrights: json['copyrights'] == null ? null : json['copyrights'],
+    legs: json['legs'] == null ? null :List<Leg>.from(json['legs'].map((x) => Leg.fromJson(x))),
+    overviewPolyline: json['overview_polyline'] == null ? null : Polylines.fromJson(json['overview_polyline']),
+    summary: json['summary'] == null ? null : json['summary'],
+    warnings: json['warnings'] == null ? null :List<dynamic>.from(json['warnings'].map((x) => x)),
+    waypointOrder: json['waypoint_order'] == null ? null :List<dynamic>.from(json['waypoint_order'].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -73,8 +73,8 @@ class Bounds {
   });
 
   factory Bounds.fromJson(Map<String, dynamic> json) =>Bounds(
-    northeast: json["northeast"] == null ? null : Northeast.fromJson(json["northeast"]),
-    southwest: json["southwest"] == null ? null : Northeast.fromJson(json["southwest"]),
+    northeast: json['northeast'] == null ? null : Northeast.fromJson(json['northeast']),
+    southwest: json['southwest'] == null ? null : Northeast.fromJson(json['southwest']),
   );
 
   Map<String, dynamic> toJson() => {
@@ -93,8 +93,8 @@ class Northeast {
   });
 
   factory Northeast.fromJson(Map<String, dynamic> json) =>Northeast(
-    lat: json["lat"] == null ? null : json["lat"].toDouble(),
-    lng: json["lng"] == null ? null : json["lng"].toDouble(),
+    lat: json['lat'] == null ? null : json['lat'].toDouble(),
+    lng: json['lng'] == null ? null : json['lng'].toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -127,15 +127,15 @@ class Leg {
   });
 
   factory Leg.fromJson(Map<String, dynamic> json) =>Leg(
-    distance: json["distance"] == null ? null : Distance.fromJson(json["distance"]),
-    duration: json["duration"] == null ? null : Distance.fromJson(json["duration"]),
-    endAddress: json["end_address"] == null ? null : json["end_address"],
-    endLocation: json["end_location"] == null ? null : Northeast.fromJson(json["end_location"]),
-    startAddress: json["start_address"] == null ? null : json["start_address"],
-    startLocation: json["start_location"] == null ? null : Northeast.fromJson(json["start_location"]),
-    steps: json["steps"] == null ? null :List<Step>.from(json["steps"].map((x) => Step.fromJson(x))),
-    trafficSpeedEntry: json["traffic_speed_entry"] == null ? null :List<dynamic>.from(json["traffic_speed_entry"].map((x) => x)),
-    viaWaypoint: json["via_waypoint"] == null ? null :List<dynamic>.from(json["via_waypoint"].map((x) => x)),
+    distance: json['distance'] == null ? null : Distance.fromJson(json['distance']),
+    duration: json['duration'] == null ? null : Distance.fromJson(json['duration']),
+    endAddress: json['end_address'] == null ? null : json['end_address'],
+    endLocation: json['end_location'] == null ? null : Northeast.fromJson(json['end_location']),
+    startAddress: json['start_address'] == null ? null : json['start_address'],
+    startLocation: json['start_location'] == null ? null : Northeast.fromJson(json['start_location']),
+    steps: json['steps'] == null ? null :List<Step>.from(json['steps'].map((x) => Step.fromJson(x))),
+    trafficSpeedEntry: json['traffic_speed_entry'] == null ? null :List<dynamic>.from(json['traffic_speed_entry'].map((x) => x)),
+    viaWaypoint: json['via_waypoint'] == null ? null :List<dynamic>.from(json['via_waypoint'].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -161,8 +161,8 @@ class Distance {
   });
 
   factory Distance.fromJson(Map<String, dynamic> json) =>Distance(
-    text: json["text"] == null ? null : json["text"],
-    value: json["value"] == null ? null : json["value"],
+    text: json['text'] == null ? null : json['text'],
+    value: json['value'] == null ? null : json['value'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -193,14 +193,14 @@ class Step {
   });
 
   factory Step.fromJson(Map<String, dynamic> json) =>Step(
-    distance: json["distance"] == null ? null : Distance.fromJson(json["distance"]),
-    duration: json["duration"] == null ? null : Distance.fromJson(json["duration"]),
-    endLocation: json["end_location"] == null ? null : Northeast.fromJson(json["end_location"]),
-    htmlInstructions: json["html_instructions"] == null ? null : json["html_instructions"],
-    polyline: json["polyline"] == null ? null : Polylines.fromJson(json["polyline"]),
-    startLocation: json["start_location"] == null ? null : Northeast.fromJson(json["start_location"]),
-    travelMode: json["travel_mode"] == null ? null : json["travel_mode"],
-    maneuver: json["maneuver"] == null ? null : json["maneuver"],
+    distance: json['distance'] == null ? null : Distance.fromJson(json['distance']),
+    duration: json['duration'] == null ? null : Distance.fromJson(json['duration']),
+    endLocation: json['end_location'] == null ? null : Northeast.fromJson(json['end_location']),
+    htmlInstructions: json['html_instructions'] == null ? null : json['html_instructions'],
+    polyline: json['polyline'] == null ? null : Polylines.fromJson(json['polyline']),
+    startLocation: json['start_location'] == null ? null : Northeast.fromJson(json['start_location']),
+    travelMode: json['travel_mode'] == null ? null : json['travel_mode'],
+    maneuver: json['maneuver'] == null ? null : json['maneuver'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -223,7 +223,7 @@ class Polylines {
   });
 
   factory Polylines.fromJson(Map<String, dynamic> json) =>Polylines(
-    points: json["points"] == null ? null : json["points"],
+    points: json['points'] == null ? null : json['points'],
   );
 
   Map<String, dynamic> toJson() => {

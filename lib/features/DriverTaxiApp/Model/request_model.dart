@@ -46,24 +46,24 @@ class Request {
   String idSolicitud;
 
   factory Request.fromJson(Map<String, dynamic> json) => Request(
-      id: json["Id"],
-      iIdUsuario: json["iIdUsuario"],
-      vchCorreo: json["vchCorreo"],
-      dFecReg: json["dFecReg"],
-      vchDni: json["vchDni"],
-      vchNombres: json["vchNombres"],
-      vchCelular: json["vchCelular"],
-      mPrecio: json["mPrecio"],
-      iTipoViaje: json["iTipoViaje"],
-      vchLatInicial: json["vchLatInicial"],
-      vchLatFinal: json["vchLatFinal"],
-      vchLongInicial: json["vchLongInicial"],
-      vchLongFinal: json["vchLongFinal"],
-      vchNombreInicial: json["vchNombreInicial"],
-      vchNombreFinal: json["vchNombreFinal"],
-      rechazados: json["rechazados"],
-      aceptados: json["aceptados"],
-      idSolicitud: json["IdSolicitud"]
+      id: json['Id'],
+      iIdUsuario: json['iIdUsuario'],
+      vchCorreo: json['vchCorreo'],
+      dFecReg: json['dFecReg'],
+      vchDni: json['vchDni'],
+      vchNombres: json['vchNombres'],
+      vchCelular: json['vchCelular'],
+      mPrecio: json['mPrecio'],
+      iTipoViaje: json['iTipoViaje'],
+      vchLatInicial: json['vchLatInicial'],
+      vchLatFinal: json['vchLatFinal'],
+      vchLongInicial: json['vchLongInicial'],
+      vchLongFinal: json['vchLongFinal'],
+      vchNombreInicial: json['vchNombreInicial'],
+      vchNombreFinal: json['vchNombreFinal'],
+      rechazados: json['rechazados'],
+      aceptados: json['aceptados'],
+      idSolicitud: json['IdSolicitud']
   );
 
   Map<String, dynamic> toJson() => {

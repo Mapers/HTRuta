@@ -20,9 +20,9 @@ class EstadoChofer {
     List<DataEstadoChofer> data;
 
     factory EstadoChofer.fromJson(Map<String, dynamic> json) => EstadoChofer(
-      message: json["message"],
-      success: json["success"],
-      data: List<DataEstadoChofer>.from(json["data"].map((x) => DataEstadoChofer.fromJson(x))),
+      message: json['message'],
+      success: json['success'],
+      data: List<DataEstadoChofer>.from(json['data'].map((x) => DataEstadoChofer.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -40,7 +40,7 @@ class DataEstadoChofer {
   String iEstado;
 
   factory DataEstadoChofer.fromJson(Map<String, dynamic> json) => DataEstadoChofer(
-    iEstado: json["iEstado"],
+    iEstado: json['iEstado'],
   );
 
   Map<String, dynamic> toJson() => {

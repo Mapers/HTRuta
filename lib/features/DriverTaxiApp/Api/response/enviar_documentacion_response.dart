@@ -12,7 +12,7 @@ class DocumentoRechazadoResponse {
     List<DocumentoResponse> documentos;
 
     factory DocumentoRechazadoResponse.fromJson(Map<String, dynamic> json) => DocumentoRechazadoResponse(
-        documentos: List<DocumentoResponse>.from(json["documentos"].map((x) => DocumentoResponse.fromJson(x))),
+        documentos: List<DocumentoResponse>.from(json['documentos'].map((x) => DocumentoResponse.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -32,9 +32,9 @@ class DocumentoResponse {
     String iTipoDocumento;
 
     factory DocumentoResponse.fromJson(Map<String, dynamic> json) => DocumentoResponse(
-        base : json["base"],
-        iIdDocumento: json["iIdDocumento"],
-        iTipoDocumento: json["iTipoDocumento"],
+        base : json['base'],
+        iIdDocumento: json['iIdDocumento'],
+        iTipoDocumento: json['iTipoDocumento'],
     );
 
     Map<String, dynamic> toJson() => {

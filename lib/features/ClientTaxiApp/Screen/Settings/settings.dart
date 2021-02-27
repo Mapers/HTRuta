@@ -35,14 +35,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         },
         child: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: Container(
                 color: greyColor2,
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(new MaterialPageRoute<Null>(
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
                           builder: (BuildContext context) {
                             return EditProfile();
                           },
@@ -108,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ListsMenu(
                       title: 'Invitar amigos',
                       onPress: (){
-                        Navigator.of(context).push(new MaterialPageRoute<Null>(
+                        Navigator.of(context).push(MaterialPageRoute<Null>(
                             builder: (BuildContext context) {
                               return InviteFriends();
                             },

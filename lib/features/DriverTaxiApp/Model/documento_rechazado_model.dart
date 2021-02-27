@@ -20,9 +20,9 @@ class DocumentoRechazado {
     List<Documento> data;
 
     factory DocumentoRechazado.fromJson(Map<String, dynamic> json) => DocumentoRechazado(
-        message: json["message"],
-        success: json["success"],
-        data: List<Documento>.from(json["data"].map((x) => Documento.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<Documento>.from(json['data'].map((x) => Documento.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,13 +52,13 @@ class Documento {
     String estadoDoc;
 
     factory Documento.fromJson(Map<String, dynamic> json) => Documento(
-        iIdUsuario: json["iIdUsuario"],
-        iIdDocumento: json["iIdDocumento"],
-        iTipoDocumento: json["iTipoDocumento"],
-        nombreDocumento: json["NombreDocumento"],
-        vchRuta: json["vchRuta"],
-        iEstado: json["iEstado"],
-        estadoDoc: json["EstadoDoc"],
+        iIdUsuario: json['iIdUsuario'],
+        iIdDocumento: json['iIdDocumento'],
+        iTipoDocumento: json['iTipoDocumento'],
+        nombreDocumento: json['NombreDocumento'],
+        vchRuta: json['vchRuta'],
+        iEstado: json['iEstado'],
+        estadoDoc: json['EstadoDoc'],
     );
 
     Map<String, dynamic> toJson() => {

@@ -65,7 +65,7 @@ class _SelectAddressState extends State<SelectAddress> {
 //             onSelected: (bool check) {
 //               widget?.onTap();
 // //              setState(() {
-// //                selectedAddress = check ? listAddress[index]["id"].toString() : '';
+// //                selectedAddress = check ? listAddress[index]['id'].toString() : '';
 // //              });
 //             })
 //         );

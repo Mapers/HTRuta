@@ -16,9 +16,9 @@ class RequestData {
     List<Solicitud> data;
 
     factory RequestData.fromJson(Map<String, dynamic> json) => RequestData(
-        message: json["message"],
-        success: json["success"],
-        data: List<Solicitud>.from(json["data"].map((x) => Solicitud.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<Solicitud>.from(json['data'].map((x) => Solicitud.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -36,7 +36,7 @@ class Solicitud {
     String idSolicitud;
 
     factory Solicitud.fromJson(Map<String, dynamic> json) => Solicitud(
-        idSolicitud: json["IdSolicitud"],
+        idSolicitud: json['IdSolicitud'],
     );
 
     Map<String, dynamic> toJson() => {

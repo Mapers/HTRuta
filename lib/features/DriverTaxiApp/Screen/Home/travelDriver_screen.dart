@@ -178,10 +178,10 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   ///the function will update the driver's position on the map.
 
   double valueRotation;
-  runTrackingDriver(var _listPosition){
+  void runTrackingDriver(var _listPosition){
     int count = 1;
     int two = count;
-    const timeRequest = const Duration(seconds: 2);
+    const timeRequest = Duration(seconds: 2);
     Timer.periodic(timeRequest, (Timer t) {
       LatLng positionDriverBefore = _listPosition[two-1];
       positionDriver = _listPosition[count++];
@@ -209,7 +209,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
     });
   }
 
-  addMakersDriver(LatLng _position){
+  void addMakersDriver(LatLng _position){
     final MarkerId markerDriver = MarkerId('driver');
     final Marker marker = Marker(
       markerId: markerDriver,
@@ -227,7 +227,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
     });
   }
 
-  dialogOption(){
+  AlertDialog dialogOption(){
 
     return AlertDialog(
       title: Text('Opcion'),

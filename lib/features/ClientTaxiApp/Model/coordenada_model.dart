@@ -16,9 +16,9 @@ class Coordenada {
     String idConductor;
 
     factory Coordenada.fromJson(Map<String, dynamic> json) => Coordenada(
-        latitud: json["latitud"].toDouble(),
-        longitud: json["longitud"].toDouble(),
-        idConductor: json["idConductor"],
+        latitud: json['latitud'].toDouble(),
+        longitud: json['longitud'].toDouble(),
+        idConductor: json['idConductor'],
     );
 
     Map<String, dynamic> toJson() => {

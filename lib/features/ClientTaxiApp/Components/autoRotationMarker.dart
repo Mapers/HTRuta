@@ -4,7 +4,7 @@ import 'package:latlong/latlong.dart';
 
   double calculateangle(double lat1,double lon1,double lat2,double lon2){
 
-    final Distance distance = const Distance();
+    final Distance distance = Distance();
 //    final num distanceInMeter = (EARTH_RADIUS * pi / 4).round();
 
     final p1 = LatLng(lat1, lon1);

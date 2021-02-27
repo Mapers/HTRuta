@@ -16,9 +16,9 @@ class TablaCodigo {
     List<Datum> data;
 
     factory TablaCodigo.fromJson(Map<String, dynamic> json) => TablaCodigo(
-        message: json["message"],
-        success: json["success"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<Datum>.from(json['data'].map((x) => Datum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -38,8 +38,8 @@ class Datum {
     int vchValor;
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        vchNombreCodigo: json["vchNombreCodigo"],
-        vchValor: json["vchValor"],
+        vchNombreCodigo: json['vchNombreCodigo'],
+        vchValor: json['vchValor'],
     );
 
     Map<String, dynamic> toJson() => {

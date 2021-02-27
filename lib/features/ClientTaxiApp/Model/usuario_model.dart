@@ -20,9 +20,9 @@ class Usuario {
     List<DataUsuario> data;
 
     factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
-        message: json["message"],
-        success: json["success"],
-        data: List<DataUsuario>.from(json["data"].map((x) => DataUsuario.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<DataUsuario>.from(json['data'].map((x) => DataUsuario.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -58,16 +58,16 @@ class DataUsuario {
     int iIdUsuario;
 
     factory DataUsuario.fromJson(Map<String, dynamic> json) => DataUsuario(
-        bAdministrador: json["bAdministrador"],
-        bInactivo: json["bInactivo"],
-        vchDni: json["vchDni"],
-        vchNombres: json["vchNombres"],
-        vchApellidoP: json["vchApellidoP"],
-        vchApellidoM: json["vchApellidoM"],
-        vchCelular: json["vchCelular"],
-        vchCorreo: json["vchCorreo"],
-        vchPassword: json["vchPassword"],
-        iIdUsuario: json["iIdUsuario"]
+        bAdministrador: json['bAdministrador'],
+        bInactivo: json['bInactivo'],
+        vchDni: json['vchDni'],
+        vchNombres: json['vchNombres'],
+        vchApellidoP: json['vchApellidoP'],
+        vchApellidoM: json['vchApellidoM'],
+        vchCelular: json['vchCelular'],
+        vchCorreo: json['vchCorreo'],
+        vchPassword: json['vchPassword'],
+        iIdUsuario: json['iIdUsuario']
     );
 
     Map<String, dynamic> toJson() => {

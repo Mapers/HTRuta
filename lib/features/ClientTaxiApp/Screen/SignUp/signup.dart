@@ -38,7 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
   int _selectedSexo;
   final tablaApi = TablaApi();
 
-  _submit() async{
+  void _submit() async{
     try{
       if(_selectedSexo == 0){
         Dialogs.alert(context,title: 'Error', message:'Debe seleccionar su Sexo');

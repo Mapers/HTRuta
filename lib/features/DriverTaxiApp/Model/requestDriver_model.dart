@@ -41,21 +41,21 @@ class RequestDriverData {
     String vchMarca;
 
     factory RequestDriverData.fromJson(Map<String, dynamic> json) => RequestDriverData(
-        iIdUsuario: json["iIdUsuario"],
-        vchCorreo: json["vchCorreo"],
-        dFecReg: json["dFecReg"],
-        vchDni: json["vchDni"],
-        vchNombres: json["vchNombres"],
-        vchCelular: json["vchCelular"],
-        mPrecio: json["mPrecio"],
-        iTipoViaje: json["iTipoViaje"],
-        vchLatInicial: json["vchLatInicial"],
-        vchLatFinal: json["vchLatFinal"],
-        vchLongInicial: json["vchLongInicial"],
-        vchLongFinal: json["vchLongFinal"],
-        vchPlaca: json["vchPlaca"],
-        vchModelo: json["vchModelo"],
-        vchMarca: json["vchMarca"],
+        iIdUsuario: json['iIdUsuario'],
+        vchCorreo: json['vchCorreo'],
+        dFecReg: json['dFecReg'],
+        vchDni: json['vchDni'],
+        vchNombres: json['vchNombres'],
+        vchCelular: json['vchCelular'],
+        mPrecio: json['mPrecio'],
+        iTipoViaje: json['iTipoViaje'],
+        vchLatInicial: json['vchLatInicial'],
+        vchLatFinal: json['vchLatFinal'],
+        vchLongInicial: json['vchLongInicial'],
+        vchLongFinal: json['vchLongFinal'],
+        vchPlaca: json['vchPlaca'],
+        vchModelo: json['vchModelo'],
+        vchMarca: json['vchMarca'],
     );
 
     Map<String, dynamic> toJson() => {

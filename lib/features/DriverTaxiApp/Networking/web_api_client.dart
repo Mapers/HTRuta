@@ -149,7 +149,7 @@ class GMapClient extends WebApiClient {
     return await get(
       url: url,
       token: null,
-      queryParameters: queryParameters..["key"] = key,
+      queryParameters: queryParameters..['key'] = key,
     );
   }
 }

@@ -28,7 +28,7 @@ class Session{
     return null;
   }
 
-  clear() async{
+  void clear() async{
     await storage.deleteAll();
   }
 }
