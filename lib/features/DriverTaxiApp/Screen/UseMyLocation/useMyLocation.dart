@@ -42,18 +42,18 @@ class _UseMyLocationState extends State<UseMyLocation> with SingleTickerProvider
         animation: animationController,
         builder: (BuildContext context, Widget child) {
           return Scaffold(
-            body: new Container(
-              decoration: new BoxDecoration(color: whiteColor),
-              child: new Column(
+            body:Container(
+              decoration:BoxDecoration(color: whiteColor),
+              child:Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Flexible(
+                 Flexible(
                     flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        new Container(
+                       Container(
                           child: FadeTransition(
                               opacity: fadeAnimation,
                               child:
@@ -64,8 +64,8 @@ class _UseMyLocationState extends State<UseMyLocation> with SingleTickerProvider
                         Text('Habilita tu ubicación', style: heading35Black,
                         ),
                         Container(
-                          padding: new EdgeInsets.only(left: 60.0, right: 60.0),
-                          child: new Text('Elija su ubicación para comenzar a encontrar la solicitud a su alrededor',
+                          padding:EdgeInsets.only(left: 60.0, right: 60.0),
+                          child:Text('Elija su ubicación para comenzar a encontrar la solicitud a su alrededor',
                             style: textStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -75,10 +75,10 @@ class _UseMyLocationState extends State<UseMyLocation> with SingleTickerProvider
                           minWidth: screenSize.width*0.43,
                           height: 45.0,
                           child: RaisedButton(
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                            shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                             elevation: 0.0,
                             color: primaryColor,
-                            child: new Text('Usa mi localizacion'.toUpperCase(),style: headingWhite,
+                            child:Text('Usa mi localizacion'.toUpperCase(),style: headingWhite,
                             ),
                             onPressed: (){
                               requestPermission()?.then((_){

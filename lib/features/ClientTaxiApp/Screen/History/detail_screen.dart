@@ -17,8 +17,8 @@ class HistoryDetail extends StatefulWidget {
 }
 
 class _HistoryDetailState extends State<HistoryDetail> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String yourReview;
   double ratingScore;
 
@@ -33,10 +33,10 @@ class _HistoryDetailState extends State<HistoryDetail> {
           minWidth: screenSize.width,
           height: 50.0,
           child: RaisedButton(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
             elevation: 0.0,
             color: primaryColor,
-            child: new Text('Enviar',style: headingWhite,
+            child: Text('Enviar',style: headingWhite,
             ),
             onPressed: (){
 //              Navigator.of(context).pushReplacementNamed('/history');
@@ -56,7 +56,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                title: Text("Historial",
+                title: Text('Historial',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
@@ -76,7 +76,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           },
           child: SingleChildScrollView(
             child: InkWellCustom(
-              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,12 +98,12 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                 height: 70,
                                 width: 70,
                                 child: Hero(
-                                  tag: "avatar_profile",
+                                  tag: 'avatar_profile',
                                   child: CircleAvatar(
                                       radius: 30,
                                       backgroundColor: Colors.transparent,
                                       backgroundImage: CachedNetworkImageProvider(
-                                        "https://source.unsplash.com/300x300/?portrait",
+                                        'https://source.unsplash.com/300x300/?portrait',
                                       )
                                   ),
                                 ),
@@ -119,9 +119,9 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Container(
-                                          child: Text("Steve Armar",style: textBoldBlack,),
+                                          child: Text('Steve Armar',style: textBoldBlack,),
                                         ),
-                                        Text("08 Ene 2019 15:34",style: textStyle,),
+                                        Text('08 Ene 2019 15:34',style: textStyle,),
                                       ],
                                     ),
                                     Icon(
@@ -136,14 +136,14 @@ class _HistoryDetailState extends State<HistoryDetail> {
                       ),
                     ),
                     rideHistory(),
-                    new Container(
+                    Container(
                       padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
                       color: whiteColor,
                       child: Column(
                         children: <Widget>[
-                          new Row(
+                          Row(
                             children: <Widget>[
-                              new Text("Detalle de factura (Pago en efectivo)",
+                              Text('Detalle de factura (Pago en efectivo)',
                                 style: TextStyle(
                                     color: blackColor,
                                     fontWeight: FontWeight.bold,
@@ -154,46 +154,46 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           ),
                           Container(
                             padding: EdgeInsets.only(top: 8.0),
-                            child: new Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                new Text("Tarifa de viaje", style: textStyle,),
-                                new Text("S/.10.99", style: textStyle,),
+                                Text('Tarifa de viaje', style: textStyle,),
+                                Text('S/.10.99', style: textStyle,),
                               ],
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.only(top: 8.0),
-                            child: new Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                new Text("Impuestos", style: textStyle,),
-                                new Text("S/.1.99", style: textStyle,),
+                                Text('Impuestos', style: textStyle,),
+                                Text('S/.1.99', style: textStyle,),
                               ],
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.only(top: 8.0,bottom: 8.0),
-                            child: new Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                new Text("Descuento", style: textStyle,),
-                                new Text("- S/.5.99", style: textStyle,),
+                                Text('Descuento', style: textStyle,),
+                                Text('- S/.5.99', style: textStyle,),
                               ],
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.only(top: 8.0),
-                            child: new Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                new Text("Total Facturado",
+                                Text('Total Facturado',
                                   style: TextStyle(
                                       color: blackColor,
                                       fontSize: 16
                                   ),
                                 ),
-                                new Text("S/.7.49",
+                                Text('S/.7.49',
                                     style: TextStyle(
                                         color: blackColor,
                                         fontSize: 16
@@ -208,7 +208,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     Divider(),
                     Container(
                       padding: EdgeInsets.only(left: 20.0),
-                      child: Text("Revisar",
+                      child: Text('Revisar',
                         style: TextStyle(
                             color: blackColor,
                             fontWeight: FontWeight.bold,
@@ -254,15 +254,15 @@ class _HistoryDetailState extends State<HistoryDetail> {
                               ),
                               Container(
                                 padding: EdgeInsets.only(top: 10.0),
-                                child: new SizedBox(
+                                child: SizedBox(
                                   height: 100.0,
-                                  child: new TextField(
-                                    style: new TextStyle(
+                                  child: TextField(
+                                    style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18.0,
                                     ),
                                     decoration: InputDecoration(
-                                      hintText: "Escribe tu reseña",
+                                      hintText: 'Escribe tu reseña',
                                       hintStyle: TextStyle(
                                         color: Colors.black38,
                                         fontFamily: 'Akrobat-Bold',
@@ -318,14 +318,14 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text("10:24",
+                      Text('10:24',
                         style: TextStyle(
                             color: Color(0xFF97ADB6),
                             fontSize: 13.0
                         ),
                       ),
 
-                      Text("10:50",
+                      Text('10:50',
                         style: TextStyle(
                             color: Color(0xFF97ADB6),
                             fontSize: 13.0

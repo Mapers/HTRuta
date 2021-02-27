@@ -30,7 +30,7 @@ class TravelScreen extends StatefulWidget {
 
 class _TravelScreenState extends State<TravelScreen> {
   final String screenName = "HOME";
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _scaffoldKey =GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   CircleId selectedCircle;
@@ -43,7 +43,7 @@ class _TravelScreenState extends State<TravelScreen> {
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData = new List<MapTypeModel>();
+  List<MapTypeModel> sampleData =List<MapTypeModel>();
 
   Position currentLocation;
   Position _lastKnownPosition;

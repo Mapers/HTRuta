@@ -78,11 +78,11 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                       height: 50.0,
                       minWidth: MediaQuery.of(context).size.width-50,
                       child: RaisedButton.icon(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+                        shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
                         elevation: 0.0,
                         color: primaryColor,
-                        icon: new Text(''),
-                        label: new Text('Verificar ahora', style: headingWhite,),
+                        icon:Text(''),
+                        label:Text('Verificar ahora', style: headingWhite,),
                         onPressed: (){
                           print('hello world');
                           Navigator.of(context).pushReplacementNamed(AppRoute.introScreen);
@@ -91,12 +91,12 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            new InkWell(
+                           InkWell(
                               onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
-                              child: new Text("No recibí un código",
+                              child:Text("No recibí un código",
                                 style: TextStyle(
                                   fontStyle: FontStyle.italic,
                                   decoration: TextDecoration.underline

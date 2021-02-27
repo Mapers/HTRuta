@@ -1,7 +1,7 @@
 class Validations {
   String validateName(String value) {
     if (value.isEmpty) return 'El nombre es obligatorio.';
-    final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
+    final RegExp nameExp =RegExp(r'^[A-za-z ]+$');
     if (!nameExp.hasMatch(value))
       return 'Por favor ingrese solo caracteres.';
     return null;
@@ -10,7 +10,7 @@ class Validations {
   String validateEmail(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
+    RegExp regex =RegExp(pattern);
     if (!regex.hasMatch(value))
       return 'Ingrese un correo válido';
     else

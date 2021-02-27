@@ -7,8 +7,8 @@ import 'package:latlong/latlong.dart';
     final Distance distance = const Distance();
 //    final num distanceInMeter = (EARTH_RADIUS * pi / 4).round();
 
-    final p1 = new LatLng(lat1, lon1);
-    final p2 = new LatLng(lat2, lon2);
+    final p1 = LatLng(lat1, lon1);
+    final p2 = LatLng(lat2, lon2);
 
     return distance.bearing(p1, p2);
 

@@ -14,7 +14,7 @@ class PlaceService {
     String apiKey = Config.googleMapsApiKey;
     String url =
         "https://maps.googleapis.com/maps/api/place/textsearch/json?key=$apiKey&language=$language&region=$region&query=" +Uri.encodeQueryComponent(keyword);
-    HttpClient client = new HttpClient();
+    HttpClient client =HttpClient();
 
     //var res = await http.get(url);
     HttpClientRequest request = await client.getUrl(Uri.parse(url));
@@ -25,7 +25,7 @@ class PlaceService {
 //      print(PlaceItemRes.fromJson(json.decode(res.body)));
 //      return PlaceItemRes.fromJson(json.decode(res.body));
 //    } else {
-//      return new List();
+//      returnList();
 //    }
   }
 }

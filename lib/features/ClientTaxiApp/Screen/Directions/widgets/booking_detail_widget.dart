@@ -151,9 +151,9 @@ class BookingDetailWidget extends StatelessWidget {
               children: <Widget>[
                 OutlineButton(
                   borderSide: BorderSide(color: primaryColor, width: 2.0),
-                  shape: new RoundedRectangleBorder(
+                  shape:RoundedRectangleBorder(
                     borderRadius:
-                        new BorderRadius.circular(10.0),
+                       BorderRadius.circular(10.0),
                   ),
                   onPressed: pedidoProvider.contador==0 ? null :(){
                     pedidoProvider.reducirPrecio();
@@ -163,9 +163,9 @@ class BookingDetailWidget extends StatelessWidget {
                 Text('S/${pedidoProvider.precio.toStringAsFixed(1)}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
                 OutlineButton(
                   borderSide: BorderSide(color: primaryColor, width: 2.0),
-                  shape: new RoundedRectangleBorder(
+                  shape:RoundedRectangleBorder(
                     borderRadius:
-                        new BorderRadius.circular(10.0),
+                       BorderRadius.circular(10.0),
                   ),
                   onPressed: (){
                     pedidoProvider.incrementarPrecio();

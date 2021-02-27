@@ -208,7 +208,7 @@ class _PickUpState extends State<PickUp> {
                     minWidth: 50,
                     height: 35.0,
                     child: RaisedButton(
-                      shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                      shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(30.0)),
                       elevation: 0.0,
                       color: redColor,
                       child: Text('Salir'.toUpperCase(),style: heading18,
@@ -266,7 +266,7 @@ class _PickUpState extends State<PickUp> {
               minWidth: screenSize.width ,
               height: 35.0,
               child: RaisedButton(
-                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                 elevation: 0.0,
                 color: primaryColor,
                 child: Text('Destino'.toUpperCase(),style: headingWhite,

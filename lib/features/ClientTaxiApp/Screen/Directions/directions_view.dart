@@ -60,7 +60,7 @@ class _DirectionsViewState extends State<DirectionsView> {
   var apis = Apis();
   List<Routes> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
-  PanelController panelController = new PanelController();
+  PanelController panelController =PanelController();
   String selectedService;
 
   Channel _channel;
@@ -433,7 +433,7 @@ class _DirectionsViewState extends State<DirectionsView> {
                                     child: ButtonTheme(
                                       height: 45.0,
                                       child: RaisedButton(
-                                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                                        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                                         elevation: 0.0,
                                         color: Colors.redAccent,
                                         child: Text('Rechazar',style: headingWhite,
@@ -463,7 +463,7 @@ class _DirectionsViewState extends State<DirectionsView> {
                                     child: ButtonTheme(
                                       height: 45.0,
                                       child: RaisedButton(
-                                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                                        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                                         elevation: 0.0,
                                         color: primaryColor,
                                         child: Text('Aceptar',style: headingWhite,

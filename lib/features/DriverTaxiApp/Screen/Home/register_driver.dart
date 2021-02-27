@@ -809,8 +809,8 @@ class QuintaPagina extends StatefulWidget {
 
 class _QuintaPaginaState extends State<QuintaPagina> {
 
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  //Validations validations = new Validations();
+  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
+  //Validations validations =Validations();
   final Session _session = Session();
   File imageFile;
   Future<dynamic> datosUsuario;

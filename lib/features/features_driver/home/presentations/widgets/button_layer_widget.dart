@@ -59,7 +59,7 @@ class _ButtonLayerWidgetState extends State<ButtonLayerWidget> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text("Tipo de mapa", style: textStyleHeading18Black),
+                  child: Text('Tipo de mapa', style: textStyleHeading18Black),
                 ),
                 Container(
                   child: IconButton(
@@ -75,9 +75,9 @@ class _ButtonLayerWidgetState extends State<ButtonLayerWidget> {
               child:
               GridView.builder(
                 itemCount: sampleData.length,
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                 itemBuilder: (BuildContext context, int index) {
-                  return new InkWell(
+                  return InkWell(
                     highlightColor: primaryColor,
                     splashColor: Colors.blueAccent,
                     onTap: () {

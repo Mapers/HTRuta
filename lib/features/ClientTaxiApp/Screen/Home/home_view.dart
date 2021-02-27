@@ -27,8 +27,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final String screenName = "HOME";
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final String screenName = 'HOME';
+  var _scaffoldKey =GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   CircleId selectedCircle;
@@ -41,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
-  List<MapTypeModel> sampleData = new List<MapTypeModel>();
+  List<MapTypeModel> sampleData = [];
   PersistentBottomSheetController _controller;
 
   Position currentLocation;
@@ -219,7 +219,7 @@ class _HomeViewState extends State<HomeView> {
     });
     _controller = await _scaffoldKey.currentState
         .showBottomSheet((context) {
-      return new Container(
+      return Container(
         height: 300.0,
         child: Container(
           padding: EdgeInsets.all(8.0),
@@ -244,12 +244,11 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
               Expanded(
-                child:
-                new GridView.builder(
+                child: GridView.builder(
                   itemCount: sampleData.length,
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                  gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                   itemBuilder: (BuildContext context, int index) {
-                    return new InkWell(
+                    return InkWell(
                       highlightColor: Colors.red,
                       splashColor: Colors.blueAccent,
                       onTap: () {
@@ -259,7 +258,7 @@ class _HomeViewState extends State<HomeView> {
                         changeMapType(sampleData[index].id, sampleData[index].fileName);
 
                       },
-                      child: new SelectMapTypeView(sampleData[index]),
+                      child:SelectMapTypeView(sampleData[index]),
                     );
                   },
                 ),

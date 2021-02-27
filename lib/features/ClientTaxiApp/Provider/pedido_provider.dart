@@ -10,50 +10,50 @@ class PedidoProvider extends ChangeNotifier{
   double _precio;
   RequestDriverData _requestDriver;
 
-  String get idSolicitud => this._idSolicitud;
+  String get idSolicitud => _idSolicitud;
 
   set idSolicitud(String data){
-    this._idSolicitud = data;
+    _idSolicitud = data;
     notifyListeners();
   }
 
-  Request get request => this._request;
+  Request get request => _request;
 
   set request(Request data){
-    this._request = data;
+    _request = data;
     notifyListeners();
   }
 
-  RequestDriverData get requestDriver => this._requestDriver;
+  RequestDriverData get requestDriver => _requestDriver;
 
   set requestDriver(RequestDriverData data){
-    this._requestDriver = data;
+    _requestDriver = data;
     notifyListeners();
   }
 
-  int get contador => this._contador;
+  int get contador => _contador;
 
   set contador(int data){
-    this._contador = data;
+    _contador = data;
     notifyListeners();
   }
 
-  double get precio => this._precio;
+  double get precio => _precio;
 
   set precio(double data){
-    this._precio = data;
+    _precio = data;
     notifyListeners();
   }
 
   void incrementarPrecio(){
-    this._precio += 0.5;
-    this._contador += 1;
+    _precio += 0.5;
+    _contador += 1;
     notifyListeners();
   }
 
   void reducirPrecio(){
-    this._precio -= 0.5;
-    this._contador -= 1;
+    _precio -= 0.5;
+    _contador -= 1;
     notifyListeners();
   }
 

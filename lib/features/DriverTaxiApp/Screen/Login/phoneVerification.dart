@@ -29,7 +29,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios,color: blackColor,),
           onPressed: () => Navigator.of(context).pushReplacement(
-              new MaterialPageRoute(builder: (context) => LoginScreen())),
+             MaterialPageRoute(builder: (context) => LoginScreen())),
         ),
       ),
       body: SingleChildScrollView(
@@ -77,27 +77,27 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
                       ),
                     ),
-                    new ButtonTheme(
+                   ButtonTheme(
                       height: 45.0,
                       minWidth: MediaQuery.of(context).size.width-50,
                       child: RaisedButton.icon(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                        shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                         elevation: 0.0,
                         color: primaryColor,
-                        icon: new Text(''),
-                        label: new Text('Verificar ahora', style: headingWhite,),
+                        icon:Text(''),
+                        label:Text('Verificar ahora', style: headingWhite,),
                         onPressed: (){Navigator.of(context).pushReplacement(
-                            new MaterialPageRoute(builder: (context) => WalkthroughScreen()));},
+                           MaterialPageRoute(builder: (context) => WalkthroughScreen()));},
                       ),
                     ),
-                    new Container(
+                   Container(
                         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            new InkWell(
+                           InkWell(
                               onTap: () => Navigator.pushNamed(context, '/login2'),
-                              child: new Text("No recibí un código",style: textStyleActive,),
+                              child:Text("No recibí un código",style: textStyleActive,),
                             ),
                           ],
                         )

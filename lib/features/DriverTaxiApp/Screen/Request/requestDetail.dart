@@ -21,8 +21,8 @@ class RequestDetail extends StatefulWidget {
 }
 
 class _RequestDetailState extends State<RequestDetail> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey =GlobalKey<ScaffoldState>();
   String yourReview;
   double ratingScore;
   final Geolocator _locationService = Geolocator();
@@ -51,7 +51,7 @@ class _RequestDetailState extends State<RequestDetail> {
           minWidth: screenSize.width ,
           height: 45.0,
           child: RaisedButton(
-            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
             elevation: 0.0,
             color: primaryColor,
             child: Text('Ir a recoger'.toUpperCase(),style: headingWhite,
@@ -202,31 +202,31 @@ class _RequestDetailState extends State<RequestDetail> {
                       Text("Detalle de facturación)".toUpperCase(), style: textGreyBold,),
                       Container(
                         padding: EdgeInsets.only(top: 8.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            new Text("Tarifa de taxi", style: textStyle,),
-                            new Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textBoldBlack,),
+                           Text("Tarifa de taxi", style: textStyle,),
+                           Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textBoldBlack,),
                           ],
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 8.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            new Text("Impuestos", style: textStyle,),
-                            new Text("S/.0.00", style: textBoldBlack,),
+                           Text("Impuestos", style: textStyle,),
+                           Text("S/.0.00", style: textBoldBlack,),
                           ],
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 8.0,bottom: 8.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            new Text("Descuento", style: textStyle,),
-                            new Text("- S/.0.00", style: textBoldBlack,),
+                           Text("Descuento", style: textStyle,),
+                           Text("- S/.0.00", style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -237,11 +237,11 @@ class _RequestDetailState extends State<RequestDetail> {
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 8.0),
-                        child: new Row(
+                        child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            new Text("Ganancia total", style: textStyleHeading18Black,),
-                            new Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textStyleHeading18Black,),
+                           Text("Ganancia total", style: textStyleHeading18Black,),
+                           Text("S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}", style: textStyleHeading18Black,),
                           ],
                         ),
                       ),

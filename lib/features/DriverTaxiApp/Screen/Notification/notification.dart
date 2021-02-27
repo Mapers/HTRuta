@@ -34,7 +34,7 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
             actions: <Widget>[
               FlatButton(
                   onPressed: (){Navigator.pop(context);},
-                  child: new Text('Cancelar',style: textGrey,)),
+                  child:Text('Cancelar',style: textGrey,)),
               FlatButton(
                   onPressed: (){
                     setState(() {
@@ -80,7 +80,7 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
         elevation: 2.0,
         iconTheme: IconThemeData(color: blackColor),
           actions: <Widget>[
-            new IconButton(
+           IconButton(
                 icon: Icon(Icons.restore_from_trash,color: blackColor,),
                 onPressed: (){
                   dialogInfo();
@@ -88,7 +88,7 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
             )
           ]
       ),
-      drawer: new MenuDriverScreens(activeScreenName: screenName),
+      drawer:MenuDriverScreens(activeScreenName: screenName),
         body: listNotification.length != 0 ?
         Scrollbar(
           child: ListView.builder(

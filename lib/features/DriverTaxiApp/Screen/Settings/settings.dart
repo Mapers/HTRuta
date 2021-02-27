@@ -28,7 +28,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
         backgroundColor: whiteColor,
         title: Text('Configuraciones',style: TextStyle(color: blackColor),),
       ),
-      drawer: new MenuDriverScreens(activeScreenName: screenName),
+      drawer:MenuDriverScreens(activeScreenName: screenName),
       body: SingleChildScrollView(
         child: InkWellCustom(
           onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
     animationController.forward();
-    new Timer(new Duration(seconds: 3), () {
+   Timer(new Duration(seconds: 3), () {
       Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     });
   }
@@ -46,15 +46,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         animation: animationController,
         builder: (BuildContext context, Widget child) {
           return Scaffold(
-            body: new Container(
-              decoration: new BoxDecoration(color: primaryColor),
-              child: new Column(
+            body:Container(
+              decoration:BoxDecoration(color: primaryColor),
+              child:Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Flexible(
+                 Flexible(
                       flex: 1,
-                      child: new Center(
+                      child:Center(
                           child: FadeTransition(
                               opacity: fadeAnimation,
                               child:

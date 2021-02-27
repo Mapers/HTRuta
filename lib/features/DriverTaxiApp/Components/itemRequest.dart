@@ -164,7 +164,7 @@ class ItemRequest extends StatelessWidget {
                 minWidth: screenSize.width ,
                 height: 45.0,
                 child: RaisedButton(
-                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                  shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                   elevation: 0.0,
                   color: primaryColor,
                   child: Text('Aceptar',style: headingWhite,

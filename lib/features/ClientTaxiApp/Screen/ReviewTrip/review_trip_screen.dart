@@ -15,7 +15,7 @@ class ReviewTripScreen extends StatefulWidget {
 
 class _ReviewTripScreenState extends State<ReviewTripScreen> {
   GoogleMapController googleMapController;
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
   LatLng currentLocation = LatLng(39.065747, -95.630775);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MarkerId selectedMarker;
@@ -51,10 +51,10 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
           minWidth: screenSize.width,
           height: 50.0,
           child: RaisedButton(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+            shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
             elevation: 0.0,
             color: primaryColor,
-            child: new Text('Enviar review',style: headingWhite,
+            child:Text('Enviar review',style: headingWhite,
             ),
             onPressed: (){
               Navigator.of(context).pushReplacementNamed(AppRoute.homeScreen);
@@ -202,7 +202,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
         ),
         Container(
           padding: EdgeInsets.only(top: 15.0,left: 20, right: 20),
-          child: new SizedBox(
+          child:SizedBox(
             height: 100.0,
             child: TextField(
               style: TextStyle(

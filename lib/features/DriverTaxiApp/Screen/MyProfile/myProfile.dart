@@ -15,9 +15,9 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<Map<String, dynamic>> listGender = [{"id": '0',"name" : 'Masculino',},{"id": '1',"name" : 'Femenino',}];
+  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey =GlobalKey<ScaffoldState>();
+  List<Map<String, dynamic>> listGender = [{'id': '0','name' : 'Masculino',},{'id': '1','name' : 'Femenino',}];
   String selectedGender;
   String lastSelectedValue;
   DateTime date = DateTime.now();
@@ -71,7 +71,7 @@ class _MyProfileState extends State<MyProfile> {
     });
   }
 
-  selectCamera () {
+  void selectCamera() {
     showDemoActionSheet(
       context: context,
       child: CupertinoActionSheet(
@@ -103,15 +103,13 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  submit(){
+  void submit(){
     final FormState form = formKey.currentState;
     form.save();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -142,20 +140,20 @@ class _MyProfileState extends State<MyProfile> {
                             Material(
                               elevation: 5.0,
                               borderRadius: BorderRadius.circular(50.0),
-                              child: new ClipRRect(
-                                  borderRadius: new BorderRadius.circular(100.0),
+                              child:ClipRRect(
+                                  borderRadius:BorderRadius.circular(100.0),
                                   child:_image == null
-                                      ?new GestureDetector(
+                                      ? GestureDetector(
                                       onTap: (){selectCamera();},
-                                      child: new Container(
+                                      child:Container(
                                           height: 80.0,
                                           width: 80.0,
                                           color: primaryColor,
-                                          child: new Image.asset('assets/image/icon/avatar.png',fit: BoxFit.cover, height: 80.0,width: 80.0,)
+                                          child:Image.asset('assets/image/icon/avatar.png',fit: BoxFit.cover, height: 80.0,width: 80.0,)
                                       )
-                                  ): new GestureDetector(
+                                  ):GestureDetector(
                                       onTap: () {selectCamera();},
-                                      child: new Container(
+                                      child:Container(
                                         height: 80.0,
                                         width: 80.0,
                                         child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
@@ -177,15 +175,14 @@ class _MyProfileState extends State<MyProfile> {
                                         labelStyle: textStyle,
                                         hintStyle: TextStyle(color: Colors.white),
                                         counterStyle: textStyle,
-                                        hintText: "First Name",
+                                        hintText: 'First Name',
                                         border: UnderlineInputBorder(
                                             borderSide:
                                                 BorderSide(color: Colors.white))),
-                                    controller:
-                                        new TextEditingController.fromValue(
-                                      new TextEditingValue(
-                                        text: "First Name",
-                                        selection: new TextSelection.collapsed(
+                                    controller: TextEditingController.fromValue(
+                                      TextEditingValue(
+                                        text: 'First Name',
+                                        selection:TextSelection.collapsed(
                                             offset: 11),
                                       ),
                                     ),
@@ -200,15 +197,14 @@ class _MyProfileState extends State<MyProfile> {
                                         labelStyle: textStyle,
                                         hintStyle: TextStyle(color: Colors.white),
                                         counterStyle: textStyle,
-                                        hintText: "Last Name",
+                                        hintText: 'Last Name',
                                         border: UnderlineInputBorder(
                                             borderSide:
                                                 BorderSide(color: Colors.white))),
-                                    controller:
-                                        new TextEditingController.fromValue(
-                                      new TextEditingValue(
-                                        text: "Last Name",
-                                        selection: new TextSelection.collapsed(
+                                    controller: TextEditingController.fromValue(
+                                      TextEditingValue(
+                                        text: 'Last Name',
+                                        selection:TextSelection.collapsed(
                                           offset: 11
                                         ),
                                       ),
@@ -238,7 +234,7 @@ class _MyProfileState extends State<MyProfile> {
                                     child: Container(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        "Phone Number",
+                                        'Phone Number',
                                         style: textStyle,
                                       ),
                                     ),
@@ -257,10 +253,10 @@ class _MyProfileState extends State<MyProfile> {
                                               borderSide: BorderSide(
                                                   color: Colors.white))
                                       ),
-                                      controller: new TextEditingController.fromValue(
-                                        new TextEditingValue(
-                                          text: "03584565656",
-                                          selection: new TextSelection.collapsed(
+                                      controller:TextEditingController.fromValue(
+                                       TextEditingValue(
+                                          text: '03584565656',
+                                          selection:TextSelection.collapsed(
                                               offset: 11),
                                         ),
                                       ),
@@ -281,7 +277,7 @@ class _MyProfileState extends State<MyProfile> {
                                     child: Container(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        "Email",
+                                        'Email',
                                         style: textStyle,
                                       ),
                                     ),
@@ -301,10 +297,10 @@ class _MyProfileState extends State<MyProfile> {
                                               borderSide: BorderSide(
                                                   color: Colors.white))
                                       ),
-                                      controller: new TextEditingController.fromValue(
-                                        new TextEditingValue(
-                                          text: "abc@example.com",
-                                          selection: new TextSelection.collapsed(
+                                      controller:TextEditingController.fromValue(
+                                       TextEditingValue(
+                                          text: 'abc@example.com',
+                                          selection:TextSelection.collapsed(
                                               offset: 11),
                                         ),
                                       ),
@@ -325,22 +321,22 @@ class _MyProfileState extends State<MyProfile> {
                                     child: Container(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        "Gender",
+                                        'Gender',
                                         style: textStyle,
                                       ),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 4,
-                                    child: new DropdownButtonHideUnderline(
+                                    child:DropdownButtonHideUnderline(
                                         child: Container(
                                          // padding: EdgeInsets.only(bottom: 12.0),
-                                          child: new InputDecorator(
+                                          child:InputDecorator(
                                             decoration: const InputDecoration(
                                             ),
                                             isEmpty: selectedGender == null,
-                                            child: new DropdownButton<String>(
-                                              hint: new Text("Gender",style: textStyle,),
+                                            child:DropdownButton<String>(
+                                              hint:Text('Gender',style: textStyle,),
                                               value: selectedGender,
                                               isDense: true,
                                               onChanged: (String newValue) {
@@ -350,9 +346,9 @@ class _MyProfileState extends State<MyProfile> {
                                                 });
                                               },
                                               items: listGender.map((value) {
-                                                return new DropdownMenuItem<String>(
+                                                return DropdownMenuItem<String>(
                                                   value: value['id'],
-                                                  child: new Text(value['name'],style: textStyle,),
+                                                  child:Text(value['name'],style: textStyle,),
                                                 );
                                               }).toList(),
                                             ),
@@ -372,7 +368,7 @@ class _MyProfileState extends State<MyProfile> {
                                     child: Container(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        "Birthday",
+                                        'Birthday',
                                         style: textStyle,
                                       ),
                                     ),
@@ -398,7 +394,7 @@ class _MyProfileState extends State<MyProfile> {
                                             },
                                           );
                                         },
-                                        child: new InputDropdown(
+                                        child:InputDropdown(
                                           valueText: DateFormat.yMMMMd().format(date),
                                           valueStyle: TextStyle(color: blackColor),
                                         )
@@ -409,15 +405,15 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                             Container(
                               padding: EdgeInsets.only(top: 20.0),
-                              child: new ButtonTheme(
+                              child:ButtonTheme(
                                 height: 45.0,
                                 minWidth: MediaQuery.of(context).size.width-50,
                                 child: RaisedButton.icon(
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                                  shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0)),
                                   elevation: 0.0,
                                   color: primaryColor,
-                                  icon: new Text(''),
-                                  label: new Text('SAVE', style: headingBlack,),
+                                  icon:Text(''),
+                                  label:Text('SAVE', style: headingBlack,),
                                   onPressed: (){
                                     submit();
                                   },

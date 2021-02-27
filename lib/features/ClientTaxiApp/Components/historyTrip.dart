@@ -20,37 +20,37 @@ class HistoryTrip extends StatelessWidget {
 //                blurRadius: 5.0,
 //              ),
 //            ]),
-        child: new Row(
+        child:Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Expanded(
+           Expanded(
               flex: 1,
-              child: new Column(
+              child:Column(
                 children: <Widget>[
-                  new Icon(Icons.my_location,size: 20.0,color: Colors.blue,),
-                  new Icon(Icons.more_vert,size: 20.0,color: greyColor,),
-                  new Icon(Icons.location_on,size: 20.0,color: redColor,)
+                 Icon(Icons.my_location,size: 20.0,color: Colors.blue,),
+                 Icon(Icons.more_vert,size: 20.0,color: greyColor,),
+                 Icon(Icons.location_on,size: 20.0,color: redColor,)
                 ],
               ),
             ),
-            new Expanded(
+           Expanded(
                 flex: 5,
-                child: new Column(
+                child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    new Container(
+                   Container(
                       height: 50.0,
                       width: MediaQuery.of(context).size.width - 50,
                       color: Colors.white,
-                      child: new Column(
+                      child:Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            fromAddress != null ? fromAddress : '',
+                            fromAddress ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: textStyle,
                           ),
@@ -63,16 +63,16 @@ class HistoryTrip extends StatelessWidget {
                       height: 1.0,
                       color: Colors.grey.withOpacity(0.4),
                     ),
-                    new Container(
+                   Container(
                       height: 50.0,
                       // width: MediaQuery.of(context).size.width,
                       color: Colors.white,
-                      child: new Column(
+                      child:Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            toAddress != null ? toAddress : '',
+                            toAddress ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: textStyle,
                           ),
@@ -82,7 +82,7 @@ class HistoryTrip extends StatelessWidget {
                   ],
                 )
             ),
-            new Expanded(
+            Expanded(
                 flex: 1,
                 child: Text('')
             )

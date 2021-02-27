@@ -222,10 +222,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text("¿No tienes cuenta? ",style: textGrey,),
+                                  Text('¿No tienes cuenta? ',style: textGrey,),
                                   InkWell(
                                     onTap: () => Navigator.of(context).pushNamed(AppRoute.signUpScreen),
-                                    child: Text("Regístrate",style: textStyleActive,),
+                                    child: Text('Regístrate',style: textStyleActive,),
                                   ),
                                 ],
                               )
@@ -235,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Text("O",style: textGrey,),
+                                    Text('O',style: textGrey,),
                                     SizedBox(height: 15,),                
                                     FlatButton(
                                       padding: EdgeInsets.symmetric(vertical: 10),

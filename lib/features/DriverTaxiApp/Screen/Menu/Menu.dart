@@ -58,9 +58,9 @@ class MenuDriverScreens extends StatelessWidget {
                               child: Material(
                                 elevation: 5.0,
                                 borderRadius: BorderRadius.circular(50.0),
-                                child: new ClipRRect(
-                                  borderRadius: new BorderRadius.circular(100.0),
-                                  child: new Container(
+                                child:ClipRRect(
+                                  borderRadius:BorderRadius.circular(100.0),
+                                  child:Container(
                                     height: 50.0,
                                     width: 50.0,
                                     color: primaryColor,
@@ -166,13 +166,13 @@ class MenuDriverScreens extends StatelessWidget {
 
 //          UserAccountsDrawerHeader(
 //            margin: EdgeInsets.all(0.0),
-//            accountName: new Text("John",style: headingWhite,),
-//            accountEmail: new Text("100 point - Gold member"),
-//            currentAccountPicture: new CircleAvatar(
+//            accountName:Text("John",style: headingWhite,),
+//            accountEmail:Text("100 point - Gold member"),
+//            currentAccountPicture:CircleAvatar(
 //                backgroundColor: Colors.white,
-//                child: new Image(
+//                child:Image(
 //                    width: 100.0,
-//                    image: new AssetImage('assets/image/taxi-driver.png',)
+//                    image:AssetImage('assets/image/taxi-driver.png',)
 //                )
 //            ),
 //            onDetailsPressed: (){
@@ -184,18 +184,18 @@ class MenuDriverScreens extends StatelessWidget {
 //                  fullscreenDialog: true));
 //            },
 //          ),
-          new MediaQuery.removePadding(
+         MediaQuery.removePadding(
             context: context,
             // DrawerHeader consumes top MediaQuery padding.
             removeTop: true,
-            child: new Expanded(
-              child: new ListView(
+            child:Expanded(
+              child:ListView(
                 //padding: const EdgeInsets.only(top: 8.0),
                 children: <Widget>[
-                  new Stack(
+                 Stack(
                     children: <Widget>[
                       // The initial contents of the drawer.
-                      new Column(
+                     Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

@@ -56,7 +56,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   var apis = Apis();
   List<Routes> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
-  PanelController panelController = new PanelController();
+  PanelController panelController =PanelController();
   String selectedService;
 
   Channel _channel;

@@ -20,7 +20,7 @@ class _InviteFriendsState extends State<InviteFriends> {
 //        leading: IconButton(
 //          icon: Icon(Icons.arrow_back_ios,color: blackColor,),
 //          onPressed: () => Navigator.of(context).pushReplacement(
-//              new MaterialPageRoute(builder: (context) => LoginScreen2())),
+//             MaterialPageRoute(builder: (context) => LoginScreen2())),
 //        ),
       ),
       body: Container(
@@ -34,9 +34,9 @@ class _InviteFriendsState extends State<InviteFriends> {
               child: Material(
                 elevation: 5.0,
                 borderRadius: BorderRadius.circular(100.0),
-                child: new ClipRRect(
-                    borderRadius: new BorderRadius.circular(100.0),
-                    child: new Container(
+                child:ClipRRect(
+                    borderRadius:BorderRadius.circular(100.0),
+                    child:Container(
                       color: primaryColor,
                         height: 180.0,
                         width: 180.0,
@@ -60,22 +60,22 @@ class _InviteFriendsState extends State<InviteFriends> {
               height: 45.0,
               decoration: BoxDecoration(
                 color: greyColor2,
-                borderRadius: new BorderRadius.circular(10.0),
+                borderRadius:BorderRadius.circular(10.0),
               ),
               child: Center(
                 child: Text("09867656",style: textStyleHeading18Black,),
               ),
             ),
             Padding(padding: EdgeInsets.only(top: 10.0),),
-            new ButtonTheme(
+           ButtonTheme(
               height: 50.0,
               minWidth: MediaQuery.of(context).size.width,
               child: RaisedButton.icon(
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+                shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
                 elevation: 0.0,
                 color: primaryColor,
-                icon: new Text(''),
-                label: new Text('Invitar', style: headingBlack,),
+                icon:Text(''),
+                label:Text('Invitar', style: headingBlack,),
                 onPressed: (){
                 },
               ),

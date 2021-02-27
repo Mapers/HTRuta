@@ -41,7 +41,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: new Text(
+                  child:Text(
                     'Cancelar',
                     style: textGrey,
                   )),
@@ -114,7 +114,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
           elevation: 0.0,
           iconTheme: IconThemeData(color: blackColor),
           actions: <Widget>[
-            new IconButton(
+           IconButton(
                 icon: Icon(
                   Icons.restore_from_trash,
                   color: blackColor,

@@ -12,7 +12,7 @@ void showDialogUtil(context, {@required String title, @required String content, 
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
           FlatButton(
-            child: Text("Cerrar"),
+            child: Text('Cerrar'),
             onPressed: () {
               Navigator.of(context).pop();
               if(onClose != null){

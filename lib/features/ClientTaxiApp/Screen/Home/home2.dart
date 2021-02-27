@@ -17,8 +17,8 @@ class HomeScreen2 extends StatefulWidget {
 
 class _HomeScreen2State extends State<HomeScreen2> {
   _HomeScreen2State();
-  final String screenName = "HOME2";
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final String screenName = 'HOME2';
+  var _scaffoldKey =GlobalKey<ScaffoldState>();
   List<LatLng> points = <LatLng>[];
   GoogleMapController _mapController;
 
@@ -35,39 +35,39 @@ class _HomeScreen2State extends State<HomeScreen2> {
   String placemark = '';
   double distance = 0;
   LatLng currentLocation = LatLng(-8.098452, -79.008016);
-  List<Map<String, dynamic>> listDistance = [{"id": 1, "title": "500 m"},{"id": 2, "title": "1 km"},{"id":3,"title": "3 km"}];
-  String selectedDistance = "1";
+  List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m'},{'id': 2, 'title': '1 km'},{'id':3,'title': '3 km'}];
+  String selectedDistance = '1';
   double _radius = 500;
 
   List<dynamic> dataMarKer = [
     {
-      "id": "1",
-      "lat": -8.095180,
-      "lng":  -79.015397
+      'id': '1',
+      'lat': -8.095180,
+      'lng':  -79.015397
     },{
-      "id": "2",
-      "lat": -8.102633,
-      "lng": -79.017507
+      'id': '2',
+      'lat': -8.102633,
+      'lng': -79.017507
     },{
-      "id": "3",
-      "lat": -8.109202,
-      "lng": -79.012449,
+      'id': '3',
+      'lat': -8.109202,
+      'lng': -79.012449,
     },{
-      "id": "4",
-      "lat": -8.112092,
-      "lng": -79.019249
+      'id': '4',
+      'lat': -8.112092,
+      'lng': -79.019249
     },{
-      "id": "5",
-      "lat": -8.117724,
-      "lng": -79.015037
+      'id': '5',
+      'lat': -8.117724,
+      'lng': -79.015037
     },{
-      "id": "6",
-      "lat": -8.117044,
-      "lng": -79.007141,
+      'id': '6',
+      'lat': -8.117044,
+      'lng': -79.007141,
     },{
-      "id": "7",
-      "lat": -8.126110,
-      "lng": -79.030460
+      'id': '7',
+      'lat': -8.126110,
+      'lng': -79.030460
     }
   ];
 
@@ -145,7 +145,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
       final ImageConfiguration imageConfiguration =
       createLocalImageConfiguration(context);
       BitmapDescriptor.fromAssetImage(
-          imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : "assets/image/marker/car_top_96.png")
+          imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
           .then(_updateBitmap);
     }
   }
@@ -162,7 +162,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(lat, lng),
-      icon: checkPlatform ? BitmapDescriptor.fromAsset("assets/image/marker/car_top_48.png") : BitmapDescriptor.fromAsset("assets/image/marker/car_top_96.png"),
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
       onTap: () {
         // _onMarkerTapped(markerId);
       },
@@ -198,7 +198,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
   Widget getListOptionDistance() {
     final List<Widget> choiceChips = listDistance.map<Widget>((value) {
-      return new Padding(
+      return Padding(
           padding: const EdgeInsets.all(3.0),
           child: ChoiceChip(
               key: ValueKey<String>(value['id'].toString()),
@@ -213,13 +213,13 @@ class _HomeScreen2State extends State<HomeScreen2> {
               label: Text((value['title'])),
               onSelected: (bool check) {
                 setState(() {
-                  selectedDistance = check ? value["id"].toString() : '';
+                  selectedDistance = check ? value['id'].toString() : '';
                   changeCircle(selectedDistance);
                 });
               })
       );
     }).toList();
-    return new Wrap(
+    return Wrap(
         children: choiceChips
     );
   }
@@ -229,19 +229,19 @@ class _HomeScreen2State extends State<HomeScreen2> {
   ///to filter and display markers around the current location.
 
   changeCircle(String selectedCircle){
-    if(selectedCircle == "1"){
+    if(selectedCircle == '1'){
       setState(() {
         _radius = 500;
         _moveCamera(14);
       });
     }
-    if(selectedCircle == "2"){
+    if(selectedCircle == '2'){
       setState(() {
         _radius = 1000;
         _moveCamera(13.9);
       });
     }
-    if(selectedCircle == "3"){
+    if(selectedCircle == '3'){
       setState(() {
         _radius = 3000;
         _moveCamera(13);
@@ -281,15 +281,15 @@ class _HomeScreen2State extends State<HomeScreen2> {
   @override
   Widget build(BuildContext context) {
     _createMarkerImageFromAsset(context);
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
-      drawer: new MenuScreens(activeScreenName: screenName),
-      body: new Container(
+      drawer:MenuScreens(activeScreenName: screenName),
+      body:Container(
         color: Colors.white,
         child: SingleChildScrollView(
-            child: new Stack(
+            child:Stack(
               children: <Widget>[
-                new Column(
+                Column(
                   children: <Widget>[
                     SizedBox(
                         height: MediaQuery.of(context).size.height,

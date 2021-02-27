@@ -34,30 +34,30 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return (new Container(
-        margin: new EdgeInsets.only(bottom: bottomMargin),
-        child: new DecoratedBox(
-          decoration: new BoxDecoration(
-              borderRadius: new BorderRadius.all(new Radius.circular(30.0)),
+    return (Container(
+        margin: EdgeInsets.only(bottom: bottomMargin),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(30.0)),
               color: textFieldColor),
-          child: new TextFormField(
+          child: TextFormField(
             style: textStyle,
             key: key,
             obscureText: obscureText,
             keyboardType: textInputType,
             validator: validateFunction,
             onSaved: onSaved,
-           //focusNode: new FocusNode(),
+           //focusNode: FocusNode(),
             enabled: enable,
-            decoration: new InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
 
               hintText: hintText,
               hintStyle: hintStyle,
-              icon: new Padding(
+              icon: Padding(
                 padding:
                     const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-                child: new Icon(
+                child: Icon(
                   icon,
                   color: iconColor,
                 ),

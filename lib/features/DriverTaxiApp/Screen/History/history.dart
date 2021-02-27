@@ -39,7 +39,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
           elevation: 2.0,
           iconTheme: IconThemeData(color: blackColor),
         ),
-        drawer: new MenuDriverScreens(activeScreenName: screenName),
+        drawer:MenuDriverScreens(activeScreenName: screenName),
         body: Container(
           child: Column(
             children: <Widget>[

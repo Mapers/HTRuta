@@ -7,11 +7,11 @@ class PlaceItemRes {
 
   static List<PlaceItemRes> fromJson(Map<String, dynamic> json) {
     print("parse data");
-    List<PlaceItemRes> rs = new List();
+    List<PlaceItemRes> rs =List();
 
     var results = json['results'] as List;
     for (var item in results) {
-      var p = new PlaceItemRes(
+      var p =PlaceItemRes(
           item['name'],
           item['formatted_address'],
           item['geometry']['location']['lat'],

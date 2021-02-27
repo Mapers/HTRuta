@@ -1,7 +1,7 @@
 List decode(var a)
 {
   var list=a.codeUnits;
-  var lList=new List();
+  var lList = [];
   int index=0;
   int len=a.length;
   int c=0;
@@ -29,7 +29,8 @@ List decode(var a)
   }while(index<len);
 
 /*adding to previous value as done in encoding */
-  for(var i=2;i<lList.length;i++)
+  for(var i=2;i<lList.length;i++){
     lList[i]+=lList[i-2];
+  }
   return lList;
 }

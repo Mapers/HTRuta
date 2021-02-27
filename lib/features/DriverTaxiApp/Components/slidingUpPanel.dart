@@ -169,7 +169,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   void initState(){
     super.initState();
 
-    _ac = new AnimationController(
+    _ac =AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     )..addListener((){
@@ -318,7 +318,7 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
   void _onDragEnd(DragEndDetails details){
     double minFlingVelocity = 365.0;
 
-    //let the current animation finish before starting a new one
+    //let the current animation finish before starting aone
     if(_ac.isAnimating) return;
 
     //check if the velocity is sufficient to constitute fling

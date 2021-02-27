@@ -12,7 +12,7 @@ class SelectAddress extends StatefulWidget {
 }
 
 class _SelectAddressState extends State<SelectAddress> {
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var _scaffoldKey =GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   int _markerIdCounter = 0;
   GoogleMapController _mapController;
@@ -166,10 +166,10 @@ class _SelectAddressState extends State<SelectAddress> {
                             minWidth: MediaQuery.of(context).size.width - 50.0,
                             height: 45.0,
                             child: RaisedButton(
-                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
+                              shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
                               elevation: 0.0,
                               color: primaryColor,
-                              child: new Text('SUBMIT',style: headingWhite,
+                              child:Text('SUBMIT',style: headingWhite,
                               ),
                               onPressed: (){
                                 submitLocation();

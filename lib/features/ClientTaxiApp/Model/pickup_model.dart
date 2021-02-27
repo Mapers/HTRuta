@@ -22,14 +22,14 @@ class PickUpRequest {
     List<Request> data;
 
     factory PickUpRequest.fromJson(Map<String, dynamic> json) => PickUpRequest(
-        message: json["message"],
-        success: json["success"],
-        data: List<Request>.from(json["data"].map((x) => Request.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<Request>.from(json['data'].map((x) => Request.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }

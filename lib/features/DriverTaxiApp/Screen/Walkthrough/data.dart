@@ -7,19 +7,19 @@ class Items {
 }
 
 class ItemsListBuilder {
-  List<Items> itemList = new List();
+  List<Items> itemList =List();
 
-  Items item1 = new Items(
+  Items item1 =Items(
       pageNo: "Acepta un trabajo",
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",
       image: "assets/image/icon/Layer_4.png",
       btnDescription: "Skip To App");
-  Items item2 = new Items(
+  Items item2 =Items(
       pageNo: "Tracking tiempo real",
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industryY",
       image: "assets/image/icon/Layer_5.png",
       btnDescription: "Skip To App");
-  Items item3 = new Items(
+  Items item3 =Items(
       pageNo: "Gana dinero",
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry",
       image: "assets/image/icon/Layer_3.png",

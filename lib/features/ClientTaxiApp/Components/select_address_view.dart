@@ -116,7 +116,7 @@ class _SelectAddressState extends State<SelectAddress> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Recoger",
+                              Text('Recoger',
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.grey
@@ -143,7 +143,7 @@ class _SelectAddressState extends State<SelectAddress> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Dejar",
+                              Text('Dejar',
                                 style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.grey

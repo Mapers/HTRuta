@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Session{
   final key = 'SESSION';
-  final storage = new FlutterSecureStorage();
+  final storage =FlutterSecureStorage();
 
   set(String id,String dni, String nombres, String apellidoPaterno,String apellidoMaterno, String celular,String correo,String password) async{
     final data = {

@@ -15,7 +15,7 @@ class ListsMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: whiteColor,
-      child: new GestureDetector(
+      child:GestureDetector(
         onTap: onPress,
         child: Container(
           decoration: BoxDecoration(
@@ -41,14 +41,14 @@ class ListsMenu extends StatelessWidget {
                       child: Icon(icon,color: Colors.white,)
                   ),
                   SizedBox(width: 10.0,),
-                  new Expanded(
+                 Expanded(
                       flex: 7,
                       child: Text(
                         title,
                         style: textStyle,
                       )
                   ),
-                  new Expanded(
+                 Expanded(
                       flex: 1,
                       child: Icon(
                         CupertinoIcons.forward,

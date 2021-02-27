@@ -27,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: whiteColor,
         title: Text('Configuraciones',style: TextStyle(color: blackColor),),
       ),
-      drawer: new MenuScreens(activeScreenName: screenName),
+      drawer:MenuScreens(activeScreenName: screenName),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overScroll) {
           overScroll.disallowGlow();
@@ -58,12 +58,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Material(
                               elevation: 5.0,
                               borderRadius: BorderRadius.circular(50.0),
-                              child: new ClipRRect(
-                                  borderRadius: new BorderRadius.circular(50.0),
-                                  child: new Container(
+                              child:ClipRRect(
+                                  borderRadius:BorderRadius.circular(50.0),
+                                  child:Container(
                                       height: 80.0,
                                       width: 80.0,
-                                      child: new Image.asset('assets/image/taxi-driver.png',fit: BoxFit.cover, height: 100.0,width: 100.0,)
+                                      child:Image.asset('assets/image/taxi-driver.png',fit: BoxFit.cover, height: 100.0,width: 100.0,)
                                   )
                               ),
                             ),

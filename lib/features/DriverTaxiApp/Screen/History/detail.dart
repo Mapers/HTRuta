@@ -15,8 +15,8 @@ class HistoryDetail extends StatefulWidget {
 }
 
 class _HistoryDetailState extends State<HistoryDetail> {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey =GlobalKey<ScaffoldState>();
   String yourReview;
   double ratingScore;
 
@@ -181,31 +181,31 @@ class _HistoryDetailState extends State<HistoryDetail> {
                         Text("Detalles de la factura (pago en efectivo)".toUpperCase(), style: textGreyBold,),
                         Container(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: new Row(
+                          child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text("Tarifa de viaje", style: textStyle,),
-                              new Text("S/.10.99", style: textBoldBlack,),
+                             Text("Tarifa de viaje", style: textStyle,),
+                             Text("S/.10.99", style: textBoldBlack,),
                             ],
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: new Row(
+                          child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text("Impuestos", style: textStyle,),
-                              new Text("S/.1.99", style: textBoldBlack,),
+                             Text("Impuestos", style: textStyle,),
+                             Text("S/.1.99", style: textBoldBlack,),
                             ],
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 8.0,bottom: 8.0),
-                          child: new Row(
+                          child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text("Descuento", style: textStyle,),
-                              new Text("- S/.5.99", style: textBoldBlack,),
+                             Text("Descuento", style: textStyle,),
+                             Text("- S/.5.99", style: textBoldBlack,),
                             ],
                           ),
                         ),
@@ -216,11 +216,11 @@ class _HistoryDetailState extends State<HistoryDetail> {
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: new Row(
+                          child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              new Text("Facturación total", style: textStyleHeading18Black,),
-                              new Text("S/.7.49", style: textStyleHeading18Black,),
+                             Text("Facturación total", style: textStyleHeading18Black,),
+                             Text("S/.7.49", style: textStyleHeading18Black,),
                             ],
                           ),
                         ),

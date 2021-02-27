@@ -16,15 +16,15 @@ class Onboarding {
     List<Pantallas> data;
 
     factory Onboarding.fromJson(Map<String, dynamic> json) => Onboarding(
-        message: json["message"],
-        success: json["success"],
-        data: List<Pantallas>.from(json["data"].map((x) => Pantallas.fromJson(x))),
+        message: json['message'],
+        success: json['success'],
+        data: List<Pantallas>.from(json['data'].map((x) => Pantallas.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "message": message,
-        "success": success,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        'message': message,
+        'success': success,
+        'data': List<dynamic>.from(data.map((x) => x.toJson())),
     };
 }
 
@@ -40,14 +40,14 @@ class Pantallas {
     String image64;
 
     factory Pantallas.fromJson(Map<String, dynamic> json) => Pantallas(
-        vchTitulo: json["vchTitulo"],
-        vchRuta: json["vchRuta"],
-        image64: json["image_64"],
+        vchTitulo: json['vchTitulo'],
+        vchRuta: json['vchRuta'],
+        image64: json['image_64'],
     );
 
     Map<String, dynamic> toJson() => {
-        "vchTitulo": vchTitulo,
-        "vchRuta": vchRuta,
-        "image_64": image64,
+        'vchTitulo': vchTitulo,
+        'vchRuta': vchRuta,
+        'image_64': image64,
     };
 }
