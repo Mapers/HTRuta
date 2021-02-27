@@ -12,12 +12,12 @@ class PreferenciaUsuario{
 
   SharedPreferences _prefs;
 
-  initPrefs() async{
-    this._prefs = await SharedPreferences.getInstance();
+  void initPrefs() async{
+    _prefs = await SharedPreferences.getInstance();
   }
 
   //Obtener cambiocontraseña
-  get primeraSesion{
+  bool get primeraSesion{
     return _prefs.getBool('primeraSesion') ?? true;
   }
 
@@ -25,13 +25,13 @@ class PreferenciaUsuario{
     _prefs.setBool('primeraSesion', value);
   }
 
-  get tokenPush => _prefs.getString('tokenPush') ?? '';
+  String get tokenPush => _prefs.getString('tokenPush') ?? '';
 
   set tokenPush(String value) {
     _prefs.setString('tokenPush', value);
   }
 
-  get idChofer => _prefs.getString('idChofer') ?? '';
+  String get idChofer => _prefs.getString('idChofer') ?? '';
 
   set idChofer(String value) {
     _prefs.setString('idChofer', value);

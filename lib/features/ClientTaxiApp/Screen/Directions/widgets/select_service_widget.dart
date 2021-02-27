@@ -3,6 +3,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+// ignore: must_be_immutable
 class SelectServiceWidget extends StatefulWidget {
   String serviceSelected;
   final PanelController panelController;

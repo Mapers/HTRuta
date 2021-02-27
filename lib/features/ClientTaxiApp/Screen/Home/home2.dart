@@ -73,13 +73,12 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getCurrentLocation();
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    this._mapController = controller;
+    _mapController = controller;
     _mapController?.animateCamera(
         CameraUpdate?.newCameraPosition(
             CameraPosition(
@@ -228,7 +227,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
   ///My data is demo. You can get data from your api and use my function
   ///to filter and display markers around the current location.
 
-  changeCircle(String selectedCircle){
+  void changeCircle(String selectedCircle){
     if(selectedCircle == '1'){
       setState(() {
         _radius = 500;
@@ -266,7 +265,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
     });
   }
 
-  _moveCamera(double zoom){
+  void _moveCamera(double zoom){
     _mapController?.animateCamera(
       CameraUpdate?.newCameraPosition(
           CameraPosition(

@@ -72,7 +72,7 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  selectCamera () {
+  void selectCamera() {
     showDemoActionSheet(
       context: context,
       child: CupertinoActionSheet(
@@ -104,7 +104,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  submit(){
+  void submit(){
     final FormState form = formKey.currentState;
     form.save();
   }

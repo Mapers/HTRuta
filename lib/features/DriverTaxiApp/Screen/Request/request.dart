@@ -38,7 +38,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   String choferId = '';
   final Geolocator _locationService = Geolocator();
 
-  navigateToDetail(Request requestItem) {
+  void navigateToDetail(Request requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
   }
 
@@ -614,7 +614,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       );
   }
 
-  navigateToInterprovincial(InterprovincialModel interprovincial) {
+  void navigateToInterprovincial(InterprovincialModel interprovincial) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => InterprovincialPage(interprovincial: interprovincial)));
   }
 

@@ -21,7 +21,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
   ];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 

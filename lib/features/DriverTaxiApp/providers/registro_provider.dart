@@ -19,94 +19,94 @@ class RegistroProvider with ChangeNotifier{
   int _index = 0;
   String _titulo = '';
 
-  DataMarca get dataMarca => this._dataMarca;
+  DataMarca get dataMarca => _dataMarca;
 
   set dataMarca(DataMarca value){
-    this._dataMarca = value;
+    _dataMarca = value;
     notifyListeners();
   }
 
-  DataModelo get dataModelo => this._dataModelo;
+  DataModelo get dataModelo => _dataModelo;
 
   set dataModelo(DataModelo value){
-    this._dataModelo = value;
+    _dataModelo = value;
     notifyListeners();
   }
 
-  int get index => this._index;
+  int get index => _index;
 
   set index(int value){
-    this._index = value;
+    _index = value;
     notifyListeners();
   }
 
-  String get color => this._color;
+  String get color => _color;
 
   set color(String value){
-    this._color = value;
+    _color = value;
     notifyListeners();
   }
 
-  String get placa => this._placa;
+  String get placa => _placa;
 
   set placa(String value){
-    this._placa = value;
+    _placa = value;
     notifyListeners();
   }
 
-  String get fotoPerfil => this._fotoPerfil;
+  String get fotoPerfil => _fotoPerfil;
 
   set fotoPerfil(String value){
-    this._fotoPerfil = value;
+    _fotoPerfil = value;
     notifyListeners();
   }
 
-  String get fotoAuto => this._fotoAuto;
+  String get fotoAuto => _fotoAuto;
 
   set fotoAuto(String value){
-    this._fotoAuto = value;
+    _fotoAuto = value;
     notifyListeners();
   }
 
-  String get fotoLicenciaFrente => this._fotoLicenciaFrente;
+  String get fotoLicenciaFrente => _fotoLicenciaFrente;
 
   set fotoLicenciaFrente(String value){
-    this._fotoLicenciaFrente = value;
+    _fotoLicenciaFrente = value;
     notifyListeners();
   }
 
-  String get fotoLicenciaTrasera => this._fotoLicenciaTrasera;
+  String get fotoLicenciaTrasera => _fotoLicenciaTrasera;
 
   set fotoLicenciaTrasera(String value){
-    this._fotoLicenciaTrasera = value;
+    _fotoLicenciaTrasera = value;
     notifyListeners();
   }
 
-  String get fotoAtencedente => this._fotoAtencedente;
+  String get fotoAtencedente => _fotoAtencedente;
 
   set fotoAtencedente(String value){
-    this._fotoAtencedente = value;
+    _fotoAtencedente = value;
     notifyListeners();
   }
 
-  String get fotoSoat => this._fotoSoat;
+  String get fotoSoat => _fotoSoat;
 
   set fotoSoat(String value){
-    this._fotoSoat = value;
+    _fotoSoat = value;
     notifyListeners();
   }
 
-  String get titulo => this._titulo;
+  String get titulo => _titulo;
 
   set titulo(String value){
-    this._titulo = value;
+    _titulo = value;
     notifyListeners();
   }
 
-  String get licencia => this._licencia;
+  String get licencia => _licencia;
 
   set licencia(String value){
-    this._licencia = value;
+    _licencia = value;
     notifyListeners();
   }
 }

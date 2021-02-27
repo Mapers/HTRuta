@@ -306,7 +306,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   zoom: 12.0,
                 ),
                 onCameraMove: (CameraPosition position) {
-                  if(_markers.length > 0) {
+                  if(_markers.isNotEmpty) {
                     MarkerId markerId = MarkerId(_markerIdVal());
                     Marker marker = _markers[markerId];
                     Marker updatedMarker = marker?.copyWith(

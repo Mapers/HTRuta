@@ -1,7 +1,7 @@
 List decode(var a)
 {
   var list=a.codeUnits;
-  var lList=new List();
+  var lList= List();
   int index=0;
   int len=a.length;
   int c=0;

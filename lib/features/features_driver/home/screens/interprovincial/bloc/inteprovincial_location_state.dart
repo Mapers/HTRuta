@@ -27,7 +27,7 @@ class DataInteprovincialLocationState extends InterprovincialLocationState {
   }
   DataInteprovincialLocationState copyWithPassengerNull(){
     return DataInteprovincialLocationState(
-      driver: this.driver,
+      driver: driver,
       passengerSelected: null
     );
   }

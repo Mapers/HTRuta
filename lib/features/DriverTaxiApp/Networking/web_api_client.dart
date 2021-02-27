@@ -134,6 +134,7 @@ class GMapClient extends WebApiClient {
     return GMapMessage.fromJson(data);
   };
 
+  @override
   final OnError onError = (
       {@required int status,
         @required String errorCode,

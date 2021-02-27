@@ -38,6 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
   int _selectedSexo;
   final tablaApi = TablaApi();
 
+  // ignore: unused_element
   void _submit() async{
     try{
       if(_selectedSexo == 0){
@@ -274,7 +275,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
                                                             )
                                                           ),
-                                                          //TODO implementar sexo
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
@@ -282,7 +282,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             future: tablaApi.getSexo(context),
                                                             builder: (context, snapshot) {
                                                               if(snapshot.hasData){
-                                                                final dato = snapshot.data;
+                                                                // final dato = snapshot.data;
                                                                 return Container(
                                                                   width: double.infinity,
                                                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),

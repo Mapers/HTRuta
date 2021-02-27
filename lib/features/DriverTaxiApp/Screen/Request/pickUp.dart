@@ -39,13 +39,13 @@ class _PickUpState extends State<PickUp> {
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
 
   void _onMapCreated(GoogleMapController controller) {
-    this._mapController = controller;
+    _mapController = controller;
     addMarker();
     getRouter();
   }
 
 
-  addMarker(){
+  void addMarker(){
     final MarkerId _markerFrom = MarkerId('fromLocation');
     final MarkerId _markerTo = MarkerId('toLocation');
     markers[_markerFrom] = GMapViewHelper.createMaker(

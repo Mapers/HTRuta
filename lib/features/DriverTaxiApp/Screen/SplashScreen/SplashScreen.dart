@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
-
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
-
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
   Animation animation, delayedAnimation, muchDelayAnimation, transfor,fadeAnimation;
   AnimationController animationController;
@@ -18,10 +16,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     animationController = AnimationController(duration: Duration(milliseconds: 1000), vsync: this);
 
     animation = Tween(begin: 0.0, end: 0.0).animate(CurvedAnimation(
-        parent: animationController,
-        curve: Curves.fastOutSlowIn
+      parent: animationController,
+      curve: Curves.fastOutSlowIn
     ));
-    
     transfor = BorderRadiusTween(
       begin: BorderRadius.circular(125.0),
       end: BorderRadius.circular(0.0)).animate(
@@ -29,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
     animationController.forward();
-   Timer(new Duration(seconds: 3), () {
+    Timer( Duration(seconds: 3), () {
       Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     });
   }
@@ -52,14 +49,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                 Flexible(
+                  Flexible(
                       flex: 1,
                       child:Center(
-                          child: FadeTransition(
-                              opacity: fadeAnimation,
-                              child:
-                              Image.asset('assets/image/taxi_driver_logo.png',height: 100.0,)
-                          ),
+                        child: FadeTransition(
+                          opacity: fadeAnimation,
+                          child:
+                          Image.asset('assets/image/taxi_driver_logo.png',height: 100.0,)
+                        ),
                       ),
                   ),
                 ],

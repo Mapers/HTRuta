@@ -19,7 +19,7 @@ class _PaymentMethodDriverState extends State<PaymentMethodDriver> {
   ];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 

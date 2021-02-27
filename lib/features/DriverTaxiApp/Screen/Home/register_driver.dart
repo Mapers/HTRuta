@@ -252,7 +252,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
       await _cropImage(index);
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
     }catch(error){
       print(error.toString());
@@ -266,9 +266,11 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool recortado = false;
@@ -644,7 +646,7 @@ class _SextaPaginaState extends State<SextaPagina> {
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
     }catch(error){
       print(error.toString());
@@ -656,9 +658,11 @@ class _SextaPaginaState extends State<SextaPagina> {
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool recortado = false;
@@ -858,7 +862,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
-      this.setState(() {});
+      setState(() {});
     }catch(error){
       print(error.toString());
     }
@@ -869,9 +873,11 @@ class _QuintaPaginaState extends State<QuintaPagina> {
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool recortado = false;

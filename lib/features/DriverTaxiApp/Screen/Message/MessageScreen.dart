@@ -67,13 +67,14 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Mensaje')),
       body: GestureDetector(
         //onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         onHorizontalDragDown: (_){
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).requestFocus( FocusNode());
         },
         child: Column(
             children: <Widget>[

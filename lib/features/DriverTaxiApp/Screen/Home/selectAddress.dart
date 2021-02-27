@@ -26,7 +26,6 @@ class _SelectAddressState extends State<SelectAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getCurrentLocation();
   }
@@ -77,7 +76,7 @@ class _SelectAddressState extends State<SelectAddress> {
   }
 
   void _onMapCreated(GoogleMapController controller) async {
-    this._mapController = controller;
+    _mapController = controller;
     MarkerId markerId = MarkerId(_markerIdVal());
     LatLng position = LatLng(21.00349833333333,  105.849);
     Marker marker = Marker(
@@ -89,7 +88,7 @@ class _SelectAddressState extends State<SelectAddress> {
       _markers[markerId] = marker;
     });
     Future.delayed(Duration(milliseconds: 200), () async {
-      this._mapController = controller;
+      _mapController = controller;
       controller?.animateCamera(
         CameraUpdate?.newCameraPosition(
           CameraPosition(
@@ -107,7 +106,7 @@ class _SelectAddressState extends State<SelectAddress> {
     return val;
   }
 
-  submitLocation(){
+  void submitLocation(){
     print(_position);
     print(newLocationName);
   }
@@ -137,7 +136,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       zoom: 12.0,
                     ),
                     onCameraMove: (CameraPosition position) {
-                      if(_markers.length > 0) {
+                      if(_markers.isNotEmpty) {
                         MarkerId markerId = MarkerId(_markerIdVal());
                         Marker marker = _markers[markerId];
                         Marker updatedMarker = marker.copyWith(

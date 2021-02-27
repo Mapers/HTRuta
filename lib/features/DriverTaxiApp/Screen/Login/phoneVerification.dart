@@ -29,12 +29,12 @@ class _PhoneVerificationState extends State<PhoneVerification> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios,color: blackColor,),
           onPressed: () => Navigator.of(context).pushReplacement(
-             MaterialPageRoute(builder: (context) => LoginScreen())),
+            MaterialPageRoute(builder: (context) => LoginScreen())),
         ),
       ),
       body: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
             child: Container(
               color: whiteColor,
               padding: EdgeInsets.fromLTRB(screenSize.width*0.13, 0.0, screenSize.width*0.13, 0.0),

@@ -466,17 +466,17 @@ class PanelController{
       bool Function() isPanelClosedListener,
       bool Function() isPanelShownListener,
       ){
-    this._closeListener = closeListener;
-    this._openListener = openListener;
-    this._hideListener = hideListener;
-    this._showListener = showListener;
-    this._setPanelPositionListener = setPanelPositionListener;
-    this._setAnimatePanelToPositionListener = setAnimatePanelToPositionListener;
-    this._getPanelPositionListener = getPanelPositionListener;
-    this._isPanelAnimatingListener = isPanelAnimatingListener;
-    this._isPanelOpenListener = isPanelOpenListener;
-    this._isPanelClosedListener = isPanelClosedListener;
-    this._isPanelShownListener = isPanelShownListener;
+    _closeListener = closeListener;
+    _openListener = openListener;
+    _hideListener = hideListener;
+    _showListener = showListener;
+    _setPanelPositionListener = setPanelPositionListener;
+    _setAnimatePanelToPositionListener = setAnimatePanelToPositionListener;
+    _getPanelPositionListener = getPanelPositionListener;
+    _isPanelAnimatingListener = isPanelAnimatingListener;
+    _isPanelOpenListener = isPanelOpenListener;
+    _isPanelClosedListener = isPanelClosedListener;
+    _isPanelShownListener = isPanelShownListener;
   }
 
   /// Closes the sliding panel to its collapsed state (i.e. to the  minHeight)

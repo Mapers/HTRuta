@@ -16,7 +16,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print(widget.id);
   }

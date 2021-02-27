@@ -25,7 +25,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
   double ratingScore;
 
   void _onMapCreated(GoogleMapController controller) {
-    this.googleMapController = controller;
+    googleMapController = controller;
   }
 
   @override
@@ -108,7 +108,7 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
                 ),
                 InkWellCustom(
                     onTap: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
+                      FocusScope.of(context).requestFocus( FocusNode());
                     },
                     child: buildContent(context)
                 ),

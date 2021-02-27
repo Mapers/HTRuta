@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool autovalidate = false;
   Validations validations =  Validations();
 
-  submit(){
+  void submit(){
     final FormState form = formKey.currentState;
     if (!form.validate()) {
       autovalidate = true; // Start validating on every change.
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       form.save();
       //code
       Navigator.of(context).pushReplacement(
-           MaterialPageRoute(builder: (context) => PhoneVerification()));
+        MaterialPageRoute(builder: (context) => PhoneVerification()));
     }
   }
 

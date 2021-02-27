@@ -24,6 +24,7 @@ class _MyProfileState extends State<MyProfile> {
   var _image;
 
   Future getImageLibrary() async {
+    // ignore: deprecated_member_use
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
     setState(() {
       _image = gallery;
@@ -31,7 +32,9 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future cameraImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
+    // ignore: deprecated_member_use
+    var pickImage = ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
+    var image = await pickImage;
     setState(() {
       _image = image;
     });
@@ -123,7 +126,7 @@ class _MyProfileState extends State<MyProfile> {
       body: Scrollbar(
         child: SingleChildScrollView(
           child: InkWellCustom(
-              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+              onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
               child: Form(
                 key: formKey,
                 child: Container(

@@ -20,7 +20,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   ];
 
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 

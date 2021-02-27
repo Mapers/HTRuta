@@ -69,7 +69,7 @@ class _DirectionsViewState extends State<DirectionsView> {
 
 
   void _onMapCreated(GoogleMapController controller) {
-    this._mapController = controller;
+    _mapController = controller;
   }
 
   @override
@@ -97,7 +97,7 @@ class _DirectionsViewState extends State<DirectionsView> {
     super.dispose();
   }
 
-  addMakers(){
+  void addMakers(){
     checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');

@@ -22,7 +22,7 @@ class MenuDriverScreens extends StatelessWidget {
 
   MenuDriverScreens({this.activeScreenName});
 
-  navigatorRemoveUntil(BuildContext context, String router){
+  void navigatorRemoveUntil(BuildContext context, String router){
     Navigator.of(context).pushNamedAndRemoveUntil('/$router', (Route<dynamic> route) => false);
   }
 
@@ -49,7 +49,7 @@ class MenuDriverScreens extends StatelessWidget {
                             GestureDetector(
                               onTap: (){
                                 Navigator.of(context).pop();
-                                Navigator.of(context).push(new MaterialPageRoute<Null>(
+                                Navigator.of(context).push( MaterialPageRoute<Null>(
                                   builder: (BuildContext context) {
                                     return ProfileDriver();
                                   },
@@ -75,7 +75,7 @@ class MenuDriverScreens extends StatelessWidget {
                             GestureDetector(
                               onTap: (){
                                 Navigator.of(context).pop();
-                                Navigator.of(context).push(new MaterialPageRoute<Null>(
+                                Navigator.of(context).push( MaterialPageRoute<Null>(
                                   builder: (BuildContext context) {
                                     return MyProfile();
                                   },
@@ -184,7 +184,7 @@ class MenuDriverScreens extends StatelessWidget {
 //                  fullscreenDialog: true));
 //            },
 //          ),
-         MediaQuery.removePadding(
+        MediaQuery.removePadding(
             context: context,
             // DrawerHeader consumes top MediaQuery padding.
             removeTop: true,
@@ -192,10 +192,10 @@ class MenuDriverScreens extends StatelessWidget {
               child:ListView(
                 //padding: const EdgeInsets.only(top: 8.0),
                 children: <Widget>[
-                 Stack(
+                Stack(
                     children: <Widget>[
                       // The initial contents of the drawer.
-                     Column(
+                    Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -204,7 +204,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'home_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('HOME') == 0,
+                            isSelected: activeScreenName.compareTo('HOME') == 0,
                             icon: FontAwesomeIcons.home,
                             text: 'Inicio'
                           ),
@@ -213,7 +213,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'request_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('REQUEST') == 0,
+                            isSelected: activeScreenName.compareTo('REQUEST') == 0,
                             icon: FontAwesomeIcons.firstOrder,
                             text: 'Solicitudes'
                           ),
@@ -222,7 +222,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'my_wallet_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('MY WALLET') == 0,
+                            isSelected: activeScreenName.compareTo('MY WALLET') == 0,
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
                           ),
@@ -230,7 +230,7 @@ class MenuDriverScreens extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
                             },
-                            isSelected: this.activeScreenName.compareTo('Rutas') == 0,
+                            isSelected: activeScreenName.compareTo('Rutas') == 0,
                             icon: FontAwesomeIcons.mapMarkedAlt,
                             text: 'Mis Rutas'
                           ),
@@ -239,7 +239,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'history_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('HISTORY') == 0,
+                            isSelected: activeScreenName.compareTo('HISTORY') == 0,
                             icon: FontAwesomeIcons.history,
                             text: 'Historial'
                           ),
@@ -248,7 +248,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'notification_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('NOTIFICATIONS') == 0,
+                            isSelected: activeScreenName.compareTo('NOTIFICATIONS') == 0,
                             icon: FontAwesomeIcons.bell,
                             text: 'Notificaciones'
                           ),
@@ -257,7 +257,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'setting_driver');
                             },
-                            isSelected: this.activeScreenName.compareTo('SETTINGS') == 0,
+                            isSelected: activeScreenName.compareTo('SETTINGS') == 0,
                             icon: FontAwesomeIcons.cogs,
                             text: 'Configuraciones'
                           ),

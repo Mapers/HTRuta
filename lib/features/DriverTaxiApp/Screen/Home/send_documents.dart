@@ -69,7 +69,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
       await _cropImage(index);
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
     }catch(error){
       print(error.toString());
@@ -83,9 +83,11 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
-      this.setState(() {});
+      setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   bool recortado = false;

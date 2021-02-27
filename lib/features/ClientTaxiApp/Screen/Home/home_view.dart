@@ -303,7 +303,7 @@ class _HomeViewState extends State<HomeView> {
                   zoom: 12.0,
                 ),
                 onCameraMove: (CameraPosition position) {
-                  if(_markers.length > 0) {
+                  if(_markers.isNotEmpty) {
                     MarkerId markerId = MarkerId(_markerIdVal());
                     Marker marker = _markers[markerId];
                     Marker updatedMarker = marker?.copyWith(

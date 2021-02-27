@@ -27,7 +27,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
     formLocation = widget?.placeBloc?.formLocation?.name;
   }
 
-  navigator(){
+  void navigator(){
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => DirectionScreen())
     );
@@ -57,7 +57,6 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                     widget?.placeBloc?.selectLocation(widget?.placeBloc?.listPlace[index])?.then((_){
                       toLocation = widget?.placeBloc?.locationSelect?.name;
                       FocusScope.of(context).requestFocus(nodeTo);
-                      //TODO probando cambios
                       Navigator.pop(context);
                       // navigator();
                     });

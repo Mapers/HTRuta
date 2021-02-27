@@ -72,6 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -93,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: _messages.isNotEmpty ?
                 GestureDetector(
                     onHorizontalDragDown: (_){
-                      FocusScope.of(context).requestFocus(new FocusNode());
+                      FocusScope.of(context).requestFocus( FocusNode());
                     },
                     child: ListView.builder(
                       padding: EdgeInsets.all(8.0),

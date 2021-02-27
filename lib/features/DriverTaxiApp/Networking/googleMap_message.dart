@@ -17,6 +17,7 @@ class GMapMessage extends JsonMessage {
   final List<GeocodedWaypoint> geocodedWaypoints;
   @JsonKey(name: 'routes')
   final List<Routes> routes;
+  @override
   @JsonKey(name: 'error_message')
   final String errorMessage;
   @JsonKey(name: 'status')

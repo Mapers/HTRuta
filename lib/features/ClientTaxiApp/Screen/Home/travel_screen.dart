@@ -86,7 +86,6 @@ class _TravelScreenState extends State<TravelScreen> {
           print(val.currentState);
       },
       onError: (error){
-        
       }
     );
 
@@ -98,7 +97,7 @@ class _TravelScreenState extends State<TravelScreen> {
 
   }
 
-  Future<void> fechDriverLocation() {
+  Future<void> fechDriverLocation() async {
     final provider = Provider.of<PedidoProvider>(context,listen: false);
     referenceDatabase.child('Coordenada').onValue.listen((event) {
       print('Data: ${event.snapshot.value}');

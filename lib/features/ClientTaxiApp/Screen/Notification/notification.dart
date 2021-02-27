@@ -60,7 +60,6 @@ class _NotificationScreensState extends State<NotificationScreens> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     listNotification = [
       {
@@ -98,7 +97,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    // 
     super.dispose();
   }
 

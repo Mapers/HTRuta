@@ -17,11 +17,11 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
 
   List<Map<String, dynamic>> listNotification = List<Map<String, dynamic>>();
 
-  navigateToDetail(String id){
+  void navigateToDetail(String id){
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationDetail(id: id,)));
   }
 
-  dialogInfo(){
+  Future dialogInfo(){
     return showDialog(
         context: context,
         builder: (BuildContext context){
@@ -51,7 +51,6 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     listNotification = [
       {'id': '0','title' : 'Sistema','subTitle' : 'Se agregaron nuevas funcionalidades', 'icon' : Icons.check_circle},
@@ -65,7 +64,6 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -80,16 +78,16 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
         elevation: 2.0,
         iconTheme: IconThemeData(color: blackColor),
           actions: <Widget>[
-           IconButton(
-                icon: Icon(Icons.restore_from_trash,color: blackColor,),
-                onPressed: (){
-                  dialogInfo();
-                }
+          IconButton(
+              icon: Icon(Icons.restore_from_trash,color: blackColor,),
+              onPressed: (){
+                dialogInfo();
+              }
             )
           ]
       ),
       drawer:MenuDriverScreens(activeScreenName: screenName),
-        body: listNotification.length != 0 ?
+        body: listNotification.isNotEmpty ?
         Scrollbar(
           child: ListView.builder(
               itemCount: listNotification.length,

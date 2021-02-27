@@ -6,7 +6,6 @@ class BankCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       height: 150.0,
       width: 252.0,
@@ -126,7 +125,6 @@ class SmallBankCard extends StatelessWidget {
   SmallBankCard({this.card, this.screenWidth});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     final bool isLargeScreen = screenWidth > 320;
     final double topPadding = isLargeScreen ? 14.0 : 24.0;
     final EdgeInsets inset = EdgeInsets.only(left: 16.0, top: topPadding);

@@ -6,6 +6,7 @@ class Session{
   final key = 'SESSION';
   final storage =FlutterSecureStorage();
 
+  // ignore: always_declare_return_types
   set(String id,String dni, String nombres, String apellidoPaterno,String apellidoMaterno, String celular,String correo,String password) async{
     final data = {
       'id' : id,
@@ -20,7 +21,7 @@ class Session{
     await storage.write(key: key, value: jsonEncode(data));
   }
 
-  get() async{
+  Future get() async{
     final result = await storage.read(key: key);
     if(result != null){
       return jsonDecode(result);

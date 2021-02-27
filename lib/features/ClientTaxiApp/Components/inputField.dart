@@ -33,7 +33,6 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (Container(
         margin: EdgeInsets.only(bottom: bottomMargin),
         child: DecoratedBox(

@@ -31,14 +31,14 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
       drawer:MenuDriverScreens(activeScreenName: screenName),
       body: SingleChildScrollView(
         child: InkWellCustom(
-          onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+          onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
           child: Container(
             color: backgroundColor,
             child: Column(
               children: <Widget>[
                 GestureDetector(
                   onTap: (){
-                    Navigator.of(context).push(new MaterialPageRoute<Null>(
+                    Navigator.of(context).push( MaterialPageRoute<Null>(
                         builder: (BuildContext context) {
                           return ProfileDriver();
                         },
@@ -117,7 +117,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   icon: Icons.people,
                   backgroundIcon: primaryColor,
                   onPress: (){
-                    Navigator.of(context).push(new MaterialPageRoute<Null>(
+                    Navigator.of(context).push( MaterialPageRoute<Null>(
                         builder: (BuildContext context) {
                           return InviteFriends();
                         },

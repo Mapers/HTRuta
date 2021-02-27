@@ -9,6 +9,5 @@ class ClientInterprovincialBloc extends Bloc<ClientInterprovincialEvent, ClientI
   Stream<ClientInterprovincialState> mapEventToState(
     ClientInterprovincialEvent event,
   ) async* {
-    // TODO: implement mapEventToState
   }
 }

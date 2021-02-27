@@ -32,7 +32,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
       ),
       body: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
             child: Container(
               padding: EdgeInsets.fromLTRB(20, 0.0, 20, 0.0),
               child: Column(

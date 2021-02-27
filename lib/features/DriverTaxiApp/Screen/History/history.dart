@@ -18,7 +18,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   List<dynamic> event = [];
   String selectedMonth = '';
 
-  navigateToDetail(String id) {
+  void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
 
@@ -66,11 +66,11 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                   todayBorderColor: primaryColor,
                   todayButtonColor: primaryColor,
                   onDayPressed: (DateTime date, List<dynamic> events) {
-                    this.setState(() => selectedDate = date);
+                    setState(() => selectedDate = date);
                     print(selectedDate);
                   },
                   onCalendarChanged: (DateTime date) {
-                    this.setState(() => selectedMonth = DateFormat.yMMM().format(date));
+                    setState(() => selectedMonth = DateFormat.yMMM().format(date));
                     print(selectedMonth);
                   },
                 ),

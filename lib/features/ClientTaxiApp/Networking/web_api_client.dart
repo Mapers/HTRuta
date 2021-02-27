@@ -130,10 +130,12 @@ abstract class WebApiClient {
 }
 
 class GMapClient extends WebApiClient {
+  @override
   final OnResponse onResponse = ({@required Map<String, dynamic> data}) {
     return GMapMessage.fromJson(data);
   };
 
+  @override
   final OnError onError = (
       {@required int status,
         @required String errorCode,

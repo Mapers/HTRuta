@@ -71,7 +71,7 @@ class _InviteFriendsState extends State<InviteFriends> {
               child: Center(
                 child: GestureDetector(
                   onLongPress: () {
-                    Clipboard.setData(new ClipboardData(text: '09867656'));
+                    Clipboard.setData( ClipboardData(text: '09867656'));
                   },
                   child: Text('09867656',
                     style: textStyleHeading18Black,

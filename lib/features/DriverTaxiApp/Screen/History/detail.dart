@@ -52,7 +52,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
       body: Scrollbar(
         child: SingleChildScrollView(
           child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+            onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
             child: Container(
               color: greyColor,
               child: Column(

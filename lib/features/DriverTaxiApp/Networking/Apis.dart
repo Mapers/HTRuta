@@ -12,7 +12,7 @@ class Apis {
 
   Apis();
 
-  getHttp(String query) async {
+  Future getHttp(String query) async {
     try {
       Response response = await Dio().get('$domain?$query');
       return response.data;

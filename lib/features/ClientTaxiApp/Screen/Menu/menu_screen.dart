@@ -129,7 +129,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.cogs,
                               text: 'Términos y Condiciones',
-                              isSelected: this.activeScreenName.compareTo('TERMS') == 0,
+                              isSelected: activeScreenName.compareTo('TERMS') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.termsConditionsScreen);
