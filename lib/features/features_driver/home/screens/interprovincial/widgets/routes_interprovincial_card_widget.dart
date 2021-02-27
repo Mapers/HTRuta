@@ -67,14 +67,14 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
       subtitle: Row(
         children: [
           Expanded(
-            child: Text(interprovincialRoute.fromLocation.name)
+            child: Text(interprovincialRoute.fromLocation.streetName)
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Icon(Icons.arrow_right_alt_outlined, size: 28,),
           ),
           Expanded(
-            child: Text(interprovincialRoute.toLocation.name),
+            child: Text(interprovincialRoute.toLocation.streetName),
           )
         ],
       ),
@@ -110,6 +110,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     if(timeOfDay == null){
       return;
     }
+    dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
     showDialog(
       context: context,
       child: AlertDialog(
@@ -138,10 +139,13 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
             onPressed: () => Navigator.of(context).pop(),
           ),
           RaisedButton(
-            child: Text('Iniciar ruta', style: TextStyle(color: Colors.white)),
+            child: Text('Establecer ruta', style: TextStyle(color: Colors.white)),
             onPressed: (){
               Navigator.of(context).pop();
-              BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(route: interprovincialRoute));
+              BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(
+                route: interprovincialRoute,
+                dateTime: dateTime
+              ));
             },
           )
         ],

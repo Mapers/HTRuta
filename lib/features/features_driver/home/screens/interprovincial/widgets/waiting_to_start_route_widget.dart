@@ -16,6 +16,7 @@ class WaitingToStartRouteWidget extends StatelessWidget {
       children: [
         PositionedInfoRouteWidget(route: route),
         DarkCardWidget(
+          bottom: 100,
           text: 'Puede aceptar la solicitud de pasajeros antes de iniciar la ruta. Presione en “Iniciar ruta” para comenzar el desplazamiento.'
         ),
         Positioned(

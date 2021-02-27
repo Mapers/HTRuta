@@ -19,7 +19,9 @@ class LocationUtil {
       name = pos.name + ', ' + pos.thoroughfare;
     }
     return LocationEntity(
-      name: name,
+      streetName: name,
+      districtName: '-',
+      provinceName: '-',
       latLang: LatLng(currentLocation.latitude, currentLocation.longitude),
       zoom: 14
     );
@@ -38,7 +40,9 @@ class LocationUtil {
       }
       listen(LocationEntity(
         latLang: LatLng(location.latitude, location.longitude),
-        name: name,
+        districtName: '-',
+        provinceName: '-',
+        streetName: name,
         zoom: 14
       ));
     });

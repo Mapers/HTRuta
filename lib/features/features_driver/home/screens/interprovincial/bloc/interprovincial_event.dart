@@ -10,11 +10,12 @@ abstract class InterprovincialEvent extends Equatable {
 class GetDataInterprovincialEvent extends InterprovincialEvent {}
 
 class SelectRouteInterprovincialEvent extends InterprovincialEvent {
+  final DateTime dateTime;
   final InterprovincialRouteEntity route;
-  SelectRouteInterprovincialEvent({@required this.route});
+  SelectRouteInterprovincialEvent({@required this.route, @required this.dateTime});
 
   @override
-  List<Object> get props => [route];
+  List<Object> get props => [route, dateTime];
 }
 
 class StartRouteInterprovincialEvent extends InterprovincialEvent {}

@@ -58,7 +58,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
                         ]
                       ),
                       SizedBox(height: 10),
-                      Text(passenger.location.name, style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Text(passenger.location.streetName, style: TextStyle(fontSize: 14, color: Colors.black54)),
                       SizedBox(height: 10),
                       Text('${distance.toStringAsFixed(2)}Km de distancia', style: TextStyle(fontSize: 12, color: Colors.black54))
                     ],

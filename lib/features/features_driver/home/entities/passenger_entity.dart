@@ -19,7 +19,9 @@ class PassengerEntity extends Equatable {
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       location: LocationEntity(
         latLang: LatLng(-11.114660, -77.594774),
-        name: 'Antigua Panamericana Nte. 1035',
+        streetName: 'Antigua Panamericana Nte. 1035',
+        districtName: 'Huacho',
+        provinceName: 'Huaura',
         zoom: 12
       ),
       urlImage: 'https://source.unsplash.com/1600x900/?portrait'

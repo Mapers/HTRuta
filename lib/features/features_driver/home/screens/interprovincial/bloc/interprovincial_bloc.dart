@@ -4,6 +4,7 @@ import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'interprovincial_event.dart';
@@ -20,16 +21,16 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
     if(event is GetDataInterprovincialEvent){
       yield DataInterprovincialState.initial();
       await Future.delayed(Duration(seconds: 1));
-      yield DataInterprovincialState(
-        route: null,
+      yield DataInterprovincialState.initial().copyWith(
         status: InterprovincialStatus.notEstablished
-      );
+      );;
     }else if(event is SelectRouteInterprovincialEvent){
       yield DataInterprovincialState.initial(loadingMessage: 'Seleccionando ruta');
       await Future.delayed(Duration(seconds: 1));
       yield DataInterprovincialState(
         route: event.route,
-        status: InterprovincialStatus.waiting
+        status: InterprovincialStatus.waiting,
+        routeStartDateTime: event.dateTime
       );
     }else if(event is StartRouteInterprovincialEvent){
       DataInterprovincialState data = state;

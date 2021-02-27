@@ -38,7 +38,7 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(route.fromLocation.name),
+                    child: Text(route.fromLocation.streetName),
                   )
                 ],
               ),
@@ -48,7 +48,7 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   Icon(Icons.location_on_outlined, color: Colors.red, size: 18),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(route.toLocation.name),
+                    child: Text(route.toLocation.streetName),
                   )
                 ],
               ),

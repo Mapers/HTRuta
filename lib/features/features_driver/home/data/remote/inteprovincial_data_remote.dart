@@ -10,12 +10,16 @@ class InterprovincialDataRemote{
         name: 'Huacho - Chancay - Lima',
         fromLocation: LocationEntity(
           latLang: LatLng(-11.109722, -77.596091),
-          name: 'Óvalo de Huacho, Huaura, Lima',
+          streetName: 'Óvalo de Huacho',
+          districtName: 'Huacho',
+          provinceName: 'Huaura',
           zoom: 12
         ),
         toLocation: LocationEntity(
           latLang: LatLng(-12.005404, -77.055431),
-          name: 'Gran Terminal Plaza Norte, Independencia, Lima',
+          streetName: 'Gran Terminal Plaza Norte, Independencia, Lima',
+          districtName: 'Independencia',
+          provinceName: 'Lima',
           zoom: 12
         )
       ),
@@ -24,12 +28,16 @@ class InterprovincialDataRemote{
         name: 'Lima - Cajamarca (Directo)',
         fromLocation: LocationEntity(
           latLang: LatLng(-12.064508, -76.996569),
-          name: 'Manuel Echeandia, San Luis, Lima',
+          streetName: 'Manuel Echeandia, San Luis, Lima',
+          districtName: 'Acho',
+          provinceName: 'Lima',
           zoom: 12
         ),
         toLocation: LocationEntity(
           latLang: LatLng(-7.166157, -78.508878),
-          name: 'Av. La Paz 361-301, Cajamarca, Cajamarca',
+          streetName: 'Av. La Paz 361-301',
+          districtName: 'Cajamarca',
+          provinceName: 'Cajamarca',
           zoom: 12
         )
       ),
@@ -38,12 +46,16 @@ class InterprovincialDataRemote{
         name: 'Cajamarca - Chimbote - Lima',
         fromLocation: LocationEntity(
           latLang: LatLng(-7.166157, -78.508878),
-          name: 'Av. La Paz 361-301, Cajamarca, Cajamarca',
+          streetName: 'Av. La Paz 361-301, Cajamarca, Cajamarca',
+          districtName: 'Cajamarca',
+          provinceName: 'Cajamarca',
           zoom: 12
         ),
         toLocation: LocationEntity(
           latLang: LatLng(-12.064508, -76.996569),
-          name: 'Manuel Echeandia, San Luis, Lima',
+          streetName: 'Manuel Echeandia, San Luis, Lima',
+          districtName: 'Acho',
+          provinceName: 'Lima',
           zoom: 12
         )
       ),

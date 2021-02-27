@@ -15,6 +15,7 @@ class InRouteWidget extends StatelessWidget {
       children: [
         PositionedInfoRouteWidget(route: route),
         DarkCardWidget(
+          top: 120,
           text: 'Se encuentra en ruta. Quede atento para el recojo de pasajeros en las cercanías.'
         ),
         Positioned(

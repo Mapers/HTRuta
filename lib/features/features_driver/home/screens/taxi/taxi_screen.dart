@@ -189,7 +189,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     LocationEntity locationEntity = await LocationUtil.currentLocation();
     setState(() {
       currentLocation = locationEntity.latLang;
-      currentLocationName = locationEntity.name;
+      currentLocationName = locationEntity.streetName;
     });
     if(currentLocation != null){
       moveCameraToMyLocation();
