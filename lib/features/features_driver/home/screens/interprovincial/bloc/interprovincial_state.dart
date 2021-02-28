@@ -8,7 +8,7 @@ abstract class InterprovincialState extends Equatable {
 }
 
 enum InterprovincialStatus {
-  loading, notEstablished, waiting, inRoute, 
+  loading, notEstablished, onWhereabouts, inRoute, 
 }
 
 class DataInterprovincialState extends InterprovincialState {

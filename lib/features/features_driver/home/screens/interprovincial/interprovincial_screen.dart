@@ -4,8 +4,8 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/blo
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/in_route_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/map_interprovincia_widget.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/on_whereabouts_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/waiting_to_start_route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -44,8 +44,8 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InterprovincialStatus.notEstablished){
                   return RoutesInterprovincialCardWidget();
-                }else if(state.status == InterprovincialStatus.waiting){
-                  return WaitingToStartRouteWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
+                }else if(state.status == InterprovincialStatus.onWhereabouts){
+                  return OnWhereaboutsWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
                 }else if(state.status == InterprovincialStatus.inRoute){
                   return InRouteWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
                 }

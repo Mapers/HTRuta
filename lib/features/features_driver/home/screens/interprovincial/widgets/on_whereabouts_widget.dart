@@ -5,10 +5,10 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/wid
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WaitingToStartRouteWidget extends StatelessWidget {
+class OnWhereaboutsWidget extends StatelessWidget {
   final InterprovincialRouteEntity route;
   final DateTime routeStartDateTime;
-  const WaitingToStartRouteWidget({Key key, @required this.route, @required this.routeStartDateTime}) : super(key: key);
+  const OnWhereaboutsWidget({Key key, @required this.route, @required this.routeStartDateTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
