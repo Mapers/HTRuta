@@ -1,3 +1,5 @@
+import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/bloc/client_interprovincial_routes_bloc.dart';
 import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/widgets/list_rutas.dart';
@@ -24,8 +26,8 @@ class ChooseRouteTrasportationPage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 10,),
-                PrincipalInput(hinText: 'Origen',),
-                PrincipalInput(hinText: 'Destino',),
+                PrincipalButton(onPressed: (){}, text: 'Origen', color: backgroundInputColor),
+                PrincipalButton(onPressed: (){}, text: 'Destino', color: backgroundInputColor),
                 SizedBox(height: 10,),
                 Text('Lista de rutas y conductores'),
                 Divider(),

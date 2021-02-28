@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const Color textFieldColor = Color.fromRGBO(168, 160, 149, 0.6);
 const Color backgroundColor = Color(0xffeeeeee);
+const Color backgroundInputColor = Color.fromRGBO(245, 245, 245, 1);
 const Color whiteColor = Color(0XFFFFFFFF);
 const Color disabledColor = Color(0XFFF7F8F9);
 const Color blackColor = Color(0XFF242A37);
