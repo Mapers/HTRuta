@@ -4,6 +4,13 @@ extension DateTimeExtension on DateTime {
   String get fullFormatToCard {
     return '${day.toString().padLeft(2,'0').padLeft(2, '0')} ${getMonthName(month).substring(0, 3)} ${DateFormat('y hh:mm a').format(this)}';
   }
+  String get formatOnlyDate {
+    return '${day.toString().padLeft(2,'0').padLeft(2, '0')}/${month.toString().padLeft(2,'0')}/$year';
+  }
+
+  String get formatOnlyTimeInAmPM {
+    return '${DateFormat('hh:mma').format(this)}';
+  }
 
   String getMonthName(int month){
     switch(month){

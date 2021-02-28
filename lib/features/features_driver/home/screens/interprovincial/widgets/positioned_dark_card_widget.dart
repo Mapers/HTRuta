@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class DarkCardWidget extends StatelessWidget {
+class PositionedDarkCardWidget extends StatelessWidget {
   final double top;
   final double bottom;
   final String text;
-  const DarkCardWidget({Key key, this.top, this.bottom, @required this.text}) : super(key: key);
+  const PositionedDarkCardWidget({Key key, this.top, this.bottom, @required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

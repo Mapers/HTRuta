@@ -1,9 +1,11 @@
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:flutter/material.dart';
 
 class PositionedInfoRouteWidget extends StatelessWidget {
   final InterprovincialRouteEntity route;
-  const PositionedInfoRouteWidget({Key key, @required this.route}) : super(key: key);
+  final DateTime routeStartDateTime;
+  const PositionedInfoRouteWidget({Key key, @required this.route, @required this.routeStartDateTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,18 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   )
                 ],
               ),
+              SizedBox(height: 10,),
+              Row(
+                children: [
+                  Icon(Icons.access_time_rounded),
+                  SizedBox(width: 5),
+                  Text(routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black54)),
+                  Spacer(),
+                  Icon(Icons.calendar_today),
+                  SizedBox(width: 5),
+                  Text(routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black54)),
+                ],
+              )
             ],
           )
         ),
