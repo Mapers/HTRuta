@@ -110,7 +110,6 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     if(timeOfDay == null){
       return;
     }
-    dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
     showDialog(
       context: context,
       child: AlertDialog(
@@ -142,6 +141,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
             child: Text('Establecer ruta', style: TextStyle(color: Colors.white)),
             onPressed: (){
               Navigator.of(context).pop();
+              dateTime = dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
               BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(
                 route: interprovincialRoute,
                 dateTime: dateTime

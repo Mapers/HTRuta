@@ -29,7 +29,7 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
       await Future.delayed(Duration(seconds: 1));
       yield DataInterprovincialState(
         route: event.route,
-        status: InterprovincialStatus.waiting,
+        status: InterprovincialStatus.onWhereabouts,
         routeStartDateTime: event.dateTime
       );
     }else if(event is StartRouteInterprovincialEvent){
