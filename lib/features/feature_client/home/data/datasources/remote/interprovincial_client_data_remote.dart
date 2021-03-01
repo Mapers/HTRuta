@@ -1,6 +1,6 @@
 
-import 'package:HTRuta/features/features_driver/home_client/entities/Client_interprovicial_routes_entity.dart';
-import 'package:HTRuta/features/features_driver/home_client/entities/privince_client_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientRemoteDataSoruce {

@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/components/principal_input.dart';
-import 'package:HTRuta/features/features_driver/home_client/entities/privince_client_entity.dart';
-import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:flutter_bloc/flutter_bloc.dart';

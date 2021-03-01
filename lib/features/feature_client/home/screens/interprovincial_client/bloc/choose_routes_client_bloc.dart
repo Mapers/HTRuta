@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:HTRuta/features/features_driver/home_client/data/datasources/remote/interprovincial_client_data_remote.dart';
-import 'package:HTRuta/features/features_driver/home_client/entities/privince_client_entity.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
+import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 

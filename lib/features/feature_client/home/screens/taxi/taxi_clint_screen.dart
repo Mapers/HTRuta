@@ -4,7 +4,7 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
-import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/widgets/change_service_client_widget.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
