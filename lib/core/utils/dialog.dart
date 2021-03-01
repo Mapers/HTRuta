@@ -61,6 +61,7 @@ void showDialogOpcion(context, {@required  String title, @required String conten
     },
   );
 }
+
 void showDialogCustomOneOption(context, {@required  String title, @required String content, String acceptTextButton='Aceptar', @required Function aceptar, bool closeOnAccept=true}) {
   // flutter defined function
   bool isAccept = false;
@@ -131,4 +132,42 @@ void openLoadingDialogWithText(BuildContext context,String message) {
       );
     },
   );
+}
+
+/// Returns null on cancel or error.
+Future<int> showDialogInputNumber({@required BuildContext context, @required String title, int initialValue, String confirmText = 'Aceptar', String cancelText = 'Cancelar'}) async{
+  TextEditingController textEditingController = TextEditingController();
+  if(initialValue != null){
+    textEditingController.text = initialValue.toString();
+  }
+  await showDialog(
+    context: context,
+    child: AlertDialog(
+      title: Text(title),
+      content: TextField(
+        controller: textEditingController,
+        keyboardType: TextInputType.number,
+      ),
+      actions: [
+        OutlineButton(
+          child: Text(cancelText),
+          onPressed: (){
+            textEditingController.text = '-';
+            Navigator.of(context).pop();
+          },
+        ),
+        RaisedButton(
+          child: Text(confirmText),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    )
+  );
+  try {
+    return int.parse(textEditingController.text);
+  } catch (e) {
+    return null;
+  }
 }

@@ -23,14 +23,21 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
       await Future.delayed(Duration(seconds: 1));
       yield DataInterprovincialState.initial().copyWith(
         status: InterprovincialStatus.notEstablished
-      );;
+      );
     }else if(event is SelectRouteInterprovincialEvent){
       yield DataInterprovincialState.initial(loadingMessage: 'Seleccionando ruta');
-      await Future.delayed(Duration(seconds: 1));
+      String serviceId = await interprovincialDataRemote.createStartService(
+        route: event.route,
+        routeStartDateTime: event.dateTime,
+        status: InterprovincialStatus.onWhereabouts,
+        availableSeats: event.availableSeats
+      );
       yield DataInterprovincialState(
         route: event.route,
         status: InterprovincialStatus.onWhereabouts,
-        routeStartDateTime: event.dateTime
+        routeStartDateTime: event.dateTime,
+        documentId: serviceId,
+        availableSeats: event.availableSeats
       );
     }else if(event is StartRouteInterprovincialEvent){
       DataInterprovincialState data = state;
@@ -39,6 +46,24 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
       yield data.copyWith(
         status: InterprovincialStatus.inRoute
       );
+    }else if(event is PlusOneAvailabelSeatInterprovincialEvent){
+      DataInterprovincialState data = state;
+      if(data.availableSeats < event.maxSeats){
+        int newAvailableSeats = data.availableSeats + 1;
+        await interprovincialDataRemote.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
+        yield data.copyWith(
+          availableSeats: newAvailableSeats
+        );
+      }
+    }else if(event is MinusOneAvailabelSeatInterprovincialEvent){
+      DataInterprovincialState data = state;
+      if(data.availableSeats > 0){
+        int newAvailableSeats = data.availableSeats - 1;
+        await interprovincialDataRemote.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
+        yield data.copyWith(
+          availableSeats: newAvailableSeats
+        );
+      }
     }
   }
 }

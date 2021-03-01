@@ -9,6 +9,8 @@ import 'package:HTRuta/features/features_driver/home_client/screens/interprovinc
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
 import 'features/features_driver/home_client/screens/interprovincial_client/bloc/client_interprovincial_routes_bloc.dart';
@@ -57,10 +59,16 @@ Future<void> init() async {
     () => ClientInterprovincialBloc()
   );
   sl.registerLazySingleton<InterprovincialDataRemote>(
-    () => InterprovincialDataRemote()
+    () => InterprovincialDataRemote(
+      firestore: sl()
+    )
   );
 
   sl.registerLazySingleton<InterprovincialLocationBloc>(
     () => InterprovincialLocationBloc()
+  );
+  await Firebase.initializeApp();
+  sl.registerLazySingleton<FirebaseFirestore>(
+    () => FirebaseFirestore.instance
   );
 }

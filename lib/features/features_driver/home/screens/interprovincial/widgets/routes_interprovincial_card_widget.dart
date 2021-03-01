@@ -1,7 +1,9 @@
+import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/core/utils/extensions/time_of_day_extension.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,6 +85,16 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
   }
 
   void _showModalConfirmationRoute(InterprovincialRouteEntity interprovincialRoute) async{
+    int availableSeats = await showDialogInputNumber(
+      context: context,
+      title: 'Ingrese los asientos disponibles',
+      //! Se requiere el origin de los asientos totales del vehiculo
+      initialValue: 60,
+    );
+    if(availableSeats == null){
+      return;
+    }
+    // availableSeats
     DateTime dateTime = await showDatePicker(
       context: context,
       helpText: 'Seleccione día de Inicio de ruta',
@@ -127,7 +139,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
                 Spacer(),
                 Icon(Icons.calendar_today),
                 SizedBox(width: 5),
-                Text('12/05/2021', style: TextStyle(color: Colors.black54)),
+                Text(dateTime.formatOnlyDate, style: TextStyle(color: Colors.black54)),
               ]
             )
           ],
@@ -144,7 +156,8 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
               dateTime = dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
               BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(
                 route: interprovincialRoute,
-                dateTime: dateTime
+                dateTime: dateTime,
+                availableSeats: availableSeats
               ));
             },
           )

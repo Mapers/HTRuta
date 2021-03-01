@@ -1,8 +1,14 @@
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:meta/meta.dart';
 
 class InterprovincialDataRemote{
+  final FirebaseFirestore firestore;
+  InterprovincialDataRemote({@required this.firestore});
+
   Future<List<InterprovincialRouteEntity>> getAllRoutesByUser() async{
     return [
       InterprovincialRouteEntity(
@@ -60,5 +66,33 @@ class InterprovincialDataRemote{
         )
       ),
     ];
+  }
+
+  Future<String> createStartService({
+    @required InterprovincialStatus status,
+    @required InterprovincialRouteEntity route,
+    @required DateTime routeStartDateTime,
+    @required int availableSeats,
+  }) async{
+    DocumentReference dr = await firestore.collection('drivers_in_service').add({
+      'status': toStringFirebaseInterprovincialStatus(status),
+      'current_location': GeoPoint(route.fromLocation.latLang.latitude, route.fromLocation.latLang.longitude),
+      'available_seats': availableSeats
+    });
+    return dr.id;
+  }
+
+  Future<bool> updateSeatsQuantity({
+    @required String documentId,
+    @required int availableSeats
+  }) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId).update({
+        'available_seats': availableSeats
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

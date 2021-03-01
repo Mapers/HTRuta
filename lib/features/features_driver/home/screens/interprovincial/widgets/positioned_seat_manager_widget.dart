@@ -1,4 +1,6 @@
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PositionedSeatManagerWidget extends StatelessWidget {
   final Widget child;
@@ -31,7 +33,9 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                     label: Expanded(
                       child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
                     ),
-                    onPressed: (){},
+                    onPressed: (){
+                      BlocProvider.of<InterprovincialBloc>(context).add(MinusOneAvailabelSeatInterprovincialEvent());
+                    },
                   )
                 ),
                 Container(
@@ -47,7 +51,12 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('9'),
+                      BlocBuilder<InterprovincialBloc, InterprovincialState>(
+                        builder: (ctx, state){
+                          DataInterprovincialState data = state;
+                          return Text(data.availableSeats.toString());
+                        },
+                      ),
                       Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green)
                     ],
                   ),
@@ -59,7 +68,10 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                     label: Expanded(
                       child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
                     ),
-                    onPressed: (){},
+                    onPressed: (){
+                      //! Se requiere tener el maximo de total de asientos
+                      BlocProvider.of<InterprovincialBloc>(context).add(PlusOneAvailabelSeatInterprovincialEvent(maxSeats: 60));
+                    },
                   )
                 ),
               ],

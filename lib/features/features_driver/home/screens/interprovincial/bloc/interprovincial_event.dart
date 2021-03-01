@@ -12,10 +12,21 @@ class GetDataInterprovincialEvent extends InterprovincialEvent {}
 class SelectRouteInterprovincialEvent extends InterprovincialEvent {
   final DateTime dateTime;
   final InterprovincialRouteEntity route;
-  SelectRouteInterprovincialEvent({@required this.route, @required this.dateTime});
+  final int availableSeats;
+  SelectRouteInterprovincialEvent({@required this.route, @required this.dateTime, @required this.availableSeats});
 
   @override
-  List<Object> get props => [route, dateTime];
+  List<Object> get props => [route, dateTime, availableSeats];
 }
 
 class StartRouteInterprovincialEvent extends InterprovincialEvent {}
+
+class PlusOneAvailabelSeatInterprovincialEvent extends InterprovincialEvent {
+  final int maxSeats;
+  PlusOneAvailabelSeatInterprovincialEvent({@required this.maxSeats});
+
+  @override
+  List<Object> get props => [maxSeats];
+}
+
+class MinusOneAvailabelSeatInterprovincialEvent extends InterprovincialEvent {}
