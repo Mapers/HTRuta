@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home_client/entities/Client_interprovicial_routes_entity.dart';
+  import 'package:HTRuta/features/features_driver/home_client/entities/Client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/bloc/client_interprovincial_routes_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

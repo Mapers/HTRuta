@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class PrincipalButton extends StatelessWidget {
   final Color color;
+  final Color textColor;
   final double height;
   final double width;
   final String text;
@@ -16,7 +17,8 @@ class PrincipalButton extends StatelessWidget {
     this.margin,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.height,
-    this.width
+    this.width,
+    this.textColor= Colors.white
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class PrincipalButton extends StatelessWidget {
         highlightElevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         onPressed: onPressed,
-        child: Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 14)),
+        child: Text(text, style: TextStyle(fontWeight: FontWeight.bold, color: textColor, fontSize: 14)),
       ),
     );
   }

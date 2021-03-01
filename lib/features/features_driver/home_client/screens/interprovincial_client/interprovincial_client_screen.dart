@@ -3,6 +3,7 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/map_interprovincia_widget.dart';
+import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
 import 'package:HTRuta/features/features_driver/home_client/screens/interprovincial_client/widgets/change_service_client_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,8 +29,11 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ij.sl<InterprovincialLocationBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<InterprovincialLocationBloc>(create: (_) => ij.sl<InterprovincialLocationBloc>()),
+        BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.sl<ChooseRoutesClientBloc>()),
+      ],
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -39,7 +43,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             bottom: 20,
             child: PrincipalButton(
               onPressed: (){
-                Navigator.of(context).push(Routes.toChooseRouteTrasportationPage());
+                Navigator.of(context).push(Routes.toChooseRouteClientPage());
               },
               text: 'Elegir ruta y trasporte'
             ),

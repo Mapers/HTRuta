@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class PrincipalInput extends StatelessWidget {
+class InputButton extends StatelessWidget {
   final Function onTap;
   final bool enabled;
   final TextEditingController controller;
@@ -14,7 +14,7 @@ class PrincipalInput extends StatelessWidget {
   final String initialValue;
   final bool isRequired;
   final int maxLines;
-  const PrincipalInput({
+  const InputButton({
     Key key,
     this.hinText,
     this.icon,
@@ -41,31 +41,34 @@ class PrincipalInput extends StatelessWidget {
         color: Color.fromRGBO(245, 245, 245, 1),
         borderRadius: BorderRadius.circular(10)
       ),
-      child: TextFormField(
+      child: InkWell(
         onTap: onTap,
-        enabled: enabled,
-        controller: controller,
-        decoration: InputDecoration(
-          icon: Icon(icon),
-          // labelText: 'Nombre',
-          hintText: hinText,
-          hintStyle: TextStyle(color: Colors.grey),
-          border: InputBorder.none,
+        child: TextFormField(
+          enabled: enabled,
+          controller: controller,
+          decoration: InputDecoration(
+            suffixIcon: Icon(Icons.keyboard_arrow_right),
+            icon: Icon(icon),
+            // labelText: 'Nombre',
+            hintText: hinText,
+            hintStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+          ),
+          maxLines: maxLines,
+          onSaved: onSaved,
+          onChanged: onChanged,
+          onFieldSubmitted: onFieldSubmitted,
+          initialValue: initialValue,
+          validator: (String _text){
+            if(isRequired && _text.isEmpty){
+              return 'Requerido.';
+            }
+            if(validator != null){
+              return validator(_text);
+            }
+            return null;
+          }
         ),
-        maxLines: maxLines,
-        onSaved: onSaved,
-        onChanged: onChanged,
-        onFieldSubmitted: onFieldSubmitted,
-        initialValue: initialValue,
-        validator: (String _text){
-          if(isRequired && _text.isEmpty){
-            return 'Requerido.';
-          }
-          if(validator != null){
-            return validator(_text);
-          }
-          return null;
-        }
       ),
     );
   }
