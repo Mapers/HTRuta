@@ -20,7 +20,7 @@ class InterprovincialClientScreen extends StatefulWidget {
 class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       BlocProvider.of<InterprovincialBloc>(context).add(GetDataInterprovincialEvent());

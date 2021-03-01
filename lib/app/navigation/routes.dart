@@ -8,5 +8,5 @@ class Routes {
   static Route toRouterDrivePage() => MaterialPageRoute(builder: (context)=> RouterDrivePage());
   static Route toChooseRouteClientPage() => MaterialPageRoute(builder: (context)=> ChooseRouteClientPage());
   static Route toSearchProvinceClientPage({@required String title,@required Function onTap,}) => MaterialPageRoute(builder: (context)=> SearchProvinceClientPage(title: title,getPrivinceOrigin: onTap,));
-  static Route toAvailableRoutesPage() => MaterialPageRoute(builder: (context)=> AvailableRoutesPage());
+  static Route toAvailableRoutesPage({String provinceOrigin, String provinceDestination}) => MaterialPageRoute(builder: (context)=> AvailableRoutesPage(provinceOrigin: provinceOrigin,provinceDestination: provinceDestination));
 }

@@ -1,4 +1,5 @@
 
+import 'package:HTRuta/features/feature_client/home/entities/availables_routes_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,6 +28,18 @@ class InterprovincialClientRemoteDataSoruce {
       ProvincesClientEntity(id: 2, nameProvince: 'Huaraz'),
     ];
     return provinces;
+  }
+
+  List<AvailablesRoutesEntity> availablesRoutes =[];
+  Future<List<AvailablesRoutesEntity>> getAvailablesRoutes() async{
+    availablesRoutes = [
+      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: true, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: true, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+    ];
+    return availablesRoutes;
   }
 
 }

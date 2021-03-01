@@ -11,15 +11,18 @@ class ChooseRouteClientPage extends StatefulWidget {
 }
 
 class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
-
-  TextEditingController provinceOrigin = TextEditingController();
-  TextEditingController provinceDestination = TextEditingController();
+  String provinceOrigin = '';
+  String provinceDestination = '';
+  TextEditingController _provinceOrigin = TextEditingController();
+  TextEditingController _provinceDestination = TextEditingController();
 
   void getPrivinceOrigin(privinceOrigin,privinceDestination){
     if(privinceOrigin != ''){
-      provinceOrigin.text = privinceOrigin;
+      _provinceOrigin.text = privinceOrigin;
+      provinceOrigin = privinceOrigin;
     }else{
-      provinceDestination.text = privinceDestination;
+      _provinceDestination.text = privinceDestination;
+      provinceDestination = privinceDestination;
     }
   }
 
@@ -38,7 +41,7 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
             children: [
               SizedBox(height: 10,),
               InputButton(
-                controller: provinceOrigin,
+                controller: _provinceOrigin,
                 enabled: false,
                 onTap: (){
                   Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar provincia origen', onTap: getPrivinceOrigin));
@@ -47,7 +50,7 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
                 // enabled: false,
               ),
               InputButton(
-                controller: provinceDestination,
+                controller: _provinceDestination,
                 hinText: 'Destino',
                 enabled: false,
                 onTap: (){
@@ -57,7 +60,9 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
               PrincipalButton(
                 text: 'Buscar rutas',
                 onPressed: (){
-                  Navigator.of(context).push(Routes.toAvailableRoutesPage());
+                  print(provinceOrigin);
+                  print(provinceDestination);
+                  Navigator.of(context).push(Routes.toAvailableRoutesPage(provinceOrigin: provinceOrigin ,provinceDestination: provinceDestination));
                 }
               ),
               SizedBox(height: 10,),
