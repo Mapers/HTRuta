@@ -15,8 +15,6 @@ import 'package:get_it/get_it.dart';
 
 import 'features/features_driver/home_client/screens/interprovincial_client/bloc/client_interprovincial_routes_bloc.dart';
 
-
-
 final sl = GetIt.instance;
 
 Future<void> init() async {
