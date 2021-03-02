@@ -46,16 +46,14 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
       body: BlocBuilder<RouteDriveBloc, RouteDriveState>(
         builder: (context, state) {
           if (state is LoadingRouteDriveState) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
           RouteDriveInitial  param = state;
-          print(param.roterDrives);
-          print(param.roterDrives.length);
           if (param.roterDrives.isEmpty) {
             return Center(
-              child: Text('falta data '),
+              child: Text('- Sin datos -'),
             );
           }
           return ListView.builder(

@@ -1,6 +1,9 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/selecction_origen_destino.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
@@ -20,18 +23,21 @@ class AdditRouterDrivePage extends StatefulWidget {
 
 class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
+  final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
   RoterDriveEntity roterDrive;
   String from = '';
   LatLng latLagFrom;
   LatLng latLagTo;
-
   TextEditingController nameConroller = TextEditingController();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   String to = '';
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<WhereaboutsBloc>(context).add(GetwhereaboutsWhereaboutsEvent());
+    });
     if(!widget.statAddEdit){
       nameConroller.text = widget.roterDrive.name;
       from = widget.roterDrive.nameFrom;
@@ -41,6 +47,8 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
     }
     super.initState();
   }
+  List<WhereaaboutsEntity> whereaabouts = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +88,69 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                     SizedBox(height: 5),
                     from == '' ? Container():CartDataMap(title: 'Origen', subTitle: from,),
                     to == '' ? Container():CartDataMap(title: 'Destino', subTitle: to,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Paraderos', style: heading20Black,),
+                        Icon(Icons.add_location,size: 30,),
+                      ],
+                    ),
+                    Divider(),
+                    BlocBuilder<WhereaboutsBloc, WhereaboutsState>(
+                      builder: (context, state) {
+                        if(state is LoadingWhereaboutsState){
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        DataWhereaboutsState param = state;
+                        if(param.whereaabouts.isEmpty){
+                          return Center(child: Text('sin data'),);
+                        }
+                        whereaabouts = param.whereaabouts;
+                        return Container(
+                          height: 200,
+                          child: ReorderableListView(
+                            children: List.generate(whereaabouts.length, (i) {
+                              WhereaaboutsEntity whereaabout = whereaabouts[i];
+                              return Card(
+                                key: UniqueKey(),
+                                elevation: 5,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(whereaabout.province ),
+                                          Text(whereaabout.adress ),
+                                          Text(whereaabout.cost),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          IconButton(icon: Icon(Icons.edit), onPressed: (){}),
+                                          IconButton(icon: Icon(Icons.delete), onPressed: (){})
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }),
+                            onReorder: (int oldIndex, int newIndex) {
+                              setState(() {
+                                if (newIndex > oldIndex) {
+                                  newIndex -= 1;
+                                }
+                                final WhereaaboutsEntity newString = whereaabouts.removeAt(oldIndex);
+                                whereaabouts.insert(newIndex, newString);
+                              });
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

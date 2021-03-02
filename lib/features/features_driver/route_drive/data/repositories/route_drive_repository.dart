@@ -1,5 +1,6 @@
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 
 class RouteDriveRepository {
   final RouterDriveRemoteDataSoruce routerDriveLocalDataSoruce;
@@ -20,5 +21,9 @@ class RouteDriveRepository {
   Future<List<RoterDriveEntity>> deleteRouterDrives({RoterDriveEntity roterDrive }) async{
     List<RoterDriveEntity> routerDrive = await routerDriveLocalDataSoruce.deleteRouterDrives( roterDrive: roterDrive );
     return routerDrive;
+  }
+  Future<List<WhereaaboutsEntity>> getWhereAbouts() async{
+    List<WhereaaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.getWhereAbouts();
+    return whereAbouts;
   }
 }

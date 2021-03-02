@@ -10,6 +10,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +19,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   //! Blocs
-  sl.registerFactory(() => RouteDriveBloc(sl()));
+  
 
 
   sl.registerLazySingleton<RouteDriveRepository>(
@@ -52,6 +53,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ClientInterprovincialBloc>(
     () => ClientInterprovincialBloc()
   );
+  
   sl.registerLazySingleton<InterprovincialDataRemote>(
     () => InterprovincialDataRemote(
       firestore: sl()
@@ -67,5 +69,12 @@ Future<void> init() async {
   await Firebase.initializeApp();
   sl.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance
+  );
+  // feature_client
+  sl.registerFactory<RouteDriveBloc>(
+    () => RouteDriveBloc(sl())
+  );
+  sl.registerFactory<WhereaboutsBloc>(
+    () => WhereaboutsBloc(sl())
   );
 }

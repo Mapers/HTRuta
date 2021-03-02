@@ -1,4 +1,5 @@
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RouterDriveRemoteDataSoruce {
@@ -33,6 +34,16 @@ class RouterDriveRemoteDataSoruce {
     int index  = roterDrives.indexOf(roterDrive);
     roterDrives.removeAt(index);
     return roterDrives;
+  }
+
+  List<WhereaaboutsEntity> whereaabouts =[];
+  Future<List<WhereaaboutsEntity>> getWhereAbouts({RoterDriveEntity roterDrive} ) async{
+    whereaabouts = [
+      WhereaaboutsEntity(id: '1', province: 'huaura',adress: 'Av.pierola', cost: 'S/.344',latLagFrom:LatLng(-11.1072, 77.6103),latLagTo: LatLng(-12.0453, -77.0311)),
+      WhereaaboutsEntity(id: '2', province: 'chancay',adress: 'san luis',cost:'S/.344' ,latLagFrom:LatLng(-12.0453, -77.0311),latLagTo: LatLng(-11.1072, 77.6103)),
+      WhereaaboutsEntity(id: '3', province: 'supe',adress: 'av.peru', cost:'S/.344' ,latLagFrom:LatLng(-6.77361, -79.84),latLagTo: LatLng(-12.0453, -77.0311))
+    ];
+    return whereaabouts;
   }
 
 }
