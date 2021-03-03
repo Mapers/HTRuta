@@ -11,20 +11,19 @@ class LocationUtil {
   static Future<LocationEntity> currentLocation() async {
     Geolocator _locationService = Geolocator();
     Position currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    String name = '';
+
+    LocationEntity locationEntity = LocationEntity.initialWIthLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
 
     List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
-      Placemark pos = placemarks[0];
-      name = pos.name + ', ' + pos.thoroughfare;
+      Placemark pos = placemarks.first;
+      locationEntity = locationEntity.copyWith(
+        streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
+        districtName: pos.locality,
+        provinceName: pos.subAdministrativeArea
+      );
     }
-    return LocationEntity(
-      streetName: name,
-      districtName: '-',
-      provinceName: '-',
-      latLang: LatLng(currentLocation.latitude, currentLocation.longitude),
-      zoom: 14
-    );
+    return locationEntity;
   }
 
   StreamSubscription subscription;
@@ -33,18 +32,18 @@ class LocationUtil {
     Geolocator _locationService = Geolocator();
     subscription = _locationService.getPositionStream().listen((location) async{
       List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(location.latitude, location.longitude);
-      String name = '-';
+      LocationEntity locationEntity = LocationEntity.initialWIthLocation(latitude: location.latitude, longitude: location.longitude);
+
       if (placemarks != null && placemarks.isNotEmpty) {
-        Placemark pos = placemarks[0];
-        name = pos.name + ', ' + pos.thoroughfare;
+        Placemark pos = placemarks.first;
+        locationEntity = locationEntity.copyWith(
+          streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
+          districtName: pos.locality,
+          provinceName: pos.subAdministrativeArea,
+          regionName: pos.administrativeArea
+        );
       }
-      listen(LocationEntity(
-        latLang: LatLng(location.latitude, location.longitude),
-        districtName: '-',
-        provinceName: '-',
-        streetName: name,
-        zoom: 14
-      ));
+      listen(locationEntity);
     });
   }
 

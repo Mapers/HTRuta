@@ -19,6 +19,7 @@ class InterprovincialDataRemote{
           streetName: 'Óvalo de Huacho',
           districtName: 'Huacho',
           provinceName: 'Huaura',
+          regionName: 'Gobierno Regional de Lima',
           zoom: 12
         ),
         toLocation: LocationEntity(
@@ -26,6 +27,7 @@ class InterprovincialDataRemote{
           streetName: 'Gran Terminal Plaza Norte, Independencia, Lima',
           districtName: 'Independencia',
           provinceName: 'Lima',
+          regionName: 'Lima',
           zoom: 12
         )
       ),
@@ -37,6 +39,7 @@ class InterprovincialDataRemote{
           streetName: 'Manuel Echeandia, San Luis, Lima',
           districtName: 'Acho',
           provinceName: 'Lima',
+          regionName: 'Lima',
           zoom: 12
         ),
         toLocation: LocationEntity(
@@ -44,6 +47,7 @@ class InterprovincialDataRemote{
           streetName: 'Av. La Paz 361-301',
           districtName: 'Cajamarca',
           provinceName: 'Cajamarca',
+          regionName: 'Cajamarca',
           zoom: 12
         )
       ),
@@ -55,6 +59,7 @@ class InterprovincialDataRemote{
           streetName: 'Av. La Paz 361-301, Cajamarca, Cajamarca',
           districtName: 'Cajamarca',
           provinceName: 'Cajamarca',
+          regionName: 'Cajamarca',
           zoom: 12
         ),
         toLocation: LocationEntity(
@@ -62,6 +67,7 @@ class InterprovincialDataRemote{
           streetName: 'Manuel Echeandia, San Luis, Lima',
           districtName: 'Acho',
           provinceName: 'Lima',
+          regionName: 'Lima',
           zoom: 12
         )
       ),
@@ -74,9 +80,14 @@ class InterprovincialDataRemote{
     @required DateTime routeStartDateTime,
     @required int availableSeats,
   }) async{
+    LocationEntity fromLocation = route.fromLocation;
     DocumentReference dr = await firestore.collection('drivers_in_service').add({
       'status': toStringFirebaseInterprovincialStatus(status),
-      'current_location': GeoPoint(route.fromLocation.latLang.latitude, route.fromLocation.latLang.longitude),
+      'current_location': GeoPoint(fromLocation.latLang.latitude, fromLocation.latLang.longitude),
+      'street': fromLocation.streetName,
+      'district_name': fromLocation.districtName,
+      'province_name': fromLocation.provinceName,
+      'region_name': fromLocation.regionName,
       'available_seats': availableSeats
     });
     return dr.id;
@@ -117,6 +128,10 @@ class InterprovincialDataRemote{
     try {
       await firestore.collection('drivers_in_service').doc(documentId).update({
         'current_location': GeoPoint(location.latLang.latitude, location.latLang.longitude),
+        'street': location.streetName,
+        'district_name': location.districtName,
+        'province_name': location.provinceName,
+        'region_name': location.regionName,
       });
       return true;
     } catch (e) {

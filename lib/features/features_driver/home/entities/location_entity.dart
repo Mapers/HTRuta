@@ -8,11 +8,13 @@ class LocationEntity extends Equatable {
   final String streetName;
   final String districtName;
   final String provinceName;
+  final String regionName;
 
   LocationEntity({
     @required this.streetName,
     @required this.districtName,
     @required this.provinceName,
+    @required this.regionName,
     @required this.latLang,
     @required this.zoom,
   });
@@ -26,6 +28,29 @@ class LocationEntity extends Equatable {
       zoom: 6.36,
       provinceName: 'Lima',
       districtName: 'Lima',
+      regionName: 'Lima',
+    );
+  }
+
+  factory LocationEntity.initialWIthLocation({@required double latitude, @required double longitude}){
+    return LocationEntity(
+      latLang: LatLng(latitude, longitude),
+      districtName: '-',
+      provinceName: '-',
+      streetName: '-',
+      regionName: '-',
+      zoom: 14
+    );
+  }
+
+  LocationEntity copyWith({LatLng latLang, double zoom, String streetName, String districtName, String provinceName, String regionName}){
+    return LocationEntity(
+      latLang: latLang ?? this.latLang,
+      zoom: zoom ?? this.zoom,
+      streetName: streetName ?? this.streetName,
+      districtName: districtName ?? this.districtName,
+      provinceName: provinceName ?? this.provinceName,
+      regionName: regionName ?? this.regionName,
     );
   }
   
