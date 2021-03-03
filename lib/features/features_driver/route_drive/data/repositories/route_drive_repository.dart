@@ -6,20 +6,20 @@ class RouteDriveRepository {
   final RouterDriveRemoteDataSoruce routerDriveLocalDataSoruce;
   RouteDriveRepository(this.routerDriveLocalDataSoruce);
 
-  Future<List<RoterDriveEntity>> getRouterDrives() async{
-    List<RoterDriveEntity> routerDrive = await routerDriveLocalDataSoruce.getListRouterDrives();
+  Future<List<RoutesEntity>> getRouterDrives() async{
+    List<RoutesEntity> routerDrive = await routerDriveLocalDataSoruce.getListRouterDrives();
     return routerDrive;
   }
-  Future<List<RoterDriveEntity>> addRouterDrives({RoterDriveEntity roterDrive }) async{
-    List<RoterDriveEntity> routerDrive = await routerDriveLocalDataSoruce.addListRouterDrives(roterDrive: roterDrive );
+  Future<List<RoutesEntity>> addRouterDrives({RoutesEntity roterDrive }) async{
+    List<RoutesEntity> routerDrive = await routerDriveLocalDataSoruce.addListRouterDrives(roterDrive: roterDrive );
     return routerDrive;
   }
-  Future<List<RoterDriveEntity>> editRouterDrives({ RoterDriveEntity roterDrive, RoterDriveEntity newRoterDrive }) async{
-    List<RoterDriveEntity> routerDrive = await routerDriveLocalDataSoruce.editListRouterDrives( roterDrive: roterDrive,newRoterDrive: newRoterDrive );
+  Future<List<RoutesEntity>> editRouterDrives({ RoutesEntity roterDrive, RoutesEntity newRoterDrive }) async{
+    List<RoutesEntity> routerDrive = await routerDriveLocalDataSoruce.editListRouterDrives( roterDrive: roterDrive,newRoterDrive: newRoterDrive );
     return routerDrive;
   }
-  Future<List<RoterDriveEntity>> deleteRouterDrives({RoterDriveEntity roterDrive }) async{
-    List<RoterDriveEntity> routerDrive = await routerDriveLocalDataSoruce.deleteRouterDrives( roterDrive: roterDrive );
+  Future<List<RoutesEntity>> deleteRouterDrives({RoutesEntity roterDrive }) async{
+    List<RoutesEntity> routerDrive = await routerDriveLocalDataSoruce.deleteRouterDrives( roterDrive: roterDrive );
     return routerDrive;
   }
   Future<List<WhereaaboutsEntity>> getWhereAbouts() async{

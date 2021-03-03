@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
-class RoterDriveEntity extends Equatable {
+class RoutesEntity extends Equatable {
   final String id;
   final String name;
   final String nameFrom;
@@ -11,12 +11,12 @@ class RoterDriveEntity extends Equatable {
   final LatLng latLagTo;
 
 
-  RoterDriveEntity({
+  RoutesEntity( {
     this.id,
     this.latLagFrom,
     this.latLagTo,
     this.name,
-    @required this.nameFrom,
+    @required this.nameFrom ,
     @required this.nameTo,
   });
 
@@ -29,10 +29,10 @@ class RoterDriveEntity extends Equatable {
     'latLagTo': latLagTo,
   };
 
-  factory RoterDriveEntity.fromJson(
+  factory RoutesEntity.fromJson(
     Map<String, dynamic> dataJson
   ){
-    return RoterDriveEntity(
+    return RoutesEntity(
       id: dataJson['id'],
       name: dataJson['name'],
       nameFrom: dataJson['nameFrom'],
@@ -41,8 +41,8 @@ class RoterDriveEntity extends Equatable {
       latLagTo: dataJson['latLagTo'],
     );
   }
-  factory RoterDriveEntity.empty({@required int orderBranch}) {
-    return RoterDriveEntity(
+  factory RoutesEntity.empty({@required int orderBranch}) {
+    return RoutesEntity(
       id: '',
       name: '',
       nameFrom: '',

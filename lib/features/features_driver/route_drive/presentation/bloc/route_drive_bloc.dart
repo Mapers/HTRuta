@@ -16,19 +16,19 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
     try {
       if (event is GetRouterDrivesEvent) {
         yield LoadingRouteDriveState();
-        List<RoterDriveEntity> roterDrives = await routeDriveRepository.getRouterDrives();
+        List<RoutesEntity> roterDrives = await routeDriveRepository.getRouterDrives();
         yield RouteDriveInitial(roterDrives: roterDrives );
       }else if(event is AddDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();
-        List<RoterDriveEntity> roterDrives = await routeDriveRepository.addRouterDrives(roterDrive: event.roterDrive);
+        List<RoutesEntity> roterDrives = await routeDriveRepository.addRouterDrives(roterDrive: event.roterDrive);
         yield RouteDriveInitial(roterDrives: roterDrives);
       }else if(event is EditDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();
-        List<RoterDriveEntity> roterDrives = await routeDriveRepository.editRouterDrives( roterDrive: event.roterDrive,newRoterDrive: event.newRoterDrive);
+        List<RoutesEntity> roterDrives = await routeDriveRepository.editRouterDrives( roterDrive: event.roterDrive,newRoterDrive: event.newRoterDrive);
         yield RouteDriveInitial(roterDrives: roterDrives);
       }else if(event is DeleteDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();
-        List<RoterDriveEntity> roterDrives = await routeDriveRepository.deleteRouterDrives(roterDrive: event.roterDrive);
+        List<RoutesEntity> roterDrives = await routeDriveRepository.deleteRouterDrives(roterDrive: event.roterDrive);
         yield RouteDriveInitial(roterDrives: roterDrives);
       }
     } catch (e) {

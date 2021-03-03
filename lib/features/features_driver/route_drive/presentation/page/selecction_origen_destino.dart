@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class SelecctionOriginDestination extends StatefulWidget {
+  final Function getFromAndTo;
   final double la;
   final double lo;
-  const SelecctionOriginDestination({Key key, this.la, this.lo}) : super(key: key);
+  const SelecctionOriginDestination({Key key, this.la, this.lo, this.getFromAndTo}) : super(key: key);
 
   @override
   _SelecctionOriginDestinationState createState() => _SelecctionOriginDestinationState();
@@ -218,13 +219,14 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 formKey.currentState.save();
                 List<Placemark> placemarkfrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
                 List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
-                RoterDriveEntity data = RoterDriveEntity(
+                RoutesEntity data = RoutesEntity(
                   nameFrom: placemarkfrom[0].locality == '' ? txtFrom : placemarkfrom[0].locality,
                   nameTo: placemarkTo[0].locality== '' ? txtTo :placemarkTo[0].locality,
                   latLagFrom: from,
                   latLagTo: to,
                 );
-                Navigator.of(context).pop(data);
+                widget.getFromAndTo(data);
+                Navigator.of(context).pop();
               },)
             ),
           ],

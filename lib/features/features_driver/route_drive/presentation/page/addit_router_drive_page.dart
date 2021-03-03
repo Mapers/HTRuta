@@ -4,16 +4,17 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/rout
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/selecction_origen_destino.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/page/selecction_origen_destino.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/page/selecction_whereabouts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class AdditRouterDrivePage extends StatefulWidget {
-  final RoterDriveEntity roterDrive;
+  final RoutesEntity roterDrive;
   final bool statAddEdit;
   AdditRouterDrivePage({Key key, this.roterDrive, this.statAddEdit}) : super(key: key);
 
@@ -25,29 +26,36 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
   final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
-  RoterDriveEntity roterDrive;
-  String from = '';
+  RoutesEntity roterDrives;
   LatLng latLagFrom;
   LatLng latLagTo;
   TextEditingController nameConroller = TextEditingController();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
-  String to = '';
   @override
   void initState() {
+    roterDrives =  RoutesEntity(
+      nameFrom: '',
+      nameTo: '',
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<WhereaboutsBloc>(context).add(GetwhereaboutsWhereaboutsEvent());
     });
     if(!widget.statAddEdit){
       nameConroller.text = widget.roterDrive.name;
-      from = widget.roterDrive.nameFrom;
-      to = widget.roterDrive.nameTo;
+      // from = widget.roterDrive.nameFrom;
+      // to = widget.roterDrive.nameTo;
       latLagFrom = widget.roterDrive.latLagFrom;
       latLagTo = widget.roterDrive.latLagTo;
     }
     super.initState();
   }
   List<WhereaaboutsEntity> whereaabouts = [];
+  void getFromAndTo(RoutesEntity roterDrive){
+    roterDrives = roterDrive;
+    print(roterDrives.nameFrom);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,23 +84,26 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                     PrincipalButton(
                       onPressed: ()async{
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                        roterDrive = await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,)));
-                          from = roterDrive.nameFrom;
-                          to = roterDrive.nameTo;
-                          setState(() {});
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
                       text: 'Selecionar ruta',
                       color: Colors.black,
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    from == '' ? Container():CartDataMap(title: 'Origen', subTitle: from,),
-                    to == '' ? Container():CartDataMap(title: 'Destino', subTitle: to,),
+                    roterDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: roterDrives.nameFrom,),
+                    roterDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: roterDrives.nameTo,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Paraderos', style: heading20Black,),
-                        Icon(Icons.add_location,size: 30,),
+                        IconButton(
+                          icon: Icon(Icons.add_location,size: 30,),
+                          onPressed: ()async{
+                            final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,)));
+                          }
+                        )
                       ],
                     ),
                     Divider(),
@@ -107,7 +118,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                         }
                         whereaabouts = param.whereaabouts;
                         return Container(
-                          height: 200,
+                          height: 220,
                           child: ReorderableListView(
                             children: List.generate(whereaabouts.length, (i) {
                               WhereaaboutsEntity whereaabout = whereaabouts[i];
@@ -115,17 +126,21 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                                 key: UniqueKey(),
                                 elevation: 5,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(whereaabout.province ),
-                                          Text(whereaabout.adress ),
-                                          Text(whereaabout.cost),
-                                        ],
+                                      Container(
+                                        height: 70,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(whereaabout.province ),
+                                            Text(whereaabout.adress ),
+                                            Text(whereaabout.cost),
+                                          ],
+                                        ),
                                       ),
                                       Row(
                                         children: [
@@ -160,20 +175,20 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                   onPressed: (){
                     formKey.currentState.save();
                     if( widget.statAddEdit){
-                      RoterDriveEntity roterDrive = RoterDriveEntity(
+                      RoutesEntity roterDrive = RoutesEntity(
                         name: name,
-                        nameFrom: from,
-                        nameTo: to,
+                        nameFrom: roterDrives.nameFrom,
+                        nameTo: roterDrives.nameTo,
                         latLagFrom: latLagFrom,
                         latLagTo:  latLagTo
                       );
                       BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(roterDrive: roterDrive));
                       Navigator.of(context).pop();
                     }else{
-                      RoterDriveEntity newRoterDrive = RoterDriveEntity(
+                      RoutesEntity newRoterDrive = RoutesEntity(
                         name: name,
-                        nameFrom: from,
-                        nameTo: to,
+                        nameFrom: roterDrives.nameFrom,
+                        nameTo: roterDrives.nameTo,
                         latLagFrom: latLagFrom ,
                         latLagTo:  latLagTo
                       );
