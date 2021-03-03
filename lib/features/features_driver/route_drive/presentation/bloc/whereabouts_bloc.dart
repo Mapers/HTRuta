@@ -18,11 +18,12 @@ class WhereaboutsBloc extends Bloc<WhereaboutsEvent, WhereaboutsState> {
   ) async* {
     if(event is GetwhereaboutsWhereaboutsEvent){
       yield LoadingWhereaboutsState();
-      print('hello world');
       List<WhereaaboutsEntity> whereaabouts = await routeDriveRepository.getWhereAbouts();
       yield DataWhereaboutsState(whereaabouts: whereaabouts);
     }else if(event is OnReorderwhereaboutsWhereaboutsEvent){
-      
+      yield LoadingWhereaboutsState();
+      List<WhereaaboutsEntity> whereaabouts = await routeDriveRepository.editOnOrderWhereAbouts(oldIndex: event.oldIndex, newIndex: event.newIndex);
+      yield DataWhereaboutsState(whereaabouts: whereaabouts);
     }
   }
 }

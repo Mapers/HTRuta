@@ -13,20 +13,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-class AdditRouterDrivePage extends StatefulWidget {
+class FormRouterDrivePage extends StatefulWidget {
   final RoutesEntity roterDrive;
   final bool statAddEdit;
-  AdditRouterDrivePage({Key key, this.roterDrive, this.statAddEdit}) : super(key: key);
+  FormRouterDrivePage({Key key, this.roterDrive, this.statAddEdit}) : super(key: key);
 
   @override
-  _AdditRouterDrivePageState createState() => _AdditRouterDrivePageState();
+  _FormRouterDrivePageState createState() => _FormRouterDrivePageState();
 }
 
-class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
+class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
   final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
   RoutesEntity roterDrives;
+  ScrollController scrollController = ScrollController();
   LatLng latLagFrom;
   LatLng latLagTo;
   TextEditingController nameConroller = TextEditingController();
@@ -101,7 +102,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                           icon: Icon(Icons.add_location,size: 30,),
                           onPressed: ()async{
                             final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,)));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: roterDrives,)));
                           }
                         )
                       ],
@@ -120,6 +121,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                         return Container(
                           height: 220,
                           child: ReorderableListView(
+                            scrollController: scrollController,
                             children: List.generate(whereaabouts.length, (i) {
                               WhereaaboutsEntity whereaabout = whereaabouts[i];
                               return Card(
@@ -154,13 +156,7 @@ class _AdditRouterDrivePageState extends State<AdditRouterDrivePage> {
                               );
                             }),
                             onReorder: (int oldIndex, int newIndex) {
-                              setState(() {
-                                if (newIndex > oldIndex) {
-                                  newIndex -= 1;
-                                }
-                                final WhereaaboutsEntity newString = whereaabouts.removeAt(oldIndex);
-                                whereaabouts.insert(newIndex, newString);
-                              });
+                              BlocProvider.of<WhereaboutsBloc>(context).add(OnReorderwhereaboutsWhereaboutsEvent(oldIndex: oldIndex,newIndex: newIndex ));
                             },
                           ),
                         );

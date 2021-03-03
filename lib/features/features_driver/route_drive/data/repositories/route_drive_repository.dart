@@ -1,6 +1,7 @@
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
+import 'package:flutter/material.dart';
 
 class RouteDriveRepository {
   final RouterDriveRemoteDataSoruce routerDriveLocalDataSoruce;
@@ -24,6 +25,10 @@ class RouteDriveRepository {
   }
   Future<List<WhereaaboutsEntity>> getWhereAbouts() async{
     List<WhereaaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.getWhereAbouts();
+    return whereAbouts;
+  }
+  Future<List<WhereaaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, }) async{
+    List<WhereaaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.editOnOrderWhereAbouts(oldIndex: oldIndex, newIndex: newIndex);
     return whereAbouts;
   }
 }
