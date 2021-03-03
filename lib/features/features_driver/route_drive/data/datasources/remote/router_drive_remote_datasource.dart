@@ -1,5 +1,6 @@
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RouterDriveRemoteDataSoruce {
@@ -43,6 +44,14 @@ class RouterDriveRemoteDataSoruce {
       WhereaaboutsEntity(id: '2', province: 'chancay',adress: 'san luis',cost:'S/.344' ,latLagFrom:LatLng(-12.0453, -77.0311),latLagTo: LatLng(-11.1072, 77.6103)),
       WhereaaboutsEntity(id: '3', province: 'supe',adress: 'av.peru', cost:'S/.344' ,latLagFrom:LatLng(-6.77361, -79.84),latLagTo: LatLng(-12.0453, -77.0311))
     ];
+    return whereaabouts;
+  }
+  Future<List<WhereaaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, } ) async{
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final WhereaaboutsEntity newString = whereaabouts.removeAt(oldIndex);
+    whereaabouts.insert(newIndex, newString);
     return whereaabouts;
   }
 
