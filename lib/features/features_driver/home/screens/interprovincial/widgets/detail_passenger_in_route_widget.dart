@@ -21,7 +21,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
         }
         PassengerEntity passenger = data.passengerSelected;
         LatLng passengerLatLang = passenger.location.latLang;
-        LocationEntity driverLocation = data.driver;
+        LocationEntity driverLocation = data.location;
         double distance = LocationUtil.calculateDistance(passengerLatLang, driverLocation.latLang);
         return Container(
           width: 300,

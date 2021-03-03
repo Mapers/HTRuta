@@ -40,6 +40,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
           BlocBuilder<InterprovincialBloc, InterprovincialState>(
             builder: (context, state) {
               if(state is DataInterprovincialState){
+                BlocProvider.of<InterprovincialLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));
                 if(state.status == InterprovincialStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InterprovincialStatus.notEstablished){

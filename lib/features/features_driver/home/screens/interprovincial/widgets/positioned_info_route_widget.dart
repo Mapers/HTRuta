@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class PositionedInfoRouteWidget extends StatelessWidget {
   final InterprovincialRouteEntity route;
   final DateTime routeStartDateTime;
-  const PositionedInfoRouteWidget({Key key, @required this.route, @required this.routeStartDateTime}) : super(key: key);
+  final bool showDataTime;
+  const PositionedInfoRouteWidget({Key key, @required this.route, @required this.routeStartDateTime, this.showDataTime = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +55,8 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 10,),
-              Row(
+              SizedBox(height: showDataTime ? 10 : 0),
+              showDataTime ? Row(
                 children: [
                   Icon(Icons.access_time_rounded),
                   SizedBox(width: 5),
@@ -65,7 +66,7 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   SizedBox(width: 5),
                   Text(routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black54)),
                 ],
-              )
+              ) : Container()
             ],
           )
         ),

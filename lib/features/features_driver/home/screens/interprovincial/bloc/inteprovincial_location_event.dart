@@ -9,10 +9,11 @@ abstract class InterprovincialLocationEvent extends Equatable {
 
 class UpdateDriverLocationInterprovincialLocationEvent extends InterprovincialLocationEvent {
   final LocationEntity driverLocation;
-  UpdateDriverLocationInterprovincialLocationEvent({@required this.driverLocation});
+  final InterprovincialStatus status;
+  UpdateDriverLocationInterprovincialLocationEvent({@required this.driverLocation, @required this.status});
 
   @override
-  List<Object> get props => [driverLocation];
+  List<Object> get props => [driverLocation, status];
 }
 
 class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialLocationEvent {
@@ -24,3 +25,10 @@ class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialLo
 }
 
 class RemovePassengerSelectedInterprovincialLocationEvent extends InterprovincialLocationEvent {}
+class SetDocumentIdInterprovincialLocationEvent extends InterprovincialLocationEvent {
+  final String documentId;
+  SetDocumentIdInterprovincialLocationEvent({@required this.documentId});
+
+  @override
+  List<Object> get props => [documentId];
+}

@@ -47,6 +47,10 @@ Future<void> init() async {
     )
   );
 
+  sl.registerLazySingleton<InterprovincialLocationBloc>(
+    () => InterprovincialLocationBloc(interprovincialDataRemote: sl())
+  );
+
   sl.registerLazySingleton<ClientServiceBloc>(
     () => ClientServiceBloc()
   );
@@ -60,9 +64,6 @@ Future<void> init() async {
     )
   );
 
-  sl.registerLazySingleton<InterprovincialLocationBloc>(
-    () => InterprovincialLocationBloc()
-  );
   sl.registerLazySingleton<AvailablesRoutesBloc>(
     () => AvailablesRoutesBloc(sl())
   );

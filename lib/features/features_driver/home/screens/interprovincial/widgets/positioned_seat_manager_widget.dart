@@ -76,7 +76,8 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                 ),
               ],
             ),
-            child ?? Container()
+            child ?? Container(),
+            SizedBox(height: child == null ? 5 : 0),
           ],
         )
       )
