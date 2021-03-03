@@ -95,4 +95,32 @@ class InterprovincialDataRemote{
       return false;
     }
   }
+
+  Future<bool> changeToStartRouteInService({
+    @required String documentId,
+    @required InterprovincialStatus status
+  }) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId).update({
+        'status': toStringFirebaseInterprovincialStatus(status)
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateLocationInService({
+    @required String documentId,
+    @required LocationEntity location
+  }) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId).update({
+        'current_location': GeoPoint(location.latLang.latitude, location.latLang.longitude),
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

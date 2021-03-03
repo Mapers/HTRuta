@@ -65,7 +65,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
     }
-    BlocProvider.of<InterprovincialLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location));
+    BlocProvider.of<InterprovincialLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location, status: _data.status));
     setState(() {
       location =_location;
       _markers[marker.markerId] = marker;

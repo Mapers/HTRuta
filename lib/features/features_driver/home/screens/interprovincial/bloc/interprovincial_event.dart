@@ -21,6 +21,14 @@ class SelectRouteInterprovincialEvent extends InterprovincialEvent {
 
 class StartRouteInterprovincialEvent extends InterprovincialEvent {}
 
+class UpdateLocationInterprovincialEvent extends InterprovincialEvent {
+  final LocationEntity location;
+  UpdateLocationInterprovincialEvent(this.location);
+
+  @override
+  List<Object> get props => [location];
+}
+
 class PlusOneAvailabelSeatInterprovincialEvent extends InterprovincialEvent {
   final int maxSeats;
   PlusOneAvailabelSeatInterprovincialEvent({@required this.maxSeats});

@@ -8,30 +8,34 @@ abstract class InterprovincialLocationState extends Equatable {
 }
 
 class DataInteprovincialLocationState extends InterprovincialLocationState {
-  final LocationEntity driver;
+  final String documentId;
+  final LocationEntity location;
   final PassengerEntity passengerSelected;
-  DataInteprovincialLocationState({@required this.driver, @required this.passengerSelected});
+  DataInteprovincialLocationState({@required this.documentId, @required this.location, @required this.passengerSelected});
 
   factory DataInteprovincialLocationState.initial(){
     return DataInteprovincialLocationState(
-      driver: null,
+      documentId: null,
+      location: null,
       passengerSelected: null
     );
   }
 
-  DataInteprovincialLocationState copyWith({ LocationEntity driver, PassengerEntity passengerSelected }){
+  DataInteprovincialLocationState copyWith({ String documentId, LocationEntity location, PassengerEntity passengerSelected }){
     return DataInteprovincialLocationState(
-      driver: driver ?? this.driver,
+      documentId: documentId ?? this.documentId,
+      location: location ?? this.location,
       passengerSelected: passengerSelected ?? this.passengerSelected
     );
   }
   DataInteprovincialLocationState copyWithPassengerNull(){
     return DataInteprovincialLocationState(
-      driver: driver,
+      documentId: documentId,
+      location: location,
       passengerSelected: null
     );
   }
 
   @override
-  List<Object> get props => [driver, passengerSelected];
+  List<Object> get props => [location, passengerSelected, documentId];
 }
