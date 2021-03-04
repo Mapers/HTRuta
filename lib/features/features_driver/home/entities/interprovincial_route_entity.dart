@@ -7,14 +7,16 @@ class InterprovincialRouteEntity extends Equatable {
   final String name;
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
+  final List<LocationEntity> whereabouts;
 
   InterprovincialRouteEntity({
     @required this.id,
     @required this.name,
     @required this.fromLocation,
     @required this.toLocation,
+    @required this.whereabouts,
   });
 
   @override
-  List<Object> get props => [id, name, fromLocation, toLocation];
+  List<Object> get props => [id, name, fromLocation, toLocation, whereabouts];
 }
