@@ -12,6 +12,7 @@ class MapViewerUtil {
     @required double height,
     @required Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
+    double zoom,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
     ArgumentCallback<LatLng> onTap,
   }) {
@@ -30,19 +31,19 @@ class MapViewerUtil {
         mapToolbarEnabled: false,
         zoomControlsEnabled: false,
         mapType: MapType.normal,
-        initialCameraPosition: _getCurrentPosition(currentLocation),
+        initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
       ),
     );
   }
 
-  CameraPosition _getCurrentPosition(LatLng currentLocation){
+  CameraPosition _getCurrentPosition(LatLng currentLocation,{double zoom = 12}){
     LatLng latLng = LatLng(0, 0);
     if(currentLocation != null){
       latLng = currentLocation;
     }
     return CameraPosition(
       target: latLng,
-      zoom: 12,
+      zoom: zoom,
     );
   }
 

@@ -2,19 +2,18 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-class SelecctionWhereaboutsPage extends StatefulWidget {
+class MapSelecctionWhereaboutsPage extends StatefulWidget {
   final RoutesEntity routesFromTo;
   final double la;
   final double lo;
-  SelecctionWhereaboutsPage({Key key, this.la, this.lo, this.routesFromTo}) : super(key: key);
+  MapSelecctionWhereaboutsPage({Key key, this.la, this.lo, this.routesFromTo}) : super(key: key);
 
   @override
-  _SelecctionWhereaboutsPageState createState() => _SelecctionWhereaboutsPageState();
+  _MapSelecctionWhereaboutsPageState createState() => _MapSelecctionWhereaboutsPageState();
 }
 
-class _SelecctionWhereaboutsPageState extends State<SelecctionWhereaboutsPage> {
+class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsPage> {
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
 
@@ -34,6 +33,7 @@ class _SelecctionWhereaboutsPageState extends State<SelecctionWhereaboutsPage> {
       _markers[markerFrom.markerId] = markerFrom;
       Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.routesFromTo.latLagFrom, widget.routesFromTo.latLagTo);
       polylines[polyline.polylineId] = polyline;
+      setState(() {});
     });
 
   }
@@ -47,6 +47,7 @@ class _SelecctionWhereaboutsPageState extends State<SelecctionWhereaboutsPage> {
             height: MediaQuery.of(context).size.height,
             child: _mapViewerUtil.build(
               height: MediaQuery.of(context).size.height,
+              zoom:7,
               currentLocation: LatLng(widget.la, widget.lo),
               markers: _markers,
               polyLines: polylines,

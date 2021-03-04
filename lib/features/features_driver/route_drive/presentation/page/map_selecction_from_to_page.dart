@@ -7,17 +7,17 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/rout
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-class SelecctionOriginDestination extends StatefulWidget {
+class MapSelecctionFromToMapPage extends StatefulWidget {
   final Function getFromAndTo;
   final double la;
   final double lo;
-  const SelecctionOriginDestination({Key key, this.la, this.lo, this.getFromAndTo}) : super(key: key);
+  const MapSelecctionFromToMapPage({Key key, this.la, this.lo, this.getFromAndTo}) : super(key: key);
 
   @override
-  _SelecctionOriginDestinationState createState() => _SelecctionOriginDestinationState();
+  _SelecctioFromToMapPageState createState() => _SelecctioFromToMapPageState();
 }
 
-class _SelecctionOriginDestinationState extends State<SelecctionOriginDestination> {
+class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
   FocusNode _focus = FocusNode();
   final formKey = GlobalKey<FormState>();
@@ -43,7 +43,6 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
     super.initState();
   }
   void _onFocusChange(){
-    
     if(_focus.hasFocus){
       inputSelecter = true;
       setState(() {});
@@ -104,6 +103,7 @@ class _SelecctionOriginDestinationState extends State<SelecctionOriginDestinatio
                 currentLocation: LatLng(widget.la, widget.lo),
                 markers: _markers,
                 polyLines: polylines,
+                zoom: 7,
                 onTap: (pos){
                   if(inputSelecter){
                     FocusScope.of(context).requestFocus( FocusNode());

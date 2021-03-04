@@ -4,10 +4,10 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/rout
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/page/selecction_origen_destino.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/page/selecction_whereabouts_page.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/page/map_selecction_from_to_page.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/page/map_selecction_whereabouts_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -85,7 +85,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     PrincipalButton(
                       onPressed: ()async{
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SelecctionOriginDestination(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
                       text: 'Selecionar ruta',
                       color: Colors.black,
@@ -102,7 +102,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                           icon: Icon(Icons.add_location,size: 30,),
                           onPressed: ()async{
                             final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: roterDrives,)));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapSelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: roterDrives,)));
                           }
                         )
                       ],
@@ -138,8 +138,8 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(whereaabout.province ),
-                                            Text(whereaabout.adress ),
+                                            Text(whereaabout.whereabouts.provinceName ),
+                                            Text(whereaabout.whereabouts.streetName ),
                                             Text(whereaabout.cost),
                                           ],
                                         ),
