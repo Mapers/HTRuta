@@ -38,20 +38,20 @@ class RouterDriveRemoteDataSoruce {
     return roterDrives;
   }
 
-  List<WhereaaboutsEntity> whereaabouts =[];
-  Future<List<WhereaaboutsEntity>> getWhereAbouts({RoutesEntity roterDrive} ) async{
+  List<WhereaboutsEntity> whereaabouts =[];
+  Future<List<WhereaboutsEntity>> getWhereAbouts({RoutesEntity roterDrive} ) async{
     whereaabouts = [
-      WhereaaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
-      WhereaaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
-      WhereaaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
+      WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
+      WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
+      WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
     ];
     return whereaabouts;
   }
-  Future<List<WhereaaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, } ) async{
+  Future<List<WhereaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, } ) async{
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    final WhereaaboutsEntity newString = whereaabouts.removeAt(oldIndex);
+    final WhereaboutsEntity newString = whereaabouts.removeAt(oldIndex);
     whereaabouts.insert(newIndex, newString);
     return whereaabouts;
   }

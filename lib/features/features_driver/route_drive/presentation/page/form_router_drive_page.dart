@@ -51,7 +51,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
     }
     super.initState();
   }
-  List<WhereaaboutsEntity> whereaabouts = [];
+  List<WhereaboutsEntity> whereaabouts = [];
   void getFromAndTo(RoutesEntity roterDrive){
     roterDrives = roterDrive;
     print(roterDrives.nameFrom);
@@ -123,7 +123,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                           child: ReorderableListView(
                             scrollController: scrollController,
                             children: List.generate(whereaabouts.length, (i) {
-                              WhereaaboutsEntity whereaabout = whereaabouts[i];
+                              WhereaboutsEntity whereaabout = whereaabouts[i];
                               return Card(
                                 key: UniqueKey(),
                                 elevation: 5,

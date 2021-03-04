@@ -2,13 +2,13 @@ import 'package:HTRuta/features/features_driver/home/entities/location_entity.da
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class WhereaaboutsEntity extends Equatable {
+class WhereaboutsEntity extends Equatable {
   final String id;
   final String cost;
   final LocationEntity whereabouts;
 
 
-  WhereaaboutsEntity({
+  WhereaboutsEntity({
     this.id,
     this.whereabouts,
     @required this.cost,

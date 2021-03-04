@@ -9,7 +9,7 @@ abstract class WhereaboutsState extends Equatable {
 
 class LoadingWhereaboutsState extends WhereaboutsState {}
 class DataWhereaboutsState extends WhereaboutsState {
-  final List<WhereaaboutsEntity> whereaabouts;
+  final List<WhereaboutsEntity> whereaabouts;
   DataWhereaboutsState({this.whereaabouts});
   @override
   List<Object> get props => [];

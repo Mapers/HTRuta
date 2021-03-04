@@ -23,12 +23,12 @@ class RouteDriveRepository {
     List<RoutesEntity> routerDrive = await routerDriveLocalDataSoruce.deleteRouterDrives( roterDrive: roterDrive );
     return routerDrive;
   }
-  Future<List<WhereaaboutsEntity>> getWhereAbouts() async{
-    List<WhereaaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.getWhereAbouts();
+  Future<List<WhereaboutsEntity>> getWhereAbouts() async{
+    List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.getWhereAbouts();
     return whereAbouts;
   }
-  Future<List<WhereaaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, }) async{
-    List<WhereaaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.editOnOrderWhereAbouts(oldIndex: oldIndex, newIndex: newIndex);
+  Future<List<WhereaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, }) async{
+    List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.editOnOrderWhereAbouts(oldIndex: oldIndex, newIndex: newIndex);
     return whereAbouts;
   }
 }

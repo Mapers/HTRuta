@@ -56,6 +56,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
       from = pos;
       openLoadingDialog(context);
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
+
       Navigator.of(context).pop();
       if(placemarkFrom[0].locality != ''){
         fromController.text = placemarkFrom[0].locality;
@@ -69,6 +70,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
       to = pos;
       openLoadingDialog(context);
       List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+      print(placemarkTo[0].locality);
       Navigator.of(context).pop();
       if(placemarkTo[0].locality != ''){
         toController.text = placemarkTo[0].locality;
