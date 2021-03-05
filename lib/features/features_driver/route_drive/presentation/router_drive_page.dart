@@ -14,7 +14,7 @@ class RouterDrivePage extends StatefulWidget {
 }
 
 class _RouterDrivePageState extends State<RouterDrivePage> {
-  
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,17 +51,17 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
             );
           }
           RouteDriveInitial  param = state;
-          if (param.roterDrives.isEmpty) {
+          if (param.routerDrives.isEmpty) {
             return Center(
               child: Text('- Sin datos -'),
             );
           }
           return ListView.builder(
-          itemCount: param.roterDrives.length,
+          itemCount: param.routerDrives.length,
           itemBuilder: (BuildContext context, int i) {
-            RoutesEntity roterDrive = param.roterDrives[i];
+            RouteEntity routerDrive = param.routerDrives[i];
             return ListTile(
-                title: Text(roterDrive.name),
+                title: Text(routerDrive.name),
                 subtitle: Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +70,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                         children: [
                           Container(
                             width: 90,
-                            child: Text(roterDrive.nameFrom)
+                            child: Text(routerDrive.nameFrom)
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -78,7 +78,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           ),
                           Container(
                             width: 90,
-                            child: Text(roterDrive.nameTo)
+                            child: Text(routerDrive.nameTo)
                           ),
                         ],
                       ),
@@ -87,13 +87,13 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           IconButton(
                             icon: Icon(Icons.edit, color: Colors.black,),
                             onPressed: (){
-                              Navigator.of(context).push(MaterialPageRoute( builder: (context) => FormRouterDrivePage(roterDrive: roterDrive,statAddEdit: false,)));
+                              Navigator.of(context).push(MaterialPageRoute( builder: (context) => FormRouterDrivePage(routerDrive: routerDrive,statAddEdit: false,)));
                             }
                           ),
                           IconButton(
                             icon: Icon(Icons.delete, color: Colors.black,),
                             onPressed: (){
-                              BlocProvider.of<RouteDriveBloc>(context).add(DeleteDrivesRouteDriveEvent(roterDrive: roterDrive));
+                              BlocProvider.of<RouteDriveBloc>(context).add(DeleteDrivesRouteDriveEvent(routerDrive:  routerDrive));
                             }
                           )
                         ],

@@ -4,7 +4,7 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/rout
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapSelecctionWhereaboutsPage extends StatefulWidget {
-  final RoutesEntity routesFromTo;
+  final RouteEntity routesFromTo;
   final double la;
   final double lo;
   MapSelecctionWhereaboutsPage({Key key, this.la, this.lo, this.routesFromTo}) : super(key: key);
@@ -22,16 +22,16 @@ class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsP
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Marker markerFrom = _mapViewerUtil.generateMarker(
-          latLng: widget.routesFromTo.latLagFrom,
+          latLng: widget.routesFromTo.whereaboutsFrom.latLang,
           nameMarkerId: 'FROM_POSITION_MARKER',
         );
         Marker markerTo = _mapViewerUtil.generateMarker(
-          latLng: widget.routesFromTo.latLagTo,
+          latLng: widget.routesFromTo.whereaboutsFrom.latLang,
           nameMarkerId: 'TO_POSITION_MARKER',
         );
       _markers[markerTo.markerId] = markerTo;
       _markers[markerFrom.markerId] = markerFrom;
-      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.routesFromTo.latLagFrom, widget.routesFromTo.latLagTo);
+      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.routesFromTo.whereaboutsFrom.latLang, widget.routesFromTo.whereaboutsTo.latLang);
       polylines[polyline.polylineId] = polyline;
       setState(() {});
     });

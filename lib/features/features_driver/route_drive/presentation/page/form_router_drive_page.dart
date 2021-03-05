@@ -14,9 +14,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class FormRouterDrivePage extends StatefulWidget {
-  final RoutesEntity roterDrive;
+  final RouteEntity routerDrive;
   final bool statAddEdit;
-  FormRouterDrivePage({Key key, this.roterDrive, this.statAddEdit}) : super(key: key);
+  FormRouterDrivePage({Key key, this.routerDrive, this.statAddEdit}) : super(key: key);
 
   @override
   _FormRouterDrivePageState createState() => _FormRouterDrivePageState();
@@ -26,7 +26,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
   final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
-  RoutesEntity roterDrives;
+  RouteEntity routerDrives;
   ScrollController scrollController = ScrollController();
   LatLng latLagFrom;
   LatLng latLagTo;
@@ -35,7 +35,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   TextEditingController toController = TextEditingController();
   @override
   void initState() {
-    roterDrives =  RoutesEntity(
+    routerDrives =  RouteEntity(
       nameFrom: '',
       nameTo: '',
     );
@@ -43,18 +43,18 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
       BlocProvider.of<WhereaboutsBloc>(context).add(GetwhereaboutsWhereaboutsEvent());
     });
     if(!widget.statAddEdit){
-      nameConroller.text = widget.roterDrive.name;
-      // from = widget.roterDrive.nameFrom;
-      // to = widget.roterDrive.nameTo;
-      latLagFrom = widget.roterDrive.latLagFrom;
-      latLagTo = widget.roterDrive.latLagTo;
+      nameConroller.text = widget.routerDrive.name;
+      // from = widget.routerDrive.nameFrom;
+      // to = widget.routerDrive.nameTo;
+      latLagFrom = widget.routerDrive.whereaboutsFrom.latLang;
+      latLagTo = widget.routerDrive.whereaboutsTo.latLang;
     }
     super.initState();
   }
   List<WhereaboutsEntity> whereaabouts = [];
-  void getFromAndTo(RoutesEntity roterDrive){
-    roterDrives = roterDrive;
-    print(roterDrives.nameFrom);
+  void getFromAndTo(RouteEntity routerDrive){
+    routerDrives = routerDrive;
+    print(routerDrives.nameFrom);
     setState(() {});
   }
 
@@ -92,8 +92,8 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    roterDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: roterDrives.nameFrom,),
-                    roterDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: roterDrives.nameTo,),
+                    routerDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: routerDrives.nameFrom,),
+                    routerDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: routerDrives.nameTo,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -102,7 +102,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                           icon: Icon(Icons.add_location,size: 30,),
                           onPressed: ()async{
                             final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapSelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: roterDrives,)));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapSelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: routerDrives,)));
                           }
                         )
                       ],
@@ -171,24 +171,24 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                   onPressed: (){
                     formKey.currentState.save();
                     if( widget.statAddEdit){
-                      RoutesEntity roterDrive = RoutesEntity(
+                      RouteEntity routerDrive = RouteEntity(
                         name: name,
-                        nameFrom: roterDrives.nameFrom,
-                        nameTo: roterDrives.nameTo,
-                        latLagFrom: latLagFrom,
-                        latLagTo:  latLagTo
+                        nameFrom: routerDrives.nameFrom,
+                        nameTo: routerDrives.nameTo,
+                        whereaboutsFrom: routerDrives.whereaboutsFrom,
+                        whereaboutsTo: routerDrives.whereaboutsTo,
                       );
-                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(roterDrive: roterDrive));
+                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
                       Navigator.of(context).pop();
                     }else{
-                      RoutesEntity newRoterDrive = RoutesEntity(
+                      RouteEntity newRouterDrive = RouteEntity(
                         name: name,
-                        nameFrom: roterDrives.nameFrom,
-                        nameTo: roterDrives.nameTo,
-                        latLagFrom: latLagFrom ,
-                        latLagTo:  latLagTo
+                        nameFrom: routerDrives.nameFrom,
+                        nameTo: routerDrives.nameTo,
+                        whereaboutsFrom: routerDrives.whereaboutsFrom,
+                        whereaboutsTo: routerDrives.whereaboutsTo,
                       );
-                      BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(roterDrive: widget.roterDrive, newRoterDrive: newRoterDrive));
+                      BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive: widget.routerDrive, newRouterDrive: newRouterDrive));
                       Navigator.of(context).pop();
                     }
                   },

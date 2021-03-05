@@ -1,23 +1,24 @@
+import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
-class RoutesEntity extends Equatable {
+class RouteEntity extends Equatable {
   final String id;
   final String name;
   final String nameFrom;
   final String nameTo;
-  final LatLng latLagFrom;
-  final LatLng latLagTo;
+  final LocationEntity whereaboutsFrom;
+  final LocationEntity whereaboutsTo;
 
 
-  RoutesEntity( {
+
+  RouteEntity( {
     this.id,
-    this.latLagFrom,
-    this.latLagTo,
     this.name,
-    @required this.nameFrom ,
-    @required this.nameTo,
+    this.nameFrom ,
+    this.nameTo,
+    this.whereaboutsFrom,
+    this.whereaboutsTo,
   });
 
   Map<String, dynamic> get toMap => {
@@ -25,33 +26,33 @@ class RoutesEntity extends Equatable {
     'name': name,
     'nameFrom': nameFrom,
     'nameTo': nameTo,
-    'latLagFrom': latLagFrom,
-    'latLagTo': latLagTo,
+    'whereaboutsFrom': whereaboutsFrom,
+    'whereaboutsTo': whereaboutsTo,
   };
 
-  factory RoutesEntity.fromJson(
+  factory RouteEntity.fromJson(
     Map<String, dynamic> dataJson
   ){
-    return RoutesEntity(
+    return RouteEntity(
       id: dataJson['id'],
       name: dataJson['name'],
       nameFrom: dataJson['nameFrom'],
       nameTo: dataJson['nameTo'],
-      latLagFrom: dataJson['latLagFrom'],
-      latLagTo: dataJson['latLagTo'],
+      whereaboutsFrom: dataJson['whereaboutsFrom'],
+      whereaboutsTo: dataJson['whereaboutsTo'],
     );
   }
-  factory RoutesEntity.empty({@required int orderBranch}) {
-    return RoutesEntity(
+  factory RouteEntity.empty({@required int orderBranch}) {
+    return RouteEntity(
       id: '',
       name: '',
       nameFrom: '',
       nameTo: '',
-      latLagFrom: null,
-      latLagTo: null,
+      whereaboutsFrom: null,
+      whereaboutsTo: null,
     );
   }
 
   @override
-  List<Object> get props => [id,name, nameFrom, nameTo,latLagFrom,latLagTo];
+  List<Object> get props => [id,name, nameFrom, nameTo,whereaboutsFrom,whereaboutsTo];
 }
