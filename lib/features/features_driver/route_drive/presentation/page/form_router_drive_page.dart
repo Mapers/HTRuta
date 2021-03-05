@@ -35,10 +35,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   TextEditingController toController = TextEditingController();
   @override
   void initState() {
-    routerDrives =  RouteEntity(
-      nameFrom: '',
-      nameTo: '',
-    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<WhereaboutsBloc>(context).add(GetwhereaboutsWhereaboutsEvent());
     });
@@ -54,7 +50,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   List<WhereaboutsEntity> whereaabouts = [];
   void getFromAndTo(RouteEntity routerDrive){
     routerDrives = routerDrive;
-    print(routerDrives.nameFrom);
+    print(routerDrives.whereaboutsFrom.districtName);
     setState(() {});
   }
 
@@ -92,8 +88,8 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    routerDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: routerDrives.nameFrom,),
-                    routerDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: routerDrives.nameTo,),
+                    // routerDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: routerDrives.nameFrom,),
+                    // routerDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: routerDrives.nameTo,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -173,8 +169,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     if( widget.statAddEdit){
                       RouteEntity routerDrive = RouteEntity(
                         name: name,
-                        nameFrom: routerDrives.nameFrom,
-                        nameTo: routerDrives.nameTo,
                         whereaboutsFrom: routerDrives.whereaboutsFrom,
                         whereaboutsTo: routerDrives.whereaboutsTo,
                       );
@@ -183,8 +177,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     }else{
                       RouteEntity newRouterDrive = RouteEntity(
                         name: name,
-                        nameFrom: routerDrives.nameFrom,
-                        nameTo: routerDrives.nameTo,
                         whereaboutsFrom: routerDrives.whereaboutsFrom,
                         whereaboutsTo: routerDrives.whereaboutsTo,
                       );

@@ -21,13 +21,13 @@ class MapSelecctionFromToMapPage extends StatefulWidget {
 
 class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
-  FocusNode _focus = FocusNode();
   final formKey = GlobalKey<FormState>();
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
-  bool inputSelecter= true ;
+  bool inputSelecter = true ;
   LatLng currentLocation;
+  bool messageController = false;
   String txtFrom;
   String txtTo;
   LatLng from;
@@ -36,71 +36,72 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   LocationEntity whereaboutsTo;
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
-
   BitmapDescriptor currentPinLocationIcon;
   BitmapDescriptor fromPinLocationIcon;
   BitmapDescriptor toPinLocationIcon;
 
   @override
   void initState() {
-    _focus.addListener(_onFocusChange);
+    whereaboutsFrom = LocationEntity(
+      latLang: to,
+      regionName: '',
+      provinceName: '' ,
+      districtName: '',
+      streetName: '' ,
+      zoom: 12
+    );
+    whereaboutsTo = LocationEntity(
+      latLang: to,
+      regionName: '',
+      provinceName: '' ,
+      districtName: '',
+      streetName: '' ,
+      zoom: 12
+    );
     super.initState();
   }
-  void _onFocusChange(){
-    if(_focus.hasFocus){
-      inputSelecter = true;
-      setState(() {});
-    }else{
-      inputSelecter =false;
-      setState(() {});
-    }
-  }
+
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     openLoadingDialog(context);
     if(inputSelecter){
       from = pos;
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
       Placemark placemark = placemarkFrom.first;
-      whereaboutsFrom = LocationEntity(
-        latLang: from,
-        regionName: placemark.administrativeArea,
-        provinceName: placemark.subAdministrativeArea ,
-        districtName: placemark.locality,
-        streetName: placemark.thoroughfare ,
-        zoom: 12
-      );
-      print('..................');
-      print('lanlog :'+ placemark.position.toString() );
-      print('pais '+ placemark.country );
-      print('region: '+ placemark.administrativeArea );
-      print('provincia: '+ placemark.subAdministrativeArea );
-      print('distrito: '+ placemark.locality );
-      print('sub distrito: '+placemark.subLocality );
-      print('calle: '+ placemark.thoroughfare );
-      print('sub calle: '+placemark.subThoroughfare );
-      print('Codigo postal: ' + placemark.postalCode );
-      print('..................');
       Navigator.of(context).pop();
       if(placemark.thoroughfare != '' ){
+        whereaboutsFrom = LocationEntity(
+          latLang: from,
+          regionName: placemark.administrativeArea,
+          provinceName: placemark.subAdministrativeArea ,
+          districtName: placemark.locality,
+          streetName: placemark.thoroughfare,
+          zoom: 12
+        );
         if( placemark.locality == ''){
-          print(placemark.subAdministrativeArea);
-          fromController.text = placemark.subAdministrativeArea;
+          fromController.text = placemark.thoroughfare;
         }else{
           print(placemark.locality);
-          fromController.text = placemark.locality;
+          fromController.text = placemark.subAdministrativeArea;
         }
+        Marker markerFrom = _mapViewerUtil.generateMarker(
+          latLng: from,
+          nameMarkerId: 'FROM_POSITION_MARKER',
+        );
+        _markers[markerFrom.markerId] = markerFrom;
       }else{
-        throw ServerException(message: 'Hellow');
+        whereaboutsFrom = LocationEntity(  latLang: from ,regionName: '',provinceName: '' ,districtName: '',streetName: '',zoom: 12);
+        fromController.clear();
+        messageController = true;
+        setState(() {});
+        await Future.delayed(Duration(seconds: 4));
+        messageController = false;
+        setState(() {});
       }
-      Marker markerFrom = _mapViewerUtil.generateMarker(
-        latLng: from,
-        nameMarkerId: 'FROM_POSITION_MARKER',
-      );
-      _markers[markerFrom.markerId] = markerFrom;
     } else {
       to = pos;
       List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
       Placemark placemark = placemarkTo.first;
+      Navigator.of(context).pop();
       whereaboutsTo = LocationEntity(
         latLang: to,
         regionName: placemark.administrativeArea,
@@ -109,11 +110,15 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         streetName: placemark.thoroughfare ,
         zoom: 12
       );
-      Navigator.of(context).pop();
-      if( placemark.locality == ''){
-        fromController.text = placemark.subAdministrativeArea;
+      if(placemark.thoroughfare != '' ){
+        if( placemark.locality == ''){
+          toController.text = placemark.thoroughfare;
+        }else{
+          print(placemark.locality);
+          toController.text = placemark.thoroughfare;
+        }
       }else{
-        fromController.text = placemark.locality;
+        // throw ServerException(message: 'Hellow');
       }
       Marker markerTo = _mapViewerUtil.generateMarker(
         latLng: to,
@@ -140,91 +145,33 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           children: [
             MapViewWidget(context),
             BackWidget(context),
-            InputMap(
-              top: 80,
-              labelText: 'Origen',
-              focus: _focus,
+            InputMapXD(
               controller: fromController,
-              inputSelecter: inputSelecter,
+              top: 80,
+              onTap: (){
+                inputSelecter = true;
+                setState(() {});
+              },
+              labelText: 'Origen',
+              suffixIcon: inputSelecter ? Icons.radio_button_checked:null,
+              region: whereaboutsFrom.regionName == '' ? '' :whereaboutsFrom.regionName,
+              province: whereaboutsFrom.provinceName == '' ? '' :whereaboutsFrom.provinceName,
+              district: whereaboutsFrom.districtName == '' ? '' :whereaboutsFrom.districtName,
             ),
-            // Positioned(
-            //   top: 80,
-            //   right: 15,
-            //   left: 15,
-            //   child: Container(
-            //     height: 50,
-            //     width: double.infinity,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(3),
-            //       color: Colors.white,
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: Colors.grey,
-            //           offset: Offset(1, 5),
-            //           blurRadius: 10,
-            //           spreadRadius: 3)
-            //       ],
-            //     ),
-            //     child: TextField(
-            //       autofocus: true,
-            //       focusNode: _focus,
-            //       cursorColor: Colors.black,
-            //       controller: fromController,
-            //       // onChanged: (val){
-            //       //   txtFrom = val;
-            //       // },
-            //       // onSubmitted: (value) async{
-            //       //   List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
-            //       //   LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
-            //       //   _addFromToMarkers(pos: pos ,inputSelecter:true );
-            //       // },
-            //       decoration: InputDecoration(
-            //         suffixIcon:  inputSelecter ?Icon(Icons.radio_button_checked):null,
-            //         labelText:'Origen' ,
-            //         border: InputBorder.none,
-            //         contentPadding: EdgeInsets.only(left: 15,),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            Positioned(
-              top: 140,
-              right: 15,
-              left: 15,
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3.0),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(1.0, 5.0),
-                      blurRadius: 10,
-                      spreadRadius: 3)
-                  ],
-                ),
-                child: TextField(
-                  cursorColor: Colors.black,
-                  controller: toController,
-                  onChanged: (val){
-                    txtTo = val;
-                  },
-                  onSubmitted: (value) async {
-                    List<Placemark> placemarkOrigin = await Geolocator().placemarkFromAddress(value);
-                    LatLng pos = LatLng(placemarkOrigin[0].position.latitude,placemarkOrigin[0].position.longitude);
-                    _addFromToMarkers(pos: pos ,inputSelecter: false );
-                  },
-                  decoration: InputDecoration(
-                    suffixIcon: !inputSelecter?Icon(Icons.radio_button_checked):null,
-                    labelText:'Destino' ,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15, top: 5),
-                  ),
-                ),
-              ),
+            InputMapXD(
+              controller: toController,
+              onTap: (){
+                inputSelecter = false;
+                setState(() {});
+              },
+              top: 155,
+              labelText: 'Destino',
+              suffixIcon: !inputSelecter ? Icons.radio_button_checked:null,
+              region: whereaboutsTo.regionName == '' ? '' :whereaboutsTo.regionName,
+              province: whereaboutsTo.provinceName == '' ? '' :whereaboutsTo.provinceName,
+              district: whereaboutsTo.districtName == '' ? '' :whereaboutsTo.districtName,
             ),
+            messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
             Positioned(
               top: 500,
               right: 15,
@@ -276,14 +223,43 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         polyLines: polylines,
         zoom: 7,
         onTap: (pos){
-          if(inputSelecter){
-            FocusScope.of(context).requestFocus( FocusNode());
-            _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
-          }else{
-            FocusScope.of(context).requestFocus( FocusNode());
-            _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
+          try {
+            if(inputSelecter){
+              _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
+            }else{
+              _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
+            }
+          } catch (e) {
+            print(e.toString());
           }
         }
+      )
+    );
+  }
+}
+
+class PositionedDarkCardWidget extends StatelessWidget {
+  final double top;
+  final double bottom;
+  final String text;
+  const PositionedDarkCardWidget({Key key, this.top, this.bottom, @required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 15,
+      left: 15,
+      top: top,
+      bottom: bottom,
+      child: Card(
+        color: Colors.black,
+        elevation: 20,
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          width: double.infinity ,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Text(text, style: TextStyle(color: Colors.white, fontSize: 12)),
+        )
       )
     );
   }

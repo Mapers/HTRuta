@@ -13,8 +13,6 @@ class RouterDriveRemoteDataSoruce {
       RouteEntity(
         id: '1',
         name: 'samuel',
-        nameFrom: 'Huacho',
-        nameTo: 'Lima',
         whereaboutsFrom: LocationEntity(
           latLang: LatLng(-11.1072, 77.6103),
           districtName: 'huacho',
@@ -39,7 +37,7 @@ class RouterDriveRemoteDataSoruce {
     return roterDrives;
   }
   Future<List<RouteEntity>> addListRouterDrives({RouteEntity roterDrive} ) async{
-    roterDrives.add(RouteEntity( id: '3',name: roterDrive.name ,nameFrom: roterDrive.nameFrom ,nameTo: roterDrive.nameTo));
+    roterDrives.add(RouteEntity( id: '3',name: roterDrive.name ));
     return roterDrives;
   }
   Future<List<RouteEntity>> editListRouterDrives({RouteEntity roterDrive, RouteEntity newRoterDrive} ) async{
