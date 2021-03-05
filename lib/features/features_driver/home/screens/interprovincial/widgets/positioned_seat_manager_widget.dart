@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,7 +34,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                       child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
                     ),
                     onPressed: (){
-                      BlocProvider.of<InterprovincialBloc>(context).add(MinusOneAvailabelSeatInterprovincialEvent());
+                      BlocProvider.of<InterprovincialDriverBloc>(context).add(MinusOneAvailabelSeatInterprovincialDriverEvent());
                     },
                   )
                 ),
@@ -51,7 +51,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      BlocBuilder<InterprovincialBloc, InterprovincialState>(
+                      BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
                         builder: (ctx, state){
                           DataInterprovincialState data = state;
                           return Text(data.availableSeats.toString());
@@ -70,7 +70,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                     ),
                     onPressed: (){
                       //! Se requiere tener el maximo de total de asientos
-                      BlocProvider.of<InterprovincialBloc>(context).add(PlusOneAvailabelSeatInterprovincialEvent(maxSeats: 60));
+                      BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailabelSeatInterprovincialDriverEvent(maxSeats: 60));
                     },
                   )
                 ),

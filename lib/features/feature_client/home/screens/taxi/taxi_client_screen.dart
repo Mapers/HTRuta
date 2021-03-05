@@ -5,6 +5,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -371,24 +372,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   ),
                 )
             ),
-            Positioned(
-                top: 60,
-                left: 10,
-                child: GestureDetector(
-                  onTap: (){
-                    _scaffoldKey.currentState.openDrawer();
-                  },
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100.0),),
-                    ),
-                    child: Icon(Icons.menu, color: blackColor,),
-                  ),
-                )
-            ),
+            MenuButtonWidget(parentScaffoldKey: _scaffoldKey)
           ],
         ),
     );

@@ -1,8 +1,8 @@
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/map_interprovincia_widget.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      BlocProvider.of<InterprovincialBloc>(context).add(GetDataInterprovincialEvent());
+      BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent());
     });
   }
 
@@ -37,7 +37,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          MapInterprovincialWidget(),
+          MapInterprovincialClientWidget(),
           ChangeServiceClientWidget(),
           Positioned(
             bottom: 20,

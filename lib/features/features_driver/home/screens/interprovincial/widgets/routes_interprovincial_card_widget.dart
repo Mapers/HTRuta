@@ -1,7 +1,7 @@
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/core/utils/extensions/time_of_day_extension.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -156,7 +156,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
             onPressed: (){
               Navigator.of(context).pop();
               dateTime = dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
-              BlocProvider.of<InterprovincialBloc>(context).add(SelectRouteInterprovincialEvent(
+              BlocProvider.of<InterprovincialDriverBloc>(context).add(SelectRouteInterprovincialDriverEvent(
                 route: interprovincialRoute,
                 dateTime: dateTime,
                 availableSeats: availableSeats

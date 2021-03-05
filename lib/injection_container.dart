@@ -1,12 +1,12 @@
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/client_interprovincial_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
@@ -19,9 +19,6 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   //! Blocs
-  
-
-
   sl.registerLazySingleton<RouteDriveRepository>(
     () => RouteDriveRepository(sl())
   );
@@ -41,8 +38,8 @@ Future<void> init() async {
     () => ChooseRoutesClientBloc(sl())
   );
 
-  sl.registerLazySingleton<InterprovincialBloc>(
-    () => InterprovincialBloc(
+  sl.registerLazySingleton<InterprovincialDriverBloc>(
+    () => InterprovincialDriverBloc(
       interprovincialDataRemote: sl()
     )
   );
@@ -54,10 +51,10 @@ Future<void> init() async {
   sl.registerLazySingleton<ClientServiceBloc>(
     () => ClientServiceBloc()
   );
-  sl.registerLazySingleton<ClientInterprovincialBloc>(
-    () => ClientInterprovincialBloc()
+  sl.registerLazySingleton<InterprovincialClientBloc>(
+    () => InterprovincialClientBloc()
   );
-  
+
   sl.registerLazySingleton<InterprovincialDataRemote>(
     () => InterprovincialDataRemote(
       firestore: sl()

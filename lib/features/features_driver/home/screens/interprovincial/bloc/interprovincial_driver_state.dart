@@ -1,4 +1,4 @@
-part of 'interprovincial_bloc.dart';
+part of 'interprovincial_driver_bloc.dart';
 
 abstract class InterprovincialState extends Equatable {
   const InterprovincialState();

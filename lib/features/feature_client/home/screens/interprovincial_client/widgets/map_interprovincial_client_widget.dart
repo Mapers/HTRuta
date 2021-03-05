@@ -4,19 +4,19 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_ro
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapInterprovincialWidget extends StatefulWidget {
-  MapInterprovincialWidget({Key key}) : super(key: key);
+class MapInterprovincialClientWidget extends StatefulWidget {
+  MapInterprovincialClientWidget({Key key}) : super(key: key);
 
   @override
-  _MapInterprovincialWidgetState createState() => _MapInterprovincialWidgetState();
+  _MapInterprovincialClientWidgetState createState() => _MapInterprovincialClientWidgetState();
 }
 
-class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
+class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClientWidget> {
   LocationUtil _locationUtil = LocationUtil();
 
   BitmapDescriptor currentPinLocationIcon;
@@ -42,10 +42,10 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
       toPinLocationIcon = result[3];
-      _mapViewerUtil.cameraMoveLatLngZoom(location.latLang);
+      _mapViewerUtil.cameraMoveLatLngZoom(location.latLang, zoom: 16);
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
-      DataInterprovincialState _data = BlocProvider.of<InterprovincialBloc>(context).state;
+      DataInterprovincialState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
       _addFromToMarkers(_data);
     });
   }
@@ -60,7 +60,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
         BlocProvider.of<InterprovincialLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
       }
     );
-    DataInterprovincialState _data = BlocProvider.of<InterprovincialBloc>(context).state;
+    DataInterprovincialState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
     if(_data.status == InterprovincialStatus.inRoute){
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
@@ -107,7 +107,7 @@ class _MapInterprovincialWidgetState extends State<MapInterprovincialWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<InterprovincialBloc, InterprovincialState>(
+    return BlocListener<InterprovincialDriverBloc, InterprovincialState>(
       listener: (ctx, state) => _addFromToMarkers(state),
       child: _buildMapLayer(),
     );

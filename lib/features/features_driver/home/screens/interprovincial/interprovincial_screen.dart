@@ -1,9 +1,9 @@
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/in_route_widget.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/map_interprovincia_widget.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/map_interprovincial_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/on_whereabouts_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      BlocProvider.of<InterprovincialBloc>(context).add(GetDataInterprovincialEvent());
+      BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent());
     });
   }
 
@@ -35,9 +35,9 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          MapInterprovincialWidget(),
+          MapInterprovincialDriverWidget(),
           ChangeServiceDriverWidget(),
-          BlocBuilder<InterprovincialBloc, InterprovincialState>(
+          BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
             builder: (context, state) {
               if(state is DataInterprovincialState){
                 BlocProvider.of<InterprovincialLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));

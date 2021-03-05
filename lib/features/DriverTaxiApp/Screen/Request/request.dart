@@ -52,7 +52,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
         requestTaxi.reversed;
         var removeData = [];
 
-
       requestTaxi.forEach((data) {
         if(data.aceptados != null){
           aceptados = data.aceptados.split(',');
@@ -117,8 +116,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       requestTaxi.reversed;
 
       var removeData = [];
-
-
       requestTaxi.forEach((data) {
         if(data.aceptados != null){
           aceptados = data.aceptados.split(',');
@@ -182,14 +179,35 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
               child: Scrollbar(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 1,
+                  itemCount: requestTaxi.length,
                   itemBuilder: (BuildContext context, int index) {
+                    Request request = requestTaxi[index];
+                    TaxiModel taxiModel = TaxiModel(
+                      accepteds: request.aceptados,
+                      dni: request.vchDni,
+                      email: request.vchCorreo,
+                      finalLat: double.parse(request.vchLatFinal),
+                      finalLong: double.parse(request.vchLongFinal),
+                      finalname: request.vchNombreFinal,
+                      id: request.id,
+                      initialLat: double.parse(request.vchLatInicial),
+                      initialLong: double.parse(request.vchLongInicial),
+                      names: request.vchNombres,
+                      phone: request.vchCelular,
+                      price: double.parse(request.mPrecio),
+                      queryId: request.idSolicitud,
+                      registeredAt: DateTime.now(),
+                      // registeredAt: DateTime.parse(request.dFecReg),
+                      rejecteds: request.rechazados,
+                      startName: request.vchNombreInicial,
+                      typeTravel: request.iTipoViaje,
+                      userId: request.iIdUsuario
+                    );
                     return GestureDetector(
                       onTap: () {
-                        print('$index');
-                        // navigateToDetail(requestTaxi[index]);
+                        navigateToDetail(request);
                       },
-                      child: cardTaxi(TaxiModel.empty())
+                      child: cardTaxi(taxiModel)
                     );
                   }
                 ),

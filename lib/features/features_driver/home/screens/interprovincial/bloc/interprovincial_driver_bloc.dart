@@ -2,30 +2,29 @@ import 'dart:async';
 
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-part 'interprovincial_event.dart';
-part 'interprovincial_state.dart';
+part 'interprovincial_driver_event.dart';
+part 'interprovincial_driver_state.dart';
 
-class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialState> {
+class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, InterprovincialState> {
   final InterprovincialDataRemote interprovincialDataRemote;
-  InterprovincialBloc({@required this.interprovincialDataRemote}) : super(DataInterprovincialState.initial());
+  InterprovincialDriverBloc({@required this.interprovincialDataRemote}) : super(DataInterprovincialState.initial());
 
   @override
   Stream<InterprovincialState> mapEventToState(
-    InterprovincialEvent event,
+    InterprovincialDriverEvent event,
   ) async* {
-    if(event is GetDataInterprovincialEvent){
+    if(event is GetDataInterprovincialDriverEvent){
       yield DataInterprovincialState.initial();
       await Future.delayed(Duration(seconds: 1));
       yield DataInterprovincialState.initial().copyWith(
         status: InterprovincialStatus.notEstablished
       );
-    }else if(event is SelectRouteInterprovincialEvent){
+    }else if(event is SelectRouteInterprovincialDriverEvent){
       yield DataInterprovincialState.initial(loadingMessage: 'Seleccionando ruta');
       String documentId = await interprovincialDataRemote.createStartService(
         route: event.route,
@@ -40,14 +39,14 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
         documentId: documentId,
         availableSeats: event.availableSeats
       );
-    }else if(event is StartRouteInterprovincialEvent){
+    }else if(event is StartRouteInterprovincialDriverEvent){
       DataInterprovincialState data = state;
       yield data.copyWith(loadingMessage: 'Iniciando ruta', status: InterprovincialStatus.loading);
       await interprovincialDataRemote.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.inRoute);
       yield data.copyWith(
         status: InterprovincialStatus.inRoute
       );
-    }else if(event is PlusOneAvailabelSeatInterprovincialEvent){
+    }else if(event is PlusOneAvailabelSeatInterprovincialDriverEvent){
       DataInterprovincialState data = state;
       if(data.availableSeats < event.maxSeats){
         int newAvailableSeats = data.availableSeats + 1;
@@ -56,7 +55,7 @@ class InterprovincialBloc extends Bloc<InterprovincialEvent, InterprovincialStat
           availableSeats: newAvailableSeats
         );
       }
-    }else if(event is MinusOneAvailabelSeatInterprovincialEvent){
+    }else if(event is MinusOneAvailabelSeatInterprovincialDriverEvent){
       DataInterprovincialState data = state;
       if(data.availableSeats > 0){
         int newAvailableSeats = data.availableSeats - 1;

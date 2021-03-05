@@ -22,6 +22,7 @@ class PassengerEntity extends Equatable {
         streetName: 'Antigua Panamericana Nte. 1035',
         districtName: 'Huacho',
         provinceName: 'Huaura',
+        regionName: 'Lima',
         zoom: 12
       ),
       urlImage: 'https://source.unsplash.com/1600x900/?portrait'

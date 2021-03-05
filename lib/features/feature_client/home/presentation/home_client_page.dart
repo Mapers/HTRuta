@@ -2,7 +2,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_client_service_enum.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
-import 'package:HTRuta/features/feature_client/home/screens/taxi/taxi_clint_screen.dart';
+import 'package:HTRuta/features/feature_client/home/screens/taxi/taxi_client_screen.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeClientPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomeClientPageState extends State<HomeClientPage> {
               }
             },
           ),
-          // MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
+          MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
         ],
       ),
     );
