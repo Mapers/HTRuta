@@ -1,5 +1,5 @@
 import 'package:HTRuta/features/DriverTaxiApp/data/equatable.dart';
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:meta/meta.dart';
 
 class InterprovincialRouteEntity extends Equatable {

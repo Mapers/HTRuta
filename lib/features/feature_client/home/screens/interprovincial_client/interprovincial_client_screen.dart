@@ -31,7 +31,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<InterprovincialLocationBloc>(create: (_) => ij.sl<InterprovincialLocationBloc>()),
+        BlocProvider<InterprovincialDriverLocationBloc>(create: (_) => ij.sl<InterprovincialDriverLocationBloc>()),
         BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.sl<ChooseRoutesClientBloc>()),
       ],
       child: Stack(

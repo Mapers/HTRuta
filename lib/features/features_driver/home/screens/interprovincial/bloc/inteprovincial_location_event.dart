@@ -1,13 +1,13 @@
 part of 'inteprovincial_location_bloc.dart';
 
-abstract class InterprovincialLocationEvent extends Equatable {
-  const InterprovincialLocationEvent();
+abstract class InterprovincialDriverLocationEvent extends Equatable {
+  const InterprovincialDriverLocationEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class UpdateDriverLocationInterprovincialLocationEvent extends InterprovincialLocationEvent {
+class UpdateDriverLocationInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
   final LocationEntity driverLocation;
   final InterprovincialStatus status;
   UpdateDriverLocationInterprovincialLocationEvent({@required this.driverLocation, @required this.status});
@@ -16,7 +16,7 @@ class UpdateDriverLocationInterprovincialLocationEvent extends InterprovincialLo
   List<Object> get props => [driverLocation, status];
 }
 
-class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialLocationEvent {
+class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
   final PassengerEntity passenger;
   SetPassengerSelectedInterprovincialLocationEvent({@required this.passenger});
 
@@ -24,8 +24,8 @@ class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialLo
   List<Object> get props => [passenger];
 }
 
-class RemovePassengerSelectedInterprovincialLocationEvent extends InterprovincialLocationEvent {}
-class SetDocumentIdInterprovincialLocationEvent extends InterprovincialLocationEvent {
+class RemovePassengerSelectedInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {}
+class SetDocumentIdInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
   final String documentId;
   SetDocumentIdInterprovincialLocationEvent({@required this.documentId});
 

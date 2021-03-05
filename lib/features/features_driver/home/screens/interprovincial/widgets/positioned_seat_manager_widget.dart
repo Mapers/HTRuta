@@ -51,7 +51,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
+                      BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
                         builder: (ctx, state){
                           DataInterprovincialDriverState data = state;
                           return Text(data.availableSeats.toString());

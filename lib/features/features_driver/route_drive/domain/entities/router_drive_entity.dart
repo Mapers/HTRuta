@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

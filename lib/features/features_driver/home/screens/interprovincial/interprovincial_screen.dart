@@ -32,16 +32,16 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ij.sl<InterprovincialLocationBloc>(),
+      create: (_) => ij.sl<InterprovincialDriverLocationBloc>(),
       child: Stack(
         alignment: Alignment.center,
         children: [
           MapInterprovincialDriverWidget(),
           ChangeServiceDriverWidget(),
-          BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
+          BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
             builder: (context, state) {
               if(state is DataInterprovincialDriverState){
-                BlocProvider.of<InterprovincialLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));
+                BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));
                 if(state.status == InterprovincialStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InterprovincialStatus.notEstablished){

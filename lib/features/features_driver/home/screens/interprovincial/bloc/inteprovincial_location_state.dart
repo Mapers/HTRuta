@@ -1,35 +1,35 @@
 part of 'inteprovincial_location_bloc.dart';
 
-abstract class InterprovincialLocationState extends Equatable {
-  const InterprovincialLocationState();
+abstract class InterprovincialDriverLocationState extends Equatable {
+  const InterprovincialDriverLocationState();
   
   @override
   List<Object> get props => [];
 }
 
-class DataInteprovincialLocationState extends InterprovincialLocationState {
+class DataInteprovincialDriverLocationState extends InterprovincialDriverLocationState {
   final String documentId;
   final LocationEntity location;
   final PassengerEntity passengerSelected;
-  DataInteprovincialLocationState({@required this.documentId, @required this.location, @required this.passengerSelected});
+  DataInteprovincialDriverLocationState({@required this.documentId, @required this.location, @required this.passengerSelected});
 
-  factory DataInteprovincialLocationState.initial(){
-    return DataInteprovincialLocationState(
+  factory DataInteprovincialDriverLocationState.initial(){
+    return DataInteprovincialDriverLocationState(
       documentId: null,
       location: null,
       passengerSelected: null
     );
   }
 
-  DataInteprovincialLocationState copyWith({ String documentId, LocationEntity location, PassengerEntity passengerSelected }){
-    return DataInteprovincialLocationState(
+  DataInteprovincialDriverLocationState copyWith({ String documentId, LocationEntity location, PassengerEntity passengerSelected }){
+    return DataInteprovincialDriverLocationState(
       documentId: documentId ?? this.documentId,
       location: location ?? this.location,
       passengerSelected: passengerSelected ?? this.passengerSelected
     );
   }
-  DataInteprovincialLocationState copyWithPassengerNull(){
-    return DataInteprovincialLocationState(
+  DataInteprovincialDriverLocationState copyWithPassengerNull(){
+    return DataInteprovincialDriverLocationState(
       documentId: documentId,
       location: location,
       passengerSelected: null
