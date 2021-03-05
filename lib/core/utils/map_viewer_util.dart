@@ -12,7 +12,7 @@ class MapViewerUtil {
     @required double height,
     @required Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
-    double zoom,
+    double zoom = 16,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
     ArgumentCallback<LatLng> onTap,
   }) {
