@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -39,7 +40,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
           ChangeServiceDriverWidget(),
           BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
             builder: (context, state) {
-              if(state is DataInterprovincialState){
+              if(state is DataInterprovincialDriverState){
                 BlocProvider.of<InterprovincialLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));
                 if(state.status == InterprovincialStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);

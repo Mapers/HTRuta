@@ -1,5 +1,6 @@
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -45,7 +46,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang);
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
-      DataInterprovincialState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+      DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
       _addFromToMarkers(_data);
     });
   }
@@ -60,7 +61,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
         BlocProvider.of<InterprovincialLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
       }
     );
-    DataInterprovincialState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+    DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
     if(_data.status == InterprovincialStatus.inRoute){
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
@@ -72,7 +73,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
     });
   }
 
-  void _addFromToMarkers(DataInterprovincialState data) async{
+  void _addFromToMarkers(DataInterprovincialDriverState data) async{
     InterprovincialRouteEntity route = data.route;
 
     if([InterprovincialStatus.loading, InterprovincialStatus.notEstablished].contains(data.status)){

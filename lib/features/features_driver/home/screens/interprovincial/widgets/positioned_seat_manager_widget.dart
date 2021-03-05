@@ -53,7 +53,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                     children: [
                       BlocBuilder<InterprovincialDriverBloc, InterprovincialState>(
                         builder: (ctx, state){
-                          DataInterprovincialState data = state;
+                          DataInterprovincialDriverState data = state;
                           return Text(data.availableSeats.toString());
                         },
                       ),
