@@ -42,28 +42,15 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
 
   @override
   void initState() {
-    whereaboutsFrom = LocationEntity(
-      latLang: to,
-      regionName: '',
-      provinceName: '' ,
-      districtName: '',
-      streetName: '' ,
-      zoom: 12
-    );
-    whereaboutsTo = LocationEntity(
-      latLang: to,
-      regionName: '',
-      provinceName: '' ,
-      districtName: '',
-      streetName: '' ,
-      zoom: 12
-    );
+    cleanFrom();
+    cleanTo();
     super.initState();
   }
-
+ 
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     openLoadingDialog(context);
     if(inputSelecter){
+      //? crear  punto y llenar data en input
       from = pos;
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
       Placemark placemark = placemarkFrom.first;
@@ -87,11 +74,15 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           latLng: from,
           nameMarkerId: 'FROM_POSITION_MARKER',
         );
+        print(markerFrom.markerId);
         _markers[markerFrom.markerId] = markerFrom;
       }else{
-        whereaboutsFrom = LocationEntity(  latLang: from ,regionName: '',provinceName: '' ,districtName: '',streetName: '',zoom: 12);
+        //? mensaje de carta negra
+        cleanFrom();
+        _markers.length;
         fromController.clear();
         messageController = true;
+        _markers = {};
         setState(() {});
         await Future.delayed(Duration(seconds: 4));
         messageController = false;
@@ -235,6 +226,12 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         }
       )
     );
+  }
+  void cleanFrom(){
+    whereaboutsFrom = LocationEntity(latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' , zoom: 12);
+  }
+  void cleanTo(){
+    whereaboutsFrom = LocationEntity( latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' , zoom: 12);
   }
 }
 
