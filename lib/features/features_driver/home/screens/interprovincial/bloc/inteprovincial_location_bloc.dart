@@ -19,7 +19,7 @@ class InterprovincialDriverLocationBloc extends Bloc<InterprovincialDriverLocati
   Stream<InterprovincialDriverLocationState> mapEventToState(
     InterprovincialDriverLocationEvent event,
   ) async* {
-    if(event is UpdateDriverLocationInterprovincialLocationEvent){
+    if(event is UpdateDriverLocationInterprovincialDriverLocationEvent){
       DataInteprovincialDriverLocationState data = state;
       if(event.status == InterprovincialStatus.inRoute){
         if(data.documentId != null){
@@ -29,15 +29,15 @@ class InterprovincialDriverLocationBloc extends Bloc<InterprovincialDriverLocati
       yield data.copyWith(
         location: event.driverLocation
       );
-    }else if(event is SetPassengerSelectedInterprovincialLocationEvent){
+    }else if(event is SetPassengerSelectedInterprovincialDriverLocationEvent){
       DataInteprovincialDriverLocationState data = state;
       yield data.copyWith(
         passengerSelected: event.passenger
       );
-    }else if(event is RemovePassengerSelectedInterprovincialLocationEvent){
+    }else if(event is RemovePassengerSelectedInterprovincialDriverLocationEvent){
       DataInteprovincialDriverLocationState data = state;
       yield data.copyWithPassengerNull();
-    }else if(event is SetDocumentIdInterprovincialLocationEvent){
+    }else if(event is SetDocumentIdInterprovincialDriverLocationEvent){
       if(event.documentId != null){
         DataInteprovincialDriverLocationState data = state;
         if(data.documentId != event.documentId){

@@ -7,27 +7,27 @@ abstract class InterprovincialDriverLocationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class UpdateDriverLocationInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
+class UpdateDriverLocationInterprovincialDriverLocationEvent extends InterprovincialDriverLocationEvent {
   final LocationEntity driverLocation;
   final InterprovincialStatus status;
-  UpdateDriverLocationInterprovincialLocationEvent({@required this.driverLocation, @required this.status});
+  UpdateDriverLocationInterprovincialDriverLocationEvent({@required this.driverLocation, @required this.status});
 
   @override
   List<Object> get props => [driverLocation, status];
 }
 
-class SetPassengerSelectedInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
+class SetPassengerSelectedInterprovincialDriverLocationEvent extends InterprovincialDriverLocationEvent {
   final PassengerEntity passenger;
-  SetPassengerSelectedInterprovincialLocationEvent({@required this.passenger});
+  SetPassengerSelectedInterprovincialDriverLocationEvent({@required this.passenger});
 
   @override
   List<Object> get props => [passenger];
 }
 
-class RemovePassengerSelectedInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {}
-class SetDocumentIdInterprovincialLocationEvent extends InterprovincialDriverLocationEvent {
+class RemovePassengerSelectedInterprovincialDriverLocationEvent extends InterprovincialDriverLocationEvent {}
+class SetDocumentIdInterprovincialDriverLocationEvent extends InterprovincialDriverLocationEvent {
   final String documentId;
-  SetDocumentIdInterprovincialLocationEvent({@required this.documentId});
+  SetDocumentIdInterprovincialDriverLocationEvent({@required this.documentId});
 
   @override
   List<Object> get props => [documentId];

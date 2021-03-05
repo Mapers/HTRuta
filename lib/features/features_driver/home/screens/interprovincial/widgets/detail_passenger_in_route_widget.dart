@@ -70,7 +70,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.close, color: Colors.black,),
                     onPressed: (){
-                      BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(RemovePassengerSelectedInterprovincialLocationEvent());
+                      BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(RemovePassengerSelectedInterprovincialDriverLocationEvent());
                     },
                   ),
                 )
