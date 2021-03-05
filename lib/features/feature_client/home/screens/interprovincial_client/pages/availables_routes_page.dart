@@ -1,4 +1,3 @@
-import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/cards_availables_routes.dart';
 import 'package:flutter/material.dart';

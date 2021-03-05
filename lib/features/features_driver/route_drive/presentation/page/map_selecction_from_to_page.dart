@@ -1,10 +1,9 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/input_map.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
-import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

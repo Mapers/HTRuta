@@ -11,12 +11,12 @@ import 'package:meta/meta.dart';
 part 'interprovincial_driver_event.dart';
 part 'interprovincial_driver_state.dart';
 
-class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, InterprovincialState> {
+class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, InterprovincialDriverState> {
   final InterprovincialDataRemote interprovincialDataRemote;
   InterprovincialDriverBloc({@required this.interprovincialDataRemote}) : super(DataInterprovincialDriverState.initial());
 
   @override
-  Stream<InterprovincialState> mapEventToState(
+  Stream<InterprovincialDriverState> mapEventToState(
     InterprovincialDriverEvent event,
   ) async* {
     if(event is GetDataInterprovincialDriverEvent){

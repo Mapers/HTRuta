@@ -2,7 +2,7 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -58,7 +58,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       icon: currentPinLocationIcon,
       onTap: (){
         //! Esto es solo para prueba temporal
-        BlocProvider.of<InterprovincialLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
+        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
       }
     );
     DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
@@ -66,7 +66,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
     }
-    BlocProvider.of<InterprovincialLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location, status: _data.status));
+    BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location, status: _data.status));
     setState(() {
       location =_location;
       _markers[marker.markerId] = marker;
@@ -108,7 +108,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<InterprovincialDriverBloc, InterprovincialState>(
+    return BlocListener<InterprovincialDriverBloc, InterprovincialDriverState>(
       listener: (ctx, state) => _addFromToMarkers(state),
       child: _buildMapLayer(),
     );

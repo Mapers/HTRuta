@@ -1,13 +1,13 @@
 part of 'interprovincial_driver_bloc.dart';
 
-abstract class InterprovincialState extends Equatable {
-  const InterprovincialState();
+abstract class InterprovincialDriverState extends Equatable {
+  const InterprovincialDriverState();
   
   @override
   List<Object> get props => [];
 }
 
-class DataInterprovincialDriverState extends InterprovincialState {
+class DataInterprovincialDriverState extends InterprovincialDriverState {
   final String loadingMessage;
   final int availableSeats;
   final String documentId;

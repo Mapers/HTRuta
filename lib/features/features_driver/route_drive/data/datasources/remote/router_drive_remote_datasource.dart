@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:flutter/cupertino.dart';

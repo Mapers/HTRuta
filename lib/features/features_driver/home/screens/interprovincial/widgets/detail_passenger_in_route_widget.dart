@@ -1,5 +1,5 @@
 import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/features/features_driver/home/entities/location_entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,9 +13,9 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InterprovincialLocationBloc, InterprovincialLocationState>(
+    return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
       builder: (ctx, state){
-        DataInteprovincialLocationState data = state;
+        DataInteprovincialDriverLocationState data = state;
         if(data.passengerSelected == null){
           return Container();
         }
@@ -70,7 +70,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(Icons.close, color: Colors.black,),
                     onPressed: (){
-                      BlocProvider.of<InterprovincialLocationBloc>(context).add(RemovePassengerSelectedInterprovincialLocationEvent());
+                      BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(RemovePassengerSelectedInterprovincialLocationEvent());
                     },
                   ),
                 )
