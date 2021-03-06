@@ -6,18 +6,20 @@ import 'package:meta/meta.dart';
 class RouteEntity extends Equatable {
   final String id;
   final String name;
+  final String cost;
   final LocationEntity from;
   final LocationEntity to;
   final List<WhereaboutsEntity> whereabouts;
 
 
 
-  RouteEntity( {
+  RouteEntity({
     this.id,
     this.name,
     this.from,
     this.to,
-    this.whereabouts
+    this.whereabouts,
+    this.cost,
   });
 
   Map<String, dynamic> get toMap => {
@@ -26,6 +28,8 @@ class RouteEntity extends Equatable {
     'from': from,
     'to': to,
     'whereabouts': whereabouts,
+    'cost': cost,
+
   };
 
   factory RouteEntity.fromJson(
@@ -37,6 +41,7 @@ class RouteEntity extends Equatable {
       from: dataJson['from'],
       to: dataJson['to'],
       whereabouts: dataJson['whereabouts'],
+      cost: dataJson['cost'],
     );
   }
   factory RouteEntity.empty({@required int orderBranch}) {
@@ -46,9 +51,10 @@ class RouteEntity extends Equatable {
       from: null,
       to: null,
       whereabouts: null,
+      cost: null,
     );
   }
 
   @override
-  List<Object> get props => [ id, name, from, to, whereabouts];
+  List<Object> get props => [ id, name, from, to, whereabouts, cost];
 }

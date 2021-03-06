@@ -26,12 +26,14 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
   final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
+  String cost;
   bool dataArrived = false;
   RouteEntity routerDrives;
   ScrollController scrollController = ScrollController();
   LatLng latLagFrom;
   LatLng latLagTo;
   TextEditingController nameConroller = TextEditingController();
+  TextEditingController costConroller = TextEditingController();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   @override
@@ -80,14 +82,19 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     ),
                     SizedBox(height: 10,),
                     PrincipalButton(
-                      width: 200,
                       onPressed: ()async{
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
                       text: 'Selecionar ruta',
                       color: Colors.black,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    PrincipalInput(
+                      controller: costConroller,
+                      hinText: 'cost',
+                      icon: Icons.monetization_on,
+                      onSaved: (val) => cost = val,
                     ),
                     SizedBox(height: 5),
                     dataArrived ? Column(
@@ -207,6 +214,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     if( widget.statAddEdit){
                       RouteEntity routerDrive = RouteEntity(
                         name: name,
+                        cost: cost,
                         from: routerDrives.from,
                         to: routerDrives.to,
                         whereabouts: whereaabouts,
