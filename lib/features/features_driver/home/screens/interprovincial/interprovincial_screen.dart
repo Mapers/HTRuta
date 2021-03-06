@@ -41,7 +41,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
           BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
             builder: (context, state) {
               if(state is DataInterprovincialDriverState){
-                BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetDocumentIdInterprovincialLocationEvent(documentId: state.documentId));
+                BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetDocumentIdInterprovincialDriverLocationEvent(documentId: state.documentId));
                 if(state.status == InterprovincialStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InterprovincialStatus.notEstablished){

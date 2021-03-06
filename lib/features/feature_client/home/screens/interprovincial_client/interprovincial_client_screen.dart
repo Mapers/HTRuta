@@ -1,10 +1,9 @@
-import 'package:HTRuta/app/components/principal_button.dart';
-import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/app/widgets/loading_positioned.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -20,10 +19,10 @@ class InterprovincialClientScreen extends StatefulWidget {
 class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
 
   @override
-  void initState() {
+  void initState() { 
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
     });
   }
 
@@ -31,7 +30,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<InterprovincialDriverLocationBloc>(create: (_) => ij.sl<InterprovincialDriverLocationBloc>()),
         BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.sl<ChooseRoutesClientBloc>()),
       ],
       child: Stack(
@@ -39,22 +37,18 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         children: [
           MapInterprovincialClientWidget(),
           ChangeServiceClientWidget(),
-          Positioned(
-            bottom: 20,
-            child: PrincipalButton(
-              onPressed: (){
-                Navigator.of(context).push(Routes.toChooseRouteClientPage());
-              },
-              text: 'Elegir ruta y trasporte'
-            ),
-          ),
-          // BlocBuilder<ClientInterprovincialBloc, ClientInterprovincialState>(
-          //   builder: (context, state) {
-          //     if(state is DataInterprovincialState){
-          //     }
-          //     return Container();
-          //   },
-          // )
+          BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
+            builder: (context, state) {
+              if(state is DataInterprovincialClientState){
+                if(state.status == InteprovincialClientStatus.loading){
+                  return LoadingPositioned(label: state.loadingMessage);
+                }else if(state.status == InteprovincialClientStatus.notEstablished){
+                  return PositionedChooseRouteWidget();
+                }
+              }
+              return Container();
+            },
+          )
         ],
       )
     );

@@ -58,7 +58,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       icon: currentPinLocationIcon,
       onTap: (){
         //! Esto es solo para prueba temporal
-        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialLocationEvent(passenger: PassengerEntity.test()));
+        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.test()));
       }
     );
     DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
@@ -66,7 +66,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
     }
-    BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialLocationEvent(driverLocation: _location, status: _data.status));
+    BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialDriverLocationEvent(driverLocation: _location, status: _data.status));
     setState(() {
       location =_location;
       _markers[marker.markerId] = marker;

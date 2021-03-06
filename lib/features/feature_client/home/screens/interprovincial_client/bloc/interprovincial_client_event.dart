@@ -6,3 +6,5 @@ abstract class InterprovincialClientEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class LoadInterprovincialClientEvent extends InterprovincialClientEvent {}
