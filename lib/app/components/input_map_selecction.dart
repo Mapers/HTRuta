@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
-class InputMapXD extends StatelessWidget {
+class InputMapSelecction extends StatelessWidget {
   final double top;
   final Function onTap;
   final String labelText;
@@ -10,7 +10,7 @@ class InputMapXD extends StatelessWidget {
   final String province;
   final String district;
   final String street;
-  const InputMapXD({
+  const InputMapSelecction({
     Key key,
     this.top,
     this.labelText,
@@ -65,7 +65,7 @@ class InputMapXD extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
             child: Row(
               children: [
-                Text( province, style: TextStyle(color: Colors.grey), ),
+                Text(province, style: TextStyle(color: Colors.grey), ),
                 district == ''?Container() : Text( ' - '+ district, style: TextStyle(color: Colors.grey)),
               ],
             ),

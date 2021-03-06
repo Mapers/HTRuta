@@ -26,6 +26,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   final formKey = GlobalKey<FormState>();
   final keyformPhysicalStock = GlobalKey<FormState>();
   String name;
+  bool dataArrived = false;
   RouteEntity routerDrives;
   ScrollController scrollController = ScrollController();
   LatLng latLagFrom;
@@ -50,8 +51,11 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   List<WhereaboutsEntity> whereaabouts = [];
   void getFromAndTo(RouteEntity routerDrive){
     routerDrives = routerDrive;
-    print(routerDrives.whereaboutsFrom.districtName);
+    dataArrived = true;
     setState(() {});
+  }
+  void getWhereabouts(RouteEntity routerDrive){
+    
   }
 
   @override
@@ -89,7 +93,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    Card(
+                    dataArrived ?Card(
                       elevation: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(8),
@@ -105,8 +109,8 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                           )
                         ),
                       ),
-                    ),
-                    Card(
+                    ):Container(),
+                    dataArrived ? Card(
                       elevation: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(8),
@@ -122,8 +126,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                           )
                         ),
                       ),
-                    ),
-                    
+                    ):Container(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

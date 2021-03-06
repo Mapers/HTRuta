@@ -76,5 +76,9 @@ class RouterDriveRemoteDataSoruce {
     whereaabouts.insert(newIndex, newString);
     return whereaabouts;
   }
+  Future<List<WhereaboutsEntity>> addWhereAbouts({WhereaboutsEntity whereabouts} ) async{
+    whereaabouts.add(WhereaboutsEntity( id: whereabouts.id ,cost: whereabouts.cost , whereabouts: whereabouts.whereabouts  ));
+    return whereaabouts;
+  }
 
 }

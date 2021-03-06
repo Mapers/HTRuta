@@ -16,3 +16,10 @@ class OnReorderwhereaboutsWhereaboutsEvent extends WhereaboutsEvent{
   @override
   List<Object> get props => [oldIndex,newIndex];
 }
+class AddwhereaboutsWhereaboutsEvent extends WhereaboutsEvent{
+  final LocationEntity whereabouts;
+  final String cost;
+  AddwhereaboutsWhereaboutsEvent({@required this.whereabouts,@required this.cost });
+  @override
+  List<Object> get props => [whereabouts];
+}

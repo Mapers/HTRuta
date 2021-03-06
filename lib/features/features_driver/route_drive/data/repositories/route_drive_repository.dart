@@ -31,4 +31,8 @@ class RouteDriveRepository {
     List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.editOnOrderWhereAbouts(oldIndex: oldIndex, newIndex: newIndex);
     return whereAbouts;
   }
+  Future<List<WhereaboutsEntity>> addWhereAboutsRepository({WhereaboutsEntity whereabouts}) async{
+    List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.addWhereAbouts(whereabouts: whereabouts);
+    return whereAbouts;
+  }
 }

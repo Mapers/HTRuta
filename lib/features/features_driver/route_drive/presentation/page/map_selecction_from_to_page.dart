@@ -1,5 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/components/input_map.dart';
+import 'package:HTRuta/app/components/input_map_selecction.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
@@ -55,7 +55,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           children: [
             MapViewWidget(context),
             BackWidget(context),
-            InputMapXD(
+            InputMapSelecction(
               controller: fromController,
               top: 80,
               onTap: (){
@@ -68,7 +68,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
               province: whereaboutsFrom.provinceName == '' ? '' :whereaboutsFrom.provinceName,
               district: whereaboutsFrom.districtName == '' ? '' :whereaboutsFrom.districtName,
             ),
-            InputMapXD(
+            InputMapSelecction(
               controller: toController,
               onTap: (){
                 inputSelecter = false;
