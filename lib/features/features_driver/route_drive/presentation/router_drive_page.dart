@@ -4,7 +4,6 @@ import 'package:HTRuta/features/features_driver/route_drive/presentation/page/fo
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RouterDrivePage extends StatefulWidget {
   RouterDrivePage({Key key}) : super(key: key);
@@ -60,47 +59,50 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
           itemCount: param.routerDrives.length,
           itemBuilder: (BuildContext context, int i) {
             RouteEntity routerDrive = param.routerDrives[i];
-            return ListTile(
-                title: Text(routerDrive.name),
-                subtitle: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Card(
+              elevation: 5,
+              child: InkWell(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
                     children: [
                       Row(
                         children: [
-                          Container(
-                            width: 90,
-                            child: Text(routerDrive.from.provinceName)
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Icon(FontAwesomeIcons.arrowRight,size: 15, ),
-                          ),
-                          Container(
-                            width: 90,
-                            child: Text(routerDrive.to.provinceName)
-                          ),
+                          Text(routerDrive.name),
+                          Icon(Icons.delete)
+                        ],
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Icon(Icons.trip_origin, color: Colors.black,),
+                          SizedBox(width: 10,),
+                          Text(routerDrive.from.provinceName),
+                          Text(' - ' + routerDrive.from.districtName),
+                          Text(' - ' + routerDrive.from.streetName),
                         ],
                       ),
                       Row(
                         children: [
-                          IconButton(
-                            icon: Icon(Icons.edit, color: Colors.black,),
-                            onPressed: (){
-                              Navigator.of(context).push(MaterialPageRoute( builder: (context) => FormRouterDrivePage(routerDrive: routerDrive,statAddEdit: false,)));
-                            }
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.black,),
-                            onPressed: (){
-                              BlocProvider.of<RouteDriveBloc>(context).add(DeleteDrivesRouteDriveEvent(routerDrive:  routerDrive));
-                            }
-                          )
+                          Icon(Icons.assistant_photo, color: Colors.black,),
+                          SizedBox(width: 10,),
+                          Text(routerDrive.to.provinceName),
+                          Text(' - ' + routerDrive.to.districtName),
+                          Text(' - ' + routerDrive.to.streetName),
                         ],
                       ),
+                      Row(
+                        children: [
+                          Icon(Icons.alt_route, color: Colors.black,),
+                          SizedBox(width: 10,),
+                          Text(routerDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
+                        ],
+                      )
+
                     ],
                   ),
                 ),
+              ),
             );
           });
         },

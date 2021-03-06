@@ -21,7 +21,7 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
         yield RouteDriveInitial(routerDrives: roterDrives );
       }else if(event is AddDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();
-        List<RouteEntity> roterDrives = await routeDriveRepository.addRouterDriveRepository(roterDrive: event.routerDrive);
+        List<RouteEntity> roterDrives = await routeDriveRepository.addRouterDriveRepository(roterDrive: event.routerDrive,);
         yield RouteDriveInitial(routerDrives: roterDrives);
       }else if(event is EditDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();

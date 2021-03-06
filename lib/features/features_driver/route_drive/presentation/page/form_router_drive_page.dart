@@ -69,7 +69,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                 child: Column(
                   children: [
                     PrincipalInput(
@@ -209,8 +209,9 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                         name: name,
                         from: routerDrives.from,
                         to: routerDrives.to,
+                        whereabouts: whereaabouts,
                       );
-                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive, whereaabouts: whereaabouts ));
+                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
                       Navigator.of(context).pop();
                     }else{
                       RouteEntity newRouterDrive = RouteEntity(
