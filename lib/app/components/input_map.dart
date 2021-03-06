@@ -62,14 +62,11 @@ class InputMapXD extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 15),
             child: Row(
               children: [
-                Text( region ),
-                Text(' - '),
-                Text( province ),
-                Text(' - '),
-                Text( district ),
+                Text( province, style: TextStyle(color: Colors.grey), ),
+                district == ''?Container() : Text( ' - '+ district, style: TextStyle(color: Colors.grey)),
               ],
             ),
           )

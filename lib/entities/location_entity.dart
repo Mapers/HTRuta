@@ -16,7 +16,7 @@ class LocationEntity extends Equatable {
     @required this.provinceName,
     @required this.regionName,
     @required this.latLang,
-    @required this.zoom,
+    this.zoom,
   });
 
   factory LocationEntity.initalPeruPosition(){

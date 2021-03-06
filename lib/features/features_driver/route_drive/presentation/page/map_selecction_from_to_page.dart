@@ -45,86 +45,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     cleanTo();
     super.initState();
   }
- 
-  void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
-    openLoadingDialog(context);
-    if(inputSelecter){
-      //? crear  punto y llenar data en input
-      from = pos;
-      List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
-      Placemark placemark = placemarkFrom.first;
-      Navigator.of(context).pop();
-      if(placemark.thoroughfare != '' ){
-        whereaboutsFrom = LocationEntity(
-          latLang: from,
-          regionName: placemark.administrativeArea,
-          provinceName: placemark.subAdministrativeArea ,
-          districtName: placemark.locality,
-          streetName: placemark.thoroughfare,
-          zoom: 12
-        );
-        if( placemark.locality == ''){
-          fromController.text = placemark.thoroughfare;
-        }else{
-          print(placemark.locality);
-          fromController.text = placemark.subAdministrativeArea;
-        }
-        Marker markerFrom = _mapViewerUtil.generateMarker(
-          latLng: from,
-          nameMarkerId: 'FROM_POSITION_MARKER',
-        );
-        print(markerFrom.markerId);
-        _markers[markerFrom.markerId] = markerFrom;
-      }else{
-        //? mensaje de carta negra
-        cleanFrom();
-        _markers.length;
-        fromController.clear();
-        messageController = true;
-        _markers = {};
-        setState(() {});
-        await Future.delayed(Duration(seconds: 4));
-        messageController = false;
-        setState(() {});
-      }
-    } else {
-      to = pos;
-      List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
-      Placemark placemark = placemarkTo.first;
-      Navigator.of(context).pop();
-      whereaboutsTo = LocationEntity(
-        latLang: to,
-        regionName: placemark.administrativeArea,
-        provinceName: placemark.subAdministrativeArea ,
-        districtName: placemark.locality,
-        streetName: placemark.thoroughfare ,
-        zoom: 12
-      );
-      if(placemark.thoroughfare != '' ){
-        if( placemark.locality == ''){
-          toController.text = placemark.thoroughfare;
-        }else{
-          print(placemark.locality);
-          toController.text = placemark.thoroughfare;
-        }
-      }else{
-        // throw ServerException(message: 'Hellow');
-      }
-      Marker markerTo = _mapViewerUtil.generateMarker(
-        latLng: to,
-        nameMarkerId: 'TO_POSITION_MARKER',
-      );
-      _markers[markerTo.markerId] = markerTo;
-    }
-
-    if(_markers.length == 2){
-      openLoadingDialog(context);
-      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', from, to);
-      Navigator.of(context).pop();
-      polylines[polyline.polylineId] = polyline;
-    }
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,47 +82,28 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
               district: whereaboutsTo.districtName == '' ? '' :whereaboutsTo.districtName,
             ),
             messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
-            Positioned(
-              top: 500,
-              right: 15,
-              left: 15,
-              child: PrincipalButton(text: 'Guardar',onPressed: () async {
-                formKey.currentState.save();
-                RouteEntity data = RouteEntity(
-                  whereaboutsFrom: whereaboutsFrom,
-                  whereaboutsTo: whereaboutsTo
-                );
-                widget.getFromAndTo(data);
-                Navigator.of(context).pop();
-              },)
-            ),
+            SaveButtonWidget(context),
           ],
         ),
       ),
     );
   }
-
-  Positioned BackWidget(BuildContext context) {
+  Positioned SaveButtonWidget(BuildContext context) {
     return Positioned(
-            top: 30,
-            left: 15,
-            child: ClipOval(
-              child: Material(
-                color: backgroundColor, // button color
-                child: InkWell(
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Center(child: Icon(Icons.chevron_left,size: 30,color: Colors.black,))),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-            )
-          );
+      top: 500,
+      right: 15,
+      left: 15,
+      child: PrincipalButton(text: 'Guardar',onPressed: (){
+        formKey.currentState.save();
+        RouteEntity data = RouteEntity(
+          whereaboutsFrom: whereaboutsFrom,
+          whereaboutsTo: whereaboutsTo
+        );
+        widget.getFromAndTo(data);
+        Navigator.of(context).pop();
+      },)
+    );
   }
-
   SizedBox MapViewWidget(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -213,25 +114,119 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         polyLines: polylines,
         zoom: 7,
         onTap: (pos){
-          try {
-            if(inputSelecter){
-              _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
-            }else{
-              _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
-            }
-          } catch (e) {
-            print(e.toString());
+          if(inputSelecter){
+            _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
+          }else{
+            _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
           }
         }
       )
     );
   }
+  void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
+    try {
+      if(inputSelecter){
+        from = pos;
+        openLoadingDialog(context);
+        List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
+        Placemark placemark = placemarkFrom.first;
+        Navigator.of(context).pop();
+        if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          whereaboutsFrom = LocationEntity(
+            latLang: from,
+            regionName: placemark.administrativeArea,
+            provinceName: placemark.subAdministrativeArea ,
+            districtName: placemark.locality,
+            streetName: placemark.thoroughfare,
+          );
+            fromController.text = placemark.thoroughfare;
+          Marker markerFrom = _mapViewerUtil.generateMarker(
+            latLng: from,
+            nameMarkerId: 'FROM_POSITION_MARKER',
+          );
+          _markers[markerFrom.markerId] = markerFrom;
+        }else{
+          cleanFrom();
+          fromController.clear();
+          appearMesage();
+        }
+      } else {
+        to = pos;
+        openLoadingDialog(context);
+        List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+        Placemark placemark = placemarkTo.first;
+        Navigator.of(context).pop();
+        if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          whereaboutsTo = LocationEntity(
+            latLang: to,
+            regionName: placemark.administrativeArea,
+            provinceName: placemark.subAdministrativeArea ,
+            districtName: placemark.locality,
+            streetName: placemark.thoroughfare ,
+          );
+          toController.text = placemark.thoroughfare;
+          Marker markerTo = _mapViewerUtil.generateMarker(
+            latLng: to,
+            nameMarkerId: 'TO_POSITION_MARKER',
+          );
+          _markers[markerTo.markerId] = markerTo;
+        }else{
+          cleanTo();
+          toController.clear();
+          appearMesage();
+        }
+      }
+      drawRoute();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  //! metodos estaticos
+  void drawRoute()async{
+    if(_markers.length == 2){
+      openLoadingDialog(context);
+      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', from, to);
+      Navigator.of(context).pop();
+      polylines[polyline.polylineId] = polyline;
+    }
+    setState(() {});
+  }
+
+  void appearMesage()async{
+    messageController = true;
+    setState(() {});
+    await Future.delayed(Duration(seconds: 4));
+    messageController = false;
+    setState(() {});
+  }
+
+  Positioned BackWidget(BuildContext context) {
+    return Positioned(
+      top: 30,
+      left: 15,
+      child: ClipOval(
+        child: Material(
+          color: backgroundColor, // button color
+          child: InkWell(
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: Center(child: Icon(Icons.chevron_left,size: 30,color: Colors.black,))),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      )
+    );
+  }
   void cleanFrom(){
-    whereaboutsFrom = LocationEntity(latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' , zoom: 12);
+    whereaboutsFrom = LocationEntity(latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' );
   }
   void cleanTo(){
-    whereaboutsFrom = LocationEntity( latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' , zoom: 12);
+    whereaboutsTo = LocationEntity( latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' );
   }
+  //! cierre
 }
 
 class PositionedDarkCardWidget extends StatelessWidget {
