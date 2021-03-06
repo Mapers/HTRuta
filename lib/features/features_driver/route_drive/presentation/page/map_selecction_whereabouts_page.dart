@@ -157,16 +157,16 @@ class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsP
   void  createRuota(){
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Marker markerFrom = _mapViewerUtil.generateMarker(
-        latLng: widget.routesFromTo.whereaboutsFrom.latLang,
+        latLng: widget.routesFromTo.from.latLang,
         nameMarkerId: 'FROM_POSITION_MARKER',
       );
       Marker markerTo = _mapViewerUtil.generateMarker(
-        latLng: widget.routesFromTo.whereaboutsTo.latLang,
+        latLng: widget.routesFromTo.to.latLang,
         nameMarkerId: 'TO_POSITION_MARKER',
       );
       _markers[markerFrom.markerId] = markerFrom;
       _markers[markerTo.markerId] = markerTo;
-      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.routesFromTo.whereaboutsFrom.latLang, widget.routesFromTo.whereaboutsTo.latLang);
+      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.routesFromTo.from.latLang, widget.routesFromTo.to.latLang);
       polylines[polyline.polylineId] = polyline;
       setState(() {});
     });

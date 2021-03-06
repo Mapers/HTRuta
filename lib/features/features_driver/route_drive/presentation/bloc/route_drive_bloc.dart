@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:HTRuta/features/features_driver/route_drive/data/repositories/route_drive_repository.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -20,7 +21,7 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
         yield RouteDriveInitial(routerDrives: roterDrives );
       }else if(event is AddDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();
-        List<RouteEntity> roterDrives = await routeDriveRepository.addRouterDrives(roterDrive: event.routerDrive);
+        List<RouteEntity> roterDrives = await routeDriveRepository.addRouterDriveRepository(roterDrive: event.routerDrive);
         yield RouteDriveInitial(routerDrives: roterDrives);
       }else if(event is EditDrivesRouteDriveEvent) {
         yield LoadingRouteDriveState();

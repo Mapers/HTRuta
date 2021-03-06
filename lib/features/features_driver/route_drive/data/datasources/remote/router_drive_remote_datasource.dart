@@ -13,7 +13,7 @@ class RouterDriveRemoteDataSoruce {
       RouteEntity(
         id: '1',
         name: 'samuel',
-        whereaboutsFrom: LocationEntity(
+        from: LocationEntity(
           latLang: LatLng(-11.1072, 77.6103),
           districtName: 'huacho',
           provinceName: 'huaura',
@@ -21,7 +21,7 @@ class RouterDriveRemoteDataSoruce {
           streetName: 'av. more',
           zoom: 12,
         ),
-        whereaboutsTo: LocationEntity(
+        to: LocationEntity(
           latLang: LatLng(-12.0453, -77.0311),
           districtName: 'Independecia',
           provinceName: 'lima ',

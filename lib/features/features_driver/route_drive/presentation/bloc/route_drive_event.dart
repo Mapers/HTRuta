@@ -10,9 +10,10 @@ class GetRouterDrivesEvent extends RouteDriveEvent{
 }
 class AddDrivesRouteDriveEvent extends RouteDriveEvent{
   final RouteEntity routerDrive;
-  AddDrivesRouteDriveEvent({ @required this.routerDrive,});
+  final List<WhereaboutsEntity> whereaabouts;
+  AddDrivesRouteDriveEvent({ @required this.routerDrive,@required this.whereaabouts});
   @override
-  List<Object> get props => [routerDrive];
+  List<Object> get props => [routerDrive, whereaabouts];
 }
 class EditDrivesRouteDriveEvent extends RouteDriveEvent{
   final RouteEntity routerDrive;

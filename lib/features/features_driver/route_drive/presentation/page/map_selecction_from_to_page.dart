@@ -96,8 +96,8 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
       child: PrincipalButton(text: 'Guardar',onPressed: (){
         formKey.currentState.save();
         RouteEntity data = RouteEntity(
-          whereaboutsFrom: whereaboutsFrom,
-          whereaboutsTo: whereaboutsTo
+          from: whereaboutsFrom,
+          to: whereaboutsTo
         );
         widget.getFromAndTo(data);
         Navigator.of(context).pop();
@@ -112,7 +112,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         currentLocation: LatLng(widget.la, widget.lo),
         markers: _markers,
         polyLines: polylines,
-        zoom: 7,
+        zoom: 16,
         onTap: (pos){
           if(inputSelecter){
             _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );

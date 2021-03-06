@@ -1,27 +1,31 @@
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class RouteEntity extends Equatable {
   final String id;
   final String name;
-  final LocationEntity whereaboutsFrom;
-  final LocationEntity whereaboutsTo;
+  final LocationEntity from;
+  final LocationEntity to;
+  final List<WhereaboutsEntity> whereabouts;
 
 
 
   RouteEntity( {
     this.id,
     this.name,
-    this.whereaboutsFrom,
-    this.whereaboutsTo,
+    this.from,
+    this.to,
+    this.whereabouts
   });
 
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
-    'whereaboutsFrom': whereaboutsFrom,
-    'whereaboutsTo': whereaboutsTo,
+    'from': from,
+    'to': to,
+    'whereabouts': whereabouts,
   };
 
   factory RouteEntity.fromJson(
@@ -30,19 +34,21 @@ class RouteEntity extends Equatable {
     return RouteEntity(
       id: dataJson['id'],
       name: dataJson['name'],
-      whereaboutsFrom: dataJson['whereaboutsFrom'],
-      whereaboutsTo: dataJson['whereaboutsTo'],
+      from: dataJson['from'],
+      to: dataJson['to'],
+      whereabouts: dataJson['whereabouts'],
     );
   }
   factory RouteEntity.empty({@required int orderBranch}) {
     return RouteEntity(
       id: '',
       name: '',
-      whereaboutsFrom: null,
-      whereaboutsTo: null,
+      from: null,
+      to: null,
+      whereabouts: null,
     );
   }
 
   @override
-  List<Object> get props => [id,name,whereaboutsFrom,whereaboutsTo];
+  List<Object> get props => [ id, name, from, to, whereabouts];
 }

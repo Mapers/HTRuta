@@ -43,8 +43,8 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
       nameConroller.text = widget.routerDrive.name;
       // from = widget.routerDrive.nameFrom;
       // to = widget.routerDrive.nameTo;
-      latLagFrom = widget.routerDrive.whereaboutsFrom.latLang;
-      latLagTo = widget.routerDrive.whereaboutsTo.latLang;
+      latLagFrom = widget.routerDrive.from.latLang;
+      latLagTo = widget.routerDrive.to.latLang;
     }
     super.initState();
   }
@@ -53,9 +53,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
     routerDrives = routerDrive;
     dataArrived = true;
     setState(() {});
-  }
-  void getWhereabouts(RouteEntity routerDrive){
-    
   }
 
   @override
@@ -93,108 +90,112 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    dataArrived ?Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          width: double.infinity,
-                          child: Column(
-                            children: [
-                              Text('Origen', style: TextStyle(fontWeight: FontWeight.bold),),
-                              Text(routerDrives.whereaboutsFrom.provinceName),
-                              Text(routerDrives.whereaboutsFrom.districtName),
-                              Text(routerDrives.whereaboutsFrom.streetName),
-                            ],
-                          )
-                        ),
-                      ),
-                    ):Container(),
-                    dataArrived ? Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          width: double.infinity,
-                          child: Column(
-                            children: [
-                              Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
-                              Text(routerDrives.whereaboutsTo.provinceName),
-                              Text(routerDrives.whereaboutsTo.districtName),
-                              Text(routerDrives.whereaboutsTo.streetName),
-                            ],
-                          )
-                        ),
-                      ),
-                    ):Container(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    dataArrived ? Column(
                       children: [
-                        Text('Paraderos', style: heading20Black,),
-                        IconButton(
-                          icon: Icon(Icons.add_location,size: 30,),
-                          onPressed: ()async{
-                            final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapSelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: routerDrives,)));
-                          }
-                        )
-                      ],
-                    ),
-                    Divider(),
-                    BlocBuilder<WhereaboutsBloc, WhereaboutsState>(
-                      builder: (context, state) {
-                        if(state is LoadingWhereaboutsState){
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        DataWhereaboutsState param = state;
-                        if(param.whereaabouts.isEmpty){
-                          return Center(child: Text('sin data'),);
-                        }
-                        whereaabouts = param.whereaabouts;
-                        return Container(
-                          height: 220,
-                          child: ReorderableListView(
-                            scrollController: scrollController,
-                            children: List.generate(whereaabouts.length, (i) {
-                              WhereaboutsEntity whereaabout = whereaabouts[i];
-                              return Card(
-                                key: UniqueKey(),
-                                elevation: 5,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        height: 70,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(whereaabout.whereabouts.provinceName ),
-                                            Text(whereaabout.whereabouts.streetName ),
-                                            Text(whereaabout.cost),
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          IconButton(icon: Icon(Icons.edit), onPressed: (){}),
-                                          IconButton(icon: Icon(Icons.delete), onPressed: (){})
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                            onReorder: (int oldIndex, int newIndex) {
-                              BlocProvider.of<WhereaboutsBloc>(context).add(OnReorderwhereaboutsWhereaboutsEvent(oldIndex: oldIndex,newIndex: newIndex ));
-                            },
+                        Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Text('Origen', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text(routerDrives.from.provinceName),
+                                  Text(routerDrives.from.districtName),
+                                  Text(routerDrives.from.streetName),
+                                ],
+                              )
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                        Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              width: double.infinity,
+                              child: Column(
+                                children: [
+                                  Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text(routerDrives.to.provinceName),
+                                  Text(routerDrives.to.districtName),
+                                  Text(routerDrives.to.streetName),
+                                ],
+                              )
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Paraderos', style: heading20Black,),
+                            IconButton(
+                              icon: Icon(Icons.add_location,size: 30,),
+                              onPressed: ()async{
+                                final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => MapSelecctionWhereaboutsPage(la:geoposition.latitude ,lo: geoposition.longitude,routesFromTo: routerDrives,)));
+                              }
+                            )
+                          ],
+                        ),
+                        Divider(),
+                        BlocBuilder<WhereaboutsBloc, WhereaboutsState>(
+                          builder: (context, state) {
+                            if(state is LoadingWhereaboutsState){
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            DataWhereaboutsState param = state;
+                            if(param.whereaabouts.isEmpty){
+                              return Center(child: Text('sin data'),);
+                            }
+                            whereaabouts = param.whereaabouts;
+                            return Container(
+                              height: 220,
+                              child: ReorderableListView(
+                                scrollController: scrollController,
+                                children: List.generate(whereaabouts.length, (i) {
+                                  WhereaboutsEntity whereaabout = whereaabouts[i];
+                                  return Card(
+                                    key: UniqueKey(),
+                                    elevation: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            height: 70,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(whereaabout.whereabouts.provinceName ),
+                                                Text(whereaabout.whereabouts.streetName ),
+                                                Text(whereaabout.cost),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              IconButton(icon: Icon(Icons.edit), onPressed: (){}),
+                                              IconButton(icon: Icon(Icons.delete), onPressed: (){})
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                onReorder: (int oldIndex, int newIndex) {
+                                  BlocProvider.of<WhereaboutsBloc>(context).add(OnReorderwhereaboutsWhereaboutsEvent(oldIndex: oldIndex,newIndex: newIndex ));
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ):Container(),
                   ],
                 ),
               ),
@@ -206,16 +207,16 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     if( widget.statAddEdit){
                       RouteEntity routerDrive = RouteEntity(
                         name: name,
-                        whereaboutsFrom: routerDrives.whereaboutsFrom,
-                        whereaboutsTo: routerDrives.whereaboutsTo,
+                        from: routerDrives.from,
+                        to: routerDrives.to,
                       );
-                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
+                      BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive, whereaabouts: whereaabouts ));
                       Navigator.of(context).pop();
                     }else{
                       RouteEntity newRouterDrive = RouteEntity(
                         name: name,
-                        whereaboutsFrom: routerDrives.whereaboutsFrom,
-                        whereaboutsTo: routerDrives.whereaboutsTo,
+                        from: routerDrives.from,
+                        to: routerDrives.to,
                       );
                       BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive: widget.routerDrive, newRouterDrive: newRouterDrive));
                       Navigator.of(context).pop();

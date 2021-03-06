@@ -70,7 +70,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                         children: [
                           Container(
                             width: 90,
-                            child: Text(routerDrive.whereaboutsFrom.provinceName)
+                            child: Text(routerDrive.from.provinceName)
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -78,7 +78,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           ),
                           Container(
                             width: 90,
-                            child: Text(routerDrive.whereaboutsTo.provinceName)
+                            child: Text(routerDrive.to.provinceName)
                           ),
                         ],
                       ),
