@@ -80,6 +80,12 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       icon: FontAwesomeIcons.mapMarkedAlt,
                       onSaved: (val) => name = val,
                     ),
+                    PrincipalInput(
+                      controller: costConroller,
+                      hinText: 'cost',
+                      icon: Icons.monetization_on,
+                      onSaved: (val) => cost = val,
+                    ),
                     SizedBox(height: 10,),
                     PrincipalButton(
                       onPressed: ()async{
@@ -89,12 +95,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       text: 'Selecionar ruta',
                       color: Colors.black,
                       mainAxisAlignment: MainAxisAlignment.center,
-                    ),
-                    PrincipalInput(
-                      controller: costConroller,
-                      hinText: 'cost',
-                      icon: Icons.monetization_on,
-                      onSaved: (val) => cost = val,
                     ),
                     SizedBox(height: 5),
                     dataArrived ? Column(
@@ -108,9 +108,35 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                               child: Column(
                                 children: [
                                   Text('Origen', style: TextStyle(fontWeight: FontWeight.bold),),
-                                  Text(routerDrives.from.provinceName),
-                                  Text(routerDrives.from.districtName),
-                                  Text(routerDrives.from.streetName),
+                                  Divider(),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                              Text(routerDrives.from.provinceName),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                              Text(routerDrives.from.districtName),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Calle: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text(routerDrives.from.streetName),
+                                        ],
+                                      ),
+                                    ],
+                                  )
                                 ],
                               )
                             ),
@@ -125,14 +151,57 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                               child: Column(
                                 children: [
                                   Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
-                                  Text(routerDrives.to.provinceName),
-                                  Text(routerDrives.to.districtName),
-                                  Text(routerDrives.to.streetName),
+                                  Divider(),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                              Text(routerDrives.to.provinceName),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                              Text(routerDrives.to.districtName),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Calle: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text(routerDrives.to.streetName),
+                                        ],
+                                      ),
+                                    ],
+                                  )
                                 ],
                               )
                             ),
                           ),
                         ),
+                        // Card(
+                        //   elevation: 4,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8),
+                        //     child: Container(
+                        //       width: double.infinity,
+                        //       child: Column(
+                        //         children: [
+                        //           Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
+                        //           Text(routerDrives.to.provinceName),
+                        //           Text(routerDrives.to.districtName),
+                        //           Text(routerDrives.to.streetName),
+                        //         ],
+                        //       )
+                        //     ),
+                        //   ),
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -172,13 +241,29 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
-                                            height: 70,
+                                            height: 80,
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text(whereaabout.whereabouts.provinceName ),
-                                                Text(whereaabout.whereabouts.streetName ),
+                                                Row(
+                                                  children: [
+                                                    Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                    Text(whereaabout.whereabouts.provinceName ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                                    Text(whereaabout.whereabouts.districtName ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text('Calle: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                                    Text(whereaabout.whereabouts.streetName ),
+                                                  ],
+                                                ),
                                                 Text(whereaabout.cost),
                                               ],
                                             ),
