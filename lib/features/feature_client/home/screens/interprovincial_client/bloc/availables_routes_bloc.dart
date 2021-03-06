@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
-import 'package:HTRuta/features/feature_client/home/entities/availables_routes_enity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -18,7 +18,7 @@ class AvailablesRoutesBloc extends Bloc<AvailablesRoutesEvent, AvailablesRoutesS
   ) async* {
     if(event is GetAvailablesRoutesEvent){
       yield LoadingAvailablesRoutes();
-      List<AvailablesRoutesEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes();
+      List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes();
       yield DataAvailablesRoutes(availablesRoutes: availablesRoutes);
     }
   }

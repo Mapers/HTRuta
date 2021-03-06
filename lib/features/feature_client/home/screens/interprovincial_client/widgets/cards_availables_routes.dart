@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
-import 'package:HTRuta/features/feature_client/home/entities/availables_routes_enity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +49,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
 }
 
 class CardAvailiblesRoutes extends StatelessWidget {
-  final AvailablesRoutesEntity availablesRoutesEntity;
+  final AvailableRouteEntity availablesRoutesEntity;
   final Function onTap;
   const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity, this.onTap}) : super(key: key);
   @override
@@ -109,6 +109,10 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Expanded(
                     child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ),
+                  SizedBox(width: 15),
+                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text(availablesRoutesEntity.availableSeats.toString(), style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.bold))
                 ],
               ),
               SizedBox(height: 5),

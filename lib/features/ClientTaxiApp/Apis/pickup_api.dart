@@ -67,7 +67,7 @@ class PickupApi{
     //idsolicitud(esta lo obtenies de la ruta donde se lista),vchLatInicial,vchLatFinal,vchLongInicial,vchLongFinal,mPrecio(este puede ser el precio q propone el chofer),mPropina,iTipoViaje,dFecReg,vchOrigenReferencia,vchDestinoReferencia,vchObservacion
     final url = '${Config.nuevaRutaApi}/registro-viaje-chofer';
     try{
-      final response = await http.post(url,body: {'idchofer':idChofer,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPropina': '','mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
+      final response = await http.post(url,body: {'idchofer':idChofer,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial.toString(), 'vchLatfinal': vchLatFinal.toString(), 'vchLonginicial': vchLongInicial.toString(), 'vchLongfinal': vchLongFinal.toString(), 'mPropina': '', 'mPrecio': mPrecio.toString(),'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){

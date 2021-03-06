@@ -483,7 +483,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                             }else{
                               Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
                             }
-                          }on ServerException catch(e, tracer){
+                          }on ServerException catch(e){
                             Navigator.pop(context);
                             Dialogs.alert(context,title: 'Error', message: e.message);
                           }
