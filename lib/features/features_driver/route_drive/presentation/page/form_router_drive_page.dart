@@ -79,6 +79,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     ),
                     SizedBox(height: 10,),
                     PrincipalButton(
+                      width: 200,
                       onPressed: ()async{
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
@@ -88,8 +89,41 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                     SizedBox(height: 5),
-                    // routerDrives.nameFrom == '' ? Container():CartDataMap(title: 'Origen', subTitle: routerDrives.nameFrom,),
-                    // routerDrives.nameTo == '' ? Container():CartDataMap(title: 'Destino', subTitle: routerDrives.nameTo,),
+                    Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Text('Origen', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(routerDrives.whereaboutsFrom.provinceName),
+                              Text(routerDrives.whereaboutsFrom.districtName),
+                              Text(routerDrives.whereaboutsFrom.streetName),
+                            ],
+                          )
+                        ),
+                      ),
+                    ),
+                    Card(
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Container(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(routerDrives.whereaboutsTo.provinceName),
+                              Text(routerDrives.whereaboutsTo.districtName),
+                              Text(routerDrives.whereaboutsTo.streetName),
+                            ],
+                          )
+                        ),
+                      ),
+                    ),
+                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
