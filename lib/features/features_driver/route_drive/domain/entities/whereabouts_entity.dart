@@ -7,7 +7,6 @@ class WhereaboutsEntity extends Equatable {
   final String cost;
   final LocationEntity whereabouts;
 
-
   WhereaboutsEntity({
     this.id,
     this.whereabouts,

@@ -14,6 +14,7 @@ class InterprovincialDataRemote{
       InterprovincialRouteEntity(
         id: '1',
         name: 'Huacho - Chancay - Lima',
+        cost: 50,
         fromLocation: LocationEntity(
           latLang: LatLng(-11.109722, -77.596091),
           streetName: 'Óvalo de Huacho',
@@ -34,6 +35,7 @@ class InterprovincialDataRemote{
       ),
       InterprovincialRouteEntity(
         id: '2',
+        cost: 60,
         name: 'Lima - Cajamarca (Directo)',
         fromLocation: LocationEntity(
           latLang: LatLng(-12.064508, -76.996569),
@@ -55,6 +57,7 @@ class InterprovincialDataRemote{
       ),
       InterprovincialRouteEntity(
         id: '3',
+        cost: 70,
         name: 'Cajamarca - Chimbote - Lima',
         fromLocation: LocationEntity(
           latLang: LatLng(-7.166157, -78.508878),

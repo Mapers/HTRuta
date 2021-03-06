@@ -21,7 +21,7 @@ class PickupApi{
       }else{
         return null;
       }
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -39,7 +39,7 @@ class PickupApi{
       }else{
         return null;
       }
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -57,7 +57,7 @@ class PickupApi{
       }else{
         return null;
       }
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -70,7 +70,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idchofer':idChofer,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPropina': '','mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -82,7 +82,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'iEstado': '2'} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -94,7 +94,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -106,7 +106,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -118,7 +118,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'mPrecio': precio});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -130,7 +130,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'mPrecio': precio, 'idchofer': idChofer});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -142,7 +142,7 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
-    }catch(error){
+    } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
