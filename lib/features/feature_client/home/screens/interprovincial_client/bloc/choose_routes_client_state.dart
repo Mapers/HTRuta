@@ -9,8 +9,9 @@ abstract class ChooseRoutesClientState extends Equatable {
 class LoadingChooseRoutesClient extends ChooseRoutesClientState {}
 
 class DataChooseRoutesClient extends ChooseRoutesClientState {
-  final List<ProvincesClientEntity> provinces;
-  DataChooseRoutesClient({this.provinces});
+  final List<ProvinceDistrictClientEntity> provinceDistricts;
+  DataChooseRoutesClient({@required this.provinceDistricts});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [provinceDistricts];
 }

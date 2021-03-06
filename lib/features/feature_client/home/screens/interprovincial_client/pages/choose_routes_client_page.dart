@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/components/input_button.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:flutter/material.dart';
 
 class ChooseRouteClientPage extends StatefulWidget {
@@ -11,19 +12,19 @@ class ChooseRouteClientPage extends StatefulWidget {
 }
 
 class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
-  String provinceOrigin = '';
-  String provinceDestination = '';
-  TextEditingController _provinceOrigin = TextEditingController();
-  TextEditingController _provinceDestination = TextEditingController();
+  ProvinceDistrictClientEntity provinceOrigin;
+  ProvinceDistrictClientEntity provinceDestination;
+  TextEditingController provinceOriginController = TextEditingController();
+  TextEditingController provinceDestinationController = TextEditingController();
 
-  void getPrivinceOrigin(privinceOrigin,privinceDestination){
-    if(privinceOrigin != ''){
-      _provinceOrigin.text = privinceOrigin;
-      provinceOrigin = privinceOrigin;
-    }else{
-      _provinceDestination.text = privinceDestination;
-      provinceDestination = privinceDestination;
-    }
+  void setProvinceOrigin(ProvinceDistrictClientEntity _provinceDistrict){
+    provinceOrigin = _provinceDistrict;
+    provinceOriginController.text = _provinceDistrict.provinceName + ' - ' + _provinceDistrict.districtName;
+  }
+  void setProvinceDstination(ProvinceDistrictClientEntity _provinceDistrict){
+    provinceDestination = _provinceDistrict;
+    provinceDestinationController.text = _provinceDistrict.provinceName + ' - ' + _provinceDistrict.districtName;
+    
   }
 
   @override
@@ -33,7 +34,6 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
         title: Text('Rutas'),
         centerTitle: false,
       ),
-      // drawer: MenuDriverScreens(activeScreenName: screenName),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -41,28 +41,22 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
             children: [
               SizedBox(height: 10,),
               InputButton(
-                controller: _provinceOrigin,
+                controller: provinceOriginController,
                 enabled: false,
-                onTap: (){
-                  Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar provincia origen', onTap: getPrivinceOrigin));
-                },
+                onTap: () => Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar distrito origen', onSelectProvinceDistrict: setProvinceOrigin)),
                 hinText: 'Origen',
                 // enabled: false,
               ),
               InputButton(
-                controller: _provinceDestination,
+                controller: provinceDestinationController,
                 hinText: 'Destino',
                 enabled: false,
-                onTap: (){
-                  Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar provincia destino',onTap: getPrivinceOrigin));
-                },
+                onTap: () => Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar distrito destino',onSelectProvinceDistrict: setProvinceDstination)),
               ),
               PrincipalButton(
                 text: 'Buscar rutas',
                 onPressed: (){
-                  print(provinceOrigin);
-                  print(provinceDestination);
-                  Navigator.of(context).push(Routes.toAvailableRoutesPage(provinceOrigin: provinceOrigin ,provinceDestination: provinceDestination));
+                  Navigator.of(context).push(Routes.toAvailableRoutesPage(origin: provinceOrigin ,destination: provinceDestination));
                 }
               ),
               SizedBox(height: 10,),

@@ -1,7 +1,7 @@
 
 import 'package:HTRuta/features/feature_client/home/entities/availables_routes_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientRemoteDataSoruce {
@@ -16,16 +16,16 @@ class InterprovincialClientRemoteDataSoruce {
     ];
     return routes;
   }
-  List<ProvincesClientEntity> provinces =[];
+  List<ProvinceDistrictClientEntity> provinces =[];
 
-  Future<List<ProvincesClientEntity>> getProvincesClient() async{
+  Future<List<ProvinceDistrictClientEntity>> getProvincesClient() async{
     provinces = [
-      ProvincesClientEntity(id: 1, nameProvince: 'Huaura'),
-      ProvincesClientEntity(id: 2, nameProvince: 'Lima'),
-      ProvincesClientEntity(id: 2, nameProvince: 'Chancay'),
-      ProvincesClientEntity(id: 2, nameProvince: 'Trujillo'),
-      ProvincesClientEntity(id: 2, nameProvince: 'Chimbote'),
-      ProvincesClientEntity(id: 2, nameProvince: 'Huaraz'),
+      ProvinceDistrictClientEntity(districtId: 1, provinceName: 'Huaura', districtName: 'Huacho'),
+      ProvinceDistrictClientEntity(districtId: 2, provinceName: 'Lima', districtName: 'Huachipa'),
+      ProvinceDistrictClientEntity(districtId: 3, provinceName: 'Chancay', districtName: 'Chancay'),
+      ProvinceDistrictClientEntity(districtId: 4, provinceName: 'Trujillo', districtName: 'Trujillo'),
+      ProvinceDistrictClientEntity(districtId: 5, provinceName: 'Santa', districtName: 'Chimbote'),
+      ProvinceDistrictClientEntity(districtId: 6, provinceName: 'Huaraz', districtName: 'Caraz'),
     ];
     return provinces;
   }

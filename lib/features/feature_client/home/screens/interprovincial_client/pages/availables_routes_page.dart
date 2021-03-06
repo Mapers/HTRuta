@@ -1,3 +1,4 @@
+import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/cards_availables_routes.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,9 @@ import 'package:HTRuta/injection_container.dart' as ij;
 
 
 class AvailableRoutesPage extends StatefulWidget {
-  final String provinceOrigin;
-  final String provinceDestination;
-  AvailableRoutesPage({Key key, this.provinceOrigin, this.provinceDestination})
+  final ProvinceDistrictClientEntity origin;
+  final ProvinceDistrictClientEntity destination;
+  AvailableRoutesPage({Key key, this.origin, this.destination})
       : super(key: key);
 
   @override
@@ -26,15 +27,15 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
         child: BlocProvider(
           create: (context) => ij.sl<AvailablesRoutesBloc>(),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(widget.provinceOrigin),
+                    Text(widget.origin.provinceName + ' - ' + widget.origin.districtName),
                     Icon(Icons.arrow_forward_sharp),
-                    Text(widget.provinceDestination),
+                    Text(widget.destination.provinceName + ' - ' + widget.destination.districtName),
                   ],
                 ),
                 CardsAvailablesRoutes()

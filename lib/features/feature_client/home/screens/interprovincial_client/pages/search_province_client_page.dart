@@ -1,14 +1,16 @@
 import 'package:HTRuta/app/components/principal_input.dart';
-import 'package:HTRuta/features/feature_client/home/entities/privince_client_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+typedef OnSelectProvinceDistrict = void Function(ProvinceDistrictClientEntity);
+
 class SearchProvinceClientPage extends StatefulWidget {
-  final Function getPrivinceOrigin;
+  final OnSelectProvinceDistrict onSelectProvinceDistrict;
   final String title;
   SearchProvinceClientPage(
-      {Key key, @required this.title, this.getPrivinceOrigin})
+      {Key key, @required this.title, this.onSelectProvinceDistrict})
       : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class _SearchProvinceClientPageState extends State<SearchProvinceClientPage> {
   bool statePage = true;
   @override
   void initState() {
-    if (widget.title != 'Buscar provincia origen') {
+    if (widget.title != 'Buscar origen') {
       statePage = false;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -44,7 +46,7 @@ class _SearchProvinceClientPageState extends State<SearchProvinceClientPage> {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: PrincipalInput(
                   onChanged: (val) {},
-                  hinText: 'Provincia',
+                  hinText: 'Provincia - Distrito',
                 ),
               ),
               BlocBuilder<ChooseRoutesClientBloc, ChooseRoutesClientState>(
@@ -55,28 +57,29 @@ class _SearchProvinceClientPageState extends State<SearchProvinceClientPage> {
                     );
                   }
                   DataChooseRoutesClient param = state;
-                  if(param.provinces.isEmpty){
+                  if(param.provinceDistricts.isEmpty){
                     return Center(child: Text('sin data'),);
                   }
-                  return ListView.builder(
+                  return ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
+                    separatorBuilder: (ctx, i) => Divider(),
                     shrinkWrap: true,
-                    itemCount: param.provinces.length,
+                    itemCount: param.provinceDistricts.length,
                     itemBuilder: (context, int i) {
-                      ProvincesClientEntity privinces = param.provinces[i];
-                      return InkWell(
+                      ProvinceDistrictClientEntity provincieDistrict = param.provinceDistricts[i];
+                      return ListTile(
+                        dense: true,
                         onTap: () {
-                          if (statePage) {
-                            widget.getPrivinceOrigin(privinces.nameProvince, '');
-                          } else {
-                            widget.getPrivinceOrigin('', privinces.nameProvince);
-                          }
+                          widget.onSelectProvinceDistrict(provincieDistrict);
                           Navigator.of(context).pop();
                         },
-                        child: Column(
+                        title: Row(
                           children: [
-                            Text(privinces.nameProvince),
-                            Divider()
+                            Text(provincieDistrict.provinceName, style: TextStyle(fontSize: 14)),
+                            SizedBox(width: 5),
+                            Icon(Icons.arrow_right_alt),
+                            SizedBox(width: 5),
+                            Text(provincieDistrict.districtName, style: TextStyle(fontSize: 14)),
                           ],
                         ),
                       );
