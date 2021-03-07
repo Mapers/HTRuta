@@ -23,3 +23,16 @@ class AddwhereaboutsWhereaboutsEvent extends WhereaboutsEvent{
   @override
   List<Object> get props => [whereabouts];
 }
+class EditWhereaboutsEvent extends WhereaboutsEvent{
+  final WhereaboutsEntity whereabouts;
+  final WhereaboutsEntity newWhereabouts;
+  EditWhereaboutsEvent({@required this.whereabouts,@required this.newWhereabouts});
+  @override
+  List<Object> get props => [whereabouts,newWhereabouts];
+}
+class DeleteWhereaboutsEvent extends WhereaboutsEvent{
+  final WhereaboutsEntity whereabouts;
+  DeleteWhereaboutsEvent({@required this.whereabouts});
+  @override
+  List<Object> get props => [whereabouts];
+}

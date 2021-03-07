@@ -31,6 +31,15 @@ class WhereaboutsBloc extends Bloc<WhereaboutsEvent, WhereaboutsState> {
       WhereaboutsEntity whereabout = WhereaboutsEntity( id:'1' ,cost:event.cost,whereabouts: event.whereabouts);
       List<WhereaboutsEntity> whereaabouts = await routeDriveRepository.addWhereAboutsRepository(whereabouts:whereabout);
       yield DataWhereaboutsState(whereaabouts: whereaabouts);
+    }else if(event is EditWhereaboutsEvent){
+      yield LoadingWhereaboutsState();
+      List<WhereaboutsEntity> whereaabouts = await routeDriveRepository.editWhereAboutsRepository(whereabouts: event.whereabouts ,newWhereabouts: event.newWhereabouts );
+      yield DataWhereaboutsState(whereaabouts: whereaabouts);
+    }else if(event is DeleteWhereaboutsEvent){
+      yield LoadingWhereaboutsState();
+      List<WhereaboutsEntity> whereaabouts = await routeDriveRepository.deleteWhereAboutsRepository(whereabouts: event.whereabouts  );
+      yield DataWhereaboutsState(whereaabouts: whereaabouts);
     }
+    
   }
 }

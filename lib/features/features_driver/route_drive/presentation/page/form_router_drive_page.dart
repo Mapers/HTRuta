@@ -185,23 +185,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                             ),
                           ),
                         ),
-                        // Card(
-                        //   elevation: 4,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8),
-                        //     child: Container(
-                        //       width: double.infinity,
-                        //       child: Column(
-                        //         children: [
-                        //           Text('Destino', style: TextStyle(fontWeight: FontWeight.bold),),
-                        //           Text(routerDrives.to.provinceName),
-                        //           Text(routerDrives.to.districtName),
-                        //           Text(routerDrives.to.streetName),
-                        //         ],
-                        //       )
-                        //     ),
-                        //   ),
-                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -223,7 +206,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                             }
                             DataWhereaboutsState param = state;
                             if(param.whereaabouts.isEmpty){
-                              return Center(child: Text('sin data'),);
+                              return Center(child: Text('- Sin paraderos -'),);
                             }
                             whereaabouts = param.whereaabouts;
                             return Container(
@@ -235,46 +218,65 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                   return Card(
                                     key: UniqueKey(),
                                     elevation: 5,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            height: 80,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                                                    Text(whereaabout.whereabouts.provinceName ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                    Text(whereaabout.whereabouts.districtName ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text('Calle: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                                                    Text(whereaabout.whereabouts.streetName ),
-                                                  ],
-                                                ),
-                                                Text(whereaabout.cost),
-                                              ],
+                                    child: InkWell(
+                                      onTap: () async {
+                                        //? logica para editar paradero
+                                        final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                                        MapSelecctionWhereaboutsPage(
+                                          la:geoposition.latitude ,
+                                          lo: geoposition.longitude,
+                                          routesFromTo: routerDrives,
+                                          editState: true,
+                                          whereabout: whereaabout,
+                                        )));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 80,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                                      Text(whereaabout.whereabouts.provinceName ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                                      Text(whereaabout.whereabouts.districtName ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text('Calle: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                                      Text(whereaabout.whereabouts.streetName ),
+                                                    ],
+                                                  ),
+                                                  Text('S/. '+whereaabout.cost),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          Row(
-                                            children: [
-                                              IconButton(icon: Icon(Icons.edit), onPressed: (){}),
-                                              IconButton(icon: Icon(Icons.delete), onPressed: (){})
-                                            ],
-                                          )
-                                        ],
+                                            Row(
+                                              children: [
+                                                // IconButton(icon: Icon(Icons.edit), onPressed: (){}),
+                                                IconButton(icon: Icon(Icons.delete),
+                                                  onPressed: (){
+                                                    //? logica para eliminar
+                                                    BlocProvider.of<WhereaboutsBloc>(context).add(DeleteWhereaboutsEvent(whereabouts: whereaabout));
+                                                  }
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );

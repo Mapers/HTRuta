@@ -5,6 +5,7 @@ import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,9 +13,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapSelecctionWhereaboutsPage extends StatefulWidget {
   final RouteEntity routesFromTo;
+  final WhereaboutsEntity whereabout;
+  final bool editState;
   final double la;
   final double lo;
-  MapSelecctionWhereaboutsPage({Key key, this.la, this.lo, this.routesFromTo}) : super(key: key);
+  MapSelecctionWhereaboutsPage({Key key, this.la, this.lo, this.routesFromTo, this.whereabout, this.editState = false}) : super(key: key);
 
   @override
   _MapSelecctionWhereaboutsPageState createState() => _MapSelecctionWhereaboutsPageState();
@@ -36,6 +39,15 @@ class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsP
   void initState() {
     cleanWhereabouts();
     createRuota();
+    if(widget.editState){
+      Marker markerWhereabouts = _mapViewerUtil.generateMarker(
+        latLng: widget.whereabout.whereabouts.latLang,
+        nameMarkerId: 'WHEREABOUTS_POSITION_MARKER',
+      );
+      _markers[markerWhereabouts.markerId] = markerWhereabouts;
+      whereaboutsController.text = widget.whereabout.whereabouts.streetName;
+      
+    }
     super.initState();
   }
   void _addFromToMarkers( { LatLng pos })async{
@@ -126,9 +138,18 @@ class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsP
       top: 500,
       right: 15,
       left: 15,
-      child: PrincipalButton(text: 'Guardar',onPressed: (){
+      child: PrincipalButton(text: widget.editState ? 'Actualizar' :'Guardar' ,onPressed: (){
         formKey.currentState.save();
-        BlocProvider.of<WhereaboutsBloc>(context).add(AddwhereaboutsWhereaboutsEvent(whereabouts: whereabouts,cost: cost));
+        if(widget.editState){
+          WhereaboutsEntity newWhereabouts = WhereaboutsEntity(
+            id: '1',
+            cost: cost,
+            whereabouts: whereabouts,
+          );
+          BlocProvider.of<WhereaboutsBloc>(context).add(EditWhereaboutsEvent( whereabouts:widget.whereabout,newWhereabouts: newWhereabouts));
+        }else{
+          BlocProvider.of<WhereaboutsBloc>(context).add(AddwhereaboutsWhereaboutsEvent(whereabouts: whereabouts,cost: cost));
+        }
         Navigator.of(context).pop();
       },)
     );

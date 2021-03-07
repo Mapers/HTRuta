@@ -35,4 +35,12 @@ class RouteDriveRepository {
     List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.addWhereAbouts(whereabouts: whereabouts);
     return whereAbouts;
   }
+  Future<List<WhereaboutsEntity>> editWhereAboutsRepository({WhereaboutsEntity whereabouts,WhereaboutsEntity newWhereabouts}) async{
+    List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.editWhereAbouts(whereabouts: whereabouts,newWhereabouts: newWhereabouts);
+    return whereAbouts;
+  }
+  Future<List<WhereaboutsEntity>> deleteWhereAboutsRepository({WhereaboutsEntity whereabouts}) async{
+    List<WhereaboutsEntity> whereAbouts = await routerDriveLocalDataSoruce.deleteWhereAbouts(whereabouts: whereabouts);
+    return whereAbouts;
+  }
 }
