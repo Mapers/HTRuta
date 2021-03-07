@@ -1,7 +1,10 @@
 
-import 'package:HTRuta/features/feature_client/home/entities/availables_routes_enity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/vehicle_seat_layout_enum.dart';
+import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientRemoteDataSoruce {
@@ -30,14 +33,14 @@ class InterprovincialClientRemoteDataSoruce {
     return provinces;
   }
 
-  List<AvailablesRoutesEntity> availablesRoutes =[];
-  Future<List<AvailablesRoutesEntity>> getAvailablesRoutes() async{
+  List<AvailableRouteEntity> availablesRoutes =[];
+  Future<List<AvailableRouteEntity>> getAvailablesRoutes() async{
     availablesRoutes = [
-      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
-      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: true, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
-      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
-      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: true, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
-      AvailablesRoutesEntity(id: 1,origin: 'lima',destination: 'huacho',costo: 'S/. 300',state: false, street: 'av. Las flores',nameDriver: 'Richar david perez', time: '02:20 PM' ,date: '28/02/2021'),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
     ];
     return availablesRoutes;
   }

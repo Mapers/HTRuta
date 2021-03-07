@@ -12,7 +12,7 @@ class LocationUtil {
     Geolocator _locationService = Geolocator();
     Position currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
-    LocationEntity locationEntity = LocationEntity.initialWIthLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
+    LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
 
     List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
@@ -32,7 +32,7 @@ class LocationUtil {
     Geolocator _locationService = Geolocator();
     subscription = _locationService.getPositionStream().listen((location) async{
       List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(location.latitude, location.longitude);
-      LocationEntity locationEntity = LocationEntity.initialWIthLocation(latitude: location.latitude, longitude: location.longitude);
+      LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
 
       if (placemarks != null && placemarks.isNotEmpty) {
         Placemark pos = placemarks.first;

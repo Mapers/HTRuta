@@ -32,7 +32,7 @@ class LocationEntity extends Equatable {
     );
   }
 
-  factory LocationEntity.initialWIthLocation({@required double latitude, @required double longitude}){
+  factory LocationEntity.initialWithLocation({@required double latitude, @required double longitude}){
     return LocationEntity(
       latLang: LatLng(latitude, longitude),
       districtName: '-',
