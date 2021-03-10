@@ -60,6 +60,7 @@ dependencies:
   flutter_bloc: ^6.1.2
   get_it: ^5.0.6
   flutter_polyline_points: ^0.2.4
+  flutter_xlider: ^3.4.0
   
 dev_dependencies:
   flutter_test:

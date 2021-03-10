@@ -1,3 +1,4 @@
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
@@ -39,7 +40,9 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
           itemBuilder: (BuildContext context, int index) {
             return CardAvailiblesRoutes(
               availablesRoutesEntity: param.availablesRoutes[index],
-              onTap: (){}
+              onTap: (){
+                Navigator.of(context).push(Routes.toPickSeatPage());
+              }
             );
           },
         );
