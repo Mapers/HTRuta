@@ -9,3 +9,9 @@ abstract class InterprovincialClientEvent extends Equatable {
 
 class LoadInterprovincialClientEvent extends InterprovincialClientEvent {}
 class SearchcInterprovincialClientEvent extends InterprovincialClientEvent {}
+class DestinationInterprovincialClientEvent extends InterprovincialClientEvent {
+  final LatLng to;
+  const DestinationInterprovincialClientEvent({this.to});
+  @override
+  List<Object> get props => [to];
+}

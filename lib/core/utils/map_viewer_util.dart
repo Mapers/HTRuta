@@ -2,6 +2,7 @@ import 'package:HTRuta/config.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapViewerUtil {
@@ -12,6 +13,8 @@ class MapViewerUtil {
     @required double height,
     @required Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
+    bool circle,
+
     double zoom = 16,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
     ArgumentCallback<LatLng> onTap,
@@ -32,8 +35,21 @@ class MapViewerUtil {
         zoomControlsEnabled: false,
         mapType: MapType.normal,
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
+        circles: Set<Circle>.from([circular(currentLocation, visible: circle )]),
       ),
     );
+  }
+
+  Circle circular(LatLng currentLocation,{bool visible = false}){
+    Circle circles =
+      Circle(
+        visible: visible,
+        circleId: CircleId('1'),
+        center: LatLng(currentLocation.latitude, currentLocation.longitude),
+        radius: 4000,
+        strokeWidth: 1
+      );
+      return circles;
   }
 
   CameraPosition _getCurrentPosition(LatLng currentLocation,{double zoom = 12}){

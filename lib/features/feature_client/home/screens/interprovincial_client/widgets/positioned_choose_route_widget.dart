@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PositionedChooseRouteWidget extends StatelessWidget {
-  const PositionedChooseRouteWidget({Key key}) : super(key: key);
+  final Function changeStateCircle;
+  const PositionedChooseRouteWidget({Key key, this.changeStateCircle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class PositionedChooseRouteWidget extends StatelessWidget {
       child: PrincipalButton(
         onPressed: (){
           BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+          changeStateCircle();
         },
         text: 'Elegir ruta y transporte'
       ),

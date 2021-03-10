@@ -5,10 +5,13 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapInterprovincialClientWidget extends StatefulWidget {
-  MapInterprovincialClientWidget({Key key}) : super(key: key);
+  final Function destinationInpit;
+  final bool circle;
+  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.circle = false}) : super(key: key);
 
   @override
   _MapInterprovincialClientWidgetState createState() => _MapInterprovincialClientWidgetState();
@@ -21,13 +24,13 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
   BitmapDescriptor fromPinLocationIcon;
   BitmapDescriptor toPinLocationIcon;
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
-  LatLng currentLocation;
+  Position currentLocation;
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dynamic result = await Future.wait([
@@ -44,9 +47,10 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
       DataInterprovincialClientState _data = BlocProvider.of<InterprovincialClientBloc>(context).state;
-      _addFromToMarkers(_data);
+      _addFromToMarkers(datan: _data);
     });
   }
+  
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
     Marker marker = _mapViewerUtil.generateMarker(
@@ -61,11 +65,32 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
     });
   }
 
-  void _addFromToMarkers(DataInterprovincialClientState data) async{
+  void _addFromToMarkers({DataInterprovincialClientState datan, LatLng pos}) async{
+    if(pos != null){
+      List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(pos.latitude,pos.longitude);
+      Placemark placemark = placemarkFrom.first;
+      LocationEntity to = LocationEntity(
+        latLang: LatLng( placemark.position.latitude,placemark.position.longitude),
+        regionName: placemark.administrativeArea,
+        provinceName: placemark.subAdministrativeArea ,
+        districtName: placemark.locality ,
+        streetName: placemark.thoroughfare
+      );
+      Marker marker = _mapViewerUtil.generateMarker(
+        latLng: to.latLang ,
+        nameMarkerId: 'DESTINATIPN_POSITION_MARKER',
+        icon: currentPinLocationIcon,
+      );
+      _markers[marker.markerId] = marker;
+      setState(() {});
+      widget.destinationInpit(to);
+
+    }
+
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     _locationUtil.disposeListener();
     super.dispose();
   }
@@ -73,10 +98,11 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
   @override
   Widget build(BuildContext context) {
     return BlocListener<InterprovincialClientBloc, InterprovincialClientState>(
-      listener: (ctx, state) => _addFromToMarkers(state),
+      listener: (ctx, state) => _addFromToMarkers(datan: state),
       child: _buildMapLayer(),
     );
   }
+  
 
   Widget _buildMapLayer(){
     return SizedBox(
@@ -85,7 +111,12 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
         height: MediaQuery.of(context).size.height,
         currentLocation: location?.latLang,
         markers: _markers,
-        polyLines: polylines
+        polyLines: polylines,
+        circle: widget.circle,
+        onTap: (val){
+          _addFromToMarkers(pos: val);
+          // BlocProvider.of<InterprovincialClientBloc>(context).add(DestinationInterprovincialClientEvent(to: val));
+        }
       )
     );
   }
