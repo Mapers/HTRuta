@@ -1,3 +1,7 @@
+import 'package:HTRuta/app/components/input_button.dart';
+import 'package:HTRuta/app/components/input_map_selecction.dart';
+import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
@@ -39,17 +43,55 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           ChangeServiceClientWidget(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
+              print(state);
               if(state is DataInterprovincialClientState){
+                print(state.status);
                 if(state.status == InteprovincialClientStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InteprovincialClientStatus.notEstablished){
                   return PositionedChooseRouteWidget();
+                }else if(state.status == InteprovincialClientStatus.searchInterprovincial){
+                  return Stack(
+                    children: [
+                      InputMapSelecction(
+                        onTap: (){
+                        },
+                        top: 110,
+                        labelText: 'Seleccione destino',
+                        region: '',
+                        province: '' ,
+                        district: '' ,
+                      ),
+                      SaveButtonWidget(context),
+                    ],
+                  );
                 }
               }
               return Container();
             },
           )
         ],
+      )
+    );
+  }
+  Positioned SaveButtonWidget(BuildContext context) {
+    return Positioned(
+      top: 500,
+      right: 15,
+      left: 15,
+      child: PrincipalButton(
+        text: 'Buscar interprovincial',
+        onPressed: ()async{
+          showDialog(
+            context: context,
+            child: Center(
+              child: Text('Buscando...',style: TextStyle(color: Colors.white, fontSize: 20,decoration: TextDecoration.none),)
+            ),
+          );
+          await Future.delayed(Duration(seconds: 2));
+          Navigator.of(context).pop();
+          Navigator.of(context).push(Routes.toAvailableRoutesPage());
+        },
       )
     );
   }

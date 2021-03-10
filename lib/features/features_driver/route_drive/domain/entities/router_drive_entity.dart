@@ -9,7 +9,7 @@ class RouteEntity extends Equatable {
   final String cost;
   final LocationEntity from;
   final LocationEntity to;
-  final List<WhereaboutsEntity> whereabouts;
+  // final List<WhereaboutsEntity> whereabouts;
 
 
 
@@ -18,7 +18,7 @@ class RouteEntity extends Equatable {
     this.name,
     this.from,
     this.to,
-    this.whereabouts,
+    // this.whereabouts,
     this.cost,
   });
 
@@ -27,7 +27,7 @@ class RouteEntity extends Equatable {
     'name': name,
     'from': from,
     'to': to,
-    'whereabouts': whereabouts,
+    // 'whereabouts': whereabouts,
     'cost': cost,
 
   };
@@ -40,7 +40,7 @@ class RouteEntity extends Equatable {
       name: dataJson['name'],
       from: dataJson['from'],
       to: dataJson['to'],
-      whereabouts: dataJson['whereabouts'],
+      // whereabouts: dataJson['whereabouts'],
       cost: dataJson['cost'],
     );
   }
@@ -50,11 +50,13 @@ class RouteEntity extends Equatable {
       name: '',
       from: null,
       to: null,
-      whereabouts: null,
+      // whereabouts: null,
       cost: null,
     );
   }
 
   @override
-  List<Object> get props => [ id, name, from, to, whereabouts, cost];
+  List<Object> get props => [ id, name, from, to,
+  // whereabouts,
+  cost];
 }

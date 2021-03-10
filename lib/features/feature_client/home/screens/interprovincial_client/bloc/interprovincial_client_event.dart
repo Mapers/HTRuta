@@ -8,3 +8,4 @@ abstract class InterprovincialClientEvent extends Equatable {
 }
 
 class LoadInterprovincialClientEvent extends InterprovincialClientEvent {}
+class SearchcInterprovincialClientEvent extends InterprovincialClientEvent {}

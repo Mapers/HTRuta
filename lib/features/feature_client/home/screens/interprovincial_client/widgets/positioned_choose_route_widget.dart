@@ -1,6 +1,8 @@
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PositionedChooseRouteWidget extends StatelessWidget {
   const PositionedChooseRouteWidget({Key key}) : super(key: key);
@@ -11,7 +13,7 @@ class PositionedChooseRouteWidget extends StatelessWidget {
       bottom: 20,
       child: PrincipalButton(
         onPressed: (){
-          Navigator.of(context).push(Routes.toChooseRouteClientPage());
+          BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
         },
         text: 'Elegir ruta y transporte'
       ),

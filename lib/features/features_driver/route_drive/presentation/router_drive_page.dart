@@ -94,13 +94,13 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                             Text(' - ' + routerDrive.to.streetName),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Icon(Icons.alt_route, color: Colors.black,),
-                            SizedBox(width: 10,),
-                            Text(routerDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Icon(Icons.alt_route, color: Colors.black,),
+                        //     SizedBox(width: 10,),
+                        //     Text(routerDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
+                        //   ],
+                        // ),
                         Row(
                           children: [
                             Icon(Icons.monetization_on, color: Colors.black,),

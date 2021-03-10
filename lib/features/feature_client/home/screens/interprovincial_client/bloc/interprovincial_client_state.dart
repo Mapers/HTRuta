@@ -8,9 +8,8 @@ abstract class InterprovincialClientState extends Equatable {
 }
 
 enum InteprovincialClientStatus {
-  loading, notEstablished, selectedRoute
+  loading, notEstablished, selectedRoute ,searchInterprovincial
 }
-
 class DataInterprovincialClientState extends InterprovincialClientState {
   final InteprovincialClientStatus status;
   final String loadingMessage;

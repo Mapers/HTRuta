@@ -30,20 +30,20 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: Text(widget.origin.provinceName + ' - ' + widget.origin.districtName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(Icons.arrow_forward_sharp),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Text(widget.destination.provinceName + ' - ' + widget.destination.districtName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     Expanded(
+                //       child: Text(widget.origin.provinceName + ' - ' + widget.origin.districtName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                //     ),
+                //     SizedBox(width: 5),
+                //     Icon(Icons.arrow_forward_sharp),
+                //     SizedBox(width: 5),
+                //     Expanded(
+                //       child: Text(widget.destination.provinceName + ' - ' + widget.destination.districtName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                //     ),
+                //   ],
+                // ),
                 SizedBox(height: 10),
                 CardsAvailablesRoutes()
               ],

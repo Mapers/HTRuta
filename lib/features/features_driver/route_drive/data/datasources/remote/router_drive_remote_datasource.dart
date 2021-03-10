@@ -9,10 +9,10 @@ class RouterDriveRemoteDataSoruce {
   List<RouteEntity> roterDrives =[];
 
   Future<List<RouteEntity>> getListRouterDrives() async{
-    List<WhereaboutsEntity> whereabouts= [
-      WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',)),
-      WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',))
-    ];
+    // List<WhereaboutsEntity> whereabouts= [
+    //   WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',)),
+    //   WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',))
+    // ];
     roterDrives = [
       RouteEntity(
         id: '1',
@@ -34,7 +34,7 @@ class RouterDriveRemoteDataSoruce {
           streetName: 'plaza el norte',
           zoom: 12,
         ),
-        whereabouts: whereabouts,
+        // whereabouts: whereabouts,
       )
       // RouteEntity(id: '2', name: 'juan', nameFrom:'Lima' ,nameTo: 'Huacho',latLagFrom:LatLng(-12.0453, -77.0311),latLagTo: LatLng(-11.1072, 77.6103)),
       // RouteEntity(id: '3', name: 'luis', nameFrom:'Chiclayo' ,nameTo: 'Lima',latLagFrom:LatLng(-6.77361, -79.84),latLagTo: LatLng(-12.0453, -77.0311))

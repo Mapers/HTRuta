@@ -45,7 +45,6 @@ class _ChooseRouteClientPageState extends State<ChooseRouteClientPage> {
                 enabled: false,
                 onTap: () => Navigator.of(context).push(Routes.toSearchProvinceClientPage(title: 'Buscar distrito origen', onSelectProvinceDistrict: setProvinceOrigin)),
                 hinText: 'Origen',
-                // enabled: false,
               ),
               InputButton(
                 controller: provinceDestinationController,

@@ -20,6 +20,11 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       yield DataInterprovincialClientState.initial().copyWith(
         status: InteprovincialClientStatus.notEstablished
       );
+    }else if(event is SearchcInterprovincialClientEvent){
+      yield DataInterprovincialClientState();
+      yield DataInterprovincialClientState.initial().copyWith(
+        status: InteprovincialClientStatus.searchInterprovincial
+      );
     }
   }
 }

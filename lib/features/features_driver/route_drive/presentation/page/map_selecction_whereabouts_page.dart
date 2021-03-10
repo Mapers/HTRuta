@@ -138,20 +138,23 @@ class _MapSelecctionWhereaboutsPageState extends State<MapSelecctionWhereaboutsP
       top: 500,
       right: 15,
       left: 15,
-      child: PrincipalButton(text: widget.editState ? 'Actualizar' :'Guardar' ,onPressed: (){
-        formKey.currentState.save();
-        if(widget.editState){
-          WhereaboutsEntity newWhereabouts = WhereaboutsEntity(
-            id: '1',
-            cost: cost,
-            whereabouts: whereabouts,
-          );
-          BlocProvider.of<WhereaboutsBloc>(context).add(EditWhereaboutsEvent( whereabouts:widget.whereabout,newWhereabouts: newWhereabouts));
-        }else{
-          BlocProvider.of<WhereaboutsBloc>(context).add(AddwhereaboutsWhereaboutsEvent(whereabouts: whereabouts,cost: cost));
-        }
-        Navigator.of(context).pop();
-      },)
+      child: PrincipalButton(
+        text: widget.editState ? 'Actualizar' :'Guardar' ,
+        onPressed: (){
+          formKey.currentState.save();
+          if(widget.editState){
+            WhereaboutsEntity newWhereabouts = WhereaboutsEntity(
+              id: '1',
+              cost: cost,
+              whereabouts: whereabouts,
+            );
+            BlocProvider.of<WhereaboutsBloc>(context).add(EditWhereaboutsEvent( whereabouts:widget.whereabout,newWhereabouts: newWhereabouts));
+          }else{
+            BlocProvider.of<WhereaboutsBloc>(context).add(AddwhereaboutsWhereaboutsEvent(whereabouts: whereabouts,cost: cost));
+          }
+          Navigator.of(context).pop();
+        },
+      )
     );
   }
   Positioned Back(BuildContext context) {
