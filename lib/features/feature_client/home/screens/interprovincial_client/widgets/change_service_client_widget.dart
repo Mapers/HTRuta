@@ -26,6 +26,7 @@ class ChangeServiceClientWidget extends StatelessWidget {
                   value: item
                 )).toList(),
                 onChanged: (newItem){
+                  print(newItem);
                   BlocProvider.of<ClientServiceBloc>(context).add(ChangeDriverServiceEvent(type: newItem));
                 },
               ),

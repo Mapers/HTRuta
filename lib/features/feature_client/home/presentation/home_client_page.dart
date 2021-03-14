@@ -1,3 +1,4 @@
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_client_service_enum.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
@@ -29,7 +30,7 @@ class _HomeClientPageState extends State<HomeClientPage> {
               DataClientServiceState data = state;
               switch (data.typeService) {
                 case TypeClientService.taxi:
-                  return TaxiClientScreen(parentScaffoldKey: _scaffoldKey);
+                  return HomeScreens();
                 case TypeClientService.interprovincial:
                   return InterprovincialClientScreen(parentScaffoldKey: _scaffoldKey);
                 default:
