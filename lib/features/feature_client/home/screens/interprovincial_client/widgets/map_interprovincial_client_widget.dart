@@ -11,7 +11,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapInterprovincialClientWidget extends StatefulWidget {
   final Function destinationInpit;
   final bool circle;
-  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.circle = false}) : super(key: key);
+  final double radiusCircle;
+  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.circle = false, this.radiusCircle}) : super(key: key);
 
   @override
   _MapInterprovincialClientWidgetState createState() => _MapInterprovincialClientWidgetState();
@@ -113,6 +114,8 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
         markers: _markers,
         polyLines: polylines,
         circle: widget.circle,
+        
+        radiusCircle: widget.radiusCircle,
         onTap: (val){
           _addFromToMarkers(pos: val);
           // BlocProvider.of<InterprovincialClientBloc>(context).add(DestinationInterprovincialClientEvent(to: val));

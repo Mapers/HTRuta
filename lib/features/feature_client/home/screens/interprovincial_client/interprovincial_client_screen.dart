@@ -26,11 +26,12 @@ class InterprovincialClientScreen extends StatefulWidget {
 class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
   LocationEntity toLocation;
   TextEditingController toController = TextEditingController();
-  List<int> xd = [1,2,3,4];
+  List<double> xd = [4000,5000,6000,7000];
   bool circle = false;
-  int xd1;
+  double xd1;
   @override
   void initState() {
+    xd1 = 4000;
     toLocation = LocationEntity(
       latLang: null,
       districtName: '',
@@ -63,7 +64,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          MapInterprovincialClientWidget(destinationInpit: destinationInpit,circle: circle,),
+          MapInterprovincialClientWidget(destinationInpit: destinationInpit,circle: circle,radiusCircle: xd1,),
           ChangeServiceClientWidget(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
@@ -95,7 +96,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Select<int>(
+                            child: Select<double>(
                               value: xd1,
                               // placeholderIsSelected: true,
                               showPlaceholder: false,

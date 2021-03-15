@@ -14,6 +14,7 @@ class MapViewerUtil {
     @required Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
     bool circle,
+    double radiusCircle,
 
     double zoom = 16,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
@@ -35,18 +36,19 @@ class MapViewerUtil {
         zoomControlsEnabled: false,
         mapType: MapType.normal,
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
-        circles: Set<Circle>.from([circular(currentLocation, visible: circle )]),
+        // ignore: prefer_collection_literals
+        circles: Set<Circle>.from([circular(currentLocation, visible: circle,radiusCircle: radiusCircle)]),
       ),
     );
   }
 
-  Circle circular(LatLng currentLocation,{bool visible = false}){
+  Circle circular(LatLng currentLocation,{bool visible = false,double  radiusCircle = 4000}){
     Circle circles =
       Circle(
         visible: visible,
         circleId: CircleId('1'),
         center: LatLng(currentLocation.latitude, currentLocation.longitude),
-        radius: 4000,
+        radius: radiusCircle,
         strokeWidth: 1
       );
       return circles;
