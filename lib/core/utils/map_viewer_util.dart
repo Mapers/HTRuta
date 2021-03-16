@@ -12,7 +12,7 @@ class MapViewerUtil {
     @required double height,
     @required Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
-    bool circle,
+    bool drawCircle,
     double radiusCircle,
 
     double zoom = 16,
@@ -36,7 +36,7 @@ class MapViewerUtil {
         mapType: MapType.normal,
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
         // ignore: prefer_collection_literals
-        circles: Set<Circle>.from([circular(currentLocation, visible: circle,radiusCircle: radiusCircle)]),
+        circles: Set<Circle>.from([circular(currentLocation, visible: drawCircle,radiusCircle: radiusCircle)]),
       ),
     );
   }

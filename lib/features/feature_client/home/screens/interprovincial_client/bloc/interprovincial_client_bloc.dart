@@ -45,7 +45,6 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
           )
         )
       );
-      
     }
   }
 }

@@ -10,9 +10,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapInterprovincialClientWidget extends StatefulWidget {
   final Function destinationInpit;
-  final bool circle;
+  final bool drawCircle;
   final double radiusCircle;
-  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.circle = false, this.radiusCircle}) : super(key: key);
+  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.drawCircle = false, this.radiusCircle}) : super(key: key);
 
   @override
   _MapInterprovincialClientWidgetState createState() => _MapInterprovincialClientWidgetState();
@@ -51,7 +51,6 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
       _addFromToMarkers(datan: _data);
     });
   }
-  
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
     Marker marker = _mapViewerUtil.generateMarker(
@@ -103,7 +102,6 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
       child: _buildMapLayer(),
     );
   }
-  
 
   Widget _buildMapLayer(){
     return SizedBox(
@@ -113,9 +111,8 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
         currentLocation: location?.latLang,
         markers: _markers,
         polyLines: polylines,
-        circle: widget.circle,
-        
-        radiusCircle: widget.radiusCircle,
+        drawCircle: widget.drawCircle,
+        radiusCircle: widget.radiusCircle*1000,
         onTap: (val){
           _addFromToMarkers(pos: val);
           // BlocProvider.of<InterprovincialClientBloc>(context).add(DestinationInterprovincialClientEvent(to: val));

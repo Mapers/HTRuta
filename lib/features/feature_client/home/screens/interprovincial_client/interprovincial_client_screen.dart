@@ -24,12 +24,15 @@ class InterprovincialClientScreen extends StatefulWidget {
 class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
   LocationEntity toLocation;
   TextEditingController toController = TextEditingController();
-  List<double> xd = [4000,5000,6000,7000];
-  bool circle = false;
-  double xd1;
+  List<double> circularRadio = [1,2,3,4,5];
+  List<int> seating = [1,2,3,4,5,6,7,8,9,10];
+  bool drawCircle = false;
+  double initialCircularRadio;
+  int initialSeat;
   @override
   void initState() {
-    xd1 = 4000;
+    initialCircularRadio = 3;
+    initialSeat = 1;
     toLocation = LocationEntity(
       latLang: null,
       districtName: '',
@@ -48,9 +51,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     setState(() {});
   }
   void changeStateCircle(){
-    circle = true;
+    drawCircle = true;
     setState(() {
-      
     });
   }
 
@@ -63,7 +65,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          MapInterprovincialClientWidget(destinationInpit: destinationInpit,circle: circle,radiusCircle: xd1,),
+          MapInterprovincialClientWidget(destinationInpit: destinationInpit,drawCircle: drawCircle,radiusCircle: initialCircularRadio ),
           ChangeServiceClientWidget(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
@@ -90,25 +92,55 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                       Positioned(
                         left: 15,
                         top: 180,
-                        child: Card(
-                          elevation: 5,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Select<double>(
-                              value: xd1,
-                              // placeholderIsSelected: true,
-                              showPlaceholder: false,
-                              items:xd.map((item) => DropdownMenuItem(
-                                child: Center(child: Text(item.toString()+' km')),
-                                value: item
-                              )).toList(),
-                              onChanged: (newItem){
-                                xd1 = newItem;
-                                  setState((){});
-                              },
+                        child: Row(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Select<double>(
+                                  value: initialCircularRadio,
+                                  // placeholderIsSelected: true,
+                                  showPlaceholder: false,
+                                  items:circularRadio.map((item) => DropdownMenuItem(
+                                    child: Center(child: Text(item.toString()+' km')),
+                                    value: item
+                                  )).toList(),
+                                  onChanged: (val){
+                                    initialCircularRadio = val;
+                                      setState((){});
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Select<int>(
+                                  value: initialSeat,
+                                  // placeholderIsSelected: true,
+                                  showPlaceholder: false,
+                                  items:seating.map((item) => DropdownMenuItem(
+                                    child: Center(child: Row(
+                                      children: [
+                                        Text(item.toString()),
+                                        SizedBox(width: 5,),
+                                        Icon(Icons.airline_seat_recline_normal ,size: 20,color: Colors.black,)
+                                      ],
+                                    )),
+                                    value: item
+                                  )).toList(),
+                                  onChanged: (val){
+                                    initialSeat = val;
+                                      setState((){});
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
