@@ -32,7 +32,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ij.sl<InterprovincialDriverLocationBloc>(),
+      create: (_) => ij.getIt<InterprovincialDriverLocationBloc>(),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -47,7 +47,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
                 }else if(state.status == InterprovincialStatus.notEstablished){
                   return RoutesInterprovincialCardWidget();
                 }else if(state.status == InterprovincialStatus.onWhereabouts){
-                  return OnWhereaboutsWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
+                  return OnWhereaboutsWidget(route: state.route, routeStartDateTime: state.routeStartDateTime, documentId: state.documentId);
                 }else if(state.status == InterprovincialStatus.inRoute){
                   return InRouteWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
                 }

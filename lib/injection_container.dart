@@ -1,6 +1,7 @@
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
@@ -16,67 +17,71 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 
-final sl = GetIt.instance;
+final getIt = GetIt.instance;
 
 Future<void> init() async {
   //! Blocs
-  sl.registerLazySingleton<RouteDriveRepository>(
-    () => RouteDriveRepository(sl())
+  getIt.registerLazySingleton<RouteDriveRepository>(
+    () => RouteDriveRepository(getIt())
   );
 
-  sl.registerLazySingleton<RouterDriveRemoteDataSoruce>(
+  getIt.registerLazySingleton<RouterDriveRemoteDataSoruce>(
     () => RouterDriveRemoteDataSoruce()
   );
-  sl.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
+  getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
     () => InterprovincialClientRemoteDataSoruce()
   );
-  sl.registerLazySingleton<InterprovincialClientLocationBloc>(
+  getIt.registerLazySingleton<InterprovincialClientLocationBloc>(
     () => InterprovincialClientLocationBloc()
   );
 
-  sl.registerLazySingleton<DriverServiceBloc>(
+  getIt.registerLazySingleton<DriverServiceBloc>(
     () => DriverServiceBloc()
   );
 
-  sl.registerLazySingleton<ChooseRoutesClientBloc>(
-    () => ChooseRoutesClientBloc(sl())
+  getIt.registerLazySingleton<ChooseRoutesClientBloc>(
+    () => ChooseRoutesClientBloc(getIt())
   );
 
-  sl.registerLazySingleton<InterprovincialDriverBloc>(
+  getIt.registerLazySingleton<InterprovincialDriverBloc>(
     () => InterprovincialDriverBloc(
-      interprovincialDataRemote: sl()
+      interprovincialDataRemote: getIt(),
+      interprovincialDataFirestore: getIt()
     )
   );
 
-  sl.registerLazySingleton<InterprovincialDriverLocationBloc>(
-    () => InterprovincialDriverLocationBloc(interprovincialDataRemote: sl())
+  getIt.registerLazySingleton<InterprovincialDriverLocationBloc>(
+    () => InterprovincialDriverLocationBloc(interprovincialDataRemote: getIt(), interprovincialDataFirestore: getIt())
   );
 
-  sl.registerLazySingleton<ClientServiceBloc>(
+  getIt.registerLazySingleton<ClientServiceBloc>(
     () => ClientServiceBloc()
   );
-  sl.registerLazySingleton<InterprovincialClientBloc>(
+  getIt.registerLazySingleton<InterprovincialClientBloc>(
     () => InterprovincialClientBloc()
   );
 
-  sl.registerLazySingleton<InterprovincialDataRemote>(
-    () => InterprovincialDataRemote(
-      firestore: sl()
+  getIt.registerLazySingleton<InterprovincialDataRemote>(
+    () => InterprovincialDataRemote()
+  );
+  getIt.registerLazySingleton<InterprovincialDataFirestore>(
+    () => InterprovincialDataFirestore(
+      firestore: getIt()
     )
   );
 
-  sl.registerLazySingleton<AvailablesRoutesBloc>(
-    () => AvailablesRoutesBloc(sl())
+  getIt.registerLazySingleton<AvailablesRoutesBloc>(
+    () => AvailablesRoutesBloc(getIt())
   );
   await Firebase.initializeApp();
-  sl.registerLazySingleton<FirebaseFirestore>(
+  getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance
   );
   // feature_client
-  sl.registerFactory<RouteDriveBloc>(
-    () => RouteDriveBloc(sl())
+  getIt.registerFactory<RouteDriveBloc>(
+    () => RouteDriveBloc(getIt())
   );
-  sl.registerFactory<WhereaboutsBloc>(
-    () => WhereaboutsBloc(sl())
+  getIt.registerFactory<WhereaboutsBloc>(
+    () => WhereaboutsBloc(getIt())
   );
 }

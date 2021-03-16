@@ -25,7 +25,7 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
       ),
       body: SingleChildScrollView(
         child: BlocProvider(
-          create: (context) => ij.sl<AvailablesRoutesBloc>(),
+          create: (context) => ij.getIt<AvailablesRoutesBloc>(),
           child: Padding(
             padding: EdgeInsets.all(20),
             child: Column(

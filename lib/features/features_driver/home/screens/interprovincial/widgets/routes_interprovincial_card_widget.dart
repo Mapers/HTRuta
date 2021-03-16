@@ -4,7 +4,6 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_ro
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/core/utils/extensions/time_of_day_extension.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -25,7 +24,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      InterprovincialDataRemote interprovincialDataRemote = InterprovincialDataRemote(firestore: sl<FirebaseFirestore>());
+      InterprovincialDataRemote interprovincialDataRemote = getIt<InterprovincialDataRemote>();
       interprovincialRoutes = await interprovincialDataRemote.getAllRoutesByUser();
       setState(() {
         isLoading = false;

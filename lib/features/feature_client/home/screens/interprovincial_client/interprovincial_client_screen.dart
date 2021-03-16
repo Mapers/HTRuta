@@ -1,11 +1,9 @@
-import 'package:HTRuta/app/components/input_button.dart';
 import 'package:HTRuta/app/components/input_map_selecction.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/radio_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
@@ -36,7 +34,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       latLang: null,
       districtName: '',
       provinceName: '',
-      streetName: ''
+      regionName: '',
+      streetName: '',
     );
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -59,7 +58,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.sl<ChooseRoutesClientBloc>()),
+        BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.getIt<ChooseRoutesClientBloc>()),
       ],
       child: Stack(
         alignment: Alignment.bottomCenter,
