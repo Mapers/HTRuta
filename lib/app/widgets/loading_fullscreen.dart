@@ -8,18 +8,21 @@ class LoadingFullScreen {
     showDialog(
       context: _parentContext,
       barrierDismissible: false,
-      child:  Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
-            ),
-            label != null ? Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(label, style: TextStyle(fontSize: 14, color: Colors.white))
-            ) : Container()
-          ]
+      child:  Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+              ),
+              label != null ? Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(label, style: TextStyle(fontSize: 14, color: Colors.white)),
+              ) : Container()
+            ]
+          ),
         )
       )
     );

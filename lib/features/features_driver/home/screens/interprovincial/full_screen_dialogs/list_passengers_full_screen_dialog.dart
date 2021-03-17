@@ -1,3 +1,4 @@
+import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -17,6 +18,7 @@ class ListPassengersFullScreenDialog extends StatefulWidget {
 class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScreenDialog> {
 
   List<PassengerEntity> passengers;
+  LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
 
   @override
   void initState() { 
@@ -103,14 +105,16 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
 
   Future<void> removePassenger(int index, PassengerEntity passenger) async{
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
+    _loadingFullScreen.show(context, label: 'Liberando asientos...');
     int newAvailableSeats = await interprovincialDataFirestore.removePassenger(documentId: widget.documentId, passenger: passenger);
+    _loadingFullScreen.close();
     if(newAvailableSeats == null){
       return;
     }
     setState(() => passengers.removeAt(index));
     BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: newAvailableSeats));
     if(passengers.isEmpty){
-      await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(Duration(milliseconds: 100));
       Navigator.of(context).pop();
     }
   }

@@ -117,10 +117,33 @@ class InterprovincialDataFirestore{
     }
   }
 
-  Future<bool> addPassenger({@required String documentId, @required PassengerEntity passenger}) async{
+  Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
+    try {
+      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      //! Esta data debe venir desde backend
+      PassengerEntity passengerEntity = PassengerEntity.mock();
+
+      List<dynamic> result = await Future.wait([
+        dr.get(),
+        dr.collection('passengers').add(passengerEntity.toFirestore),
+        dr.collection('requests').doc(request.documentId).delete(),
+      ]);
+      DocumentSnapshot ds = result.first;
+      int newAvailableSeats = ds.data()['available_seats'] - request.seats;
+      await dr.update({
+        'available_seats': newAvailableSeats
+      });
+      return newAvailableSeats;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //! Debe ser borrado luego
+  Future<bool> addRequestTest({@required String documentId, @required InterprovincialRequestEntity request}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
-      .collection('passengers').add(passenger.toFirestore);
+      .collection('requests').add(request.toFirestore);
       return true;
     } catch (e) {
       return false;

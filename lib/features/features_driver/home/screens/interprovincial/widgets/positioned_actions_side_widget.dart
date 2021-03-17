@@ -41,9 +41,9 @@ class PositionedActionsSideWidget extends StatelessWidget {
                 int length = asyncSnapshot.data.length;
                 return itemOption(
                   icon: Icons.assignment_ind,
-                  text: '$length Solicitude${length == 1 ? "" : "s"}',
+                  text: '$length Solicitud${length == 1 ? "" : "es"}',
                   onTap: length > 0 ? () {
-                    print('Solicitudes');
+                    Navigator.of(context).push(Routes.toListInterprovincialRequestFullScreenDialog(documentId, asyncSnapshot.data));
                   } : null
                 );
               }
@@ -52,9 +52,9 @@ class PositionedActionsSideWidget extends StatelessWidget {
           ),
           itemOption(
             icon: Icons.add,
-            text: 'Añadir pasajero',
+            text: 'Añadir Solicitud',
             onTap: () {
-              interprovincialDataFirestore.addPassenger(documentId: documentId, passenger: PassengerEntity.mock());
+              interprovincialDataFirestore.addRequestTest(documentId: documentId, request: InterprovincialRequestEntity.mock());
             }
           )
         ],
@@ -64,6 +64,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
 
   Widget itemOption({@required IconData icon, @required String text, @required Function onTap}){
     return Card(
+      margin: EdgeInsets.only(bottom: 10),
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),

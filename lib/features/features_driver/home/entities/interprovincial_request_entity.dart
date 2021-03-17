@@ -29,6 +29,14 @@ class InterprovincialRequestEntity extends Equatable {
     );
   }
 
+  Map<String, dynamic> get toFirestore => {
+    'full_names': fullNames,
+    'seats': seats,
+    'from': from,
+    'to': to,
+    'price': price,
+  };
+
   factory InterprovincialRequestEntity.mock(){
     return InterprovincialRequestEntity(
       documentId: 's56sadf67sdf56as76df5a67sd',
