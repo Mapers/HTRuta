@@ -1,4 +1,5 @@
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -74,11 +75,55 @@ class InterprovincialDataFirestore{
     }
   }
 
-  Stream<List<PassengerEntity>> getListenerPassengers({@required String documentId}){
+  Stream<List<PassengerEntity>> getStreamPassengers({@required String documentId}){
     return firestore.collection('drivers_in_service').doc(documentId)
     .collection('passengers').snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
-      querySnapshot.docs.map<PassengerEntity>((doc) => PassengerEntity.fromJsonLocal(doc.data())).toList()
+      querySnapshot.docs.map<PassengerEntity>((doc){
+        Map<String, dynamic> data = doc.data();
+        data['id'] = doc.id;
+        return PassengerEntity.fromJsonLocal(data);
+      }).toList()
     );
+  }
+
+  Stream<List<InterprovincialRequestEntity>> getStreamRequests({@required String documentId}){
+    return firestore.collection('drivers_in_service').doc(documentId)
+    .collection('requests').snapshots()
+    .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
+      querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
+        Map<String, dynamic> data = doc.data();
+        data['id'] = doc.id;
+        return InterprovincialRequestEntity.fromJsonLocal(data);
+      }).toList()
+    );
+  }
+
+  Future<int> removePassenger({@required String documentId, @required PassengerEntity passenger}) async{
+    try {
+      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      List<dynamic> result = await Future.wait([
+        dr.get(),
+        dr.collection('passengers').doc(passenger.documentId).delete()
+      ]);
+      DocumentSnapshot ds = result.first;
+      int newAvailableSeats = ds.data()['available_seats'] + passenger.seats;
+      await dr.update({
+        'available_seats': newAvailableSeats
+      });
+      return newAvailableSeats;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> addPassenger({@required String documentId, @required PassengerEntity passenger}) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId)
+      .collection('passengers').add(passenger.toFirestore);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

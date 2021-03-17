@@ -21,12 +21,20 @@ class SelectRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {
 
 class StartRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {}
 
-class PlusOneAvailabelSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {
+class PlusOneAvailableSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {
   final int maxSeats;
-  PlusOneAvailabelSeatInterprovincialDriverEvent({@required this.maxSeats});
+  PlusOneAvailableSeatInterprovincialDriverEvent({@required this.maxSeats});
 
   @override
   List<Object> get props => [maxSeats];
 }
 
-class MinusOneAvailabelSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {}
+class SetLocalAvailabelSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {
+  final int newSeats;
+  SetLocalAvailabelSeatInterprovincialDriverEvent({@required this.newSeats});
+
+  @override
+  List<Object> get props => [newSeats];
+}
+
+class MinusOneAvailableSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {}

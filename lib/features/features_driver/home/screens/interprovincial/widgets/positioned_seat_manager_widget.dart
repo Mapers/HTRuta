@@ -34,7 +34,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                       child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
                     ),
                     onPressed: (){
-                      BlocProvider.of<InterprovincialDriverBloc>(context).add(MinusOneAvailabelSeatInterprovincialDriverEvent());
+                      BlocProvider.of<InterprovincialDriverBloc>(context).add(MinusOneAvailableSeatInterprovincialDriverEvent());
                     },
                   )
                 ),
@@ -70,7 +70,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                     ),
                     onPressed: (){
                       //! Se requiere tener el maximo de total de asientos
-                      BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailabelSeatInterprovincialDriverEvent(maxSeats: 60));
+                      BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailableSeatInterprovincialDriverEvent(maxSeats: 60));
                     },
                   )
                 ),

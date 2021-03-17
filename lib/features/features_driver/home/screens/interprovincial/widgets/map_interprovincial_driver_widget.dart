@@ -58,7 +58,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       icon: currentPinLocationIcon,
       onTap: (){
         //! Esto es solo para prueba temporal
-        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.test()));
+        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.mock()));
       }
     );
     DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
