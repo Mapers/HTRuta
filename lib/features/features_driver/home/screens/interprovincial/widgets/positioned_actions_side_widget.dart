@@ -1,5 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -17,28 +19,44 @@ class PositionedActionsSideWidget extends StatelessWidget {
       child: Column(
         children: [
           StreamBuilder<List<PassengerEntity>>(
-            stream: interprovincialDataFirestore.getListenerPassengers(documentId: documentId),
+            stream: interprovincialDataFirestore.getStreamPassengers(documentId: documentId),
             builder: (ctx, asyncSnapshot){
               if(asyncSnapshot.connectionState == ConnectionState.active){
                 int length = asyncSnapshot.data.length;
                 return itemOption(
                   icon: Icons.group,
                   text: '$length Pasajero${length == 1 ? "" : "s"}',
-                  onTap: () {
-                    print('Pasajeros');
-                  }
+                  onTap: length > 0 ? () {
+                    Navigator.of(context).push(Routes.toListPassengersFullScreenDialog(documentId, asyncSnapshot.data));
+                  } : null
+                );
+              }
+              return Container();
+            }
+          ),
+          StreamBuilder<List<InterprovincialRequestEntity>>(
+            stream: interprovincialDataFirestore.getStreamRequests(documentId: documentId),
+            builder: (ctx, asyncSnapshot){
+              if(asyncSnapshot.connectionState == ConnectionState.active){
+                int length = asyncSnapshot.data.length;
+                return itemOption(
+                  icon: Icons.assignment_ind,
+                  text: '$length Solicitude${length == 1 ? "" : "s"}',
+                  onTap: length > 0 ? () {
+                    print('Solicitudes');
+                  } : null
                 );
               }
               return Container();
             }
           ),
           itemOption(
-            icon: Icons.assignment_ind,
-            text: 'Solicitudes',
+            icon: Icons.add,
+            text: 'Añadir pasajero',
             onTap: () {
-              print('Solicitudes');
+              interprovincialDataFirestore.addPassenger(documentId: documentId, passenger: PassengerEntity.mock());
             }
-          ),
+          )
         ],
       )
     );

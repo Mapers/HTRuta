@@ -1,5 +1,4 @@
 import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,9 +19,8 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
           return Container();
         }
         PassengerEntity passenger = data.passengerSelected;
-        LatLng passengerLatLang = passenger.location.latLang;
-        LocationEntity driverLocation = data.location;
-        double distance = LocationUtil.calculateDistance(passengerLatLang, driverLocation.latLang);
+        LatLng passengerLatLang = passenger.toLocation.latLang;
+        double distance = LocationUtil.calculateDistance(passengerLatLang, data.location.latLang);
         return Container(
           width: 300,
           child: Card(
@@ -58,7 +56,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
                         ]
                       ),
                       SizedBox(height: 10),
-                      Text(passenger.location.streetName, style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 14, color: Colors.black54)),
                       SizedBox(height: 10),
                       Text('${distance.toStringAsFixed(2)}Km de distancia', style: TextStyle(fontSize: 12, color: Colors.black54))
                     ],

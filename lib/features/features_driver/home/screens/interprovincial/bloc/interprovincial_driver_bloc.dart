@@ -49,7 +49,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
       yield data.copyWith(
         status: InterprovincialStatus.inRoute
       );
-    }else if(event is PlusOneAvailabelSeatInterprovincialDriverEvent){
+    }else if(event is PlusOneAvailableSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       if(data.availableSeats < event.maxSeats){
         int newAvailableSeats = data.availableSeats + 1;
@@ -58,7 +58,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           availableSeats: newAvailableSeats
         );
       }
-    }else if(event is MinusOneAvailabelSeatInterprovincialDriverEvent){
+    }else if(event is MinusOneAvailableSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       if(data.availableSeats > 0){
         int newAvailableSeats = data.availableSeats - 1;
@@ -67,6 +67,9 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           availableSeats: newAvailableSeats
         );
       }
+    }else if(event is SetLocalAvailabelSeatInterprovincialDriverEvent){
+      DataInterprovincialDriverState data = state;
+      yield data.copyWith(availableSeats: event.newSeats);
     }
   }
 }
