@@ -4,6 +4,7 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,13 +17,6 @@ class CardsAvailablesRoutes extends StatefulWidget {
 
 class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
   @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent());
-    });
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<AvailablesRoutesBloc, AvailablesRoutesState>(
       builder: (context, state) {
@@ -33,18 +27,37 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
         if(param.availablesRoutes.isEmpty){
           return Center(child: Text('- Sin resultados -'),);
         }
-        return ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: param.availablesRoutes.length ,
-          itemBuilder: (BuildContext context, int index) {
-            return CardAvailiblesRoutes(
-              availablesRoutesEntity: param.availablesRoutes[index],
-              onTap: (){
-                Navigator.of(context).push(Routes.toPickSeatPage());
-              }
-            );
-          },
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: Text(param.distictfrom , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                ),
+                SizedBox(width: 5),
+                Icon(Icons.arrow_forward_sharp),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(param.distictTo, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: param.availablesRoutes.length ,
+              itemBuilder: (BuildContext context, int index) {
+                return CardAvailiblesRoutes(
+                  availablesRoutesEntity: param.availablesRoutes[index],
+                  onTap: (){
+                    Navigator.of(context).push(Routes.toTravelNegotationPage(availablesRoutesEntity:  param.availablesRoutes[index]));
+                  }
+                );
+              },
+            ),
+          ],
         );
       },
     );
@@ -81,19 +94,53 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Text('S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2), style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
                 ],
               ),
-              Container(
-                padding: EdgeInsets.all(4),
-                margin: EdgeInsets.symmetric(vertical: 5),
-                width: 90,
-                decoration: BoxDecoration(
-                  color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                  textAlign: TextAlign.center,
-                ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Icon(Icons.star,size: 20,),
+                  Icon(Icons.star,size: 20,),
+                  Icon(Icons.star,size: 20,),
+                  Icon(Icons.star,size: 20,),
+                  Icon(Icons.star,size: 20,),
+                  Spacer(),
+                  InkWell(
+                    onTap: (){
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ComentsWirdgets();
+                        }
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('ver comen...'),
+                    )
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.person, color: Colors.black87),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(availablesRoutesEntity.route.nameDriver , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  ),
+                ],
               ),
               Row(
                 children: [

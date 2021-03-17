@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 class InterprovincialRouteEntity extends Equatable {
   final String id;
   final String name;
+  final String nameDriver;
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
   final double cost;
@@ -15,6 +16,7 @@ class InterprovincialRouteEntity extends Equatable {
   InterprovincialRouteEntity({
     @required this.id,
     @required this.name,
+    @required this.nameDriver,
     @required this.cost,
     @required this.fromLocation,
     @required this.toLocation,
@@ -25,6 +27,7 @@ class InterprovincialRouteEntity extends Equatable {
     return InterprovincialRouteEntity(
       id: '1',
       name: 'Huacho - Chancay - Lima',
+      nameDriver: 'Pepe lopez Peres' ,
       cost: 50,
       fromLocation: LocationEntity(
         latLang: LatLng(-11.109722, -77.596091),
@@ -47,5 +50,5 @@ class InterprovincialRouteEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, name, cost, fromLocation, toLocation, whereabouts];
+  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, whereabouts];
 }

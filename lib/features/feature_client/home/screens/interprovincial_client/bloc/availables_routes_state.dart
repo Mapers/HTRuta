@@ -9,9 +9,11 @@ abstract class AvailablesRoutesState extends Equatable {
 class LoadingAvailablesRoutes extends AvailablesRoutesState {}
 
 class DataAvailablesRoutes extends AvailablesRoutesState {
+  final String distictfrom;
+  final String distictTo;
   final List<AvailableRouteEntity> availablesRoutes;
-  DataAvailablesRoutes({ this.availablesRoutes });
+  DataAvailablesRoutes({ this.availablesRoutes,this.distictfrom, this.distictTo });
   @override
-  List<Object> get props => [availablesRoutes];
+  List<Object> get props => [availablesRoutes,distictfrom,distictTo];
 }
 

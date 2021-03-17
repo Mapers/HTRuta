@@ -9,10 +9,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapInterprovincialClientWidget extends StatefulWidget {
+  final Function getFrom;
   final Function destinationInpit;
   final bool drawCircle;
   final double radiusCircle;
-  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.drawCircle = false, this.radiusCircle}) : super(key: key);
+  MapInterprovincialClientWidget({Key key, this.destinationInpit, this.drawCircle = false, this.radiusCircle, this.getFrom}) : super(key: key);
 
   @override
   _MapInterprovincialClientWidgetState createState() => _MapInterprovincialClientWidgetState();
@@ -53,6 +54,7 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
   }
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
+    widget.getFrom(_location);
     Marker marker = _mapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',

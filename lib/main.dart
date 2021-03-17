@@ -5,7 +5,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart'
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/choose_routes_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
@@ -70,11 +70,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<WhereaboutsBloc>(create: (_) => ij.getIt<WhereaboutsBloc>()),
           BlocProvider<DriverServiceBloc>(create: (_) => ij.getIt<DriverServiceBloc>()),
           BlocProvider<InterprovincialDriverBloc>(create: (_) => ij.getIt<InterprovincialDriverBloc>()),
-          BlocProvider<ChooseRoutesClientBloc>(create: (_) => ij.getIt<ChooseRoutesClientBloc>()),
           BlocProvider<ClientServiceBloc>(create: (_) => ij.getIt<ClientServiceBloc>()),
           BlocProvider<InterprovincialDriverBloc>(create: (_) => ij.getIt<InterprovincialDriverBloc>()),
           BlocProvider<InterprovincialClientBloc>(create: (_) => ij.getIt<InterprovincialClientBloc>()),
           BlocProvider<InterprovincialClientLocationBloc>(create: (_) => ij.getIt<InterprovincialClientLocationBloc>()),
+          BlocProvider<AvailablesRoutesBloc>(create: (_) => ij.getIt<AvailablesRoutesBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',
