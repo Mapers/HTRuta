@@ -4,6 +4,7 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_ro
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 
 class InterprovincialDataFirestore{
@@ -99,7 +100,7 @@ class InterprovincialDataFirestore{
     );
   }
 
-  Future<int> removePassenger({@required String documentId, @required PassengerEntity passenger}) async{
+  Future<int> releaseSeatsFromPasenger({@required String documentId, @required PassengerEntity passenger}) async{
     try {
       DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
       List<dynamic> result = await Future.wait([
@@ -113,6 +114,7 @@ class InterprovincialDataFirestore{
       });
       return newAvailableSeats;
     } catch (e) {
+      Fluttertoast.showToast(msg: 'No se pudo liberar los asientos.',toastLength: Toast.LENGTH_SHORT);
       return null;
     }
   }
@@ -135,7 +137,33 @@ class InterprovincialDataFirestore{
       });
       return newAvailableSeats;
     } catch (e) {
+      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
       return null;
+    }
+  }
+
+  Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId)
+      .collection('requests').doc(request.documentId).delete();
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+  }
+
+  Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice}) async{
+    try {
+      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      await dr.update({
+        'condition': InterprovincialRequestCondition.counterOffer,
+        'price': newPrice
+      });
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
+      return false;
     }
   }
 

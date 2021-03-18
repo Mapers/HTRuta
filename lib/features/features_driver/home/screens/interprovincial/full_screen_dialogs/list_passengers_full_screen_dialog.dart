@@ -106,7 +106,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
   Future<void> removePassenger(int index, PassengerEntity passenger) async{
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     _loadingFullScreen.show(context, label: 'Liberando asientos...');
-    int newAvailableSeats = await interprovincialDataFirestore.removePassenger(documentId: widget.documentId, passenger: passenger);
+    int newAvailableSeats = await interprovincialDataFirestore.releaseSeatsFromPasenger(documentId: widget.documentId, passenger: passenger);
     _loadingFullScreen.close();
     if(newAvailableSeats == null){
       return;
