@@ -1,3 +1,4 @@
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_ser
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
 
@@ -31,6 +33,33 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+//updated myBackgroundMessageHandler
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  int msgId = int.tryParse(message['msgId'].toString()) ?? 0;
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'report_chanel',
+    'Canal Básico',
+    'Este es el canal Básico',
+    color: primaryColor,
+    enableVibration: true,
+    importance: Importance.max,
+    priority: Priority.max,
+    ticker: 'ticker'
+  );
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  var platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics
+  );
+  flutterLocalNotificationsPlugin.show(msgId,
+    message['notification']['title'],
+    message['notification']['body'],
+    platformChannelSpecifics,
+    payload: ''
+  );
+  return Future<void>.value();
+}
+
 class _MyAppState extends State<MyApp> {
 
   PushNotificationProvider pushProvider;
@@ -39,7 +68,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     pushProvider = PushNotificationProvider();
-    pushProvider.initNotifications();
+    pushProvider.initNotifications(myBackgroundMessageHandler);
     pushProvider.mensajes.listen((argumento) async{
       if(argumento.contains('Rechazados')){
         Navigator.pushNamed(context, AppRoute.sendDocumentScreen);

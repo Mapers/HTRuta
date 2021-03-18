@@ -61,6 +61,7 @@ dependencies:
   get_it: ^5.0.6
   flutter_polyline_points: ^0.2.4
   fluttertoast: ^7.1.8
+  flutter_local_notifications: ^4.0.0
   
 dev_dependencies:
   flutter_test:

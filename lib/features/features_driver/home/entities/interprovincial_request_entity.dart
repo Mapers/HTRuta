@@ -9,6 +9,7 @@ class InterprovincialRequestEntity extends Equatable {
   final int seats;
   final double price;
   final InterprovincialRequestCondition condition;
+  final String fcmToken;
 
   InterprovincialRequestEntity({
     @required this.documentId,
@@ -18,6 +19,7 @@ class InterprovincialRequestEntity extends Equatable {
     @required this.from,
     @required this.to,
     @required this.condition,
+    @required this.fcmToken,
   });
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
@@ -28,7 +30,8 @@ class InterprovincialRequestEntity extends Equatable {
       price: (dataJson['price'] as num).toDouble(),
       from: dataJson['from'],
       to: dataJson['to'],
-      condition: getInterprovincialRequestConditionFromString(dataJson['condition'])
+      condition: getInterprovincialRequestConditionFromString(dataJson['condition']),
+      fcmToken: dataJson['fcm_token']
     );
   }
 
@@ -38,7 +41,8 @@ class InterprovincialRequestEntity extends Equatable {
     'from': from,
     'to': to,
     'price': price,
-    'condition': getStringInterprovincialRequestCondition(condition)
+    'condition': getStringInterprovincialRequestCondition(condition),
+    'fcm_token': fcmToken
   };
 
   factory InterprovincialRequestEntity.mock(){
@@ -49,11 +53,12 @@ class InterprovincialRequestEntity extends Equatable {
       to: 'Independencia - Lima - Lima',
       seats: 12,
       price: 55.99,
-      condition: InterprovincialRequestCondition.offer
+      condition: InterprovincialRequestCondition.offer,
+      fcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
     );
   }
 
-  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, double price, InterprovincialRequestCondition condition}){
+  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, double price, InterprovincialRequestCondition condition, String fcmToken}){
     return InterprovincialRequestEntity(
       documentId: documentId,
       fullNames: fullNames ?? this.fullNames,
@@ -62,11 +67,12 @@ class InterprovincialRequestEntity extends Equatable {
       from: from ?? this.from,
       to: to ?? this.to,
       condition: condition ?? this.condition,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 
   @override
-  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition];
+  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, fcmToken];
 }
 
 enum InterprovincialRequestCondition { offer, counterOffer }
