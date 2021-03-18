@@ -94,7 +94,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
 
   Widget getActionButtons(int index, InterprovincialRequestEntity interprovincialRequest){
     if(interprovincialRequest.condition == InterprovincialRequestCondition.offer){
-      ButtonBar(
+      return ButtonBar(
         children:  [
           RaisedButton(
             onPressed: () => showPrepareContraofferDialog(index, interprovincialRequest),
@@ -151,7 +151,8 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text('Enviar confraoferta'),
-        content: Column(
+        content: ListView(
+          shrinkWrap: true,
           children: [
             Row(
               children: [
@@ -164,10 +165,13 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
                     textController.text = newPrice.toStringAsFixed(2);
                   },
                 ),
-                TextField(
+                SizedBox(width: 20),
+                Expanded(child: TextField(
                   controller: textController,
                   keyboardType: TextInputType.number,
-                ),
+                  textAlign: TextAlign.center,
+                )),
+                SizedBox(width: 20),
                 IconButton(
                   icon: Icon(Icons.add),
                   onPressed: (){
@@ -179,7 +183,8 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
                 ),
               ],
             ),
-            Text('Si el pasajero acepta la contraoferta, este automaticamente se convertirá en pasajero.')
+            SizedBox(height: 20),
+            Text('Si el pasajero acepta la contraoferta, este automaticamente se convertirá en pasajero.', style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic), textAlign: TextAlign.center,)
           ],
         ),
         actions: [

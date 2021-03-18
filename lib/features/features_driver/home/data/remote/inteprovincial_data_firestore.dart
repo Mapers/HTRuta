@@ -156,13 +156,14 @@ class InterprovincialDataFirestore{
   Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice}) async{
     try {
       DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
-      await dr.update({
-        'condition': InterprovincialRequestCondition.counterOffer,
+      await dr.collection('requests').doc(request.documentId).update({
+        'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
         'price': newPrice
       });
       return true;
     } catch (e) {
-      Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
+      print(e.toString());
+      Fluttertoast.showToast(msg: 'No se pudo enviar la contraoferta.',toastLength: Toast.LENGTH_SHORT);
       return false;
     }
   }
