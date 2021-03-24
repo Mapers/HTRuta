@@ -10,9 +10,8 @@ class PushMessage {
   final http.Client client;
   PushMessage({@required this.client});
 
-  Future<bool> sendPushMessage({@required String token, @required String title, @required String description, @required Map<String, String> data, bool displayNotification = true}) async {
+  Future<bool> sendPushMessage({@required String token, @required String title, @required String description, Map<String, String> data, bool displayNotification = true}) async {
     data ??= {};
-    data['display_notification'] = 'true';
     try {
       Map<String, String> headers = {
         'Content-Type': 'application/json',

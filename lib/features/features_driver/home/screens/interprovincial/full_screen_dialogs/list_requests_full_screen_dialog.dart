@@ -1,6 +1,5 @@
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_notification.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
