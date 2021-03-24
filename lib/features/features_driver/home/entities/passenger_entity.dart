@@ -8,6 +8,7 @@ class PassengerEntity extends Equatable {
   final String documentId;
   final String fullNames;
   final String urlImage;
+  final String fcmToken;
   final int seats;
   final LocationEntity toLocation;
 
@@ -15,6 +16,7 @@ class PassengerEntity extends Equatable {
     @required this.documentId,
     @required this.fullNames,
     @required this.toLocation,
+    @required this.fcmToken,
     @required this.seats,
     @required this.urlImage,
   });
@@ -23,6 +25,7 @@ class PassengerEntity extends Equatable {
     return PassengerEntity(
       documentId: dataJson['id'],
       fullNames: dataJson['full_names'],
+      fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
       toLocation: LocationEntity(
@@ -39,6 +42,7 @@ class PassengerEntity extends Equatable {
     'full_names': fullNames,
     'url_image': urlImage,
     'seats': seats,
+    'fcm_token': fcmToken,
     'to_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
     'to_district_name': toLocation.districtName,
     'to_province_name': toLocation.provinceName,
@@ -61,10 +65,11 @@ class PassengerEntity extends Equatable {
         regionName: 'Lima',
         zoom: 12
       ),
-      urlImage: 'https://source.unsplash.com/1600x900/?portrait'
+      urlImage: 'https://source.unsplash.com/1600x900/?portrait',
+      fcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
     );
   }
 
   @override
-  List<Object> get props => [documentId, fullNames, toLocation, urlImage, seats];
+  List<Object> get props => [documentId, fullNames, toLocation, urlImage, seats, fcmToken];
 }

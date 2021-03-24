@@ -1,5 +1,4 @@
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -10,8 +9,6 @@ class RouteEntity extends Equatable {
   final LocationEntity from;
   final LocationEntity to;
   // final List<WhereaboutsEntity> whereabouts;
-
-
 
   RouteEntity({
     this.id,

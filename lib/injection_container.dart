@@ -50,7 +50,8 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton<InterprovincialDataFirestore>(
     () => InterprovincialDataFirestore(
-      firestore: getIt()
+      firestore: getIt(),
+      pushMessage: getIt()
     )
   );
     getIt.registerFactory<RouteDriveBloc>(

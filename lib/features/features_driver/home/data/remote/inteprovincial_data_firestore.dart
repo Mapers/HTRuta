@@ -5,14 +5,14 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_re
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
-import 'package:HTRuta/injection_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 
 class InterprovincialDataFirestore{
   final FirebaseFirestore firestore;
-  InterprovincialDataFirestore({@required this.firestore});
+  final PushMessage pushMessage;
+  InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage});
 
   Future<String> createStartService({
     @required InterprovincialStatus status,
@@ -135,6 +135,12 @@ class InterprovincialDataFirestore{
         dr.collection('passengers').add(passengerEntity.toFirestore),
         dr.collection('requests').doc(request.documentId).delete(),
       ]);
+
+      pushMessage.sendPushMessage(
+        token: request.fcmToken,
+        title: 'Su solicitud ha sido aceptada por el interprovincial',
+        description: 'Revise la información de interprovincial'
+      );
       DocumentSnapshot ds = result.first;
       int newAvailableSeats = ds.data()['available_seats'] - request.seats;
       await dr.update({
@@ -151,6 +157,11 @@ class InterprovincialDataFirestore{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').doc(request.documentId).delete();
+      pushMessage.sendPushMessage(
+        token: request.fcmToken, // Token del dispositivo del chofer
+        title: 'Su solicitud ha sido rechazada por el interprovincial',
+        description: 'Puede realizar otra solicitud'
+      );
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
@@ -165,6 +176,11 @@ class InterprovincialDataFirestore{
         'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
         'price': newPrice
       });
+      pushMessage.sendPushMessage(
+        token: request.fcmToken, // Token del dispositivo del chofer
+        title: 'Ha recibido una contraoferta a su solicitud de interprovincial',
+        description: 'Revise la contraoferta'
+      );
       return true;
     } catch (e) {
       print(e.toString());
@@ -178,7 +194,6 @@ class InterprovincialDataFirestore{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore);
-      PushMessage pushMessage = getIt<PushMessage>();
       pushMessage.sendPushMessage(
         token: request.fcmToken, // Token del dispositivo del chofer
         title: 'Ha recibido una nueva solicitud',
