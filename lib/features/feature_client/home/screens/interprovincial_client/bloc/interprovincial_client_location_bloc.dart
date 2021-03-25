@@ -14,7 +14,8 @@ class InterprovincialClientLocationBloc extends Bloc<InterprovincialClientLocati
   @override
   Stream<InterprovincialClientLocationState> mapEventToState(
     InterprovincialClientLocationEvent event,
-  ) async* {if(event is UpdateInterprovincialClientLocationEvent){
+  ) async* {
+    if(event is UpdateInterprovincialClientLocationEvent){
       DataInterprovincialClientLocationState data = state;
       // if(event.status == InterprovincialStatus.inRoute){
       //   if(data.documentId != null){
