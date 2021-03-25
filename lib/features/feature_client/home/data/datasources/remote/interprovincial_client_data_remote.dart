@@ -1,14 +1,18 @@
 
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/vehicle_seat_layout_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientRemoteDataSoruce {
-
+  final FirebaseFirestore firestore;
+  InterprovincialClientRemoteDataSoruce({@required this.firestore});
   List<ClientInterporvincialRoutesEntity> routes =[];
 
   Future<List<ClientInterporvincialRoutesEntity>> getListRouterClient() async{
@@ -33,8 +37,8 @@ class InterprovincialClientRemoteDataSoruce {
     return provinces;
   }
 
-  List<AvailableRouteEntity> availablesRoutes =[];
   Future<List<AvailableRouteEntity>> getAvailablesRoutes() async{
+    List<AvailableRouteEntity> availablesRoutes =[];
     availablesRoutes = [
       AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
       AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
@@ -42,6 +46,28 @@ class InterprovincialClientRemoteDataSoruce {
       AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
       AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
     ];
+    return availablesRoutes;
+  }
+  Future<List<AvailableRouteEntity>> getFiebaseAvailablesRoutes() async{
+    List<AvailableRouteEntity> availablesRoutes =[];
+
+    QuerySnapshot xd =  await firestore.collection('drivers_in_service').get();
+    for (var item in xd.docs) {
+      availablesRoutes.add(
+        AvailableRouteEntity(
+          id: 1,
+          status: InterprovincialStatus.inRoute,
+          documentId:item.id,
+          availableSeats: item.data()['available_seats'],
+          vehicleSeatLayout: VehicleSeatLayout.miniban,
+          route: InterprovincialRouteEntity.test(),
+          routeStartDateTime: DateTime.now(),
+          fcm_token: item.data()['fcm_token']
+        ),
+      );
+      print(item.id );
+      print(item.data() );
+    }
     return availablesRoutes;
   }
 

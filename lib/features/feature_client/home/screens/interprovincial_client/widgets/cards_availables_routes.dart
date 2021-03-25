@@ -7,6 +7,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CardsAvailablesRoutes extends StatefulWidget {
   CardsAvailablesRoutes({Key key}) : super(key: key);
@@ -111,11 +112,17 @@ class CardAvailiblesRoutes extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 10,),
-                  Icon(Icons.star,size: 20,),
-                  Icon(Icons.star,size: 20,),
-                  Icon(Icons.star,size: 20,),
-                  Icon(Icons.star,size: 20,),
-                  Icon(Icons.star,size: 20,),
+                  RatingBar.builder(
+                    initialRating: availablesRoutesEntity.route.starts,
+                    allowHalfRating: true,
+                    itemSize: 18,
+                    itemCount: 5,
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: null,
+                  ),
                   Spacer(),
                   InkWell(
                     onTap: (){

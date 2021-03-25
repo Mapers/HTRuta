@@ -11,6 +11,7 @@ class InterprovincialRouteEntity extends Equatable {
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
   final double cost;
+  final double starts;
   final List<WhereaboutsEntity> whereabouts;
 
   InterprovincialRouteEntity({
@@ -21,6 +22,7 @@ class InterprovincialRouteEntity extends Equatable {
     @required this.fromLocation,
     @required this.toLocation,
     @required this.whereabouts,
+    @required this.starts,
   });
 
   factory InterprovincialRouteEntity.test(){
@@ -45,10 +47,11 @@ class InterprovincialRouteEntity extends Equatable {
         regionName: 'Lima',
         zoom: 12
       ),
-      whereabouts: []
+      whereabouts: [],
+      starts: 3.4
     );
   }
 
   @override
-  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, whereabouts];
+  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, whereabouts,starts];
 }

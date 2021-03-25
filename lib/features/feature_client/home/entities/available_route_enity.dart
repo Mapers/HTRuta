@@ -12,17 +12,19 @@ class AvailableRouteEntity extends Equatable{
   final InterprovincialStatus status;
   final InterprovincialRouteEntity route;
   final DateTime routeStartDateTime;
+  final String fcm_token;
 
-  AvailableRouteEntity({
+  AvailableRouteEntity( {
     @required this.id,
     @required this.availableSeats,
     @required this.documentId,
     @required this.vehicleSeatLayout,
     @required this.status,
     @required this.route,
-    @required this.routeStartDateTime
+    @required this.routeStartDateTime,
+    @required this.fcm_token,
   });
 
   @override
-  List<Object> get props => [id, availableSeats, vehicleSeatLayout, documentId, status, route, routeStartDateTime];
+  List<Object> get props => [id, availableSeats, vehicleSeatLayout, documentId, status, route, routeStartDateTime,fcm_token];
 }

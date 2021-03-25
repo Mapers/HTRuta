@@ -1,4 +1,5 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
@@ -63,7 +64,15 @@ Future<void> init() async {
     () => InterprovincialDriverLocationBloc(interprovincialDataRemote: getIt(), interprovincialDataFirestore: getIt())
   );
   getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
-    () => InterprovincialClientRemoteDataSoruce()
+    () => InterprovincialClientRemoteDataSoruce(
+      firestore: getIt(),
+    )
+  );
+  getIt.registerLazySingleton<InterprovincialClientDataFirebase>(
+    () => InterprovincialClientDataFirebase(
+      pushMessage: getIt(),
+      firestore: getIt(),
+    )
   );
   getIt.registerLazySingleton<InterprovincialClientLocationBloc>(
     () => InterprovincialClientLocationBloc()
