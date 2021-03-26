@@ -153,7 +153,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     onPressed: ()async{
                       LocationDriveEntity drive = await interprovincialClientDataFirebase.getlocateDrive(documentId: documentId);
                       LocationEntity currenActual = await LocationUtil.currentLocation();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,driveData: drive,)));
                     },
                   ),
                 ],
