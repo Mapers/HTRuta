@@ -30,12 +30,12 @@ class InterprovincialDataFirestore{
       ]);
 
       DocumentSnapshot ds = result.first;
-      InterprovincialLocationDriverEntity interprovincialLocationDriverEntity = InterprovincialLocationDriverEntity.fromJson(ds.data());
+      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(origin == InterprovincialDataFirestoreOrigin.client){
         pushMessage.sendPushMessage(
-          token: interprovincialLocationDriverEntity.fcmToken,
+          token: interprovincialLocationDriver.fcmToken,
           title: 'La contraoferta ha sido aceptada',
-          description: 'Revise la información de interprovincial'
+          description: 'Revise su lista de pasajeros'
         );
       }else{
         pushMessage.sendPushMessage(
@@ -45,7 +45,7 @@ class InterprovincialDataFirestore{
         );
       }
 
-      int newAvailableSeats = interprovincialLocationDriverEntity.availableSeats - request.seats;
+      int newAvailableSeats = interprovincialLocationDriver.availableSeats - request.seats;
       await dr.update({
         'available_seats': newAvailableSeats
       });
