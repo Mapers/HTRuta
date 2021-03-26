@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await ij.init();
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {

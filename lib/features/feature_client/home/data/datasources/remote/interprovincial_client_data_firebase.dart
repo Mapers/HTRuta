@@ -71,15 +71,8 @@ class InterprovincialClientDataFirebase {
     });
   }
 
-  // Stream<List<PassengerEntity>> getStreamPassengers({@required String documentId}){
-  //   return firestore.collection('drivers_in_service').doc(documentId)
-  //   .collection('passengers').snapshots()
-  //   .map<List<PassengerEntity>>((querySnapshot) =>
-  //     querySnapshot.docs.map<PassengerEntity>((doc){
-  //       Map<String, dynamic> data = doc.data();
-  //       data['id'] = doc.id;
-  //       return PassengerEntity.fromJsonLocal(data);
-  //     }).toList()
-  //   );
-  // }
+  Future<bool> checkIfInterprovincialLocationDriverEntityOnService({@required String documentId}) async{
+    DocumentSnapshot ds = await firestore.collection('drivers_in_service').doc(documentId).get();
+    return ds.exists;
+  }
 }

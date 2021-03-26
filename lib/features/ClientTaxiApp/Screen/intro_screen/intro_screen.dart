@@ -55,111 +55,111 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
     return Scaffold(
       body:  Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: screenSize.height*0.09,left: screenSize.width*0.1,right: screenSize.width*0.1),
-                child: Column(
-                  children: <Widget>[
-                    Text(providerOnBoarding.listItem[currentIndex].vchTitulo??'SinData',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    // Container(
-                    //   padding: EdgeInsets.only(top: 10),
-                    //   alignment: Alignment.center,
-                    //   child: Text('${listItem[currentIndex]['description']}',
-                    //     style: TextStyle(
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w500
-                    //     ),
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
-                  ],
+        alignment: Alignment.topCenter,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: screenSize.height*0.09,left: screenSize.width*0.1,right: screenSize.width*0.1),
+            child: Column(
+              children: <Widget>[
+                Text(providerOnBoarding.listItem[currentIndex].vchTitulo??'SinData',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  height: screenSize.height*0.58,
-                  width: double.infinity,
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Swiper(
-                    curve: Curves.easeInOut,
-                    controller: _controller,
-                    itemCount: providerOnBoarding.listItem.length,
-                    itemHeight: 200.0,
-                    viewportFraction: 0.6,
-                    scale: 0.6,
-                    loop: false,
-                    outer: true,
-                    index: currentIndex,
-                    onIndexChanged: (int index) {
-                      setState(() {
-                        currentIndex = index;
-                      });
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      // return Container(
-                      //   decoration: BoxDecoration(
-                      //     image: DecorationImage(
-                      //       image: AssetImage(listItem[index]['image'],),
-                      //       fit: BoxFit.cover
-                      //     ),
-                      //     borderRadius: BorderRadius.circular(10.0)
-                      //   ),
-                      // );
+                // Container(
+                //   padding: EdgeInsets.only(top: 10),
+                //   alignment: Alignment.center,
+                //   child: Text('${listItem[currentIndex]['description']}',
+                //     style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w500
+                //     ),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              height: screenSize.height*0.58,
+              width: double.infinity,
+              padding: EdgeInsets.only(top: 20.0),
+              child: Swiper(
+                curve: Curves.easeInOut,
+                controller: _controller,
+                itemCount: providerOnBoarding.listItem.length,
+                itemHeight: 200.0,
+                viewportFraction: 0.6,
+                scale: 0.6,
+                loop: false,
+                outer: true,
+                index: currentIndex,
+                onIndexChanged: (int index) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  // return Container(
+                  //   decoration: BoxDecoration(
+                  //     image: DecorationImage(
+                  //       image: AssetImage(listItem[index]['image'],),
+                  //       fit: BoxFit.cover
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(10.0)
+                  //   ),
+                  // );
 
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.memory(obtenerFile(providerOnBoarding.listItem[index].image64),fit: BoxFit.cover)
-                      );
-                    },
-                    pagination: SwiperPagination(
-                        alignment: Alignment.bottomCenter,
-                        builder: DotSwiperPaginationBuilder(
-                            size: 5.0,
-                            activeSize: 10.0,
-                            space: 5.0,
-                            color: greyColor2,
-                            activeColor: blackColor
-                        )
-                    ),
-                  ),
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.memory(obtenerFile(providerOnBoarding.listItem[index].image64),fit: BoxFit.cover)
+                  );
+                },
+                pagination: SwiperPagination(
+                    alignment: Alignment.bottomCenter,
+                    builder: DotSwiperPaginationBuilder(
+                        size: 5.0,
+                        activeSize: 10.0,
+                        space: 5.0,
+                        color: greyColor2,
+                        activeColor: blackColor
+                    )
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: currentIndex == providerOnBoarding.listItem.length - 1 ?
-                Container(
-                  padding: EdgeInsets.only(bottom: screenSize.height*0.06,left: screenSize.width*0.1,right: screenSize.width*0.1),
-                  child: ButtonTheme(
-                    height: 50,
-                    minWidth: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                      child: Text('Ir a la aplicacion',
-                        style: TextStyle(
-                            color: whiteColor,
-                            fontSize: 16
-                        ),
-                      ),
-                      color: primaryColor,
-                      onPressed: (){
-                        requestPermission()?.then((_){
-                          _prefs.primeraSesion = false;
-                          Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.loginScreen, (Route<dynamic> route) => false);
-                        });
-                      },
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: currentIndex == providerOnBoarding.listItem.length - 1 ?
+            Container(
+              padding: EdgeInsets.only(bottom: screenSize.height*0.06,left: screenSize.width*0.1,right: screenSize.width*0.1),
+              child: ButtonTheme(
+                height: 50,
+                minWidth: MediaQuery.of(context).size.width,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                  child: Text('Ir a la aplicacion',
+                    style: TextStyle(
+                        color: whiteColor,
+                        fontSize: 16
                     ),
                   ),
-                ):SizedBox.shrink()
-              )
-            ],
+                  color: primaryColor,
+                  onPressed: (){
+                    requestPermission()?.then((_){
+                      _prefs.primeraSesion = false;
+                      Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.loginScreen, (Route<dynamic> route) => false);
+                    });
+                  },
+                ),
+              ),
+            ):SizedBox.shrink()
           )
+        ],
+      )
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -88,6 +90,11 @@ Future<void> init() async {
   getIt.registerLazySingleton<AvailablesRoutesBloc>(
     () => AvailablesRoutesBloc(getIt())
   );
+  getIt.registerLazySingleton<InterprovincialClientDataLocal>(
+    () => InterprovincialClientDataLocal(
+      sharedPreferences: getIt()
+    )
+  );
 
   //! Core Dependences
   await Firebase.initializeApp();
@@ -95,6 +102,8 @@ Future<void> init() async {
     () => FirebaseFirestore.instance
   );
   getIt.registerLazySingleton(() => http.Client());
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton(() => sharedPreferences);
   //! Core Libs
   getIt.registerLazySingleton(() => PushMessage(client: getIt()));
 }

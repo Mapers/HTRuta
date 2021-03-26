@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
@@ -22,7 +25,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   final OnBoardingApi onboardingApi = OnBoardingApi();
   Onboarding dataOnBoarding;
 
-
   @override
   void initState(){
     super.initState();
@@ -42,22 +44,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
     fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
     animationController.forward();
-      Timer( Duration(seconds: 3), () async{
-        final data = await _session.get();
-        await _prefs.initPrefs();
-        final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
-        if(data != null){
-          if(data['correo'] != null || data['correo'] != ''){
-            Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-          }else{
-            if(_prefs.primeraSesion){
-              dataOnBoarding = await onboardingApi.getOnBoardingData();
-              providerOnBoarding.listItem = dataOnBoarding.data;
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.introScreen, (Route<dynamic> route) => false);
-            }else{
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.loginScreen, (Route<dynamic> route) => false);
-            }
-          }
+    Timer( Duration(seconds: 3), () async{
+      final data = await _session.get();
+      await _prefs.initPrefs();
+      final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
+      if(data != null){
+        if(data['correo'] != null || data['correo'] != ''){
+          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
+          _showDialogQualification();
         }else{
           if(_prefs.primeraSesion){
             dataOnBoarding = await onboardingApi.getOnBoardingData();
@@ -67,12 +61,36 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.loginScreen, (Route<dynamic> route) => false);
           }
         }
+      }else{
+        if(_prefs.primeraSesion){
+          dataOnBoarding = await onboardingApi.getOnBoardingData();
+          providerOnBoarding.listItem = dataOnBoarding.data;
+          Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.introScreen, (Route<dynamic> route) => false);
+        }else{
+          Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.loginScreen, (Route<dynamic> route) => false);
+        }
+      }
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void _showDialogQualification() async{
+    InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
+    String documentId = interprovincialClientDataLocal.getDocumentIdOnServiceInterprovincialToQualification;
+    if(documentId == null){
+      return;
+    }
+    InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+    bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
+    print('holaaa');
+    print(onService);
+    if(onService){
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('holaaa'),
+        )
+      );
+    }
   }
 
   @override
@@ -92,8 +110,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   child:  Center(
                     child: FadeTransition(
                       opacity: fadeAnimation,
-                      child:
-                      Image.asset('assets/image/logosplash.png',height: 200.0,)
+                      child: Image.asset('assets/image/logosplash.png', height: 200)
                     ),
                   ),
                 ),
