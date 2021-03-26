@@ -56,6 +56,16 @@ class InterprovincialDataFirestore{
     }
   }
 
+  Future<bool> seeRoute({@required String documentId, @required InterprovincialRequestEntity request}) async{
+    try {
+      await firestore.collection('drivers_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();
+      return true;
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'No se pudo realizar esta acción.',toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+  }
+
   Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request, @required String driverFcmToken, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)

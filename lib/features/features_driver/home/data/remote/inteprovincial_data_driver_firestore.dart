@@ -1,6 +1,6 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -21,7 +21,7 @@ class InterprovincialDataDriverFirestore{
     @required int availableSeats,
   }) async{
     LocationEntity fromLocation = route.fromLocation;
-    final _prefs = PreferenciaUsuario();
+    final _prefs = UserPreferences();
     DocumentReference dr = await firestore.collection('drivers_in_service').add({
       'status': toStringFirebaseInterprovincialStatus(status),
       'current_location': GeoPoint(fromLocation.latLang.latitude, fromLocation.latLang.longitude),

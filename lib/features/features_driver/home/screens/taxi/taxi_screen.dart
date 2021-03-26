@@ -3,7 +3,7 @@ import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
@@ -71,7 +71,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       _locationService.getPositionStream().listen((event) async{
         double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
         if(diferencia > 5){
-          final _prefs = PreferenciaUsuario();
+          final _prefs = UserPreferences();
           await _prefs.initPrefs();
           final data = await referenceDatabase.child('Coordenada').child(_prefs.idChofer).once();
           if(data.value != null && data.value!= ''){

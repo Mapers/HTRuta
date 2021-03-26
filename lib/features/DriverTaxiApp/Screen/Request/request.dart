@@ -11,7 +11,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      final _prefs = PreferenciaUsuario();
+      final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final data = await pickupApi.getRequest();
       print(_prefs.idChofer);
@@ -93,7 +93,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       print(e);
     }
 
-    final _prefs = PreferenciaUsuario();
+    final _prefs = UserPreferences();
     await _prefs.initPrefs();
     choferId = _prefs.idChofer;
     print(choferId);
@@ -413,7 +413,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         ),
                         onPressed: ()async{
                           try{
-                            final _prefs = PreferenciaUsuario();
+                            final _prefs = UserPreferences();
                             await _prefs.initPrefs();
                             Dialogs.openLoadingDialog(context);
                             final dato = await pickupApi.actionTravel(
@@ -459,7 +459,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         ),
                         onPressed: ()async{
                           try{
-                            final _prefs = PreferenciaUsuario();
+                            final _prefs = UserPreferences();
                             await _prefs.initPrefs();
                             Dialogs.openLoadingDialog(context);
                             final dato = await pickupApi.actionTravel(

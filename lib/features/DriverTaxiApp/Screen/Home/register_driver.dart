@@ -8,7 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/color_carro_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/marca_carro_model.dart';
@@ -167,7 +167,7 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                             final registroConductor = RegistroConductorApi();
                             final authApi = AuthApi();
                             dynamic datosUsuario = await _session.get();
-                            final _prefs = PreferenciaUsuario();
+                            final _prefs = UserPreferences();
                             await _prefs.initPrefs();
                             Dialogs.openLoadingDialog(context);
                             final respuesta = await registroConductor.registrarChofer(datosUsuario['dni'], datosUsuario['nombres'], datosUsuario['apellidoPaterno'], datosUsuario['apellidoMaterno'], '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario['celular'],  datosUsuario['celular'], datosUsuario['correo'], datosUsuario['password'], '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');

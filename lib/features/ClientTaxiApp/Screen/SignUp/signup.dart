@@ -13,7 +13,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/tabla_codigo.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:intl/intl.dart';
 
@@ -67,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
           imei = info.identifierForVendor;
         }
         print('Marca: $marca, NombreD = $nombreDispositivo, IMEI = $imei');
-        final _prefs = PreferenciaUsuario();
+        final _prefs = UserPreferences();
         await _prefs.initPrefs();
         final token = await _prefs.tokenPush;
         final isOk = await authApi.registerUser(context,dni: _dni,nombre: _nombres,apellidoPaterno: _apellidoP,apellidoMaterno: _apellidoM,celular: _celular,correo: _email,password: _password,direccion: _direccion,fechaNacimiento: date.toString(),referencia: _referencia,tipoDispositivo: dispositivo.toString(),imei: imei,marca: marca,nombreDispositivo: nombreDispositivo,token: token,sexo: '1');

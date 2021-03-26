@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/documento_rechazado_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/estado_chofer_model.dart';
@@ -56,14 +56,14 @@ class RegistroConductorApi{
     try{
       // final _session = Session();
       // final dataUsuario = await _session.get();
-      final _prefs = PreferenciaUsuario();
+      final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final url = '${Config.apiHost}/api_getDocumentosRechazados.php';
       print(url);
       final response = await http.post(url,body: {'id' : _prefs.idChofer});
       final responseUsuario = documentoRechazadoFromJson(response.body);
       if(responseUsuario.success){
-        final _prefs = PreferenciaUsuario();
+        final _prefs = UserPreferences();
         await _prefs.initPrefs();
         _prefs.idChofer = responseUsuario.data[0].iIdUsuario.toString();
         print(responseUsuario.data[0].iEstado);
@@ -82,7 +82,7 @@ class RegistroConductorApi{
 
       Uri url = Uri.parse('${Config.nuevaRutaApi}/actualizar-archivos');
       final imageUpload = http.MultipartRequest('POST', url);
-      final _prefs = PreferenciaUsuario();
+      final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final DocumentoRechazadoResponse data = DocumentoRechazadoResponse(documentos: documentos);
       print('${json.encode(data.documentos)}');

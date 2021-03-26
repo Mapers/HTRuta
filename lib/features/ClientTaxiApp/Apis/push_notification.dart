@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -24,7 +24,7 @@ class PushNotificationProvider{
 
     _firebaseMessaging.getToken().then(
       (token) async{
-        final _prefs = PreferenciaUsuario();
+        final _prefs = UserPreferences();
         await _prefs.initPrefs();
         _prefs.tokenPush = token.toString();
         print('token guardado: ${_prefs.tokenPush}');

@@ -3,7 +3,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 
 import '../../../config.dart';
@@ -28,7 +28,7 @@ class PickupApi{
   }
 
   Future<List<Request>> getRequest()async{
-    final _prefs = PreferenciaUsuario();
+    final _prefs = UserPreferences();
     await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/obtener-viajes-solicitados';
     try{
@@ -46,7 +46,7 @@ class PickupApi{
   }
 
   Future<List<DriverRequest>> getRequestDriver(String idSolicitud)async{
-    final _prefs = PreferenciaUsuario();
+    final _prefs = UserPreferences();
     await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/obtener-viajes-choferes';
     try{

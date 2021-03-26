@@ -1,14 +1,14 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferenciaUsuario{
+class UserPreferences{
 
-  static final PreferenciaUsuario _instance = PreferenciaUsuario._internal();
+  static final UserPreferences _instance = UserPreferences._internal();
 
-  factory PreferenciaUsuario(){
+  factory UserPreferences(){
     return _instance;
   }
 
-  PreferenciaUsuario._internal();
+  UserPreferences._internal();
 
   SharedPreferences _prefs;
 

@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -139,7 +139,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             onPressed: () async{
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Rechazando solicitud...');
-              final _prefs = PreferenciaUsuario();
+              final _prefs = UserPreferences();
               await interprovincialDataFirestore.rejectRequest(documentId: widget.documentId, request: interprovincialRequest, driverFcmToken: _prefs.tokenPush, origin: InterprovincialDataFirestoreOrigin.driver);
               _loadingFullScreen.close();
             },

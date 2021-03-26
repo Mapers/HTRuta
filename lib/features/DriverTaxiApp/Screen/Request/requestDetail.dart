@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:geolocator/geolocator.dart';
@@ -257,7 +257,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       FlatButton(
                         onPressed: ()async{
                           Dialogs.openLoadingDialog(context);
-                          final _prefs = PreferenciaUsuario();
+                          final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
                             double.parse(widget.requestItem.vchLatInicial),
@@ -282,7 +282,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       FlatButton(
                         onPressed: ()async{
                           Dialogs.openLoadingDialog(context);
-                          final _prefs = PreferenciaUsuario();
+                          final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
                             double.parse(widget.requestItem.vchLatInicial),
@@ -307,7 +307,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       FlatButton(
                         onPressed: ()async{
                           Dialogs.openLoadingDialog(context);
-                          final _prefs = PreferenciaUsuario();
+                          final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
                             double.parse(widget.requestItem.vchLatInicial),

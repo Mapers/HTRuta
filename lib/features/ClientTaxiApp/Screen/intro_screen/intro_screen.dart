@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   PermissionStatus permission;
   bool isGrantedLocation = false;
   List<Map<String, dynamic>> listItem = [];
-  final _prefs = PreferenciaUsuario();
+  final _prefs = UserPreferences();
 
   @override
   void initState() {

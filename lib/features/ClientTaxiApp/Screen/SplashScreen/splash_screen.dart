@@ -9,7 +9,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Animation animation, delayedAnimation, muchDelayAnimation, transfor,fadeAnimation;
   AnimationController animationController;
   final Session _session =  Session();
-  final _prefs = PreferenciaUsuario();
+  final _prefs = UserPreferences();
   final OnBoardingApi onboardingApi = OnBoardingApi();
   Onboarding dataOnBoarding;
 

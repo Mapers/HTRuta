@@ -4,7 +4,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/usuario_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config.dart';
@@ -48,7 +48,7 @@ class AuthApi{
   }
 
   Future<bool> loginUser(String email, String password) async{
-    final _prefs = PreferenciaUsuario();
+    final _prefs = UserPreferences();
     await _prefs.initPrefs();
     final token = await _prefs.tokenPush;
     final url = '${Config.apiHost}/api_getLoginUsuario.php?email=$email&clave=$password&tipo=1&token=$token';
@@ -60,7 +60,7 @@ class AuthApi{
       await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword);
       if(responseUsuario.data.length > 1){
         if(responseUsuario.data[1] != null){
-          final _prefs = PreferenciaUsuario();
+          final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();
         }
