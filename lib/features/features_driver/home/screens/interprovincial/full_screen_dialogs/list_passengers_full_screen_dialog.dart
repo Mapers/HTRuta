@@ -94,7 +94,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           ),
           RaisedButton(
             onPressed: (){
-              // removePassenger(index, passenger);
+              removePassenger(index, passenger);
               Navigator.of(ctx).pop();
               qualificationShowDialog(passenger: passenger);
             },
@@ -105,7 +105,6 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     );
   }
   void qualificationShowDialog({@required PassengerEntity passenger}){
-    
     showDialog(
       context: context,
       builder: (context) {

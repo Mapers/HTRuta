@@ -80,6 +80,26 @@ class _QualificationWidgetState extends State<QualificationWidget> {
               formKey.currentState.save();
               widget.onAccepted(numberStart,commenctary);
               Navigator.of(context).pop();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Column(
+                      children: [
+                        Center(child: Text('¡ Gracias por su calificación !',style: TextStyle(fontSize: 20,color: Colors.grey ),textAlign: TextAlign.center ,)),
+                        SizedBox(height: 10,),
+                        PrincipalButton(
+                          width: 200,
+                          text: 'Aceptar',
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          }
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             }
           )
         ],
