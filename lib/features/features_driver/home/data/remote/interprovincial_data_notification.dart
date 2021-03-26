@@ -8,7 +8,7 @@ class InterprovincialFcmDataRemote{
 
   Future<void> sendNotificationCounterOfferInRequest(InterprovincialRequestEntity request) async{
     bool status = await pushMessage.sendPushMessage(
-      token: request.fcmToken,
+      token: request.passengerFcmToken,
       title: 'Ha recibido una contraoferta',
       description: 'Revisa la propuesta del Driver.',
       data: {}

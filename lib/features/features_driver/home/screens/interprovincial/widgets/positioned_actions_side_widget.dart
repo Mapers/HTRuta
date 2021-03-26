@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -12,7 +12,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
+    InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
     return Positioned(
       right: 10,
       top: 180,
@@ -43,7 +43,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
                   icon: Icons.assignment_ind,
                   text: '$length Solicitud${length == 1 ? "" : "es"}',
                   onTap: length > 0 ? () {
-                    Navigator.of(context).push(Routes.toListInterprovincialRequestFullScreenDialog(documentId, asyncSnapshot.data));
+                    Navigator.of(context).push(Routes.toListInterprovincialRequestFullScreenDialog(documentId));
                   } : null
                 );
               }

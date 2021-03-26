@@ -1,5 +1,3 @@
-
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/vehicle_seat_layout_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
@@ -40,11 +38,11 @@ class InterprovincialClientRemoteDataSoruce {
   Future<List<AvailableRouteEntity>> getAvailablesRoutes() async{
     List<AvailableRouteEntity> availablesRoutes =[];
     availablesRoutes = [
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
     ];
     return availablesRoutes;
   }
@@ -62,7 +60,7 @@ class InterprovincialClientRemoteDataSoruce {
           vehicleSeatLayout: VehicleSeatLayout.miniban,
           route: InterprovincialRouteEntity.test(),
           routeStartDateTime: DateTime.now(),
-          fcm_token: item.data()['fcm_token']
+          fcm_token: item.data()['passenger_fcm_token']
         ),
       );
       print(item.id );

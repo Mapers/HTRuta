@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:bloc/bloc.dart';
@@ -14,7 +14,7 @@ part 'interprovincial_driver_state.dart';
 
 class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, InterprovincialDriverState> {
   final InterprovincialDataRemote interprovincialDataRemote;
-  final InterprovincialDataFirestore interprovincialDataFirestore;
+  final InterprovincialDataDriverFirestore interprovincialDataFirestore;
   InterprovincialDriverBloc({@required this.interprovincialDataRemote, @required this.interprovincialDataFirestore}) : super(DataInterprovincialDriverState.initial());
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
@@ -69,19 +68,7 @@ class InterprovincialClientDataFirebase {
   Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}){
     return firestore.collection('drivers_in_service').doc(documentId).snapshots().map((documentSnapshot){
       dynamic dataJson = documentSnapshot.data();
-      GeoPoint currentLocation = dataJson['current_location'];
-      return InterprovincialLocationDriverEntity(
-        availableSeats: dataJson['available_seats'],
-        fcmToken: dataJson['fcm_token'],
-        location: LocationEntity(
-          districtName: dataJson['district_name'],
-          provinceName: dataJson['province_name'],
-          regionName: dataJson['region_name'],
-          streetName: dataJson['street'],
-          latLang: LatLng(currentLocation.latitude, currentLocation.longitude),
-        ),
-        status: dataJson['status'],
-      );
+      return InterprovincialLocationDriverEntity.fromJson(dataJson);
     });
   }
 

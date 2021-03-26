@@ -1,9 +1,10 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_notification.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
@@ -50,7 +51,10 @@ Future<void> init() async {
     () => InterprovincialDataRemote()
   );
   getIt.registerLazySingleton<InterprovincialDataFirestore>(
-    () => InterprovincialDataFirestore(
+    () => InterprovincialDataFirestore(firestore: getIt(), pushMessage: getIt())
+  );
+  getIt.registerLazySingleton<InterprovincialDataDriverFirestore>(
+    () => InterprovincialDataDriverFirestore(
       firestore: getIt(),
       pushMessage: getIt()
     )

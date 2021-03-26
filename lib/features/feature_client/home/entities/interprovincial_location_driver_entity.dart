@@ -1,5 +1,7 @@
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 class InterprovincialLocationDriverEntity extends Equatable{
@@ -14,6 +16,22 @@ class InterprovincialLocationDriverEntity extends Equatable{
     @required this.availableSeats,
     @required this.location,
   });
+
+  factory InterprovincialLocationDriverEntity.fromJson(Map<String, dynamic> dataJson){
+    GeoPoint currentLocation = dataJson['current_location'];
+    return InterprovincialLocationDriverEntity(
+      availableSeats: dataJson['available_seats'],
+      fcmToken: dataJson['passenger_fcm_token'],
+      location: LocationEntity(
+        districtName: dataJson['district_name'],
+        provinceName: dataJson['province_name'],
+        regionName: dataJson['region_name'],
+        streetName: dataJson['street'],
+        latLang: LatLng(currentLocation.latitude, currentLocation.longitude),
+      ),
+      status: dataJson['status'],
+    );
+  }
 
   @override
   List<Object> get props => [ fcmToken, status, availableSeats, location ];

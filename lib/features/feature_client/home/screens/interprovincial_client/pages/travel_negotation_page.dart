@@ -103,7 +103,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                             InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
                               condition: InterprovincialRequestCondition.offer,
                               documentId: null,
-                              fcmToken: _prefs.tokenPush,
+                              passengerFcmToken: _prefs.tokenPush,
                               from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
                               to: param.distictTo,
                               //! Corregir con data del usuario

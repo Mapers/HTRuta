@@ -9,7 +9,7 @@ class InterprovincialRequestEntity extends Equatable {
   final int seats;
   final double price;
   final InterprovincialRequestCondition condition;
-  final String fcmToken;
+  final String passengerFcmToken;
 
   InterprovincialRequestEntity({
     @required this.documentId,
@@ -19,7 +19,7 @@ class InterprovincialRequestEntity extends Equatable {
     @required this.from,
     @required this.to,
     @required this.condition,
-    @required this.fcmToken,
+    @required this.passengerFcmToken,
   });
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
@@ -31,7 +31,7 @@ class InterprovincialRequestEntity extends Equatable {
       from: dataJson['from'],
       to: dataJson['to'],
       condition: getInterprovincialRequestConditionFromString(dataJson['condition']),
-      fcmToken: dataJson['fcm_token']
+      passengerFcmToken: dataJson['passenger_fcm_token']
     );
   }
 
@@ -42,7 +42,7 @@ class InterprovincialRequestEntity extends Equatable {
     'to': to,
     'price': price,
     'condition': getStringInterprovincialRequestCondition(condition),
-    'fcm_token': fcmToken
+    'passenger_fcm_token': passengerFcmToken
   };
 
   factory InterprovincialRequestEntity.mock(){
@@ -54,11 +54,11 @@ class InterprovincialRequestEntity extends Equatable {
       seats: 12,
       price: 55.99,
       condition: InterprovincialRequestCondition.offer,
-      fcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
+      passengerFcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
     );
   }
 
-  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, double price, InterprovincialRequestCondition condition, String fcmToken}){
+  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, double price, InterprovincialRequestCondition condition, String passengerFcmToken}){
     return InterprovincialRequestEntity(
       documentId: documentId,
       fullNames: fullNames ?? this.fullNames,
@@ -67,12 +67,12 @@ class InterprovincialRequestEntity extends Equatable {
       from: from ?? this.from,
       to: to ?? this.to,
       condition: condition ?? this.condition,
-      fcmToken: fcmToken ?? this.fcmToken,
+      passengerFcmToken: passengerFcmToken ?? this.passengerFcmToken,
     );
   }
 
   @override
-  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, fcmToken];
+  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, passengerFcmToken];
 }
 
 enum InterprovincialRequestCondition { offer, counterOffer , accepted,}

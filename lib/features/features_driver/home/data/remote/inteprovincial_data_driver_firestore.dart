@@ -9,10 +9,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 
-class InterprovincialDataFirestore{
+class InterprovincialDataDriverFirestore{
   final FirebaseFirestore firestore;
   final PushMessage pushMessage;
-  InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage});
+  InterprovincialDataDriverFirestore({@required this.firestore, @required this.pushMessage});
 
   Future<String> createStartService({
     @required InterprovincialStatus status,
@@ -95,9 +95,8 @@ class InterprovincialDataFirestore{
 
   Stream<List<InterprovincialRequestEntity>> getStreamEnabledRequests({@required String documentId}){
     return firestore.collection('drivers_in_service').doc(documentId)
-    .collection('requests').where('condition', arrayContains: [
-      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.offer),
-      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
+    .collection('requests').where('condition', whereNotIn: [
+      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
     ]).snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
@@ -127,43 +126,12 @@ class InterprovincialDataFirestore{
     }
   }
 
-  Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
-    try {
-      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
-      //! Esta data debe venir desde backend
-      PassengerEntity passengerEntity = PassengerEntity.mock();
-
-      List<dynamic> result = await Future.wait([
-        dr.get(),
-        dr.collection('passengers').add(passengerEntity.toFirestore),
-        dr.collection('requests').doc(request.documentId).update({
-          'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
-        }),
-      ]);
-
-      pushMessage.sendPushMessage(
-        token: request.fcmToken,
-        title: 'Su solicitud ha sido aceptada por el interprovincial',
-        description: 'Revise la información de interprovincial'
-      );
-      DocumentSnapshot ds = result.first;
-      int newAvailableSeats = ds.data()['available_seats'] - request.seats;
-      await dr.update({
-        'available_seats': newAvailableSeats
-      });
-      return newAvailableSeats;
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
-      return null;
-    }
-  }
-
   Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').doc(request.documentId).delete();
       pushMessage.sendPushMessage(
-        token: request.fcmToken, // Token del dispositivo del chofer
+        token: request.passengerFcmToken, // Token del dispositivo del chofer
         title: 'Su solicitud ha sido rechazada por el interprovincial',
         description: 'Puede realizar otra solicitud'
       );
@@ -182,7 +150,7 @@ class InterprovincialDataFirestore{
         'price': newPrice
       });
       pushMessage.sendPushMessage(
-        token: request.fcmToken, // Token del dispositivo del chofer
+        token: request.passengerFcmToken, // Token del dispositivo del chofer
         title: 'Ha recibido una contraoferta a su solicitud de interprovincial',
         description: 'Revise la contraoferta'
       );
@@ -200,7 +168,7 @@ class InterprovincialDataFirestore{
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore);
       pushMessage.sendPushMessage(
-        token: request.fcmToken, // Token del dispositivo del chofer
+        token: request.passengerFcmToken, // Token del dispositivo del chofer
         title: 'Ha recibido una nueva solicitud',
         description: 'Revise las solicitudes'
       );

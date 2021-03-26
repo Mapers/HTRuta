@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_firestore.dart';
+import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -9,8 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ListRequestsFullScreenDialog extends StatefulWidget {
   final String documentId;
-  final List<InterprovincialRequestEntity> interprovincialRequests;
-  ListRequestsFullScreenDialog(this.interprovincialRequests, {Key key, @required this.documentId}) : super(key: key);
+  ListRequestsFullScreenDialog({Key key, @required this.documentId}) : super(key: key);
 
   @override
   _ListRequestsFullScreenDialogState createState() => _ListRequestsFullScreenDialogState();
@@ -18,15 +18,9 @@ class ListRequestsFullScreenDialog extends StatefulWidget {
 
 class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDialog> {
 
+  InterprovincialDataDriverFirestore interprovincialDataDriverFirestore = getIt<InterprovincialDataDriverFirestore>();
   InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
   LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
-  List<InterprovincialRequestEntity> interprovincialRequests;
-
-  @override
-  void initState() { 
-    super.initState();
-    interprovincialRequests = widget.interprovincialRequests;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +28,26 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
       appBar: AppBar(
         title: Text('Solicitudes'),
       ),
-      body: ListView.separated(
-        separatorBuilder: (ctx, i) => Divider(),
-        itemCount: interprovincialRequests.length,
-        padding: EdgeInsets.all(15),
-        itemBuilder: (ctx, i) => getItem(i, interprovincialRequests[i])
-      ),
+      body: StreamBuilder<List<InterprovincialRequestEntity>>(
+        stream: interprovincialDataDriverFirestore.getStreamEnabledRequests(documentId: widget.documentId),
+        builder: (ctx, asyncSnapshot){
+          if(asyncSnapshot.connectionState == ConnectionState.active){
+            List<InterprovincialRequestEntity> interprovincialRequests = asyncSnapshot.data;
+            if(interprovincialRequests.isEmpty){
+              return Center(
+                child: Text('- Sin solicitudes -', style: TextStyle(fontStyle: FontStyle.italic)),
+              );
+            }
+            return ListView.separated(
+              separatorBuilder: (ctx, i) => Divider(),
+              itemCount: interprovincialRequests.length,
+              padding: EdgeInsets.all(15),
+              itemBuilder: (ctx, i) => getItem(i, interprovincialRequests[i])
+            );
+          }
+          return Container();
+        }
+      )
     );
   }
 
@@ -106,11 +114,13 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
           )
         ]
       );
+    }else if(interprovincialRequest.condition == InterprovincialRequestCondition.counterOffer){
+      return Container(
+        margin: EdgeInsets.only(top: 15),
+        child: Text('- En espera de aceptación de contraoferta -', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+      );
     }
-    return Container(
-      margin: EdgeInsets.only(top: 15),
-      child: Text('- En espera de aceptación de contraoferta -', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
-    );
+    return Container();
   }
 
   void showRejectRequestDialog(int index, InterprovincialRequestEntity interprovincialRequest){
@@ -128,15 +138,8 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             onPressed: () async{
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Rechazando solicitud...');
-              bool status = await interprovincialDataFirestore.rejectRequest(documentId: widget.documentId, request: interprovincialRequest);
+              await interprovincialDataDriverFirestore.rejectRequest(documentId: widget.documentId, request: interprovincialRequest);
               _loadingFullScreen.close();
-              if(status){
-                setState(() => interprovincialRequests.removeAt(index));
-                if(interprovincialRequests.isEmpty){
-                  await Future.delayed(Duration(milliseconds: 100));
-                  Navigator.of(context).pop();
-                }
-              }
             },
           )
         ],
@@ -203,17 +206,8 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               }
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Enviando contraoferta...');
-              bool status = await interprovincialDataFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice);
+              await interprovincialDataDriverFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice);
               _loadingFullScreen.close();
-              if(status){
-                setState((){
-                  interprovincialRequests.removeAt(index);
-                  interprovincialRequests.insert(index, interprovincialRequest.copyWith(
-                    price: newPrice,
-                    condition: InterprovincialRequestCondition.counterOffer
-                  ));
-                });
-              }
             },
           )
         ],
@@ -241,15 +235,10 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             onPressed: () async{
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Aceptando solicitud...');
-              int newAvailableSeats = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest);
+              int newAvailableSeats = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver);
               _loadingFullScreen.close();
               if(newAvailableSeats == null) return;
-              setState(() => interprovincialRequests.removeAt(index));
               BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: newAvailableSeats));
-              if(interprovincialRequests.isEmpty){
-                await Future.delayed(Duration(milliseconds: 100));
-                Navigator.of(context).pop();
-              }
             },
           )
         ],
