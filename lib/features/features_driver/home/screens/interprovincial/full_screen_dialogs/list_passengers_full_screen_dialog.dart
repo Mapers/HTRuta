@@ -2,7 +2,7 @@ import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/qualification_widgets.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/qualification_widget.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,14 +109,15 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     showDialog(
       context: context,
       builder: (context) {
-        return QualificationWidgets(
+        return QualificationWidget(
           title: 'Califica al pasajero',
           nameUserQuelify: 'Juan pere salinas',
           routeTraveled: 'huacho malecon',
-          accepted: (val){
+          onAccepted: (val){
             //!la calificacion tiene que ir a el back-end
-
-            // Navigator.of(context).pop();
+          },
+          onSkip: (val){
+            //!la calificacion tiene que ir a el back-end
           },
         );
       }

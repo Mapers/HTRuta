@@ -2,18 +2,19 @@ import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class QualificationWidgets extends StatefulWidget {
+class QualificationWidget extends StatefulWidget {
   final String title;
   final String nameUserQuelify;
   final String routeTraveled;
-  final Function(double start) accepted;
-  const QualificationWidgets({Key key,@required this.title,@required this.nameUserQuelify,@required this.routeTraveled,@required this.accepted}) : super(key: key);
+  final Function(double start) onAccepted;
+  final Function onSkip;
+  const QualificationWidget({Key key, @required this.title, @required this.nameUserQuelify, @required this.routeTraveled, @required this.onAccepted, @required this.onSkip}) : super(key: key);
 
   @override
-  _QualificationWidgetsState createState() => _QualificationWidgetsState();
+  _QualificationWidgetState createState() => _QualificationWidgetState();
 }
 
-class _QualificationWidgetsState extends State<QualificationWidgets> {
+class _QualificationWidgetState extends State<QualificationWidget> {
   double numberStart = 0;
   @override
   Widget build(BuildContext context) {
@@ -51,17 +52,18 @@ class _QualificationWidgetsState extends State<QualificationWidgets> {
         PrincipalButton(
           color: Colors.red,
           width: 100,
-          text: 'omitir',
+          text: 'Omitir',
           onPressed: (){
+            widget.onSkip();
             Navigator.of(context).pop();
           }
         ),
         PrincipalButton(
           width: 100,
-          text: 'Eviar',
+          text: 'Enviar',
           onPressed: (){
-            widget.accepted(numberStart);
-            // Navigator.of(context).pop();
+            widget.onAccepted(numberStart);
+            Navigator.of(context).pop();
           }
         )
       ],

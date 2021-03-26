@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/qualification_widget.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
@@ -81,13 +82,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     }
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
-    print('holaaa');
-    print(onService);
     if(onService){
       showDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('holaaa'),
+        barrierDismissible: false,
+        child: QualificationWidget(
+          title: 'Califica el servicio',
+          nameUserQuelify: '',
+          routeTraveled: '',
+          onAccepted: (stars){},
+          onSkip: (){
+          },
         )
       );
     }
