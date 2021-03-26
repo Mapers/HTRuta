@@ -100,8 +100,8 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
             child: Text('Cancelar'),
           ),
           RaisedButton(
-            onPressed: (){
-              removePassenger(index, passenger);
+            onPressed: ()async{
+              await removePassenger(index, passenger);
               Navigator.of(ctx).pop();
               qualificationShowDialog(passenger: passenger);
             },
