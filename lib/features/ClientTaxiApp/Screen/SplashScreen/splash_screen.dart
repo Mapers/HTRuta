@@ -82,16 +82,19 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     }
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
-    if(onService){
+    if(!onService){
+      //! Considerar traer del backend los datos el driver
       showDialog(
         context: context,
-        barrierDismissible: false,
         child: QualificationWidget(
           title: 'Califica el servicio',
           nameUserQuelify: '',
           routeTraveled: '',
-          onAccepted: (stars, commentary){},
+          onAccepted: (stars, comments){
+            interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
+          },
           onSkip: (){
+            interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
           },
         )
       );

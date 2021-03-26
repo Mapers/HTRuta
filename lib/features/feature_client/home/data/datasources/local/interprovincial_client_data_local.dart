@@ -14,5 +14,6 @@ class InterprovincialClientDataLocal {
   }
 
   String get getDocumentIdOnServiceInterprovincialToQualification => sharedPreferences.getString('CLIENTE_ON_INTERPROVINCIAL_DOCUMENT_ID');
+  Future<bool> get deleteDocumentIdOnServiceInterprovincialToQualification async => await sharedPreferences.remove('CLIENTE_ON_INTERPROVINCIAL_DOCUMENT_ID');
 
 }
