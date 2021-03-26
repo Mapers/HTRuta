@@ -6,16 +6,16 @@ abstract class ClientServiceState extends Equatable{
   List<Object> get props => [];
 }
 class DataClientServiceState extends ClientServiceState {
-  final TypeClientService typeService;
+  final TypeServiceEnum typeService;
   DataClientServiceState({@required this.typeService});
 
   factory DataClientServiceState.initial(){
     return DataClientServiceState(
-      typeService: TypeClientService.taxi
+      typeService: TypeServiceEnum.taxi
     );
   }
 
-  DataClientServiceState copyWith({TypeClientService typeService}){
+  DataClientServiceState copyWith({TypeServiceEnum typeService}){
     return DataClientServiceState(
       typeService: typeService ?? this.typeService
     );

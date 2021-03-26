@@ -1,5 +1,5 @@
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:HTRuta/features/DriverTaxiApp/enums/type_driver_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/interprovincial_screen.dart';
@@ -30,9 +30,9 @@ class _HomeDriverPageState extends State<HomeDriverPage> {
             builder: (ctx, state){
               DataDriverServiceState data = state;
               switch (data.typeService) {
-                case TypeDriverService.taxi:
+                case TypeServiceEnum.taxi:
                   return TaxiDriverServiceScreen(parentScaffoldKey: _scaffoldKey);
-                case TypeDriverService.interprovincial:
+                case TypeServiceEnum.interprovincial:
                   return InterprovincialScreen(parentScaffoldKey: _scaffoldKey);
                 default:
                   return Text('Service not found!');

@@ -1,6 +1,6 @@
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/enums/type_client_service_enum.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
@@ -28,9 +28,9 @@ class _HomeClientPageState extends State<HomeClientPage> {
             builder: (ctx, state){
               DataClientServiceState data = state;
               switch (data.typeService) {
-                case TypeClientService.taxi:
+                case TypeServiceEnum.taxi:
                   return HomeScreens();
-                case TypeClientService.interprovincial:
+                case TypeServiceEnum.interprovincial:
                   return InterprovincialClientScreen(parentScaffoldKey: _scaffoldKey);
                 default:
                   return Text('Service not found!');

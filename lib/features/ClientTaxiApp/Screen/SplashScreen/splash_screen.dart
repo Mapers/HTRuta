@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:HTRuta/app/components/qualification_widget.dart';
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
@@ -11,6 +13,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart'
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -51,8 +54,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       if(data != null){
         if(data['correo'] != null || data['correo'] != ''){
-          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-          _showDialogQualification();
+          _sentToPage();
         }else{
           if(_prefs.primeraSesion){
             dataOnBoarding = await onboardingApi.getOnBoardingData();
@@ -91,6 +93,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           nameUserQuelify: '',
           routeTraveled: '',
           onAccepted: (stars, comments){
+            //! Enviar calificacion al server
             interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
           },
           onSkip: (){
@@ -99,6 +102,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         )
       );
     }
+  }
+  void _sentToPage() async{
+    //! El backend debe decirme a donde ir
+    String documentId;
+    if(documentId == null){
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);;
+    }else{
+      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: TypeServiceEnum.interprovincial));
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeDriverScreen, (route) => false);;
+    }
+    _showDialogQualification();
   }
 
   @override

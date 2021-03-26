@@ -8,7 +8,7 @@ abstract class DriverServiceEvent extends Equatable {
 }
 
 class ChangeDriverServiceEvent extends DriverServiceEvent {
-  final TypeDriverService type;
+  final TypeServiceEnum type;
   ChangeDriverServiceEvent({@required this.type});
 
   @override

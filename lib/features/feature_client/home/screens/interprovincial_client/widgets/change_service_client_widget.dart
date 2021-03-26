@@ -1,5 +1,5 @@
 import 'package:HTRuta/app/components/select.dart';
-import 'package:HTRuta/features/ClientTaxiApp/enums/type_client_service_enum.dart';
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +18,11 @@ class ChangeServiceClientWidget extends StatelessWidget {
             elevation: 20,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Select<TypeClientService>(
+              child: Select<TypeServiceEnum>(
                 value: data.typeService,
                 showPlaceholder: false,
-                items: TypeClientService.values.map((item) => DropdownMenuItem(
-                  child: Center(child: Text(getTextByTypeClientService(item))),
+                items: TypeServiceEnum.values.map((item) => DropdownMenuItem(
+                  child: Center(child: Text(getTextByTypeServiceEnum(item))),
                   value: item
                 )).toList(),
                 onChanged: (newItem){
