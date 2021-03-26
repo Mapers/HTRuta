@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -28,6 +32,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   LocationEntity location = LocationEntity.initalPeruPosition();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
+  StreamSubscription subscriptionPassengers;
 
   @override
   void initState() { 
@@ -65,6 +70,25 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
     if(_data.status == InterprovincialStatus.inRoute){
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
       polylines[polyline.polylineId] = polyline;
+      
+      if(subscriptionPassengers == null){
+        InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
+        subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
+          for (var item in passengers) {
+            Marker markerPassenger = _mapViewerUtil.generateMarker(
+              latLng: _location.  latLang,
+              nameMarkerId: 'PASSENGER_MARKER_${item.documentId}',
+              icon: currentPinLocationIcon,
+              onTap: (){
+                //! Esto es solo para prueba temporal
+                BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.mock()));
+              }
+            );
+            _markers[markerPassenger.markerId] = markerPassenger;
+          }
+        });
+      }
+      // Lanzar listener de pasajeros
     }
     BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialDriverLocationEvent(driverLocation: _location, status: _data.status));
     setState(() {
@@ -103,6 +127,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   @override
   void dispose() { 
     _locationUtil.disposeListener();
+    subscriptionPassengers?.cancel();
     super.dispose();
   }
 

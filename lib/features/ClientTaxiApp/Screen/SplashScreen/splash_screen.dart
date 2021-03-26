@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:HTRuta/app/components/qualification_widget.dart';
-import 'package:HTRuta/enums/type_service_enum.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
+import 'package:HTRuta/entities/service_in_course_entity.dart';
+import 'package:HTRuta/enums/type_entity_enum.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
@@ -54,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       if(data != null){
         if(data['correo'] != null || data['correo'] != ''){
-          _sentToPage();
+          _sendToPage();
         }else{
           if(_prefs.primeraSesion){
             dataOnBoarding = await onboardingApi.getOnBoardingData();
@@ -103,14 +105,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       );
     }
   }
-  void _sentToPage() async{
-    //! El backend debe decirme a donde ir
-    String documentId;
-    if(documentId == null){
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);;
+  void _sendToPage() async{
+    ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
+    ServiceInCourseEntity serviceInCourseEntity = await serviceDataRemote.getServiceInCourse();
+    if(serviceInCourseEntity == null){
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
     }else{
-      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: TypeServiceEnum.interprovincial));
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeDriverScreen, (route) => false);;
+      if(serviceInCourseEntity.entityType == TypeEntityEnum.driver){
+        BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourseEntity.serviceType));
+        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeDriverScreen, (route) => false);
+      }
     }
     _showDialogQualification();
   }

@@ -1,5 +1,6 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
@@ -95,8 +96,14 @@ Future<void> init() async {
       sharedPreferences: getIt()
     )
   );
+  //? General
+  getIt.registerLazySingleton<ServiceDataRemote>(
+    () => ServiceDataRemote(
+      client: getIt()
+    )
+  );
 
-  //! Core Dependences
+  //? Core Dependences
   await Firebase.initializeApp();
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance
@@ -104,6 +111,6 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => http.Client());
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreferences);
-  //! Core Libs
+  //? Core Libs
   getIt.registerLazySingleton(() => PushMessage(client: getIt()));
 }
