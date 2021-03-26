@@ -27,7 +27,6 @@ class InterprovincialDataRemote{
           regionName: 'Lima',
           zoom: 12
         ),
-        whereabouts: []
       ),
       InterprovincialRouteEntity(
         id: '2',
@@ -51,7 +50,6 @@ class InterprovincialDataRemote{
           regionName: 'Cajamarca',
           zoom: 12
         ),
-        whereabouts: []
       ),
       InterprovincialRouteEntity(
         id: '3',
@@ -75,7 +73,6 @@ class InterprovincialDataRemote{
           regionName: 'Lima',
           zoom: 12
         ),
-        whereabouts: []
       ),
     ];
   }

@@ -1,6 +1,5 @@
 import 'package:HTRuta/features/DriverTaxiApp/data/equatable.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
@@ -12,7 +11,6 @@ class InterprovincialRouteEntity extends Equatable {
   final LocationEntity toLocation;
   final double cost;
   final double starts;
-  final List<WhereaboutsEntity> whereabouts;
 
   InterprovincialRouteEntity({
     @required this.id,
@@ -21,7 +19,6 @@ class InterprovincialRouteEntity extends Equatable {
     @required this.cost,
     @required this.fromLocation,
     @required this.toLocation,
-    @required this.whereabouts,
     @required this.starts,
   });
 
@@ -47,11 +44,10 @@ class InterprovincialRouteEntity extends Equatable {
         regionName: 'Lima',
         zoom: 12
       ),
-      whereabouts: [],
       starts: 3.4
     );
   }
 
   @override
-  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, whereabouts,starts];
+  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, starts];
 }

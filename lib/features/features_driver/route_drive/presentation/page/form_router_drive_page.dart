@@ -1,9 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/input_button.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/page/map_selecction_from_to_page.dart';
@@ -12,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class FormRouterDrivePage extends StatefulWidget {
   final RouteEntity routerDrive;
   final bool statAddEdit;
@@ -37,9 +36,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   TextEditingController toController = TextEditingController();
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<WhereaboutsBloc>(context).add(GetwhereaboutsWhereaboutsEvent());
-    });
     if(!widget.statAddEdit){
       nameConroller.text = widget.routerDrive.name;
       // from = widget.routerDrive.nameFrom;
@@ -49,7 +45,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
     }
     super.initState();
   }
-  List<WhereaboutsEntity> whereaabouts = [];
   void getFromAndTo(RouteEntity routerDrive){
     routerDrives = routerDrive;
     dataArrived = true;

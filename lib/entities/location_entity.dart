@@ -55,5 +55,5 @@ class LocationEntity extends Equatable {
   }
   
   @override
-  List<Object> get props => [streetName, districtName, provinceName, latLang, zoom];
+  List<Object> get props => [streetName, districtName, provinceName, latLang, zoom, regionName];
 }

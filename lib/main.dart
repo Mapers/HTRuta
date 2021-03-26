@@ -13,7 +13,6 @@ import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_s
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/whereabouts_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +95,6 @@ class _MyAppState extends State<MyApp> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<RouteDriveBloc>(create: (_) => ij.getIt<RouteDriveBloc>()),
-          BlocProvider<WhereaboutsBloc>(create: (_) => ij.getIt<WhereaboutsBloc>()),
           BlocProvider<DriverServiceBloc>(create: (_) => ij.getIt<DriverServiceBloc>()),
           BlocProvider<InterprovincialDriverBloc>(create: (_) => ij.getIt<InterprovincialDriverBloc>()),
           BlocProvider<ClientServiceBloc>(create: (_) => ij.getIt<ClientServiceBloc>()),

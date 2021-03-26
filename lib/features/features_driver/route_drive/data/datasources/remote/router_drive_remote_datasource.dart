@@ -1,7 +1,5 @@
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/whereabouts_entity.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RouterDriveRemoteDataSoruce {
@@ -63,39 +61,6 @@ class RouterDriveRemoteDataSoruce {
     int index  = roterDrives.indexOf(roterDrive);
     roterDrives.removeAt(index);
     return roterDrives;
-  }
-
-  List<WhereaboutsEntity> whereaabouts =[];
-  Future<List<WhereaboutsEntity>> getWhereAbouts({RouteEntity roterDrive} ) async{
-    whereaabouts = [
-      // WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
-      // WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
-      // WhereaboutsEntity(id: '1', cost: 'S/.344',whereabouts: LocationEntity(latLang: LatLng(-12.0453, -77.0311),regionName: 'lima', provinceName: 'Huaura',districtName: 'Huacho',streetName: 'Av. San matin', zoom: 12)),
-    ];
-    return whereaabouts;
-  }
-  Future<List<WhereaboutsEntity>> editOnOrderWhereAbouts({@required int oldIndex,@required int newIndex, } ) async{
-    if (newIndex > oldIndex) {
-      newIndex -= 1;
-    }
-    final WhereaboutsEntity newString = whereaabouts.removeAt(oldIndex);
-    whereaabouts.insert(newIndex, newString);
-    return whereaabouts;
-  }
-  Future<List<WhereaboutsEntity>> addWhereAbouts({WhereaboutsEntity whereabouts} ) async{
-    whereaabouts.add(whereabouts);
-    return whereaabouts;
-  }
-  Future<List<WhereaboutsEntity>> editWhereAbouts({WhereaboutsEntity whereabouts,WhereaboutsEntity newWhereabouts} ) async{
-    int index = whereaabouts.indexOf(whereabouts);
-    print(index);
-    whereaabouts[index] = newWhereabouts;
-    return whereaabouts;
-  }
-  Future<List<WhereaboutsEntity>> deleteWhereAbouts({WhereaboutsEntity whereabouts,WhereaboutsEntity newWhereabouts} ) async{
-    int index = whereaabouts.indexOf(whereabouts);
-    whereaabouts.removeAt(index);
-    return whereaabouts;
   }
 
 }
