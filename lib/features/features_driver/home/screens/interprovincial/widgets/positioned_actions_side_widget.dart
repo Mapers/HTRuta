@@ -35,7 +35,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
             }
           ),
           StreamBuilder<List<InterprovincialRequestEntity>>(
-            stream: interprovincialDataFirestore.getStreamRequests(documentId: documentId),
+            stream: interprovincialDataFirestore.getStreamEnabledRequests(documentId: documentId),
             builder: (ctx, asyncSnapshot){
               if(asyncSnapshot.connectionState == ConnectionState.active){
                 int length = asyncSnapshot.data.length;

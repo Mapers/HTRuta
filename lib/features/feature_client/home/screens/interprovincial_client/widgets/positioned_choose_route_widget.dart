@@ -16,7 +16,7 @@ class PositionedChooseRouteWidget extends StatelessWidget {
           BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
           changeStateCircle();
         },
-        text: 'A donde quieres ir?'
+        text: '¿A dónde quieres ir?'
       ),
     );
   }

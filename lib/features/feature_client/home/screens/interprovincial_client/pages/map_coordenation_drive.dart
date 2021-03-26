@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
@@ -6,10 +8,11 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/location_drove_Entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -20,8 +23,7 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final LocationEntity currenActual;
-  final LocationDriveEntity driveData;
-  MapCoordenationDrivePage({Key key, this.currenActual, this.availablesRoutesEntity, this.driveData}) : super(key: key);
+  MapCoordenationDrivePage({Key key, @required this.currenActual, @required this.availablesRoutesEntity}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -32,6 +34,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
   LocationEntity currenActual;
+
+  StreamSubscription subscription;
+  
   @override
   void initState() { 
     
@@ -62,17 +67,28 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       );
       _markers[markerTo.markerId] = markerTo;
 
-      Marker markerDrive = _mapViewerUtil.generateMarker(
-        latLng: widget.driveData.coordenationDrive ,
-        nameMarkerId: 'DRIVE_POSITION_MARKER',
-        icon: result[2],
-        onTap: (){
-          print('Data del conductor');
-        }
-      );
-      _markers[markerDrive.markerId] = markerDrive;
+      InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+      //! Consultar de base de datos el documentID
+      String documentId = '9KtcOCl1Pj5JjYAD8a6G';
+      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: documentId).listen((interprovincialLocationDriver){
+        Marker markerDrive = _mapViewerUtil.generateMarker(
+          latLng: interprovincialLocationDriver.location.latLang,
+          nameMarkerId: 'DRIVE_POSITION_MARKER',
+          icon: result[2],
+          onTap: (){
+            print('Data del conductor');
+          }
+        );
+        _markers[markerDrive.markerId] = markerDrive;
+      });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() { 
+    subscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -129,7 +145,6 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
                     onPressed: (){
                       BlocProvider.of<InterprovincialClientBloc>(context).add(InitialInterprovincialClientEvent());
                       Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-
                     },
                   )
                 ],
@@ -141,6 +156,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
   }
 }
+
 class CardAvailiblesRoutes extends StatelessWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity}) : super(key: key);

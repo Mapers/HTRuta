@@ -1,7 +1,7 @@
 
 import 'package:HTRuta/core/push_message/push_message.dart';
-import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/location_drove_Entity.dart';
+import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +10,24 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class InterprovincialClientDataFirebase {
   final FirebaseFirestore firestore;
   final PushMessage pushMessage;
-  InterprovincialClientDataFirebase( {@required this.firestore,@required this.pushMessage,});
+  InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
+
   //! cambiar name del metodo
   Future<bool> addRequestTest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
-      .collection('requests').add(request.toFirestore );
-    pushMessage.sendPushMessage(
-      token: fcmTokenDriver, // Token del dispositivo del chofer
-      title: 'Ha recibido una nueva solicitud',
-      description: 'Revise las solicitudes'
-    );
+      .collection('requests').add(request.toFirestore);
+      pushMessage.sendPushMessage(
+        token: fcmTokenDriver, // Token del dispositivo del chofer
+        title: 'Ha recibido una nueva solicitud',
+        description: 'Revise las solicitudes'
+      );
       return true;
     } catch (e) {
       return false;
     }
   }
+
   Stream<List<InterprovincialRequestEntity>> getStreamContraoferta({@required String documentId}){
     return firestore.collection('drivers_in_service').doc(documentId)
     .collection('requests').snapshots()
@@ -37,6 +39,7 @@ class InterprovincialClientDataFirebase {
       }).toList()
     );
   }
+
   Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, @required String idRequests}) async{
     try {
       print(documentId);
@@ -48,20 +51,35 @@ class InterprovincialClientDataFirebase {
       return false;
     }
   }
-  Future<LocationDriveEntity> getlocateDrive({String documentId}) async{
-    LocationDriveEntity locationDrive;
-    DocumentSnapshot drive =  await firestore.collection('drivers_in_service').doc(documentId).get();
-    GeoPoint coordenationDrive = drive.data()['current_location'];
-    locationDrive = LocationDriveEntity(
-      availableSeats: drive.data()['available_seats'],
-      coordenationDrive: LatLng(coordenationDrive.latitude,coordenationDrive.longitude ),
-      districtName: drive.data()['district_name'],
-      fcmToken: drive.data()['fcm_token'],
-      provinceName: drive.data()['province_name'],
-      regionName: drive.data()['region_name'],
-      status: drive.data()['status'],
-      street: drive.data()['street']
-    );
-    return locationDrive;
+
+  Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}){
+    return firestore.collection('drivers_in_service').doc(documentId).snapshots().map((documentSnapshot){
+      dynamic dataJson = documentSnapshot.data();
+      GeoPoint currentLocation = dataJson['current_location'];
+      return InterprovincialLocationDriverEntity(
+        availableSeats: dataJson['available_seats'],
+        fcmToken: dataJson['fcm_token'],
+        location: LocationEntity(
+          districtName: dataJson['district_name'],
+          provinceName: dataJson['province_name'],
+          regionName: dataJson['region_name'],
+          streetName: dataJson['street'],
+          latLang: LatLng(currentLocation.latitude, currentLocation.longitude),
+        ),
+        status: dataJson['status'],
+      );
+    });
   }
+
+  // Stream<List<PassengerEntity>> getStreamPassengers({@required String documentId}){
+  //   return firestore.collection('drivers_in_service').doc(documentId)
+  //   .collection('passengers').snapshots()
+  //   .map<List<PassengerEntity>>((querySnapshot) =>
+  //     querySnapshot.docs.map<PassengerEntity>((doc){
+  //       Map<String, dynamic> data = doc.data();
+  //       data['id'] = doc.id;
+  //       return PassengerEntity.fromJsonLocal(data);
+  //     }).toList()
+  //   );
+  // }
 }

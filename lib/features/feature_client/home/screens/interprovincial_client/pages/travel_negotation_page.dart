@@ -1,18 +1,18 @@
-
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/location_drove_Entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_drive.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class TravelNegotationPage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   const TravelNegotationPage({Key key, this.availablesRoutesEntity}) : super(key: key);
@@ -51,73 +51,76 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
             StreamBuilder<List<InterprovincialRequestEntity>>(
               stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
               builder: (ctx, asyncSnapshot){
-                if(asyncSnapshot.data.isEmpty){
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: (){
-                              amountController.text = (double.parse(amountController.text)  - 1.00 ).toStringAsFixed(2);
-                            },
-                            icon: Icon(Icons.remove),
-                          ),
-                          SizedBox(width: 20,),
-                          Card(
-                            color: backgroundInputColor,
-                            child: Container(
-                              width: 100,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: TextFormField(
-                                  onSaved: (val)=> amount = val,
-                                  controller: amountController,
-                                  decoration: InputDecoration(
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none,
+                if(asyncSnapshot.connectionState == ConnectionState.active){
+                  if(asyncSnapshot.data.isEmpty){
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: (){
+                                amountController.text = (double.parse(amountController.text)  - 1.00 ).toStringAsFixed(2);
+                              },
+                              icon: Icon(Icons.remove),
+                            ),
+                            SizedBox(width: 20,),
+                            Card(
+                              color: backgroundInputColor,
+                              child: Container(
+                                width: 100,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                  child: TextFormField(
+                                    onSaved: (val)=> amount = val,
+                                    controller: amountController,
+                                    decoration: InputDecoration(
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 20,),
-                          IconButton(
-                            onPressed: (){
-                              amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
-                            },
-                            icon: Icon(Icons.add),
-                          ),
-                        ],
-                      ),
-                      PrincipalButton(
-                        text: 'Negociar',
-                        onPressed: ()async{
-                          formKey.currentState.save();
-                          print(amount);
-                          final _prefs = PreferenciaUsuario();
-                          LocationEntity from = await LocationUtil.currentLocation();
-                          DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
-                          InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
-                            condition: InterprovincialRequestCondition.offer,
-                            documentId: null,
-                            fcmToken: _prefs.tokenPush,
-                            from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
-                            to: param.distictTo,
-                            //! Corregir con data del usuario
-                            fullNames: 'juancarlos peres',
-                            price: double.parse(amount),
-                            //! Corregir con data del usuario
-                            seats: 3
-                          );
-                          interprovincialClientDataFirebase.addRequestTest(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
-                    
-                        },
-                      )
-                    ],
-                  );
-                }else if(asyncSnapshot.connectionState == ConnectionState.active){
-                  return contitional( interprovincialClientDataFirebase: interprovincialClientDataFirebase,interprovincialRequest: asyncSnapshot.data[0],documentId: widget.availablesRoutesEntity.documentId);
+                            SizedBox(width: 20,),
+                            IconButton(
+                              onPressed: (){
+                                amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
+                              },
+                              icon: Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                        PrincipalButton(
+                          text: 'Negociar',
+                          onPressed: ()async{
+                            formKey.currentState.save();
+                            print(amount);
+                            //! Agregar modal de consulta
+                            final _prefs = PreferenciaUsuario();
+                            LocationEntity from = await LocationUtil.currentLocation();
+                            DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+                            InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
+                              condition: InterprovincialRequestCondition.offer,
+                              documentId: null,
+                              fcmToken: _prefs.tokenPush,
+                              from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
+                              to: param.distictTo,
+                              //! Corregir con data del usuario
+                              fullNames: 'juancarlos peres',
+                              price: double.parse(amount),
+                              //! Corregir con data del usuario
+                              seats: 3
+                            );
+                            interprovincialClientDataFirebase.addRequestTest(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
+                            Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
+                          },
+                        )
+                      ],
+                    );
+                  }else if(asyncSnapshot.connectionState == ConnectionState.active){
+                    return contitional( interprovincialClientDataFirebase: interprovincialClientDataFirebase, interprovincialRequest: asyncSnapshot.data[0],documentId: widget.availablesRoutesEntity.documentId);
+                  }
                 }
                 return Container();
               }
@@ -127,7 +130,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
-  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase,InterprovincialRequestEntity interprovincialRequest,String documentId} ){
+  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity interprovincialRequest, String documentId} ){
     switch (interprovincialRequest.condition) {
       case InterprovincialRequestCondition.offer:
           return Center(
@@ -135,12 +138,12 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
               children: [
                 Text('S/. '+ interprovincialRequest.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
                 SizedBox(height: 10,),
-                Text('Esperado respuesta del interprovicial',style: TextStyle( fontWeight: FontWeight.bold,color:Colors.grey ),),
+                Text('Esperado respuesta del interprovicial', style: TextStyle( fontWeight: FontWeight.bold,color:Colors.grey ),),
               ],
             ),
           );
         break;
-      case InterprovincialRequestCondition.aceptedOffer:
+      case InterprovincialRequestCondition.accepted:
           return Column(
             children: [
               Text('Oferta aceptada'),
@@ -150,11 +153,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                   PrincipalButton(
                     text: 'Ver ruta',
                     width: 100,
-                    onPressed: ()async{
-                      LocationDriveEntity drive = await interprovincialClientDataFirebase.getlocateDrive(documentId: documentId);
-                      LocationEntity currenActual = await LocationUtil.currentLocation();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,driveData: drive,)));
-                    },
+                    onPressed: () => acceptService(documentId)
                   ),
                 ],
               ),
@@ -182,11 +181,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                   PrincipalButton(
                     text: 'Aceptar',
                     width: 100,
-                    onPressed: () async {
-                      LocationDriveEntity drive = await interprovincialClientDataFirebase.getlocateDrive(documentId: documentId);
-                      LocationEntity currenActual = await LocationUtil.currentLocation();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,driveData: drive,)));
-                    },
+                    onPressed: () => acceptService(documentId)
                   ),
                 ],
               )
@@ -196,5 +191,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       default:
     }
     return Container();
+  }
+
+  void acceptService(String documentId) async {
+    LocationEntity currenActual = await LocationUtil.currentLocation();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity)), (_) => false);
   }
 }

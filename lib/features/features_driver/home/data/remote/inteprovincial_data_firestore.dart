@@ -93,9 +93,12 @@ class InterprovincialDataFirestore{
     );
   }
 
-  Stream<List<InterprovincialRequestEntity>> getStreamRequests({@required String documentId}){
+  Stream<List<InterprovincialRequestEntity>> getStreamEnabledRequests({@required String documentId}){
     return firestore.collection('drivers_in_service').doc(documentId)
-    .collection('requests').snapshots()
+    .collection('requests').where('condition', arrayContains: [
+      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.offer),
+      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
+    ]).snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
         Map<String, dynamic> data = doc.data();
@@ -133,7 +136,9 @@ class InterprovincialDataFirestore{
       List<dynamic> result = await Future.wait([
         dr.get(),
         dr.collection('passengers').add(passengerEntity.toFirestore),
-        dr.collection('requests').doc(request.documentId).delete(),
+        dr.collection('requests').doc(request.documentId).update({
+          'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
+        }),
       ]);
 
       pushMessage.sendPushMessage(
