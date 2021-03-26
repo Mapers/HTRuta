@@ -112,7 +112,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           title: 'Califica al pasajero',
           nameUserQuelify: passenger.fullNames,
           routeTraveled: passenger.destination,
-          onAccepted: (start,commentary){
+          onAccepted: (start,commentary)async{
             //!la calificacion tiene que ir a el back-end
             print(start);
             print(commentary);
