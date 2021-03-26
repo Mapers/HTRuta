@@ -203,6 +203,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
 
   void acceptService(String documentId) async {
     LocationEntity currenActual = await LocationUtil.currentLocation();
+    //! Eliminar documento de request
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity)), (_) => false);
   }
 }
