@@ -18,27 +18,35 @@ class ListPassengersFullScreenDialog extends StatefulWidget {
 
 class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScreenDialog> {
 
-  List<PassengerEntity> passengers;
   LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
 
   @override
-  void initState() { 
-    super.initState();
-    passengers = widget.passengers;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Pasajeros'),
       ),
-      body: ListView.separated(
-        separatorBuilder: (ctx, i) => Divider(),
-        itemCount: passengers.length,
-        padding: EdgeInsets.all(15),
-        itemBuilder: (ctx, i) => getItem(i, passengers[i])
-      ),
+      body: StreamBuilder<List<PassengerEntity>>(
+        stream: interprovincialDataFirestore.getStreamPassengers(documentId: widget.documentId),
+        builder: (ctx, asyncSnapshot){
+          if(asyncSnapshot.connectionState == ConnectionState.active){
+            List<PassengerEntity> passengers = asyncSnapshot.data;
+            if(passengers.isEmpty){
+              return Center(
+                child: Text('- Sin pasajeros -', style: TextStyle(fontStyle: FontStyle.italic)),
+              );
+            }
+            return ListView.separated(
+              separatorBuilder: (ctx, i) => Divider(),
+              itemCount: passengers.length,
+              padding: EdgeInsets.all(15),
+              itemBuilder: (ctx, i) => getItem(i, passengers[i])
+            );
+          }
+          return Container();
+        }
+      )
     );
   }
 
@@ -133,11 +141,6 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     if(newAvailableSeats == null){
       return;
     }
-    setState(() => passengers.removeAt(index));
     BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: newAvailableSeats));
-    if(passengers.isEmpty){
-      await Future.delayed(Duration(milliseconds: 100));
-      Navigator.of(context).pop();
-    }
   }
 }
