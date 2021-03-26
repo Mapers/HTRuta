@@ -110,9 +110,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               fullNames: 'juancarlos peres',
                               price: double.parse(amount),
                               //! Corregir con data del usuario
-                              seats: 3
+                              seats: param.requiredSeats
                             );
-                            interprovincialClientDataFirebase.addRequestTest(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
+                            interprovincialClientDataFirebase.addRequestCliet(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
                           },
                         )

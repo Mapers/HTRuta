@@ -21,9 +21,10 @@ class AvailablesRoutesBloc extends Bloc<AvailablesRoutesEvent, AvailablesRoutesS
     if(event is GetAvailablesRoutesEvent){
       interprovincialClientRemote.getFiebaseAvailablesRoutes();
       yield LoadingAvailablesRoutes();
+      print(event.seating );
       // List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes();
       List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getFiebaseAvailablesRoutes();
-      yield DataAvailablesRoutes(availablesRoutes: availablesRoutes,distictfrom: event.from.districtName,distictTo: event.to.districtName);
+      yield DataAvailablesRoutes(availablesRoutes: availablesRoutes,distictfrom: event.from.districtName,distictTo: event.to.districtName,requiredSeats: event.seating);
     }
   }
 }

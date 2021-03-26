@@ -12,8 +12,7 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  //! cambiar name del metodo
-  Future<bool> addRequestTest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver,bool update}) async{
+  Future<bool> addRequestCliet({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver,bool update}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore);
