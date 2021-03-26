@@ -13,7 +13,7 @@ class InterprovincialClientDataFirebase {
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
   //! cambiar name del metodo
-  Future<bool> addRequestTest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver}) async{
+  Future<bool> addRequestTest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver,bool update}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore);
@@ -39,13 +39,28 @@ class InterprovincialClientDataFirebase {
       }).toList()
     );
   }
-
-  Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, @required String idRequests}) async{
+  //! cambiar nombre del meotod
+  Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver, bool update = false}) async{
     try {
-      print(documentId);
-      print(idRequests);
-      await firestore.collection('drivers_in_service').doc(documentId)
-      .collection('requests').doc(idRequests).delete();
+      String message = 'Revise las solicitudes';
+      if(update){
+        await firestore.collection('drivers_in_service').doc(documentId)
+        .collection('requests').doc(request.documentId).update(
+          {
+            'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
+          }
+        );
+        message = 'El cliente acepto la oferta';
+      }else{
+        await firestore.collection('drivers_in_service').doc(documentId)
+        .collection('requests').doc(request.documentId).delete();
+        message = 'Solicitud rechazada';
+      }
+      pushMessage.sendPushMessage(
+        token: fcmTokenDriver, // Token del dispositivo del chofer
+        title: message,
+        description: 'Revise las solicitudes'
+      );
       return true;
     } catch (e) {
       return false;

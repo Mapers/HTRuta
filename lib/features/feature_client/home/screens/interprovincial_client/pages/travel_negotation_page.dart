@@ -119,7 +119,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       ],
                     );
                   }else if(asyncSnapshot.connectionState == ConnectionState.active){
-                    return contitional( interprovincialClientDataFirebase: interprovincialClientDataFirebase, interprovincialRequest: asyncSnapshot.data[0],documentId: widget.availablesRoutesEntity.documentId);
+                    return contitional( interprovincialClientDataFirebase: interprovincialClientDataFirebase, interprovincialRequest: asyncSnapshot.data[0],documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
                   }
                 }
                 return Container();
@@ -130,7 +130,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
-  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity interprovincialRequest, String documentId} ){
+  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity interprovincialRequest, String documentId, String fcmTokenDriver} ){
     switch (interprovincialRequest.condition) {
       case InterprovincialRequestCondition.offer:
           return Center(
@@ -153,7 +153,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                   PrincipalButton(
                     text: 'Ver ruta',
                     width: 100,
-                    onPressed: () => acceptService(documentId)
+                    onPressed: () {
+                      acceptService(documentId);
+                    }
                   ),
                 ],
               ),
@@ -174,14 +176,17 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     color:Colors.red,
                     onPressed: ()async{
                       Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.deleteRequest(idRequests: interprovincialRequest.documentId,documentId: documentId);
+                      await interprovincialClientDataFirebase.deleteRequest(request: interprovincialRequest , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
                     },
                   ),
                   SizedBox(width: 30,),
                   PrincipalButton(
                     text: 'Aceptar',
                     width: 100,
-                    onPressed: () => acceptService(documentId)
+                    onPressed: () async{
+                      await interprovincialClientDataFirebase.deleteRequest(request: interprovincialRequest ,documentId: documentId,fcmTokenDriver: fcmTokenDriver,update: true);
+                      // acceptService(documentId);
+                    }
                   ),
                 ],
               )
