@@ -113,9 +113,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           nameUserQuelify: 'Juan pere salinas',
           routeTraveled: 'huacho malecon',
           accepted: (val){
-            print('xd');
-            print(val);
-            print('xd');
+          
             // Navigator.of(context).pop();
           },
         );
