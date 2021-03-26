@@ -113,46 +113,45 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
   }
   //! eliminar en caso no se requera el cancelar
-  // Positioned CancelButtonWidget(BuildContext context) {
-  //   return Positioned(
-  //     top: 30,
-  //     right: 15,
-  //     // left: 15,
-  //     child: PrincipalButton(
-  //       width: 100,
-  //       text: 'Cancelar',
-  //       color: Colors.grey,
-  //       onPressed: ()async{
-  //         showDialog(
-  //           context:context,
-  //           builder: (context) {
-  //             return AlertDialog(
-  //               title: Text('¿Esta seguro que quiere cancelar?'),
-  //               actions: [
-  //                 PrincipalButton(
-  //                   width: 100,
-  //                   color: Colors.grey,
-  //                   text: 'no',
-  //                   onPressed: (){
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                 ),
-  //                 PrincipalButton(
-  //                   width: 100,
-  //                   text: 'si',
-  //                   onPressed: (){
-  //                     BlocProvider.of<InterprovincialClientBloc>(context).add(InitialInterprovincialClientEvent());
-  //                     Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-  //                   },
-  //                 )
-  //               ],
-  //             );
-  //           },
-  //         );
-  //       },
-  //     )
-  //   );
-  // }
+//   Positioned CancelButtonWidget(BuildContext context) {
+//     return Positioned(
+//       top: 30,
+//       right: 15,
+//       child: PrincipalButton(
+//         width: 100,
+//         text: 'Cancelar',
+//         color: Colors.grey,
+//         onPressed: ()async{
+//           showDialog(
+//             context:context,
+//             builder: (context) {
+//               return AlertDialog(
+//                 title: Text('¿Esta seguro que quiere cancelar?'),
+//                 actions: [
+//                   PrincipalButton(
+//                     width: 100,
+//                     color: Colors.grey,
+//                     text: 'no',
+//                     onPressed: (){
+//                       Navigator.of(context).pop();
+//                     },
+//                   ),
+//                   PrincipalButton(
+//                     width: 100,
+//                     text: 'si',
+//                     onPressed: (){
+//                       BlocProvider.of<InterprovincialClientBloc>(context).add(InitialInterprovincialClientEvent());
+//                       Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
+//                     },
+//                   )
+//                 ],
+//               );
+//             },
+//           );
+//         },
+//       )
+//     );
+//   }
 }
 
 class CardAvailiblesRoutes extends StatelessWidget {

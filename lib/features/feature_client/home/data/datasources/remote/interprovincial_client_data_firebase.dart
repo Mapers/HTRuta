@@ -73,6 +73,9 @@ class InterprovincialClientDataFirebase {
 
   Future<bool> checkIfInterprovincialLocationDriverEntityOnService({@required String documentId}) async{
     DocumentSnapshot ds = await firestore.collection('drivers_in_service').doc(documentId).get();
+    print('..................');
+    print(ds.exists);
+    print('..................');
     return ds.exists;
   }
 }
