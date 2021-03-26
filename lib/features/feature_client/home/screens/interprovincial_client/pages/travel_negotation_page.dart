@@ -151,6 +151,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver ruta',
                     width: 100,
                     onPressed: ()async{
+                      LocationDriveEntity drive = await interprovincialClientDataFirebase.getlocateDrive(documentId: documentId);
                       LocationEntity currenActual = await LocationUtil.currentLocation();
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,)));
                     },
