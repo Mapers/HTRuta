@@ -17,7 +17,7 @@ class InterprovincialClientDataFirebase {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore );
     pushMessage.sendPushMessage(
-      token: request.fcmToken, // Token del dispositivo del chofer
+      token: fcmTokenDriver, // Token del dispositivo del chofer
       title: 'Ha recibido una nueva solicitud',
       description: 'Revise las solicitudes'
     );

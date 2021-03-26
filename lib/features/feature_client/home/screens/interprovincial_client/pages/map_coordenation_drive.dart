@@ -1,16 +1,21 @@
 import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/location_drove_Entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+
 
 class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
@@ -83,16 +88,24 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             height: MediaQuery.of(context).size.height,
           )
         ),
+        Positioned(
+          top: 400,
+          right: 15,
+          left: 15,
+          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,)
+        ),
         SaveButtonWidget(context),
       ],
     );
   }
+
   Positioned SaveButtonWidget(BuildContext context) {
     return Positioned(
-      top: 500,
+      top: 30,
       right: 15,
-      left: 15,
+      // left: 15,
       child: PrincipalButton(
+        width: 100,
         text: 'Cancelar',
         color: Colors.grey,
         onPressed: ()async{
@@ -125,6 +138,128 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           );
         },
       )
+    );
+  }
+}
+class CardAvailiblesRoutes extends StatelessWidget {
+  final AvailableRouteEntity availablesRoutesEntity;
+  const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    availablesRoutesEntity.route.name,
+                    style: textStyleHeading18Black,
+                  )
+                ),
+                SizedBox(width: 10),
+                Text('S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2), style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+              ],
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(width: 10,),
+                RatingBar.builder(
+                  initialRating: availablesRoutesEntity.route.starts,
+                  allowHalfRating: true,
+                  itemSize: 18,
+                  itemCount: 5,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: null,
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: (){
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ComentsWirdgets();
+                      }
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('ver comen...'),
+                  )
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Icon(Icons.person, color: Colors.black87),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(availablesRoutesEntity.route.nameDriver , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Icon(Icons.location_on, color: Colors.black87),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Icon(Icons.directions_bus_rounded, color: Colors.black87),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                ),
+                SizedBox(width: 15),
+                Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
+                SizedBox(width: 8),
+                Text(availablesRoutesEntity.availableSeats.toString(), style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.bold))
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Icon(Icons.access_time, color: Colors.black87),
+                SizedBox(width: 5),
+                Text(availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                SizedBox(width: 20),
+                Icon(Icons.calendar_today, color: Colors.black87),
+                SizedBox(width: 5),
+                Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
