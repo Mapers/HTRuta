@@ -205,6 +205,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     LocationEntity currenActual = await LocationUtil.currentLocation();
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     interprovincialDataFirestore.seeRoute(documentId: widget.availablesRoutesEntity.documentId, request: request);
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity)), (_) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity, interprovincialRequest: request,)), (_) => false);
   }
 }

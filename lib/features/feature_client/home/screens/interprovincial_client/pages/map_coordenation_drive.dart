@@ -13,6 +13,7 @@ import 'package:HTRuta/features/feature_client/home/data/datasources/remote/inte
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +24,9 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final LocationEntity currenActual;
+  final InterprovincialRequestEntity interprovincialRequest;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.currenActual, @required this.availablesRoutesEntity}) : super(key: key);
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.currenActual, @required this.availablesRoutesEntity,@required this.interprovincialRequest}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -109,58 +111,60 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           top: 400,
           right: 15,
           left: 15,
-          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,)
+          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,interprovincialRequest: widget.interprovincialRequest,)
         ),
-        SaveButtonWidget(context),
+        //! eliminar en caso no se requera el cancelar
+        // CancelButtonWidget(context),
       ],
     );
   }
-
-  Positioned SaveButtonWidget(BuildContext context) {
-    return Positioned(
-      top: 30,
-      right: 15,
-      // left: 15,
-      child: PrincipalButton(
-        width: 100,
-        text: 'Cancelar',
-        color: Colors.grey,
-        onPressed: ()async{
-          showDialog(
-            context:context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('¿Esta seguro que quiere cancelar?'),
-                actions: [
-                  PrincipalButton(
-                    width: 100,
-                    color: Colors.grey,
-                    text: 'no',
-                    onPressed: (){
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  PrincipalButton(
-                    width: 100,
-                    text: 'si',
-                    onPressed: (){
-                      BlocProvider.of<InterprovincialClientBloc>(context).add(InitialInterprovincialClientEvent());
-                      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-                    },
-                  )
-                ],
-              );
-            },
-          );
-        },
-      )
-    );
-  }
+  //! eliminar en caso no se requera el cancelar
+  // Positioned CancelButtonWidget(BuildContext context) {
+  //   return Positioned(
+  //     top: 30,
+  //     right: 15,
+  //     // left: 15,
+  //     child: PrincipalButton(
+  //       width: 100,
+  //       text: 'Cancelar',
+  //       color: Colors.grey,
+  //       onPressed: ()async{
+  //         showDialog(
+  //           context:context,
+  //           builder: (context) {
+  //             return AlertDialog(
+  //               title: Text('¿Esta seguro que quiere cancelar?'),
+  //               actions: [
+  //                 PrincipalButton(
+  //                   width: 100,
+  //                   color: Colors.grey,
+  //                   text: 'no',
+  //                   onPressed: (){
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                 ),
+  //                 PrincipalButton(
+  //                   width: 100,
+  //                   text: 'si',
+  //                   onPressed: (){
+  //                     BlocProvider.of<InterprovincialClientBloc>(context).add(InitialInterprovincialClientEvent());
+  //                     Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
+  //                   },
+  //                 )
+  //               ],
+  //             );
+  //           },
+  //         );
+  //       },
+  //     )
+  //   );
+  // }
 }
 
 class CardAvailiblesRoutes extends StatelessWidget {
   final AvailableRouteEntity availablesRoutesEntity;
-  const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity}) : super(key: key);
+  final InterprovincialRequestEntity interprovincialRequest;
+  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.interprovincialRequest}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -182,7 +186,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   )
                 ),
                 SizedBox(width: 10),
-                Text('S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2), style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('S/.' + interprovincialRequest.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
             Row(
@@ -202,32 +206,6 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10,),
-                RatingBar.builder(
-                  initialRating: availablesRoutesEntity.route.starts,
-                  allowHalfRating: true,
-                  itemSize: 18,
-                  itemCount: 5,
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  onRatingUpdate: null,
-                ),
-                Spacer(),
-                InkWell(
-                  onTap: (){
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return ComentsWirdgets();
-                      }
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('ver comen...'),
-                  )
-                ),
               ],
             ),
             Row(
@@ -256,10 +234,6 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Expanded(
                   child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
-                SizedBox(width: 15),
-                Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
-                SizedBox(width: 8),
-                Text(availablesRoutesEntity.availableSeats.toString(), style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.bold))
               ],
             ),
             SizedBox(height: 5),
