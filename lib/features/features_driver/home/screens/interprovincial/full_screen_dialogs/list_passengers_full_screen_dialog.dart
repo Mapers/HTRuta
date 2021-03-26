@@ -2,6 +2,7 @@ import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/qualification_widgets.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,13 +94,32 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           ),
           RaisedButton(
             onPressed: (){
-              removePassenger(index, passenger);
+              // removePassenger(index, passenger);
               Navigator.of(ctx).pop();
+              qualificationShowDialog();
             },
             child: Text('Liberar asientos'),
           )
         ]
       )
+    );
+  }
+  void qualificationShowDialog(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return QualificationWidgets(
+          title: 'Califica al pasajero',
+          nameUserQuelify: 'Juan pere salinas',
+          routeTraveled: 'huacho malecon',
+          accepted: (val){
+            print('xd');
+            print(val);
+            print('xd');
+            // Navigator.of(context).pop();
+          },
+        );
+      }
     );
   }
 

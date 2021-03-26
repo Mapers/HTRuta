@@ -85,7 +85,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     subscription?.cancel();
     super.dispose();
   }
