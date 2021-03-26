@@ -145,20 +145,4 @@ class InterprovincialDataDriverFirestore{
       return false;
     }
   }
-
-  //! Debe ser borrado luego
-  Future<bool> addRequestTest({@required String documentId, @required InterprovincialRequestEntity request}) async{
-    try {
-      await firestore.collection('drivers_in_service').doc(documentId)
-      .collection('requests').add(request.toFirestore);
-      pushMessage.sendPushMessage(
-        token: request.passengerFcmToken, // Token del dispositivo del chofer
-        title: 'Ha recibido una nueva solicitud',
-        description: 'Revise las solicitudes'
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 }

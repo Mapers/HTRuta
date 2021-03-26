@@ -21,7 +21,7 @@ class InterprovincialLocationDriverEntity extends Equatable{
     GeoPoint currentLocation = dataJson['current_location'];
     return InterprovincialLocationDriverEntity(
       availableSeats: dataJson['available_seats'],
-      fcmToken: dataJson['passenger_fcm_token'],
+      fcmToken: dataJson['fcm_token'],
       location: LocationEntity(
         districtName: dataJson['district_name'],
         provinceName: dataJson['province_name'],

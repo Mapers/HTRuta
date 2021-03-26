@@ -1,10 +1,8 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientDataFirebase {
   final FirebaseFirestore firestore;

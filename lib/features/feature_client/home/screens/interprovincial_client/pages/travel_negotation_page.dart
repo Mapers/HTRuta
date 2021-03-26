@@ -120,8 +120,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                         )
                       ],
                     );
-                  }else if(asyncSnapshot.connectionState == ConnectionState.active){
-                    return contitional( interprovincialClientDataFirebase: interprovincialClientDataFirebase, interprovincialRequest: asyncSnapshot.data[0],documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
+                  }else{
+                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, interprovincialRequest: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
                   }
                 }
                 return Container();
@@ -188,7 +188,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     width: 100,
                     onPressed: () async{
                       await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client);
-                      // await interprovincialClientDataFirebase.deleteRequest(request: interprovincialRequest ,documentId: documentId,fcmTokenDriver: fcmTokenDriver,update: true);
                       acceptService(documentId);
                     }
                   ),
@@ -204,6 +203,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
 
   void acceptService(String documentId) async {
     LocationEntity currenActual = await LocationUtil.currentLocation();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity)), (_) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity)), (_) => false);
   }
 }
