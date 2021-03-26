@@ -96,7 +96,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
             onPressed: (){
               // removePassenger(index, passenger);
               Navigator.of(ctx).pop();
-              qualificationShowDialog();
+              qualificationShowDialog(passenger: passenger);
             },
             child: Text('Liberar asientos'),
           )
@@ -104,15 +104,15 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
       )
     );
   }
-  void qualificationShowDialog(){
+  void qualificationShowDialog({@required PassengerEntity passenger}){
     
     showDialog(
       context: context,
       builder: (context) {
         return QualificationWidget(
           title: 'Califica al pasajero',
-          nameUserQuelify: 'Juan pere salinas',
-          routeTraveled: 'huacho malecon',
+          nameUserQuelify: passenger.fullNames,
+          routeTraveled: passenger.destination,
           onAccepted: (start,commentary){
             //!la calificacion tiene que ir a el back-end
             print(start);

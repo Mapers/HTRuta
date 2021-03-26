@@ -26,14 +26,18 @@ class _QualificationWidgetState extends State<QualificationWidget> {
       child: AlertDialog(
         title: Text(widget.title),
         content: Container(
-          height: 180,
+          height: 190,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Row(
                   children: [
                     Icon(Icons.person ),
-                    Text(widget.nameUserQuelify)
+                    SizedBox(width: 7,),
+                    Container(
+                      width: 200,
+                      child: Text(widget.nameUserQuelify)
+                    )
                   ],
                 ),
                 SizedBox(height: 10,),
