@@ -9,8 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListPassengersFullScreenDialog extends StatefulWidget {
   final String documentId;
-  final List<PassengerEntity> passengers;
-  ListPassengersFullScreenDialog(this.passengers, {Key key, @required this.documentId}) : super(key: key);
+  ListPassengersFullScreenDialog({Key key, @required this.documentId}) : super(key: key);
 
   @override
   _ListPassengersFullScreenDialogState createState() => _ListPassengersFullScreenDialogState();

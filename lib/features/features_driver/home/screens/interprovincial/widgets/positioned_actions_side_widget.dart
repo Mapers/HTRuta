@@ -27,7 +27,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
                   icon: Icons.group,
                   text: '$length Pasajero${length == 1 ? "" : "s"}',
                   onTap: length > 0 ? () {
-                    Navigator.of(context).push(Routes.toListPassengersFullScreenDialog(documentId, asyncSnapshot.data));
+                    Navigator.of(context).push(Routes.toListPassengersFullScreenDialog(documentId));
                   } : null
                 );
               }
