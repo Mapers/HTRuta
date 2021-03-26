@@ -44,6 +44,7 @@ class MapViewerUtil {
   Circle circular(LatLng currentLocation,{bool visible = false,double  radiusCircle = 4000}){
     Circle circles =
       Circle(
+        
         visible: visible,
         circleId: CircleId('1'),
         center: LatLng(currentLocation.latitude, currentLocation.longitude),

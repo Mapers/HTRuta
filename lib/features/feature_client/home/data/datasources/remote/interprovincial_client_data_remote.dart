@@ -48,7 +48,7 @@ class InterprovincialClientRemoteDataSoruce {
   }
   Future<List<AvailableRouteEntity>> getFiebaseAvailablesRoutes() async{
     List<AvailableRouteEntity> availablesRoutes =[];
-
+    //! cambira nombre  cuado este listo el back-ent
     QuerySnapshot xd =  await firestore.collection('drivers_in_service').get();
     for (var item in xd.docs) {
       availablesRoutes.add(
@@ -60,11 +60,9 @@ class InterprovincialClientRemoteDataSoruce {
           vehicleSeatLayout: VehicleSeatLayout.miniban,
           route: InterprovincialRouteEntity.test(),
           routeStartDateTime: DateTime.now(),
-          fcm_token: item.data()['passenger_fcm_token']
+          fcm_token: item.data()['fcm_token']
         ),
       );
-      print(item.id );
-      print(item.data() );
     }
     return availablesRoutes;
   }

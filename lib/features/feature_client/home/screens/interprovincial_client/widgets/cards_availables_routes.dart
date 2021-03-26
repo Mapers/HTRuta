@@ -53,6 +53,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
                 return CardAvailiblesRoutes(
                   availablesRoutesEntity: param.availablesRoutes[index],
                   onTap: (){
+                    
                     Navigator.of(context).push(Routes.toTravelNegotationPage(availablesRoutesEntity: param.availablesRoutes[index]));
                   }
                 );

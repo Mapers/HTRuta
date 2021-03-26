@@ -2,6 +2,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
@@ -112,6 +113,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               //! Corregir con data del usuario
                               seats: param.requiredSeats
                             );
+                            print(widget.availablesRoutesEntity.fcm_token);
                             interprovincialClientDataFirebase.addRequestCliet(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
                           },
@@ -131,6 +133,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     );
   }
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity interprovincialRequest, String documentId, String fcmTokenDriver} ){
+    InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (interprovincialRequest.condition) {
       case InterprovincialRequestCondition.offer:
           return Center(
@@ -184,8 +187,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      await interprovincialClientDataFirebase.deleteRequest(request: interprovincialRequest ,documentId: documentId,fcmTokenDriver: fcmTokenDriver,update: true);
-                      // acceptService(documentId);
+                      await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client);
+                      // await interprovincialClientDataFirebase.deleteRequest(request: interprovincialRequest ,documentId: documentId,fcmTokenDriver: fcmTokenDriver,update: true);
+                      acceptService(documentId);
                     }
                   ),
                 ],
