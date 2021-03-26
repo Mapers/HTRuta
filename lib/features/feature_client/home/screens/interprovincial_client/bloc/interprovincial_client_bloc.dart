@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
-import 'package:HTRuta/injection_container.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';

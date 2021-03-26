@@ -23,7 +23,8 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final LocationEntity currenActual;
-  MapCoordenationDrivePage({Key key, @required this.currenActual, @required this.availablesRoutesEntity}) : super(key: key);
+  final String documentId;
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.currenActual, @required this.availablesRoutesEntity}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -68,9 +69,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       _markers[markerTo.markerId] = markerTo;
 
       InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-      //! Consultar de base de datos el documentID
-      String documentId = '9KtcOCl1Pj5JjYAD8a6G';
-      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: documentId).listen((interprovincialLocationDriver){
+      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
         Marker markerDrive = _mapViewerUtil.generateMarker(
           latLng: interprovincialLocationDriver.location.latLang,
           nameMarkerId: 'DRIVE_POSITION_MARKER',

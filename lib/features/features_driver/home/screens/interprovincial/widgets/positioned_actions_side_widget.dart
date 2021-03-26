@@ -49,13 +49,6 @@ class PositionedActionsSideWidget extends StatelessWidget {
               }
               return Container();
             }
-          ),
-          itemOption(
-            icon: Icons.add,
-            text: 'Añadir Solicitud',
-            onTap: () {
-              interprovincialDataFirestore.addRequestTest(documentId: documentId, request: InterprovincialRequestEntity.mock());
-            }
           )
         ],
       )

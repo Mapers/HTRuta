@@ -33,5 +33,5 @@ class DataInterprovincialClientState extends InterprovincialClientState {
   }
 
   @override
-  List<Object> get props => [loadingMessage];
+  List<Object> get props => [status, loadingMessage, interprovincialRoute];
 }
