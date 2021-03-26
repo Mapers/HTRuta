@@ -32,6 +32,9 @@ class InterprovincialDataFirestore{
       DocumentSnapshot ds = result.first;
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(origin == InterprovincialDataFirestoreOrigin.client){
+        print('###################');
+        print(interprovincialLocationDriver.fcmToken);
+        print('###################');
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken,
           title: 'La contraoferta ha sido aceptada',

@@ -23,6 +23,7 @@ class InterprovincialRequestEntity extends Equatable {
   });
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
+    print(dataJson);
     return InterprovincialRequestEntity(
       documentId: dataJson['id'],
       fullNames: dataJson['full_names'],
