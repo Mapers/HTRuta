@@ -69,13 +69,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       _markers[markerTo.markerId] = markerTo;
 
       InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-<<<<<<< HEAD
-      //! Consultar de base de datos el documentID
-      String documentId = 'dQhq0ZEzFRxN8IczLOz8';
-      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: documentId).listen((interprovincialLocationDriver){
-=======
       subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
->>>>>>> 96303e36c805aafdccc69b5a5e281abcfacd896a
         Marker markerDrive = _mapViewerUtil.generateMarker(
           latLng: interprovincialLocationDriver.location.latLang,
           nameMarkerId: 'DRIVE_POSITION_MARKER',
