@@ -105,6 +105,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     );
   }
   void qualificationShowDialog(){
+    
     showDialog(
       context: context,
       builder: (context) {
@@ -113,7 +114,8 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           nameUserQuelify: 'Juan pere salinas',
           routeTraveled: 'huacho malecon',
           accepted: (val){
-          
+            //!la calificacion tiene que ir a el back-end
+
             // Navigator.of(context).pop();
           },
         );

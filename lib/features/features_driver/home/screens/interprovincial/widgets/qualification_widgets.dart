@@ -7,7 +7,7 @@ class QualificationWidgets extends StatefulWidget {
   final String nameUserQuelify;
   final String routeTraveled;
   final Function(double start) accepted;
-  const QualificationWidgets({Key key, this.title, this.nameUserQuelify, this.routeTraveled, this.accepted}) : super(key: key);
+  const QualificationWidgets({Key key,@required this.title,@required this.nameUserQuelify,@required this.routeTraveled,@required this.accepted}) : super(key: key);
 
   @override
   _QualificationWidgetsState createState() => _QualificationWidgetsState();
