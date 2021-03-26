@@ -126,22 +126,6 @@ class InterprovincialDataDriverFirestore{
     }
   }
 
-  Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
-    try {
-      await firestore.collection('drivers_in_service').doc(documentId)
-      .collection('requests').doc(request.documentId).delete();
-      pushMessage.sendPushMessage(
-        token: request.passengerFcmToken, // Token del dispositivo del chofer
-        title: 'Su solicitud ha sido rechazada por el interprovincial',
-        description: 'Puede realizar otra solicitud'
-      );
-      return true;
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
-      return false;
-    }
-  }
-
   Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice}) async{
     try {
       DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);

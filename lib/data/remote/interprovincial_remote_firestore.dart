@@ -56,15 +56,23 @@ class InterprovincialDataFirestore{
     }
   }
 
-  Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request}) async{
+  Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request, @required String driverFcmToken, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       await firestore.collection('drivers_in_service').doc(documentId)
       .collection('requests').doc(request.documentId).delete();
-      pushMessage.sendPushMessage(
-        token: request.passengerFcmToken, // Token del dispositivo del chofer
-        title: 'Su solicitud ha sido rechazada por el interprovincial',
-        description: 'Puede realizar otra solicitud'
-      );
+      if(origin == InterprovincialDataFirestoreOrigin.driver){
+        pushMessage.sendPushMessage(
+          token: request.passengerFcmToken,
+          title: 'Su solicitud ha sido rechazada',
+          description: 'Puede realizar otra solicitud'
+        );
+      }else{
+        pushMessage.sendPushMessage(
+          token: driverFcmToken,
+          title: 'La contraoferta ha sido rechazada',
+          description: 'Se ha removido de la lista de solicitudes'
+        );
+      }
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo rechazar la solicitud.',toastLength: Toast.LENGTH_SHORT);
