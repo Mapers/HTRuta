@@ -6,6 +6,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/shared_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/location_drove_Entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_drive.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
@@ -149,8 +150,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                   PrincipalButton(
                     text: 'Ver ruta',
                     width: 100,
-                    onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage()));
+                    onPressed: ()async{
+                      LocationEntity currenActual = await LocationUtil.currentLocation();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,)));
                     },
                   ),
                 ],
@@ -180,8 +182,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async {
+                      LocationDriveEntity drive = await interprovincialClientDataFirebase.getlocateDrive(documentId: documentId);
                       LocationEntity currenActual = await LocationUtil.currentLocation();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(currenActual: currenActual,availablesRoutesEntity: widget.availablesRoutesEntity,driveData: drive,)));
                     },
                   ),
                 ],

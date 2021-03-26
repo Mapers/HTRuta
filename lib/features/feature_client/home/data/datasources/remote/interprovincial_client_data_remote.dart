@@ -70,5 +70,4 @@ class InterprovincialClientRemoteDataSoruce {
     }
     return availablesRoutes;
   }
-
 }
