@@ -47,9 +47,7 @@ class LocationUtil {
     });
   }
 
-  void disposeListener(){
-    subscription?.cancel();
-  }
+  void disposeListener() => subscription?.cancel();
 
   /// In kilometers
   static double calculateDistance(LatLng from, LatLng to){

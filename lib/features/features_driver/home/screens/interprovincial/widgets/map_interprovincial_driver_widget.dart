@@ -60,11 +60,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
     Marker marker = _mapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
-      icon: currentPinLocationIcon,
-      onTap: (){
-        //! Esto es solo para prueba temporal
-        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.mock()));
-      }
+      icon: currentPinLocationIcon
     );
     DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
     if(_data.status == InterprovincialStatus.inRoute){
@@ -74,15 +70,13 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       if(subscriptionPassengers == null){
         InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
         subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
-          for (var item in passengers) {
+          for (var passenger in passengers) {
             Marker markerPassenger = _mapViewerUtil.generateMarker(
-              latLng: _location.  latLang,
-              nameMarkerId: 'PASSENGER_MARKER_${item.documentId}',
-              icon: currentPinLocationIcon,
-              onTap: (){
-                //! Esto es solo para prueba temporal
-                BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: PassengerEntity.mock()));
-              }
+              //! Debe ser la ubicación actual
+              latLng: passenger.toLocation.latLang,
+              nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
+              icon: fromPinLocationIcon,
+              onTap: () => BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: passenger))
             );
             _markers[markerPassenger.markerId] = markerPassenger;
           }

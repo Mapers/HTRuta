@@ -50,7 +50,7 @@ Future<void> init() async {
     () => InterprovincialDataRemote()
   );
   getIt.registerLazySingleton<InterprovincialDataFirestore>(
-    () => InterprovincialDataFirestore(firestore: getIt(), pushMessage: getIt())
+    () => InterprovincialDataFirestore(firestore: getIt(), pushMessage: getIt(), serviceDataRemote: getIt())
   );
   getIt.registerLazySingleton<InterprovincialDataDriverFirestore>(
     () => InterprovincialDataDriverFirestore(

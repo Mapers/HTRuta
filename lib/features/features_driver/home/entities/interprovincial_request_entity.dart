@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 class InterprovincialRequestEntity extends Equatable {
   final String documentId;
+  final int passengerId;
   final String fullNames;
   final String from;
   final String to;
@@ -13,6 +14,7 @@ class InterprovincialRequestEntity extends Equatable {
 
   InterprovincialRequestEntity({
     @required this.documentId,
+    @required this.passengerId,
     @required this.fullNames,
     @required this.price,
     @required this.seats,
@@ -23,9 +25,9 @@ class InterprovincialRequestEntity extends Equatable {
   });
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
-    print(dataJson);
     return InterprovincialRequestEntity(
       documentId: dataJson['id'],
+      passengerId: (dataJson['passenger_id'] as num).toInt(),
       fullNames: dataJson['full_names'],
       seats: (dataJson['seats'] as num).toInt(),
       price: (dataJson['price'] as num).toDouble(),
@@ -41,6 +43,7 @@ class InterprovincialRequestEntity extends Equatable {
     'seats': seats,
     'from': from,
     'to': to,
+    'passenger_id': passengerId,
     'price': price,
     'condition': getStringInterprovincialRequestCondition(condition),
     'passenger_fcm_token': passengerFcmToken
@@ -52,6 +55,7 @@ class InterprovincialRequestEntity extends Equatable {
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       from: 'Huacho - Huaura - Huacho',
       to: 'Independencia - Lima - Lima',
+      passengerId: 1,
       seats: 12,
       price: 55.99,
       condition: InterprovincialRequestCondition.offer,
@@ -59,9 +63,10 @@ class InterprovincialRequestEntity extends Equatable {
     );
   }
 
-  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, double price, InterprovincialRequestCondition condition, String passengerFcmToken}){
+  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, int passengerId, double price, InterprovincialRequestCondition condition, String passengerFcmToken}){
     return InterprovincialRequestEntity(
       documentId: documentId,
+      passengerId: passengerId ?? this.passengerId,
       fullNames: fullNames ?? this.fullNames,
       price: price ?? this.price,
       seats: seats ?? this.seats,
@@ -73,7 +78,7 @@ class InterprovincialRequestEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, passengerFcmToken];
+  List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, passengerFcmToken, passengerId];
 }
 
 enum InterprovincialRequestCondition { offer, counterOffer , accepted,}

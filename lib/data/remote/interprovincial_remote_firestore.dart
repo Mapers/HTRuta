@@ -1,4 +1,5 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -13,13 +14,13 @@ enum InterprovincialDataFirestoreOrigin {
 class InterprovincialDataFirestore{
   final FirebaseFirestore firestore;
   final PushMessage pushMessage;
-  InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage});
+  final ServiceDataRemote serviceDataRemote;
+  InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage, @required this.serviceDataRemote});
 
   Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
-      //! Esta data debe venir desde backend
-      PassengerEntity passengerEntity = PassengerEntity.mock();
+      PassengerEntity passengerEntity = await serviceDataRemote.getPassengerById(request.passengerId);
 
       List<dynamic> result = await Future.wait([
         dr.get(),
