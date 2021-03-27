@@ -78,33 +78,33 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
   }
 
-  void _showDialogQualification() async{
-    InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
-    String documentId = interprovincialClientDataLocal.getDocumentIdOnServiceInterprovincialToQualification;
-    if(documentId == null){
-      return;
-    }
-    InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-    bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
-    if(!onService){
-      //! Considerar traer del backend los datos el driver
-      showDialog(
-        context: context,
-        child: QualificationWidget(
-          title: 'Califica el servicio',
-          nameUserQuelify: '',
-          routeTraveled: '',
-          onAccepted: (stars, comments){
-            //! Enviar calificacion al server
-            interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-          },
-          onSkip: (){
-            interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-          },
-        )
-      );
-    }
-  }
+  // void _showDialogQualification() async{
+  //   InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
+  //   String documentId = interprovincialClientDataLocal.getDocumentIdOnServiceInterprovincialToQualification;
+  //   if(documentId == null){
+  //     return;
+  //   }
+  //   InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+  //   bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
+  //   if(!onService){
+  //     //! Considerar traer del backend los datos el driver
+  //     showDialog(
+  //       context: context,
+  //       child: QualificationWidget(
+  //         title: 'Califica el servicio',
+  //         nameUserQuelify: '',
+  //         routeTraveled: '',
+  //         onAccepted: (stars, comments){
+  //           //! Enviar calificacion al server
+  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
+  //         },
+  //         onSkip: (){
+  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
+  //         },
+  //       )
+  //     );
+  //   }
+  // }
   void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourseEntity = await serviceDataRemote.getServiceInCourse();
@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeDriverScreen, (route) => false);
       }
     }
-    _showDialogQualification();
+    // _showDialogQualification();
   }
 
   @override
