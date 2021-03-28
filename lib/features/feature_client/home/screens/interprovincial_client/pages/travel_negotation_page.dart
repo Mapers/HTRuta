@@ -108,6 +108,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
                               to: param.distictTo,
                               //! Corregir con data del usuario
+                              passengerId: 1,
                               fullNames: 'juancarlos peres',
                               price: double.parse(amount),
                               //! Corregir con data del usuario
