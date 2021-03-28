@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class PrincipalInput extends StatelessWidget {
   final Function onTap;
   final bool enabled;

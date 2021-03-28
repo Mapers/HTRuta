@@ -32,6 +32,20 @@ class LocationEntity extends Equatable {
     );
   }
 
+  factory LocationEntity.fromJson(Map<String, dynamic> dataJson){
+    return LocationEntity(
+      districtName: dataJson['district_name'],
+      latLang: LatLng(
+        (dataJson['latitude'] as num).toDouble(),
+        (dataJson['longutide'] as num).toDouble(),
+      ),
+      provinceName: dataJson['province_ame'],
+      regionName: dataJson['region_name'],
+      streetName: dataJson['street_name'],
+      zoom: 6.36
+    );
+  }
+
   factory LocationEntity.initialWithLocation({@required double latitude, @required double longitude}){
     return LocationEntity(
       latLang: LatLng(latitude, longitude),

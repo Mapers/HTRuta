@@ -13,7 +13,7 @@ class RouterDriveRemoteDataSoruce {
     // ];
     roterDrives = [
       RouteEntity(
-        id: '1',
+        id: 1,
         name: 'Causal',
         cost: '240',
         from: LocationEntity(
@@ -32,7 +32,6 @@ class RouterDriveRemoteDataSoruce {
           streetName: 'plaza el norte',
           zoom: 12,
         ),
-        // whereabouts: whereabouts,
       )
       // RouteEntity(id: '2', name: 'juan', nameFrom:'Lima' ,nameTo: 'Huacho',latLagFrom:LatLng(-12.0453, -77.0311),latLagTo: LatLng(-11.1072, 77.6103)),
       // RouteEntity(id: '3', name: 'luis', nameFrom:'Chiclayo' ,nameTo: 'Lima',latLagFrom:LatLng(-6.77361, -79.84),latLagTo: LatLng(-12.0453, -77.0311))

@@ -3,19 +3,17 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class RouteEntity extends Equatable {
-  final String id;
+  final int id;
   final String name;
   final String cost;
   final LocationEntity from;
   final LocationEntity to;
-  // final List<WhereaboutsEntity> whereabouts;
 
   RouteEntity({
     this.id,
     this.name,
     this.from,
     this.to,
-    // this.whereabouts,
     this.cost,
   });
 
@@ -24,36 +22,29 @@ class RouteEntity extends Equatable {
     'name': name,
     'from': from,
     'to': to,
-    // 'whereabouts': whereabouts,
     'cost': cost,
-
   };
 
-  factory RouteEntity.fromJson(
-    Map<String, dynamic> dataJson
-  ){
+  factory RouteEntity.fromJson(Map<String, dynamic> dataJson){
     return RouteEntity(
-      id: dataJson['id'],
+      id: (dataJson['id'] as num).toInt(),
       name: dataJson['name'],
-      from: dataJson['from'],
-      to: dataJson['to'],
-      // whereabouts: dataJson['whereabouts'],
+      from: LocationEntity.fromJson(dataJson['from']),
+      to: LocationEntity.fromJson(dataJson['to']),
       cost: dataJson['cost'],
     );
   }
+
   factory RouteEntity.empty({@required int orderBranch}) {
     return RouteEntity(
-      id: '',
+      id: 0,
       name: '',
       from: null,
       to: null,
-      // whereabouts: null,
       cost: null,
     );
   }
 
   @override
-  List<Object> get props => [ id, name, from, to,
-  // whereabouts,
-  cost];
+  List<Object> get props => [ id, name, from, to, cost];
 }

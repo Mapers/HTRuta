@@ -74,31 +74,23 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                         final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
-                      hinText: 'Selecionar ruta',
+                      hinText: 'Seleccionar ruta',
                     ),
                     PrincipalInput(
                       controller: nameConroller,
                       hinText: 'Nombre',
+                      maxLines: 1,
                       icon: FontAwesomeIcons.mapMarkedAlt,
                       onSaved: (val) => name = val,
                     ),
                     
                     PrincipalInput(
                       controller: costConroller,
-                      hinText: 'cost',
+                      hinText: 'Costo',
+                      maxLines: 1,
                       icon: Icons.monetization_on,
                       onSaved: (val) => cost = val,
                     ),
-                    SizedBox(height: 10,),
-                    // PrincipalButton(
-                    //   onPressed: ()async{
-                    //     final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                    //     Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
-                    //   },
-                    //   text: 'Selecionar ruta',
-                    //   color: Colors.black,
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    // ),
                     SizedBox(height: 5),
                     dataArrived ? Column(
                       children: [
