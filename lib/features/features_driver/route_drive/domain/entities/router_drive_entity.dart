@@ -20,8 +20,8 @@ class RouteEntity extends Equatable {
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
-    'from': from,
-    'to': to,
+    'from': from.toMap,
+    'to': to.toMap,
     'cost': cost,
   };
 

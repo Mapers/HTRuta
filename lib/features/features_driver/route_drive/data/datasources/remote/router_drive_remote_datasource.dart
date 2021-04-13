@@ -39,8 +39,8 @@ class RouterDriveRemoteDataSoruce {
 
     return roterDrives;
   }
-  Future<List<RouteEntity>> addListRouterDrives({RouteEntity roterDrive} ) async{
-    roterDrives.add(roterDrive);
+  Future<List<RouteEntity>> addListRouterDrives({RouteEntity router} ) async{
+    roterDrives.add(router);
     return roterDrives;
   }
   Future<List<RouteEntity>> editListRouterDrives({RouteEntity roterDrive, RouteEntity newRoterDrive} ) async{

@@ -1,11 +1,11 @@
 enum TypeEntityEnum {
-  client, driver
+  passenger, driver
 }
 
 String getTextByTypeEntityEnum(TypeEntityEnum type){
   switch (type) {
-    case TypeEntityEnum.client:
-      return 'Cliente';
+    case TypeEntityEnum.passenger:
+      return 'Pasajero';
     case TypeEntityEnum.driver:
       return 'Conductor';
   }

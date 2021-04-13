@@ -37,9 +37,9 @@ class LocationEntity extends Equatable {
       districtName: dataJson['district_name'],
       latLang: LatLng(
         (dataJson['latitude'] as num).toDouble(),
-        (dataJson['longutide'] as num).toDouble(),
+        (dataJson['longitude'] as num).toDouble(),
       ),
-      provinceName: dataJson['province_ame'],
+      provinceName: dataJson['province_name'],
       regionName: dataJson['region_name'],
       streetName: dataJson['street_name'],
       zoom: 6.36
@@ -67,7 +67,17 @@ class LocationEntity extends Equatable {
       regionName: regionName ?? this.regionName,
     );
   }
-  
+
+  Map<String, dynamic> get toMap => {
+    'district_name': districtName,
+    'latitude': latLang.latitude,
+    'longitude': latLang.longitude,
+    'province_name': provinceName,
+    'region_name': regionName,
+    'street_name': streetName,
+    'zoom': zoom
+  };
+
   @override
   List<Object> get props => [streetName, districtName, provinceName, latLang, zoom, regionName];
 }
