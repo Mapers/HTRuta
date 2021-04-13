@@ -17,7 +17,8 @@ class RouteEntity extends Equatable {
     this.cost,
   });
 
-  Map<String, dynamic> get toMap => {
+  Map<String, dynamic> get toMap =>
+  {
     'id': id,
     'name': name,
     'from': from.toMap,

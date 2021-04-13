@@ -10,7 +10,7 @@ class RouteDriveRepository {
     return routerDrive;
   }
   Future<List<RouteEntity>> addRouterDriveRepository({RouteEntity roterDrive }) async{
-    List<RouteEntity> routerDrive = await routerDriveLocalDataSoruce.addListRouterDrives(router: roterDrive );
+    List<RouteEntity> routerDrive = await routerDriveLocalDataSoruce.addListRouterDrives( routeDrive: roterDrive );
     return routerDrive;
   }
   Future<List<RouteEntity>> editRouterDrives({ RouteEntity roterDrive, RouteEntity newRoterDrive }) async{

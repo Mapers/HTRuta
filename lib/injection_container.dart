@@ -33,7 +33,9 @@ Future<void> init() async {
   );
 
   getIt.registerLazySingleton<RouterDriveRemoteDataSoruce>(
-    () => RouterDriveRemoteDataSoruce()
+    () => RouterDriveRemoteDataSoruce(
+      requestHttp: getIt(),
+    )
   );
 
   getIt.registerLazySingleton<DriverServiceBloc>(
@@ -119,4 +121,6 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => sharedPreferences);
   //? Core Libs
   getIt.registerLazySingleton(() => PushMessage(client: getIt()));
+
+
 }
