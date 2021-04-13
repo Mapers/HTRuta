@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           overScroll.disallowGlow();
           return false;
         },
-        child: FutureBuilder(
+        child: FutureBuilder<UserSession>(
           future: _session.get(),
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.done){
@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                '${snapshot.data['nombres']} ${snapshot.data['apellidoPaterno']} ${snapshot.data['apellidoMaterno']}',
+                                '${snapshot.data.names} ${snapshot.data.lastNameFather} ${snapshot.data.lastNameMother}',
                                 style: TextStyle( color: blackColor,fontSize: 35.0),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -133,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Usuario',style: textStyle,),
-                                    Text('${snapshot.data['nombres']}',style: textGrey,)
+                                    Text('${snapshot.data.names}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Numero de celular',style: textStyle,),
-                                    Text('${snapshot.data['celular']}',style: textGrey,)
+                                    Text('${snapshot.data.cellphone}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('Email',style: textStyle,),
-                                    Text('${snapshot.data['correo']}',style: textGrey,)
+                                    Text('${snapshot.data.cellphone}',style: textGrey,)
                                   ],
                                 ),
                               ),
@@ -184,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text('DNI',style: textStyle,),
-                                    Text('${snapshot.data['dni']}',style: textGrey,)
+                                    Text('${snapshot.data.dni}',style: textGrey,)
                                   ],
                                 ),
                               ),

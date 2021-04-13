@@ -24,7 +24,7 @@ class MenuScreens extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
-          FutureBuilder(
+          FutureBuilder<UserSession>(
             future: _session.get(),
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.done){
@@ -32,7 +32,7 @@ class MenuScreens extends StatelessWidget {
                   final data = snapshot.data;
                   return UserAccountsDrawerHeader(
                     margin: EdgeInsets.all(0.0),
-                    accountName: Text(data['nombres'].toString(),style: headingWhite,),
+                    accountName: Text(data.names,style: headingWhite,),
                     accountEmail: Text('100 puntos - miembro Gold'),
                     currentAccountPicture: CircleAvatar(
                       radius: 30,

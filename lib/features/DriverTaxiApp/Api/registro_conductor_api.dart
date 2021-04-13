@@ -54,8 +54,6 @@ class RegistroConductorApi{
 
   Future<List<Documento>> obtenerDocumentosRechazados() async{
     try{
-      // final _session = Session();
-      // final dataUsuario = await _session.get();
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final url = '${Config.apiHost}/api_getDocumentosRechazados.php';

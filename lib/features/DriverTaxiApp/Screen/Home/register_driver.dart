@@ -154,45 +154,45 @@ class _OctavaPaginaState extends State<OctavaPagina> {
           ),
           Spacer(),
           Container(
-                      color: Colors.white,
-                      width: responsive.wp(100),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5), vertical: responsive.wp(2)),
-                      child: FlatButton(
-                        padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                        color: primaryColor,
-                        onPressed: () async{
-                          final provider = Provider.of<RegistroProvider>(context,listen: false);
-                          try{
-                            final registroConductor = RegistroConductorApi();
-                            final authApi = AuthApi();
-                            UserSession datosUsuario = await _session.get();
-                            final _prefs = UserPreferences();
-                            await _prefs.initPrefs();
-                            Dialogs.openLoadingDialog(context);
-                            final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario.cellphone,  datosUsuario.cellphone, datosUsuario.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
-                            await authApi.loginUser(datosUsuario.email, datosUsuario.password);
-                            Navigator.pop(context);
-                            if(respuesta){
-                              Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
-                            }else{
-                              Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
-                            }
+            color: Colors.white,
+            width: responsive.wp(100),
+            padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5), vertical: responsive.wp(2)),
+            child: FlatButton(
+              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+              color: primaryColor,
+              onPressed: () async{
+                final provider = Provider.of<RegistroProvider>(context,listen: false);
+                try{
+                  final registroConductor = RegistroConductorApi();
+                  final authApi = AuthApi();
+                  UserSession datosUsuario = await _session.get();
+                  final _prefs = UserPreferences();
+                  await _prefs.initPrefs();
+                  Dialogs.openLoadingDialog(context);
+                  final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario.cellphone,  datosUsuario.cellphone, datosUsuario.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
+                  await authApi.loginUser(datosUsuario.email, datosUsuario.password);
+                  Navigator.pop(context);
+                  if(respuesta){
+                    Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
+                  }else{
+                    Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
+                  }
 
-                          }catch(error){
-                            Navigator.pop(context);
-                            print('Error ${error.toString()}');
-                            Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                          }
-                        },
-                        child: Text(
-                          'Enviar',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(responsive.wp(10))),
-                      ),
-                    ),
+                }catch(error){
+                  Navigator.pop(context);
+                  print('Error ${error.toString()}');
+                  Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
+                }
+              },
+              child: Text(
+                'Enviar',
+                style: TextStyle(color: Colors.white),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(responsive.wp(10))),
+            ),
+          ),
         ],
       ),
     );
@@ -821,15 +821,12 @@ class _QuintaPaginaState extends State<QuintaPagina> {
   //Validations validations =Validations();
   final Session _session = Session();
   File imageFile;
-  Future<dynamic> datosUsuario;
   //Cmabia de estado asi que declarar en state
   int sexo = 1;
 
   @override
   void initState() { 
     super.initState();
-    //Solucionar bug de recargar el futurebuilder
-    datosUsuario = _session.get();
   }
 
   Future<void> buscarImagen() {
@@ -914,218 +911,218 @@ class _QuintaPaginaState extends State<QuintaPagina> {
     final providerRegistro = Provider.of<RegistroProvider>(context);
 
     return Stack(
-                  children: <Widget>[
-                    FutureBuilder<dynamic>(
-                      future: datosUsuario,
-                      builder: (context, snapshot) {
-                        if(snapshot.connectionState == ConnectionState.done){
-                          if(snapshot.hasData){
-                            final data = snapshot.data;
-                            return SingleChildScrollView(
-                              child: Column(
-                                children: <Widget>[
-                                  SizedBox(height: responsive.hp(2),),
-                                  CircleAvatar(
-                                    radius: responsive.wp(10),
-                                    backgroundColor: imageFile!= null ? Colors.transparent : primaryColor,
-                                    child: imageFile!= null ? ClipRRect(child: Image.file(imageFile, fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userAlt, size: responsive.ip(5.5),color: Colors.white,),
-                                  ),
-                                  SizedBox(height: responsive.hp(2),),
-                                  OutlineButton(
-                                    onPressed: (){
-                                      buscarImagen();
-                                    },
-                                    borderSide: BorderSide(color: primaryColor),
-                                    child: Text('Añadir', style: TextStyle(color: primaryColor),),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
-                                    padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
-                                  ),
-                                  SizedBox(height: responsive.hp(2),),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text('Nombre', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        TextFormField(
-                                          initialValue: data['nombres']??'',
-                                          keyboardType: TextInputType.text,
-                                          //validator: validations.validateName,
-                                          decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                                        )
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Text('Apellido Paterno', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        TextFormField(
-                                          initialValue: data['apellidoPaterno']??'',
-                                          keyboardType: TextInputType.text,
-                                          //validator: validations.validateName,
-                                          decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                                        )
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Text('Apellido Materno', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        TextFormField(
-                                          initialValue: data['apellidoMaterno']??'',
-                                          keyboardType: TextInputType.text,
-                                          //validator: validations.validateMobile,
-                                          decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                                        )
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Text('Documento de indentidad', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        TextFormField(
-                                          initialValue: data['dni']??'',
-                                          keyboardType: TextInputType.phone,
-                                          //validator: validations.validateName,
-                                          decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                                        )
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: FlatButton(
-                                              onPressed: (){       
-                                                setState(() {
-                                                  sexo = 1;
-                                                });
-                                              }, 
-                                              child: Text('Masculino', style: TextStyle(color: sexo == 1 ? Colors.white : primaryColor, fontSize: responsive.ip(2),)),
-                                              shape: OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(responsive.wp(2)), bottomLeft: Radius.circular(responsive.wp(2))),
-                                                borderSide: BorderSide(
-                                                  color: primaryColor
-                                                )
-                                              ),
-                                              color: sexo == 1 ? primaryColor : Colors.white,
-                                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                                            ),
-                                          ),
-                                          SizedBox(width: responsive.wp(1),),
-                                          Expanded(
-                                            child: FlatButton(
-                                              onPressed: (){
-                                                setState(() {
-                                                  sexo = 2;
-                                                });
-                                              }, 
-                                              child: Text('Femenino',style: TextStyle(color: sexo == 2 ? Colors.white : primaryColor, fontSize: responsive.ip(2)),),
-                                              shape: OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(topRight: Radius.circular(responsive.wp(2)), bottomRight: Radius.circular(responsive.wp(2))),
-                                                borderSide: BorderSide(color: primaryColor)
-                                              ),
-                                              color:  sexo == 2 ? primaryColor : Colors.white,
-                                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                                              
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Text('Fecha de Nacimiento', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        OutlineButton(
-                                          onPressed: (){},
-                                          child: Text('04/08/1995', textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
-                                          padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)),
-                                      ),
-                                      SizedBox(height: responsive.hp(2),),
-                                      Text('Email', style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(1),),
-                                        TextFormField(
-                                          initialValue: data['correo']??'',
-                                          keyboardType: TextInputType.emailAddress,
-                                          //validator: validations.validateEmail,
-                                          decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                          ),
-                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                                        )
-                                      ),
-                                      SizedBox(height: responsive.hp(10),),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            );
-                          }else{
-                            return Center(child: Text('No se pudo obtener la informacion'));
-                          }
-                        }else{
-                          return Center(child: CircularProgressIndicator(),);
-                        }
-                        
-                      }
-                    ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                      color: Colors.white,
-                      width: responsive.wp(100),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5), vertical: responsive.wp(2)),
-                      child: FlatButton(
-                        padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                        color: primaryColor,
-                        onPressed: () async{
-                          final provider = Provider.of<RegistroProvider>(context,listen: false);
-                          try{
-                            if (imageFile != null) {
-                              String base64Image;
-                              List<int> imageBytes = await imageFile.readAsBytes();
-                              base64Image = base64Encode(imageBytes);
-                              provider.fotoPerfil = base64Image;
-                              providerRegistro.index = 5;
-                              providerRegistro.titulo = 'Foto de su auto';
-                              widget.onAddButtonTapped(providerRegistro.index);
-                            }else{
-                              Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
-                            }
-                          }catch(error){
-                            print('Error ${error.toString()}');
-                            Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                          }
-                          
-                        },
-                        child: Text(
-                          'Siguiente',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(responsive.wp(10))),
+      children: <Widget>[
+        FutureBuilder<UserSession>(
+          future: _session.get(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.done){
+              if(snapshot.hasData){
+                final data = snapshot.data;
+                return SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: responsive.hp(2),),
+                      CircleAvatar(
+                        radius: responsive.wp(10),
+                        backgroundColor: imageFile!= null ? Colors.transparent : primaryColor,
+                        child: imageFile!= null ? ClipRRect(child: Image.file(imageFile, fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userAlt, size: responsive.ip(5.5),color: Colors.white,),
                       ),
-                    ),
-                )
-              ],
-            );
+                      SizedBox(height: responsive.hp(2),),
+                      OutlineButton(
+                        onPressed: (){
+                          buscarImagen();
+                        },
+                        borderSide: BorderSide(color: primaryColor),
+                        child: Text('Añadir', style: TextStyle(color: primaryColor),),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
+                        padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
+                      ),
+                      SizedBox(height: responsive.hp(2),),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Nombre', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            TextFormField(
+                              initialValue: data.names ?? '',
+                              keyboardType: TextInputType.text,
+                              //validator: validations.validateName,
+                              decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                            )
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Text('Apellido Paterno', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            TextFormField(
+                              initialValue: data.lastNameFather ?? '',
+                              keyboardType: TextInputType.text,
+                              //validator: validations.validateName,
+                              decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                            )
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Text('Apellido Materno', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            TextFormField(
+                              initialValue: data.lastNameMother ?? '',
+                              keyboardType: TextInputType.text,
+                              //validator: validations.validateMobile,
+                              decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                            )
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Text('Documento de indentidad', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            TextFormField(
+                              initialValue: data.dni ?? '',
+                              keyboardType: TextInputType.phone,
+                              //validator: validations.validateName,
+                              decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                            )
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: FlatButton(
+                                  onPressed: (){       
+                                    setState(() {
+                                      sexo = 1;
+                                    });
+                                  }, 
+                                  child: Text('Masculino', style: TextStyle(color: sexo == 1 ? Colors.white : primaryColor, fontSize: responsive.ip(2),)),
+                                  shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(responsive.wp(2)), bottomLeft: Radius.circular(responsive.wp(2))),
+                                    borderSide: BorderSide(
+                                      color: primaryColor
+                                    )
+                                  ),
+                                  color: sexo == 1 ? primaryColor : Colors.white,
+                                  padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                                ),
+                              ),
+                              SizedBox(width: responsive.wp(1),),
+                              Expanded(
+                                child: FlatButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      sexo = 2;
+                                    });
+                                  }, 
+                                  child: Text('Femenino',style: TextStyle(color: sexo == 2 ? Colors.white : primaryColor, fontSize: responsive.ip(2)),),
+                                  shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(responsive.wp(2)), bottomRight: Radius.circular(responsive.wp(2))),
+                                    borderSide: BorderSide(color: primaryColor)
+                                  ),
+                                  color:  sexo == 2 ? primaryColor : Colors.white,
+                                  padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                                  
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Text('Fecha de Nacimiento', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            OutlineButton(
+                              onPressed: (){},
+                              child: Text('04/08/1995', textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
+                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)),
+                          ),
+                          SizedBox(height: responsive.hp(2),),
+                          Text('Email', style: TextStyle(fontSize: responsive.ip(2)),),
+                            SizedBox(height: responsive.hp(1),),
+                            TextFormField(
+                              initialValue: data.email ?? '',
+                              keyboardType: TextInputType.emailAddress,
+                              //validator: validations.validateEmail,
+                              decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                            )
+                          ),
+                          SizedBox(height: responsive.hp(10),),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                );
+              }else{
+                return Center(child: Text('No se pudo obtener la informacion'));
+              }
+            }else{
+              return Center(child: CircularProgressIndicator(),);
+            }
+            
+          }
+        ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+              color: Colors.white,
+              width: responsive.wp(100),
+              padding: EdgeInsets.symmetric(
+                  horizontal: responsive.wp(5), vertical: responsive.wp(2)),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                color: primaryColor,
+                onPressed: () async{
+                  final provider = Provider.of<RegistroProvider>(context,listen: false);
+                  try{
+                    if (imageFile != null) {
+                      String base64Image;
+                      List<int> imageBytes = await imageFile.readAsBytes();
+                      base64Image = base64Encode(imageBytes);
+                      provider.fotoPerfil = base64Image;
+                      providerRegistro.index = 5;
+                      providerRegistro.titulo = 'Foto de su auto';
+                      widget.onAddButtonTapped(providerRegistro.index);
+                    }else{
+                      Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
+                    }
+                  }catch(error){
+                    print('Error ${error.toString()}');
+                    Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
+                  }
+                  
+                },
+                child: Text(
+                  'Siguiente',
+                  style: TextStyle(color: Colors.white),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(responsive.wp(10))),
+              ),
+            ),
+        )
+      ],
+    );
   }
 }
 

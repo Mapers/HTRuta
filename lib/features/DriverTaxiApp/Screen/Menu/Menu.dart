@@ -31,7 +31,7 @@ class MenuDriverScreens extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
-          FutureBuilder<dynamic>(
+          FutureBuilder<UserSession>(
             future: _session.get(),
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.done){
