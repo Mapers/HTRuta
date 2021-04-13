@@ -166,12 +166,12 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                           try{
                             final registroConductor = RegistroConductorApi();
                             final authApi = AuthApi();
-                            dynamic datosUsuario = await _session.get();
+                            UserSession datosUsuario = await _session.get();
                             final _prefs = UserPreferences();
                             await _prefs.initPrefs();
                             Dialogs.openLoadingDialog(context);
-                            final respuesta = await registroConductor.registrarChofer(datosUsuario['dni'], datosUsuario['nombres'], datosUsuario['apellidoPaterno'], datosUsuario['apellidoMaterno'], '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario['celular'],  datosUsuario['celular'], datosUsuario['correo'], datosUsuario['password'], '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
-                            await authApi.loginUser(datosUsuario['correo'], datosUsuario['password']);
+                            final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario.cellphone,  datosUsuario.cellphone, datosUsuario.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
+                            await authApi.loginUser(datosUsuario.email, datosUsuario.password);
                             Navigator.pop(context);
                             if(respuesta){
                               Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
