@@ -83,27 +83,24 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           children: [
                             Icon(Icons.trip_origin, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text(routeDrive.from.provinceName),
-                            Text(' - ' + routeDrive.from.districtName),
-                            Text(' - ' + routeDrive.from.streetName),
+                            Container(
+                              width: 275,
+                              child: Text(routeDrive.from.provinceName +' - ' + routeDrive.from.districtName+ ' - ' + routeDrive.from.streetName ),
+                            )
                           ],
                         ),
+                        SizedBox(height: 10,),
                         Row(
                           children: [
                             Icon(Icons.assistant_photo, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text(routeDrive.to.provinceName),
-                            Text(' - ' + routeDrive.to.districtName),
-                            Text(' - ' + routeDrive.to.streetName),
+                            Container(
+                              width: 275,
+                              child: Text(routeDrive.to.provinceName +' - ' + routeDrive.to.districtName+ ' - ' + routeDrive.to.streetName ),
+                            )
                           ],
                         ),
-                        // Row(
-                        //   children: [
-                        //     Icon(Icons.alt_route, color: Colors.black,),
-                        //     SizedBox(width: 10,),
-                        //     Text(routeDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
-                        //   ],
-                        // ),
+                        SizedBox(height: 10,),
                         Row(
                           children: [
                             Icon(Icons.monetization_on, color: Colors.black,),

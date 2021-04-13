@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PrincipalInput extends StatelessWidget {
+  final TextInputType keyboardType;
   final Function onTap;
   final bool enabled;
   final TextEditingController controller;
@@ -22,6 +24,7 @@ class PrincipalInput extends StatelessWidget {
     this.validator,
     this.onFieldSubmitted,
     this.initialValue,
+    this.keyboardType,
     this.isRequired,
     this.maxLines,
     this.controller,
@@ -41,6 +44,7 @@ class PrincipalInput extends StatelessWidget {
         borderRadius: BorderRadius.circular(10)
       ),
       child: TextFormField(
+        keyboardType: keyboardType ,
         onTap: onTap,
         enabled: enabled,
         controller: controller,

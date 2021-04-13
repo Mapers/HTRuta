@@ -56,6 +56,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
             MapViewWidget(context),
             BackWidget(context),
             InputMapSelecction(
+              isRequired: true,
               controller: fromController,
               top: 80,
               onTap: (){
@@ -69,6 +70,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
               district: whereaboutsFrom.districtName == '' ? '' :whereaboutsFrom.districtName,
             ),
             InputMapSelecction(
+              isRequired: true,
               controller: toController,
               onTap: (){
                 inputSelecter = false;
@@ -94,6 +96,9 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
       right: 15,
       left: 15,
       child: PrincipalButton(text: 'Guardar',onPressed: (){
+        if(!formKey.currentState.validate()){
+          return ;
+        }
         formKey.currentState.save();
         RouteEntity data = RouteEntity(
           from: whereaboutsFrom,

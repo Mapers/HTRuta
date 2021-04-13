@@ -80,6 +80,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       onSaved: (val) => name = val,
                     ),
                     PrincipalInput(
+                      keyboardType: TextInputType.number,
                       controller: costConroller,
                       hinText: 'Costo',
                       maxLines: 1,

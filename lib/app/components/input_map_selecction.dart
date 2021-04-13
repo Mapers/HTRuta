@@ -10,6 +10,9 @@ class InputMapSelecction extends StatelessWidget {
   final String province;
   final String district;
   final String street;
+  final bool isRequired;
+  final String Function(String) validator;
+
   const InputMapSelecction({
     Key key,
     this.top,
@@ -17,9 +20,12 @@ class InputMapSelecction extends StatelessWidget {
     this.onTap,
     this.controller,
     this.suffixIcon,
+    this.validator,
     this.region,
     this.province,
-    this.district, this.street,
+    this.district,
+    this.street,
+    this.isRequired
   }) : super(key: key);
 
   @override
@@ -48,7 +54,7 @@ class InputMapSelecction extends StatelessWidget {
             ),
             child: InkWell(
               onTap: onTap,
-              child: TextField(
+              child: TextFormField(
                 enabled: false,
                 controller: controller,
                 cursorColor: Colors.black,
@@ -58,6 +64,15 @@ class InputMapSelecction extends StatelessWidget {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(left: 15, top: 5),
                 ),
+                validator: (String _text){
+                  if(isRequired && _text.isEmpty){
+                    return 'Requerido.';
+                  }
+                  if(validator != null){
+                    return validator(_text);
+                  }
+                  return null;
+                }
               ),
             ),
           ),
