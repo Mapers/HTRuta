@@ -16,10 +16,9 @@ class AddDrivesRouteDriveEvent extends RouteDriveEvent{
 }
 class EditDrivesRouteDriveEvent extends RouteDriveEvent{
   final RouteEntity routerDrive;
-  final RouteEntity newRouterDrive;
-  EditDrivesRouteDriveEvent({@required this.newRouterDrive,@required this.routerDrive});
+  EditDrivesRouteDriveEvent({@required this.routerDrive});
   @override
-  List<Object> get props => [routerDrive,newRouterDrive];
+  List<Object> get props => [ routerDrive ];
 }
 class DeleteDrivesRouteDriveEvent extends RouteDriveEvent{
   final RouteEntity routerDrive;

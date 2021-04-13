@@ -12,9 +12,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FormRouterDrivePage extends StatefulWidget {
-  final RouteEntity routerDrive;
+  final RouteEntity routeDrive;
   final bool statAddEdit;
-  FormRouterDrivePage({Key key, this.routerDrive, this.statAddEdit}) : super(key: key);
+  FormRouterDrivePage({Key key, this.routeDrive, this.statAddEdit}) : super(key: key);
 
   @override
   _FormRouterDrivePageState createState() => _FormRouterDrivePageState();
@@ -28,8 +28,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   bool dataArrived = false;
   RouteEntity routerDrives;
   ScrollController scrollController = ScrollController();
-  LatLng latLagFrom;
-  LatLng latLagTo;
   TextEditingController nameConroller = TextEditingController();
   TextEditingController costConroller = TextEditingController();
   TextEditingController fromController = TextEditingController();
@@ -37,11 +35,9 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   @override
   void initState() {
     if(!widget.statAddEdit){
-      nameConroller.text = widget.routerDrive.name;
-      // from = widget.routerDrive.nameFrom;
-      // to = widget.routerDrive.nameTo;
-      latLagFrom = widget.routerDrive.from.latLang;
-      latLagTo = widget.routerDrive.to.latLang;
+      nameConroller.text = widget.routeDrive.name;
+      costConroller.text = widget.routeDrive.cost.toStringAsFixed(2);
+      getFromAndTo(widget.routeDrive );
     }
     super.initState();
   }
@@ -56,7 +52,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text('Crear ruta'),
+        title: Text(widget.statAddEdit ? 'Crear ruta': 'Actualizar ruta' ),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -83,7 +79,6 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       icon: FontAwesomeIcons.mapMarkedAlt,
                       onSaved: (val) => name = val,
                     ),
-                    
                     PrincipalInput(
                       controller: costConroller,
                       hinText: 'Costo',
@@ -196,17 +191,18 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                         cost: double.parse(cost) ,
                         from: routerDrives.from,
                         to: routerDrives.to,
-                        // whereabouts: whereaabouts,
                       );
                       BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
                       Navigator.of(context).pop();
                     }else{
                       RouteEntity newRouterDrive = RouteEntity(
+                        id: widget.routeDrive.id,
                         name: name,
+                        cost: double.parse(cost) ,
                         from: routerDrives.from,
                         to: routerDrives.to,
                       );
-                      BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive: widget.routerDrive, newRouterDrive: newRouterDrive));
+                      BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive:  newRouterDrive));
                       Navigator.of(context).pop();
                     }
                   },

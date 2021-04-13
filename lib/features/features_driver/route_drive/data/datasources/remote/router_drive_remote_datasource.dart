@@ -27,7 +27,7 @@ class RouterDriveRemoteDataSoruce {
     return routeDrives;
   }
 
-  Future<List<RouteEntity>> addListRouterDrives({RouteEntity routeDrive} ) async{
+  Future<void> addListRouterDrives({RouteEntity routeDrive} ) async{
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/create',
@@ -39,19 +39,16 @@ class RouterDriveRemoteDataSoruce {
         'cost': routeDrive.cost,
       }
     );
-    print('..................');
-    print(result.data);
-    print(result.error);
-    print(result.success);
-    print('..................');
-    return roterDrives;
+    if(!result.success){
+      print('mensaje de error');
+    }
   }
-  Future<List<RouteEntity>> editListRouterDrives({RouteEntity routeDrive} ) async{
-    final userSession = await _session.get();
+  Future<void> editListRouterDrives({RouteEntity routeDrive} ) async{
+    await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/driver/routes/create',
+      Config.nuevaRutaApi + '/interprovincial/driver/routes/update',
       data: {
-        'user_id': userSession.id,
+        'user_id': _prefs.idChofer,
         'id': routeDrive.id,
         'name':routeDrive.name,
         'from': routeDrive.from.toMap,

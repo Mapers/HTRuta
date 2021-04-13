@@ -60,10 +60,13 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
             child: ListView.builder(
             itemCount: param.routerDrives.length,
             itemBuilder: (BuildContext context, int i) {
-              RouteEntity routerDrive = param.routerDrives[i];
+              RouteEntity routeDrive = param.routerDrives[i];
               return Card(
                 elevation: 5,
                 child: InkWell(
+                  onTap:  () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> FormRouterDrivePage(routeDrive: routeDrive, statAddEdit: false, )));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -71,7 +74,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(routerDrive.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(routeDrive.name, style: TextStyle(fontWeight: FontWeight.bold),),
                             Icon(Icons.delete)
                           ],
                         ),
@@ -80,32 +83,32 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           children: [
                             Icon(Icons.trip_origin, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text(routerDrive.from.provinceName),
-                            Text(' - ' + routerDrive.from.districtName),
-                            Text(' - ' + routerDrive.from.streetName),
+                            Text(routeDrive.from.provinceName),
+                            Text(' - ' + routeDrive.from.districtName),
+                            Text(' - ' + routeDrive.from.streetName),
                           ],
                         ),
                         Row(
                           children: [
                             Icon(Icons.assistant_photo, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text(routerDrive.to.provinceName),
-                            Text(' - ' + routerDrive.to.districtName),
-                            Text(' - ' + routerDrive.to.streetName),
+                            Text(routeDrive.to.provinceName),
+                            Text(' - ' + routeDrive.to.districtName),
+                            Text(' - ' + routeDrive.to.streetName),
                           ],
                         ),
                         // Row(
                         //   children: [
                         //     Icon(Icons.alt_route, color: Colors.black,),
                         //     SizedBox(width: 10,),
-                        //     Text(routerDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
+                        //     Text(routeDrive.whereabouts.length.toString() + 'Paraderos en ruta'),
                         //   ],
                         // ),
                         Row(
                           children: [
                             Icon(Icons.monetization_on, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text('S/. '+routerDrive.cost.toString()),
+                            Text('S/. '+routeDrive.cost.toString()),
                           ],
                         )
                       ],
