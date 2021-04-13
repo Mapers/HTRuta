@@ -18,11 +18,14 @@ class UserModel {
   String message;
   bool success;
   List<UserEntity> data;
-
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     message: json['message'],
     success: json['success'],
-    data: List<UserEntity>.from(json['data'].map((x) => UserEntity.fromJson(x))),
+    data: List<UserEntity>.from(json['data'].map((x){
+      print("lo que llega :v");
+      print(x);
+      return UserEntity.fromJson(x);
+    })),
   );
 
   Map<String, dynamic> toJson() => {
