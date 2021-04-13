@@ -11,49 +11,19 @@ class RouterDriveRemoteDataSoruce {
   List<RouteEntity> roterDrives =[];
 
   Future<List<RouteEntity>> getListRouterDrives() async{
-    // List<WhereaboutsEntity> whereabouts= [
-    //   WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',)),
-    //   WhereaboutsEntity(id: '1',cost: '2500',whereabouts: LocationEntity(latLang: LatLng(-11.1072, 77.6103),districtName: 'huacho', provinceName: 'huaura', regionName: 'lima', streetName: 'av. more',))
-    // ];
-    print('object');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
       data: {
         'user_id': 1041,
       }
     );
+    List<RouteEntity> routeDrives =RouteEntity.fromListJson(result.data['data']);
     print('..................');
     print(result.data );
     print(result.error );
     print(result.success );
     print('..................');
-    // roterDrives = [
-    //   RouteEntity(
-    //     id: 1,
-    //     name: 'Causal',
-    //     cost: '240',
-    //     from: LocationEntity(
-    //       latLang: LatLng(-11.1072, 77.6103),
-    //       districtName: 'Huacho',
-    //       provinceName: 'Huaura',
-    //       regionName: 'Lima',
-    //       streetName: 'av. more',
-    //       zoom: 12,
-    //     ),
-    //     to: LocationEntity(
-    //       latLang: LatLng(-12.0453, -77.0311),
-    //       districtName: 'Independecia',
-    //       provinceName: 'Lima ',
-    //       regionName: 'Lima',
-    //       streetName: 'plaza el norte',
-    //       zoom: 12,
-    //     ),
-    //   )
-    //   // RouteEntity(id: '2', name: 'juan', nameFrom:'Lima' ,nameTo: 'Huacho',latLagFrom:LatLng(-12.0453, -77.0311),latLagTo: LatLng(-11.1072, 77.6103)),
-    //   // RouteEntity(id: '3', name: 'luis', nameFrom:'Chiclayo' ,nameTo: 'Lima',latLagFrom:LatLng(-6.77361, -79.84),latLagTo: LatLng(-12.0453, -77.0311))
-    // ];
-
-    return roterDrives;
+    return routeDrives;
   }
   Future<List<RouteEntity>> addListRouterDrives({RouteEntity routeDrive} ) async{
     ResponseHttp result = await requestHttp.post(

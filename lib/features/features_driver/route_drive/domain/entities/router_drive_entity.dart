@@ -32,7 +32,7 @@ class RouteEntity extends Equatable {
       name: dataJson['name'],
       from: LocationEntity.fromJson(dataJson['from']),
       to: LocationEntity.fromJson(dataJson['to']),
-      cost: dataJson['cost'],
+      cost: (dataJson['cost']),
     );
   }
 
@@ -44,6 +44,16 @@ class RouteEntity extends Equatable {
       to: null,
       cost: null,
     );
+  }
+  static List<RouteEntity> fromListJson(List<dynamic> listJson){
+    print('###################');
+    print(listJson);
+    print('###################');
+    List<RouteEntity> list = [];
+    listJson.forEach((data) {
+      list.add(RouteEntity.fromJson(data));
+    });
+    return list;
   }
 
   @override

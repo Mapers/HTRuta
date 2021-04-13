@@ -12,7 +12,6 @@ class RequestHttp{
   RequestHttp({@required this.client});
 
   Future<ResponseHttp> post(String url, { dynamic data = '' }) async {
-    print('llgeeeeeeeeeeeeeeeeeeeeeee');
     ResponseHttp response;
     try {
       final result = await client.post(
@@ -22,12 +21,6 @@ class RequestHttp{
         },
         body: jsonEncode(data)
       );
-      print('###################');
-      print(result.statusCode );
-      print(result.reasonPhrase );
-      print(result.body );
-      print(result.request);
-      print('###################');
       switch (result.statusCode) {
         case 200:
           response = ResponseHttp.success(json.decode(result.body));
