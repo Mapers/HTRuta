@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class RouteEntity extends Equatable {
   final int id;
   final String name;
-  final String cost;
+  final double cost;
   final LocationEntity from;
   final LocationEntity to;
 
@@ -28,11 +28,11 @@ class RouteEntity extends Equatable {
 
   factory RouteEntity.fromJson(Map<String, dynamic> dataJson){
     return RouteEntity(
-      id: (dataJson['id'] as num).toInt(),
+      id: int.parse(dataJson['id']) ,
       name: dataJson['name'],
       from: LocationEntity.fromJson(dataJson['from']),
       to: LocationEntity.fromJson(dataJson['to']),
-      cost: (dataJson['cost']),
+      cost: double.parse(dataJson['cost']),
     );
   }
 
@@ -46,9 +46,6 @@ class RouteEntity extends Equatable {
     );
   }
   static List<RouteEntity> fromListJson(List<dynamic> listJson){
-    print('###################');
-    print(listJson);
-    print('###################');
     List<RouteEntity> list = [];
     listJson.forEach((data) {
       list.add(RouteEntity.fromJson(data));

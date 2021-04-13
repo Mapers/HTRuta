@@ -105,7 +105,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           children: [
                             Icon(Icons.monetization_on, color: Colors.black,),
                             SizedBox(width: 10,),
-                            Text('S/. '+routerDrive.cost),
+                            Text('S/. '+routerDrive.cost.toString()),
                           ],
                         )
                       ],

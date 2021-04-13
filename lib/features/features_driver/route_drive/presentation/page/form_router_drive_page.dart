@@ -193,7 +193,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     if( widget.statAddEdit){
                       RouteEntity routerDrive = RouteEntity(
                         name: name,
-                        cost: cost,
+                        cost: double.parse(cost) ,
                         from: routerDrives.from,
                         to: routerDrives.to,
                         // whereabouts: whereaabouts,

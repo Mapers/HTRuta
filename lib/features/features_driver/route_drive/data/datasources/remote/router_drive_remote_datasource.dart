@@ -17,24 +17,20 @@ class RouterDriveRemoteDataSoruce {
         'user_id': 1041,
       }
     );
-    List<RouteEntity> routeDrives =RouteEntity.fromListJson(result.data['data']);
-    print('..................');
-    print(result.data );
-    print(result.error );
-    print(result.success );
-    print('..................');
+    List<RouteEntity> routeDrives = RouteEntity.fromListJson(result.data['data']);
     return routeDrives;
   }
+
   Future<List<RouteEntity>> addListRouterDrives({RouteEntity routeDrive} ) async{
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver//routes/create',
       data: {
         'user_id': 1041,
-        'id': null,
-        'name':null,
+        'id': null ,
+        'name':routeDrive.name,
         'from': routeDrive.from.toMap,
         'to': routeDrive.to.toMap,
-        'cost':null,
+        'cost': routeDrive.cost,
       }
     );
     print('..................');
