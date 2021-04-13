@@ -137,7 +137,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     Dialogs.openLoadingDialog(context);
     final session = Session();
     final data = await session.get();
-    final estado = await registroConductorApi.obtenerEstadoChofer(data['dni']);
+    final estado = await registroConductorApi.obtenerEstadoChofer(data.dni);
     Navigator.pop(context);
     if(estado != null){
       if(estado.iEstado == 'Rechazado'){
@@ -277,7 +277,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               Dialogs.openLoadingDialog(context);
               final session = Session();
               final data = await session.get();
-              final estado = await registroConductorApi.obtenerEstadoChofer(data['dni']);
+              final estado = await registroConductorApi.obtenerEstadoChofer(data.dni);
               Navigator.pop(context);
               if(estado != null){
                 if(estado.iEstado == 'Pendiente Aprobación'){

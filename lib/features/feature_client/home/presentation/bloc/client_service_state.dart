@@ -1,6 +1,6 @@
 part of 'client_service_bloc.dart';
 
-abstract class ClientServiceState extends Equatable{
+abstract class ClientServiceState extends EquatableClientTaxiApp{
   ClientServiceState();
   @override
   List<Object> get props => [];

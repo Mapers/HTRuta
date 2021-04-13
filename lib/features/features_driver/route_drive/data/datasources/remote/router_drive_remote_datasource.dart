@@ -1,9 +1,7 @@
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RouterDriveRemoteDataSoruce {
   final RequestHttp requestHttp;

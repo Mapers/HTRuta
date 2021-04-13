@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 /// without needing to explicitly override == and [hashCode].
 /// Equatables override their own == and [hashCode] based on
 /// the provided `properties`.
-abstract class Equatable {
+abstract class EquatableClientTaxiApp {
   /// The [List] of `props` (properties) which will be used to determine whether
   /// two [Equatables] are equal.
   final List props;
@@ -13,12 +13,12 @@ abstract class Equatable {
   /// will be used to determine whether two [Equatables] are equal.
   /// If no properties are provided, `props` will be initialized to
   /// an empty [List].
-  Equatable([this.props = const []]);
+  EquatableClientTaxiApp([this.props = const []]);
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Equatable &&
+          other is EquatableClientTaxiApp &&
               runtimeType == other.runtimeType &&
               const IterableEquality().equals(props, other.props);
 

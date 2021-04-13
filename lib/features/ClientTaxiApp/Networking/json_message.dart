@@ -29,7 +29,7 @@ class SuccessMessage extends JsonMessage {
 }
 
 @JsonSerializable(nullable: true)
-class ResultData extends Equatable {
+class ResultData extends EquatableClientTaxiApp {
   ResultData({
     this.geocodedWaypoints,
     this.routes,

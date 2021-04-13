@@ -6,7 +6,7 @@ import '../../data/equatable.dart';
 part 'get_routes_request_model.g.dart';
 
 @JsonSerializable(nullable: true)
-class GetRoutesRequestModel extends Equatable {
+class GetRoutesRequestModel extends EquatableClientTaxiApp {
   @JsonKey(ignore: true)
   LatLng fromLocation;
   @JsonKey(name: 'origin')

@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       if(data != null){
-        if(data['correo'] != null || data['correo'] != ''){
+        if(data.email != null || data.email != ''){
           _sendToPage();
         }else{
           if(_prefs.primeraSesion){

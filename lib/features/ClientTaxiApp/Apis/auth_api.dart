@@ -24,7 +24,7 @@ class AuthApi{
           if(usuarioResponse['success']){
             final urlLogin = '${Config.apiHost}/api_getLoginUsuario.php?email=$correo&clave=$password&tipo=1';
             final response = await http.post(urlLogin,body: {'email' : correo, 'clave' : password, 'tipo' : '1'});
-            final responseLogin = usuarioFromJson(response.body);
+            final responseLogin = userModelFromJson(response.body);
             final usuario = responseLogin.data[0];
             final session = Session();
             await session.set(usuario.iIdUsuario.toString(),dni, nombre, apellidoPaterno, apellidoMaterno, celular,correo, password);
@@ -53,7 +53,7 @@ class AuthApi{
     final token = await _prefs.tokenPush;
     final url = '${Config.apiHost}/api_getLoginUsuario.php?email=$email&clave=$password&tipo=1&token=$token';
     final response = await http.post(url,body: {'email' : email, 'clave' : password, 'tipo' : '1', 'token' : token});
-    final responseUsuario = usuarioFromJson(response.body);
+    final responseUsuario = userModelFromJson(response.body);
     if(responseUsuario.success){
       final usuario = responseUsuario.data[0];
       final session = Session();

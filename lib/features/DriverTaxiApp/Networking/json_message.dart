@@ -1,5 +1,6 @@
+import 'package:HTRuta/features/ClientTaxiApp/data/equatable.dart';
+
 import '../data/Model/direction_model.dart';
-import '../data/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'json_message.g.dart';
@@ -29,7 +30,7 @@ class SuccessMessage extends JsonMessage {
 }
 
 @JsonSerializable(nullable: true)
-class ResultData extends Equatable {
+class ResultData extends EquatableClientTaxiApp {
   ResultData({
     this.geocodedWaypoints,
     this.routes,

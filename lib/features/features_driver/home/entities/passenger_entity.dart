@@ -1,6 +1,6 @@
-import 'package:HTRuta/features/DriverTaxiApp/data/equatable.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 

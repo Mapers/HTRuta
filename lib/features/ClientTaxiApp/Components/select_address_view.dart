@@ -232,11 +232,11 @@ class _SelectAddressState extends State<SelectAddress> {
                       final _session = Session();
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
-                      final viaje = await pickUpApi.registerTravel(dataUsuario['id'], widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name);
+                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name);
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;
-                        pedidoProvider.request = Request(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario['id'],dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario['dni'],vchCelular: dataUsuario['celular'],vchCorreo: dataUsuario['correo'],vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario['nombres']} ${dataUsuario['apellidoPaterno']} ${dataUsuario['apellidoMaterno']}');
+                        pedidoProvider.request = Request(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
                         pedidoProvider.precio = double.parse(precio);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => DirectionScreen())
