@@ -1,3 +1,4 @@
+import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
@@ -99,6 +100,11 @@ Future<void> init() async {
   //? General
   getIt.registerLazySingleton<ServiceDataRemote>(
     () => ServiceDataRemote(
+      client: getIt()
+    )
+  );
+  getIt.registerLazySingleton<RequestHttp>(
+    () => RequestHttp(
       client: getIt()
     )
   );
