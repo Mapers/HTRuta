@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
