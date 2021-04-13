@@ -32,9 +32,10 @@ class RouterDriveRemoteDataSoruce {
       }
     );
     print('..................');
-    print(result);
+    print(result.data);
+    print(result.error);
+    print(result.success);
     print('..................');
-    roterDrives.add(routeDrive);
     return roterDrives;
   }
   Future<List<RouteEntity>> editListRouterDrives({RouteEntity roterDrive,RouteEntity newRoterDrive} ) async{

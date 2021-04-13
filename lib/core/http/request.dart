@@ -21,6 +21,10 @@ class RequestHttp{
         },
         body: jsonEncode(data)
       );
+      print(result.statusCode);
+      print(result.isRedirect);
+      print(result.request);
+      print(result.body);
       switch (result.statusCode) {
         case 200:
           response = ResponseHttp.success(json.decode(result.body));

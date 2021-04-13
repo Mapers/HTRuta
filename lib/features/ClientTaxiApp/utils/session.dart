@@ -26,7 +26,7 @@ class Session{
   Future<UserSession> get() async{
     final result = await storage.read(key: key);
     if(result != null){
-      return jsonDecode(result);
+      return UserSession.fromMap(jsonDecode(result));
     }
     return null;
   }
@@ -68,7 +68,7 @@ class UserSession extends Equatable{
     'password': password
   };
 
-  factory UserSession.fromMap(Map<String, String> json) => UserSession(
+  factory UserSession.fromMap(dynamic json) => UserSession(
     id: json['id'],
     dni: json['dni'],
     names: json['names'],
