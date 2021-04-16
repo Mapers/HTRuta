@@ -68,6 +68,8 @@ class UserSession extends Equatable{
     'password': password
   };
 
+  String get fullNames => '$lastNameFather $lastNameMother $names';
+
   factory UserSession.fromMap(dynamic json) => UserSession(
     id: json['id'],
     dni: json['dni'],

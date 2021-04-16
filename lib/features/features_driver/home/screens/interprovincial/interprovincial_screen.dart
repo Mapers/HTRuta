@@ -47,9 +47,9 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
                 }else if(state.status == InterprovincialStatus.notEstablished){
                   return RoutesInterprovincialCardWidget();
                 }else if(state.status == InterprovincialStatus.onWhereabouts){
-                  return OnWhereaboutsWidget(route: state.route, routeStartDateTime: state.routeStartDateTime, documentId: state.documentId);
+                  return OnWhereaboutsWidget(route: state.routeService, routeStartDateTime: state.routeStartDateTime, documentId: state.documentId);
                 }else if(state.status == InterprovincialStatus.inRoute){
-                  return InRouteWidget(route: state.route, routeStartDateTime: state.routeStartDateTime);
+                  return InRouteWidget(route: state.routeService, routeStartDateTime: state.routeStartDateTime);
                 }
               }
               return Container();

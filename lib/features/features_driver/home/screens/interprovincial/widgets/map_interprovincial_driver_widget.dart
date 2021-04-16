@@ -64,7 +64,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
     );
     DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
     if(_data.status == InterprovincialStatus.inRoute){
-      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.route.toLocation);
+      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.routeService.toLocation);
       polylines[polyline.polylineId] = polyline;
       
       if(subscriptionPassengers == null){
@@ -92,7 +92,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   }
 
   void _addFromToMarkers(DataInterprovincialDriverState data) async{
-    InterprovincialRouteInServiceEntity route = data.route;
+    InterprovincialRouteInServiceEntity route = data.routeService;
 
     if([InterprovincialStatus.loading, InterprovincialStatus.notEstablished].contains(data.status)){
       return;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';

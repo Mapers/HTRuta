@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:HTRuta/config.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/documento_rechazado_model.dart';

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/tabla_codigo.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:intl/intl.dart';

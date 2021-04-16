@@ -3,18 +3,16 @@ import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
+import 'package:meta/meta.dart';
 
 class RouterDriveRemoteDataSoruce {
   final RequestHttp requestHttp;
   final _prefs = UserPreferences();
-  RouterDriveRemoteDataSoruce({this.requestHttp});
+  RouterDriveRemoteDataSoruce({@required this.requestHttp});
   //!borrar
   List<InterprovincialRouteEntity> interprovincialRoutes =[];
   Future<List<InterprovincialRouteEntity>> getListRouterDrives() async{
-    // final userSession = await _session.get();
     await _prefs.initPrefs();
-
-    print(_prefs.idChofer);
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
       data: {

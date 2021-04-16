@@ -11,12 +11,12 @@ class GetDataInterprovincialDriverEvent extends InterprovincialDriverEvent {}
 
 class SelectRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {
   final DateTime dateTime;
-  final InterprovincialRouteInServiceEntity route;
+  final InterprovincialRouteEntity interprovincialRoute;
   final int availableSeats;
-  SelectRouteInterprovincialDriverEvent({@required this.route, @required this.dateTime, @required this.availableSeats});
+  SelectRouteInterprovincialDriverEvent({@required this.interprovincialRoute, @required this.dateTime, @required this.availableSeats});
 
   @override
-  List<Object> get props => [route, dateTime, availableSeats];
+  List<Object> get props => [interprovincialRoute, dateTime, availableSeats];
 }
 
 class StartRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {}

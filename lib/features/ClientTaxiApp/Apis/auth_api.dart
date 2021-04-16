@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/usuario_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,6 @@ class AuthApi{
 
     return Future<bool>.sync(() {
       return http.post(url,body: {'Dni' : dni, 'Nombre': nombre, 'ApellidoP': apellidoPaterno, 'ApellidoM': apellidoMaterno,'FecNac': fechaNacimiento,'Sexo': sexo,'Dirección': direccion,'Referencia': referencia,'Telefono': '','Celular': celular,'Correo': correo,'Password': password,'iTipoDispositivo': tipoDispositivo,'iMarca': marca,'vchNombreD': nombreDispositivo,'Imei': imei,'TokenD': token} ).then((response)async{
-        print(response.body);
         Map<String,dynamic> usuarioResponse = json.decode(response.body);
         if(usuarioResponse != null){
           if(usuarioResponse['success']){

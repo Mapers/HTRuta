@@ -1,9 +1,9 @@
 import 'package:HTRuta/core/utils/dialog.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/core/utils/extensions/time_of_day_extension.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:HTRuta/features/features_driver/route_drive/data/datasources/remote/router_drive_remote_datasource.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -16,7 +16,7 @@ class RoutesInterprovincialCardWidget extends StatefulWidget {
 }
 
 class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialCardWidget> {
-  List<InterprovincialRouteInServiceEntity> interprovincialRoutes = [];
+  List<InterprovincialRouteEntity> interprovincialRoutes = [];
 
   bool isLoading = true;
 
@@ -24,8 +24,8 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      InterprovincialDataRemote interprovincialDataRemote = getIt<InterprovincialDataRemote>();
-      interprovincialRoutes = await interprovincialDataRemote.getAllRoutesByUser();
+      RouterDriveRemoteDataSoruce routerDriverRemoteDataSource = getIt<RouterDriveRemoteDataSoruce>();
+      interprovincialRoutes = await routerDriverRemoteDataSource.getListRouterDrives();
       setState(() {
         isLoading = false;
       });
@@ -63,21 +63,21 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     );
   }
 
-  Widget _getItemRoute(InterprovincialRouteInServiceEntity interprovincialRoute){
+  Widget _getItemRoute(InterprovincialRouteEntity interprovincialRoute){
     return ListTile(
       title: Text(interprovincialRoute.name),
       dense: true,
       subtitle: Row(
         children: [
           Expanded(
-            child: Text(interprovincialRoute.fromLocation.streetName)
+            child: Text(interprovincialRoute.from.streetName)
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Icon(Icons.arrow_right_alt_outlined, size: 28,),
           ),
           Expanded(
-            child: Text(interprovincialRoute.toLocation.streetName),
+            child: Text(interprovincialRoute.to.streetName),
           )
         ],
       ),
@@ -85,7 +85,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     );
   }
 
-  void _showModalConfirmationRoute(InterprovincialRouteInServiceEntity interprovincialRoute) async{
+  void _showModalConfirmationRoute(InterprovincialRouteEntity interprovincialRoute) async{
     int availableSeats = await showDialogInputNumber(
       context: context,
       title: 'Ingrese los asientos disponibles',
@@ -156,7 +156,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
               Navigator.of(context).pop();
               dateTime = dateTime.add(Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute));
               BlocProvider.of<InterprovincialDriverBloc>(context).add(SelectRouteInterprovincialDriverEvent(
-                route: interprovincialRoute,
+                interprovincialRoute: interprovincialRoute,
                 dateTime: dateTime,
                 availableSeats: availableSeats
               ));

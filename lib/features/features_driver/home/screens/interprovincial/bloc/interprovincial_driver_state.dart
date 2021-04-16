@@ -12,32 +12,32 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
   final int availableSeats;
   final String documentId;
   final InterprovincialStatus status;
-  final InterprovincialRouteInServiceEntity route;
+  final InterprovincialRouteInServiceEntity routeService;
   final DateTime routeStartDateTime;
-  DataInterprovincialDriverState({@required this.route, @required this.documentId, @required this.status, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
+  DataInterprovincialDriverState({@required this.routeService, @required this.documentId, @required this.status, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
 
   factory DataInterprovincialDriverState.initial({String loadingMessage}){
     return DataInterprovincialDriverState(
       status: InterprovincialStatus.loading,
       documentId: null,
-      route: null,
+      routeService: null,
       routeStartDateTime: null,
       availableSeats: null,
       loadingMessage: loadingMessage ?? 'Cargando'
     );
   }
 
-  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, InterprovincialStatus status, InterprovincialRouteInServiceEntity route, DateTime routeStartDateTime, int availableSeats}){
+  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, InterprovincialStatus status, InterprovincialRouteInServiceEntity routeService, DateTime routeStartDateTime, int availableSeats}){
     return DataInterprovincialDriverState(
       loadingMessage: loadingMessage ?? this.loadingMessage,
       documentId: documentId ?? this.documentId,
       status: status ?? this.status,
-      route: route ?? this.route,
+      routeService: routeService ?? this.routeService,
       routeStartDateTime: routeStartDateTime ?? this.routeStartDateTime,
       availableSeats: availableSeats ?? this.availableSeats,
     );
   }
 
   @override
-  List<Object> get props => [route, status, documentId, loadingMessage, routeStartDateTime, availableSeats];
+  List<Object> get props => [routeService, status, documentId, loadingMessage, routeStartDateTime, availableSeats];
 }

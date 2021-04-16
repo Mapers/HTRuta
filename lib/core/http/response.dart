@@ -30,4 +30,12 @@ class ResponseHttp extends Equatable{
       error: null
     );
   }
+
+  factory ResponseHttp.error(String error){
+    return ResponseHttp(
+      data: null,
+      success: false,
+      error: error
+    );
+  }
 }

@@ -44,16 +44,16 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<InterprovincialDriverBloc>(
     () => InterprovincialDriverBloc(
-      interprovincialDataRemote: getIt(),
-      interprovincialDataFirestore: getIt()
+      interprovincialDataFirestore: getIt(),
+      interprovincialDriverDataRemote: getIt()
     )
   );
 
-  getIt.registerLazySingleton<InterprovincialDataRemote>(
-    () => InterprovincialDataRemote()
-  );
   getIt.registerLazySingleton<InterprovincialDataFirestore>(
     () => InterprovincialDataFirestore(firestore: getIt(), pushMessage: getIt(), serviceDataRemote: getIt())
+  );
+  getIt.registerLazySingleton<InterprovincialDriverDataRemote>(
+    () => InterprovincialDriverDataRemote(requestHttp: getIt())
   );
   getIt.registerLazySingleton<InterprovincialDataDriverFirestore>(
     () => InterprovincialDataDriverFirestore(
@@ -67,7 +67,7 @@ Future<void> init() async {
 
   //? Client
   getIt.registerLazySingleton<InterprovincialDriverLocationBloc>(
-    () => InterprovincialDriverLocationBloc(interprovincialDataRemote: getIt(), interprovincialDataFirestore: getIt())
+    () => InterprovincialDriverLocationBloc(interprovincialDataFirestore: getIt())
   );
   getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
     () => InterprovincialClientRemoteDataSoruce(

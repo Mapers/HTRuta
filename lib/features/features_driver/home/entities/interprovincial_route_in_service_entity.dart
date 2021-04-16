@@ -1,4 +1,5 @@
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
@@ -45,6 +46,18 @@ class InterprovincialRouteInServiceEntity extends Equatable {
         zoom: 12
       ),
       starts: 3.4
+    );
+  }
+
+  factory InterprovincialRouteInServiceEntity.fromRoute({@required String id, @required InterprovincialRouteEntity interprovincialRoute, @required String driverName, double starts}){
+    return InterprovincialRouteInServiceEntity(
+      id: id,
+      name: interprovincialRoute.name,
+      nameDriver: driverName,
+      cost: interprovincialRoute.cost,
+      fromLocation: interprovincialRoute.from,
+      toLocation: interprovincialRoute.to,
+      starts: starts
     );
   }
 
