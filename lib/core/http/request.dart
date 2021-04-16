@@ -50,7 +50,7 @@ class RequestHttp{
       switch (result.statusCode) {
         case 200:
           try {
-            response = ResponseHttp.success(json.decode(result.body));
+            response = ResponseHttp.fromJson(json.decode(result.body));
           } catch (_) {
             response = ResponseHttp.error('[Format]: Formato no válido.');
           }

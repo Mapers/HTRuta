@@ -19,7 +19,7 @@ class RouterDriveRemoteDataSoruce {
         'user_id': _prefs.idChofer,
       }
     );
-    List<InterprovincialRouteEntity> routeDrives = InterprovincialRouteEntity.fromListJson(result.data['data']);
+    List<InterprovincialRouteEntity> routeDrives = InterprovincialRouteEntity.fromListJson(result.data);
     return routeDrives;
   }
 

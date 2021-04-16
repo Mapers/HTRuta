@@ -11,12 +11,13 @@ class InterprovincialDriverDataRemote {
   InterprovincialDriverDataRemote({@required this.requestHttp});
 
   Future<String> createService({@required String documentId, @required DateTime startDateTime, @required InterprovincialRouteEntity interprovincialRoute, @required int availableSeats}) async{
-    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/get-routes',
+    String strStartDateTime = startDateTime.toString().split('.').first;
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/start',
       data: {
         'route_id': interprovincialRoute.id,
         'available_seats': availableSeats,
         'document_id': documentId,
-        'start_date_time': startDateTime.toString().split('.').first,
+        'start_date_time': strStartDateTime.substring(0, strStartDateTime.length - 3),
         'status': toStringFirebaseInterprovincialStatus(InterprovincialStatus.onWhereabouts) 
       }
     );

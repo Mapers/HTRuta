@@ -19,7 +19,7 @@ class ResponseHttp extends Equatable{
     return ResponseHttp(
       data: json['data'],
       success: json['success'],
-      error: json['message']
+      error: json['error']
     );
   }
 
