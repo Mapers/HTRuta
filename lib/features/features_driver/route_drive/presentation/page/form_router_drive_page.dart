@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/input_button.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
@@ -9,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FormRouterDrivePage extends StatefulWidget {
-  final RouteEntity routeDrive;
+  final InterprovincialRouteEntity routeDrive;
   final bool statAddEdit;
   FormRouterDrivePage({Key key, this.routeDrive, this.statAddEdit}) : super(key: key);
 
@@ -26,7 +25,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
   String name;
   String cost;
   bool dataArrived = false;
-  RouteEntity routerDrives;
+  InterprovincialRouteEntity routerDrives;
   ScrollController scrollController = ScrollController();
   TextEditingController nameConroller = TextEditingController();
   TextEditingController costConroller = TextEditingController();
@@ -41,7 +40,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
     }
     super.initState();
   }
-  void getFromAndTo(RouteEntity routerDrive){
+  void getFromAndTo(InterprovincialRouteEntity routerDrive){
     routerDrives = routerDrive;
     dataArrived = true;
     setState(() {});
@@ -187,7 +186,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                   onPressed: (){
                     formKey.currentState.save();
                     if( widget.statAddEdit){
-                      RouteEntity routerDrive = RouteEntity(
+                      InterprovincialRouteEntity routerDrive = InterprovincialRouteEntity(
                         name: name,
                         cost: double.parse(cost) ,
                         from: routerDrives.from,
@@ -196,7 +195,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
                       Navigator.of(context).pop();
                     }else{
-                      RouteEntity newRouterDrive = RouteEntity(
+                      InterprovincialRouteEntity newRouterDrive = InterprovincialRouteEntity(
                         id: widget.routeDrive.id,
                         name: name,
                         cost: double.parse(cost) ,

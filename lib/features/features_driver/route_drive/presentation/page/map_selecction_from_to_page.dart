@@ -4,10 +4,11 @@ import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class MapSelecctionFromToMapPage extends StatefulWidget {
   final Function getFromAndTo;
   final double la;
@@ -100,7 +101,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           return ;
         }
         formKey.currentState.save();
-        RouteEntity data = RouteEntity(
+        InterprovincialRouteEntity data = InterprovincialRouteEntity(
           from: whereaboutsFrom,
           to: whereaboutsTo
         );

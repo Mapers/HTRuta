@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,7 +41,7 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
         status: InteprovincialClientStatus.searchInterprovincial,
-        interprovincialRoute: InterprovincialRouteEntity(
+        interprovincialRoute: InterprovincialRouteInServiceEntity(
           toLocation: LocationEntity(
             latLang: LatLng(placemark.position.latitude, placemark.position.latitude ),
             regionName: placemark.administrativeArea,

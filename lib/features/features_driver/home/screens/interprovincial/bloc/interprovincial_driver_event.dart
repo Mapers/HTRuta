@@ -11,7 +11,7 @@ class GetDataInterprovincialDriverEvent extends InterprovincialDriverEvent {}
 
 class SelectRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {
   final DateTime dateTime;
-  final InterprovincialRouteEntity route;
+  final InterprovincialRouteInServiceEntity route;
   final int availableSeats;
   SelectRouteInterprovincialDriverEvent({@required this.route, @required this.dateTime, @required this.availableSeats});
 

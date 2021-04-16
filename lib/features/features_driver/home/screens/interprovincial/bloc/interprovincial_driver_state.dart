@@ -12,7 +12,7 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
   final int availableSeats;
   final String documentId;
   final InterprovincialStatus status;
-  final InterprovincialRouteEntity route;
+  final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   DataInterprovincialDriverState({@required this.route, @required this.documentId, @required this.status, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
 
@@ -27,7 +27,7 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
     );
   }
 
-  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, InterprovincialStatus status, InterprovincialRouteEntity route, DateTime routeStartDateTime, int availableSeats}){
+  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, InterprovincialStatus status, InterprovincialRouteInServiceEntity route, DateTime routeStartDateTime, int availableSeats}){
     return DataInterprovincialDriverState(
       loadingMessage: loadingMessage ?? this.loadingMessage,
       documentId: documentId ?? this.documentId,

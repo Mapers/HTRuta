@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_actions_side_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_info_route_widget.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OnWhereaboutsWidget extends StatelessWidget {
-  final InterprovincialRouteEntity route;
+  final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   final String documentId;
   const OnWhereaboutsWidget({Key key, @required this.route, @required this.routeStartDateTime, @required this.documentId}) : super(key: key);

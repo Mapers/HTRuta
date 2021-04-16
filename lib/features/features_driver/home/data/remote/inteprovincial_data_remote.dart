@@ -1,11 +1,11 @@
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialDataRemote{
-  Future<List<InterprovincialRouteEntity>> getAllRoutesByUser() async{
+  Future<List<InterprovincialRouteInServiceEntity>> getAllRoutesByUser() async{
     return [
-      InterprovincialRouteEntity(
+      InterprovincialRouteInServiceEntity(
         id: '1',
         name: 'Huacho - Chancay - Lima',
         nameDriver: 'Jose Carlos',
@@ -28,7 +28,7 @@ class InterprovincialDataRemote{
           zoom: 12
         ),
       ),
-      InterprovincialRouteEntity(
+      InterprovincialRouteInServiceEntity(
         id: '2',
         cost: 60,
         starts: 3,
@@ -51,7 +51,7 @@ class InterprovincialDataRemote{
           zoom: 12
         ),
       ),
-      InterprovincialRouteEntity(
+      InterprovincialRouteInServiceEntity(
         id: '3',
         cost: 70,
         starts: 2,

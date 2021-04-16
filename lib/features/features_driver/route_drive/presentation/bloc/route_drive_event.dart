@@ -9,19 +9,19 @@ abstract class RouteDriveEvent extends Equatable{
 class GetRouterDrivesEvent extends RouteDriveEvent{
 }
 class AddDrivesRouteDriveEvent extends RouteDriveEvent{
-  final RouteEntity routerDrive;
+  final InterprovincialRouteEntity routerDrive;
   AddDrivesRouteDriveEvent({ @required this.routerDrive});
   @override
   List<Object> get props => [routerDrive];
 }
 class EditDrivesRouteDriveEvent extends RouteDriveEvent{
-  final RouteEntity routerDrive;
+  final InterprovincialRouteEntity routerDrive;
   EditDrivesRouteDriveEvent({@required this.routerDrive});
   @override
   List<Object> get props => [ routerDrive ];
 }
 class DeleteDrivesRouteDriveEvent extends RouteDriveEvent{
-  final RouteEntity routerDrive;
+  final InterprovincialRouteEntity routerDrive;
   DeleteDrivesRouteDriveEvent({ @required this.routerDrive});
   @override
   List<Object> get props => [routerDrive];

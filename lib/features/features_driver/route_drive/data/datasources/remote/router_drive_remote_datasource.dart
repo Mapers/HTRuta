@@ -1,18 +1,16 @@
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 
 class RouterDriveRemoteDataSoruce {
   final RequestHttp requestHttp;
-  final Session _session =  Session();
   final _prefs = UserPreferences();
   RouterDriveRemoteDataSoruce({this.requestHttp});
   //!borrar
-  List<RouteEntity> roterDrives =[];
-  Future<List<RouteEntity>> getListRouterDrives() async{
+  List<InterprovincialRouteEntity> interprovincialRoutes =[];
+  Future<List<InterprovincialRouteEntity>> getListRouterDrives() async{
     // final userSession = await _session.get();
     await _prefs.initPrefs();
 
@@ -23,46 +21,46 @@ class RouterDriveRemoteDataSoruce {
         'user_id': _prefs.idChofer,
       }
     );
-    List<RouteEntity> routeDrives = RouteEntity.fromListJson(result.data['data']);
+    List<InterprovincialRouteEntity> routeDrives = InterprovincialRouteEntity.fromListJson(result.data['data']);
     return routeDrives;
   }
 
-  Future<void> addListRouterDrives({RouteEntity routeDrive} ) async{
+  Future<void> addListRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/create',
       data: {
         'user_id': _prefs.idChofer,
-        'name':routeDrive.name,
-        'from': routeDrive.from.toMap,
-        'to': routeDrive.to.toMap,
-        'cost': routeDrive.cost,
+        'name':interprovincialRoute.name,
+        'from': interprovincialRoute.from.toMap,
+        'to': interprovincialRoute.to.toMap,
+        'cost': interprovincialRoute.cost,
       }
     );
     if(!result.success){
       print('mensaje de error');
     }
   }
-  Future<void> editListRouterDrives({RouteEntity routeDrive} ) async{
+  Future<void> editListRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/update',
       data: {
         'user_id': _prefs.idChofer,
-        'id': routeDrive.id,
-        'name':routeDrive.name,
-        'from': routeDrive.from.toMap,
-        'to': routeDrive.to.toMap,
-        'cost': routeDrive.cost,
+        'id': interprovincialRoute.id,
+        'name':interprovincialRoute.name,
+        'from': interprovincialRoute.from.toMap,
+        'to': interprovincialRoute.to.toMap,
+        'cost': interprovincialRoute.cost,
       }
     );
     print(result.success);
     print(result.error);
   }
-  Future<List<RouteEntity>> deleteRouterDrives({RouteEntity roterDrive} ) async{
-    int index  = roterDrives.indexOf(roterDrive);
-    roterDrives.removeAt(index);
-    return roterDrives;
+  Future<List<InterprovincialRouteEntity>> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
+    int index  = interprovincialRoutes.indexOf(interprovincialRoute);
+    interprovincialRoutes.removeAt(index);
+    return interprovincialRoutes;
   }
 
 }

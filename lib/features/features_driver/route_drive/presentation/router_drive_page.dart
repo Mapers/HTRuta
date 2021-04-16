@@ -1,5 +1,5 @@
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:HTRuta/features/features_driver/route_drive/domain/entities/router_drive_entity.dart';
+import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/page/form_router_drive_page.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
             child: ListView.builder(
             itemCount: param.routerDrives.length,
             itemBuilder: (BuildContext context, int i) {
-              RouteEntity routeDrive = param.routerDrives[i];
+              InterprovincialRouteEntity routeDrive = param.routerDrives[i];
               return Card(
                 elevation: 5,
                 child: InkWell(

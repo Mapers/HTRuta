@@ -2,23 +2,22 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class RouteEntity extends Equatable {
+class InterprovincialRouteEntity extends Equatable {
   final int id;
   final String name;
   final double cost;
   final LocationEntity from;
   final LocationEntity to;
 
-  RouteEntity({
-    this.id,
-    this.name,
-    this.from,
-    this.to,
-    this.cost,
+  InterprovincialRouteEntity({
+    @required this.id,
+    @required this.name,
+    @required this.from,
+    @required this.to,
+    @required this.cost,
   });
 
-  Map<String, dynamic> get toMap =>
-  {
+  Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
     'from': from.toMap,
@@ -26,8 +25,8 @@ class RouteEntity extends Equatable {
     'cost': cost,
   };
 
-  factory RouteEntity.fromJson(Map<String, dynamic> dataJson){
-    return RouteEntity(
+  factory InterprovincialRouteEntity.fromJson(Map<String, dynamic> dataJson){
+    return InterprovincialRouteEntity(
       id: int.parse(dataJson['id']) ,
       name: dataJson['name'],
       from: LocationEntity.fromJson(dataJson['from']),
@@ -36,8 +35,8 @@ class RouteEntity extends Equatable {
     );
   }
 
-  factory RouteEntity.empty({@required int orderBranch}) {
-    return RouteEntity(
+  factory InterprovincialRouteEntity.empty({@required int orderBranch}) {
+    return InterprovincialRouteEntity(
       id: 0,
       name: '',
       from: null,
@@ -45,11 +44,9 @@ class RouteEntity extends Equatable {
       cost: null,
     );
   }
-  static List<RouteEntity> fromListJson(List<dynamic> listJson){
-    List<RouteEntity> list = [];
-    listJson.forEach((data) {
-      list.add(RouteEntity.fromJson(data));
-    });
+  static List<InterprovincialRouteEntity> fromListJson(List<dynamic> listJson){
+    List<InterprovincialRouteEntity> list = [];
+    listJson.forEach((data) => list.add(InterprovincialRouteEntity.fromJson(data)));
     return list;
   }
 

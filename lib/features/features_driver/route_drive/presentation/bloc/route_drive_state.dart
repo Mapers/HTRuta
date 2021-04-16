@@ -7,7 +7,7 @@ abstract class RouteDriveState extends Equatable {
 
 }
 class RouteDriveInitial extends RouteDriveState {
-  final List<RouteEntity> routerDrives;
+  final List<InterprovincialRouteEntity> routerDrives;
   RouteDriveInitial({@required this.routerDrives});
   @override
   List<Object> get props => [routerDrives];

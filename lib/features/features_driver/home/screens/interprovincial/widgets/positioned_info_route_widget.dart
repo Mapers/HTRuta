@@ -1,9 +1,9 @@
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:flutter/material.dart';
 
 class PositionedInfoRouteWidget extends StatelessWidget {
-  final InterprovincialRouteEntity route;
+  final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   final bool showDataTime;
   const PositionedInfoRouteWidget({Key key, @required this.route, @required this.routeStartDateTime, this.showDataTime = true}) : super(key: key);

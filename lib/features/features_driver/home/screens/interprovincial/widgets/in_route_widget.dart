@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/detail_passenger_in_route_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_dark_card_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_info_route_widget.dart';
@@ -6,7 +6,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/wid
 import 'package:flutter/material.dart';
 
 class InRouteWidget extends StatelessWidget {
-  final InterprovincialRouteEntity route;
+  final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   const InRouteWidget({Key key, @required this.route, @required this.routeStartDateTime}) : super(key: key);
 

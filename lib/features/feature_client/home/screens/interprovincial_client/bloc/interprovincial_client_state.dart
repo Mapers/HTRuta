@@ -13,7 +13,7 @@ enum InteprovincialClientStatus {
 class DataInterprovincialClientState extends InterprovincialClientState {
   final InteprovincialClientStatus status;
   final String loadingMessage;
-  final InterprovincialRouteEntity interprovincialRoute;
+  final InterprovincialRouteInServiceEntity interprovincialRoute;
   DataInterprovincialClientState({@required this.loadingMessage, @required this.status, @required this.interprovincialRoute});
 
   factory DataInterprovincialClientState.initial({String loadingMessage}){
@@ -24,7 +24,7 @@ class DataInterprovincialClientState extends InterprovincialClientState {
     );
   }
 
-  DataInterprovincialClientState copyWith({InteprovincialClientStatus status, String loadingMessage, InterprovincialRouteEntity interprovincialRoute}){
+  DataInterprovincialClientState copyWith({InteprovincialClientStatus status, String loadingMessage, InterprovincialRouteInServiceEntity interprovincialRoute}){
     return DataInterprovincialClientState(
       status: status ?? this.status,
       loadingMessage: loadingMessage ?? this.loadingMessage,

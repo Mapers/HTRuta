@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
-class InterprovincialRouteEntity extends Equatable {
+class InterprovincialRouteInServiceEntity extends Equatable {
   final String id;
   final String name;
   final String nameDriver;
@@ -12,7 +12,7 @@ class InterprovincialRouteEntity extends Equatable {
   final double cost;
   final double starts;
 
-  InterprovincialRouteEntity({
+  InterprovincialRouteInServiceEntity({
     @required this.id,
     @required this.name,
     @required this.nameDriver,
@@ -22,8 +22,8 @@ class InterprovincialRouteEntity extends Equatable {
     @required this.starts,
   });
 
-  factory InterprovincialRouteEntity.test(){
-    return InterprovincialRouteEntity(
+  factory InterprovincialRouteInServiceEntity.test(){
+    return InterprovincialRouteInServiceEntity(
       id: '1',
       name: 'Huacho - Chancay - Lima',
       nameDriver: 'Pepe lopez Peres' ,

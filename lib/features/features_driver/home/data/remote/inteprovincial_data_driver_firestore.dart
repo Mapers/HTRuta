@@ -2,7 +2,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +16,7 @@ class InterprovincialDataDriverFirestore{
 
   Future<String> createStartService({
     @required InterprovincialStatus status,
-    @required InterprovincialRouteEntity route,
+    @required InterprovincialRouteInServiceEntity route,
     @required DateTime routeStartDateTime,
     @required int availableSeats,
   }) async{
