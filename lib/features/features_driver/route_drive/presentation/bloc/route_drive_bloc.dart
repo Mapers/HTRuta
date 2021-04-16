@@ -30,7 +30,9 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
         List<InterprovincialRouteEntity> interprovincialRoutes = await routeDriveRepository.getRouterDrives();
         yield RouteDriveInitial(routerDrives: interprovincialRoutes);
       }else if(event is DeleteDrivesRouteDriveEvent) {
-        yield LoadingRouteDriveState();
+        RouteDriveInitial currentState = state;
+        yield RouteDriveInitial(routerDrives: currentState.routerDrives);
+        // yield LoadingRouteDriveState();
         await routeDriveRepository.deleteRouterDrives( interprovincialRoute: event.routerDrive);
         List<InterprovincialRouteEntity> interprovincialRoutes = await routeDriveRepository.getRouterDrives();
         yield RouteDriveInitial(routerDrives: interprovincialRoutes);
