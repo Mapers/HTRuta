@@ -55,10 +55,17 @@ class RouterDriveRemoteDataSoruce {
     print(result.success);
     print(result.error);
   }
-  Future<List<InterprovincialRouteEntity>> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
-    int index  = interprovincialRoutes.indexOf(interprovincialRoute);
-    interprovincialRoutes.removeAt(index);
-    return interprovincialRoutes;
+  Future<void> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
+    await _prefs.initPrefs();
+    ResponseHttp result = await requestHttp.post(
+      Config.nuevaRutaApi + '/interprovincial/driver/routes/delete',
+      data: {
+        'user_id': _prefs.idChofer,
+        'id': interprovincialRoute.id,
+      }
+    );
+    print(result.success);
+    print(result.error);
   }
 
 }

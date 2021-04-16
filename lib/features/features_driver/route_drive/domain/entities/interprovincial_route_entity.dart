@@ -10,7 +10,7 @@ class InterprovincialRouteEntity extends Equatable {
   final LocationEntity to;
 
   InterprovincialRouteEntity({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.from,
     @required this.to,

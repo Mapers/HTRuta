@@ -15,8 +15,7 @@ class RouteDriveRepository {
   Future<void> editRouterDrives({ InterprovincialRouteEntity interprovincialRoute}) async{
     await routerDriveLocalDataSoruce.editListRouterDrives( interprovincialRoute: interprovincialRoute );
   }
-  Future<List<InterprovincialRouteEntity>> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute }) async{
-    List<InterprovincialRouteEntity> routerDrive = await routerDriveLocalDataSoruce.deleteRouterDrives( interprovincialRoute: interprovincialRoute );
-    return routerDrive;
+  Future<void> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute }) async{
+    await routerDriveLocalDataSoruce.deleteRouterDrives( interprovincialRoute: interprovincialRoute );
   }
 }

@@ -75,7 +75,12 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(routeDrive.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                            Icon(Icons.delete)
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                  BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive:  newRouterDrive));
+                              },
+                            )
                           ],
                         ),
                         Divider(),
