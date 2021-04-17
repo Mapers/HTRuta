@@ -201,7 +201,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       rejecteds: request.rechazados,
                       startName: request.vchNombreInicial,
                       typeTravel: request.iTipoViaje,
-                      userId: request.iIdUsuario
+                      userId: request.iIdUsuario,
+                      comentario: request.comentario
                     );
                     return GestureDetector(
                       onTap: () {
@@ -401,7 +402,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Comentario'.toUpperCase(),style: textGreyBold,),
-                          Text(taxi.names,style: textStyle,),
+                          Text(taxi.comentario,style: textStyle,),
 
                         ],
                       ),

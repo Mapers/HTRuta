@@ -36,6 +36,7 @@ class MenuDriverScreens extends StatelessWidget {
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.done){
                 if(snapshot.hasData){
+                  final data = snapshot.data;
                   return Container(
                     padding: EdgeInsets.only(left: 20.0,top: 30.0,right: 20.0,bottom: 0.0),
                     color: primaryColor,
@@ -87,7 +88,7 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text('Naomi Cespedes',style: textBoldWhite,),
+                                    Text(data.names.toString(),style: textBoldWhite,),
                                     Container(
                                       padding: EdgeInsets.only(left: 4.0, right: 4.0, top: 2.0, bottom: 2.0),
                                       decoration: BoxDecoration(
