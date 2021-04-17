@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/card.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class MyWalletDriver extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class MyWalletDriver extends StatefulWidget {
 
 class _MyWalletDriverState extends State<MyWalletDriver> {
   final String screenName = 'MY WALLET';
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 //IconData icon, String title, String date, String balance
   List<Map<String, dynamic>> listService = [
     {'id': '0','icon' : Icons.phone_android, 'title' : 'Recarga Movil','date' : '22-05-2020','balance' : 'S/.+200'},
@@ -28,13 +30,27 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuDriverScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
       appBar: AppBar(
         title: Text('Billetera',style: TextStyle(color: blackColor),),
         backgroundColor: whiteColor,
         elevation: 0.0,
         iconTheme: IconThemeData(color: blackColor),
-
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final _state = _sideMenuKey.currentState;
+            if (_state.isOpened)
+              _state.closeSideMenu(); // close side menu
+            else
+              _state.openSideMenu();// open side menu
+          },
+        ),
       ),
       drawer:MenuDriverScreens(activeScreenName: screenName),
       body: Scrollbar(
@@ -119,6 +135,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
           ],
         ),
       ),
+    )
     );
   }
 

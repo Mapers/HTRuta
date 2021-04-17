@@ -16,6 +16,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import '../../../../app_router.dart';
 import 'requestDetail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -35,6 +36,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   var aceptados = <String>[];
   var rechazados = <String>[];
   String choferId = '';
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   void navigateToDetail(Request requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
@@ -158,6 +160,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
+      child: SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuDriverScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -171,6 +178,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: Colors.white,fontSize: 10),)),
             Tab(child: Text('CARGA', style: TextStyle(color: Colors.white,fontSize: 11),))
           ]),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
+          ),
         ),
         drawer: MenuDriverScreens(activeScreenName: screenName),
         body: TabBarView(
@@ -252,6 +269,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           ]
         )
       ),
+    )
     );
   }
 

@@ -1,9 +1,11 @@
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/page/form_router_drive_page.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class RouterDrivePage extends StatefulWidget {
   RouterDrivePage({Key key}) : super(key: key);
@@ -13,7 +15,7 @@ class RouterDrivePage extends StatefulWidget {
 }
 
 class _RouterDrivePageState extends State<RouterDrivePage> {
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,9 +27,24 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
   final String screenName = 'Rutas';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuDriverScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
       appBar: AppBar(
         title: Text('Rutas'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final _state = _sideMenuKey.currentState;
+            if (_state.isOpened)
+              _state.closeSideMenu(); // close side menu
+            else
+              _state.openSideMenu();// open side menu
+          },
+        ),
         centerTitle: false,
         actions: [
           IconButton(
@@ -122,6 +139,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
           );
         },
       ),
+    )
     );
   }
 }

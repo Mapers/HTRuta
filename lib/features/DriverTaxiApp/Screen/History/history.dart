@@ -3,6 +3,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'detail.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,7 +18,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   DateTime selectedDate;
   List<dynamic> event = [];
   String selectedMonth = '';
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
@@ -29,6 +31,11 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
+      child: SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuDriverScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -38,6 +45,16 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
           backgroundColor: whiteColor,
           elevation: 2.0,
           iconTheme: IconThemeData(color: blackColor),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
+          ),
         ),
         drawer:MenuDriverScreens(activeScreenName: screenName),
         body: Container(
@@ -199,6 +216,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
           ),
         )
       ),
+    )
     );
   }
 

@@ -968,6 +968,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.4+1"
+  shrink_sidemenu:
+    dependency: "direct main"
+    description:
+      name: shrink_sidemenu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+3"
   sky_engine:
     dependency: transitive
     description: flutter

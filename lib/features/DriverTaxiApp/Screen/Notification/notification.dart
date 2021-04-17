@@ -4,6 +4,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Notification/itemNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'detail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -14,7 +15,8 @@ class NotificationDriverScreens extends StatefulWidget {
 
 class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
   final String screenName = 'NOTIFICATIONS';
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  
   List<Map<String, dynamic>> listNotification = <Map<String, dynamic>>[];
 
   void navigateToDetail(String id){
@@ -71,69 +73,85 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Notificacion',style: TextStyle(color: blackColor),),
-        backgroundColor: whiteColor,
-        elevation: 2.0,
-        iconTheme: IconThemeData(color: blackColor),
-          actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.restore_from_trash,color: blackColor,),
-              onPressed: (){
-                dialogInfo();
-              }
-            )
-          ]
-      ),
-      drawer:MenuDriverScreens(activeScreenName: screenName),
-        body: listNotification.isNotEmpty ?
-        Scrollbar(
-          child: ListView.builder(
-              itemCount: listNotification.length,
-              itemBuilder: (BuildContext context, int index){
-                return Slidable(
-                    actionPane: SlidableScrollActionPane(),
-                    actionExtentRatio: 0.25,
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Eliminar',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: (){
-                          setState(() {
-                            listNotification.removeAt(index);
-                          });
-                        },
-                      ),
-                    ],
-                    child: Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: greyColor,width: 1)
-                            )
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuDriverScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Notificacion',style: TextStyle(color: blackColor),),
+          backgroundColor: whiteColor,
+          elevation: 2.0,
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
+          ),
+          iconTheme: IconThemeData(color: blackColor),
+            actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.restore_from_trash,color: blackColor,),
+                onPressed: (){
+                  dialogInfo();
+                }
+              )
+            ]
+        ),
+        drawer:MenuDriverScreens(activeScreenName: screenName),
+          body: listNotification.isNotEmpty ?
+          Scrollbar(
+            child: ListView.builder(
+                itemCount: listNotification.length,
+                itemBuilder: (BuildContext context, int index){
+                  return Slidable(
+                      actionPane: SlidableScrollActionPane(),
+                      actionExtentRatio: 0.25,
+                      secondaryActions: <Widget>[
+                        IconSlideAction(
+                          caption: 'Eliminar',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: (){
+                            setState(() {
+                              listNotification.removeAt(index);
+                            });
+                          },
                         ),
-                        child: GestureDetector(
-                            onTap: (){
-                              print('$index');
-                              navigateToDetail(index.toString());
-                            },
-                            child: ItemNotification(
-                              title: listNotification[index]['title'],
-                              subTitle: listNotification[index]['subTitle'],
-                              icon: listNotification[index]['icon'],
-                            )
-                        )
-                    )
-                );
-              }
-          ),
-        ): Container(
-          height: screenSize.height,
-          child: Center(
-            child: Image.asset('assets/image/empty_state_trash_300.png',width: 100.0,),
-          ),
-        )
+                      ],
+                      child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(color: greyColor,width: 1)
+                              )
+                          ),
+                          child: GestureDetector(
+                              onTap: (){
+                                print('$index');
+                                navigateToDetail(index.toString());
+                              },
+                              child: ItemNotification(
+                                title: listNotification[index]['title'],
+                                subTitle: listNotification[index]['subTitle'],
+                                icon: listNotification[index]['icon'],
+                              )
+                          )
+                      )
+                  );
+                }
+            ),
+          ): Container(
+            height: screenSize.height,
+            child: Center(
+              child: Image.asset('assets/image/empty_state_trash_300.png',width: 100.0,),
+            ),
+          )
+      )
     );
   }
 }
