@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 
 class CargaPage extends StatefulWidget {
@@ -14,12 +15,18 @@ class CargaPage extends StatefulWidget {
 
 class _CargaPageState extends State<CargaPage> {
   final String screenName = 'CARGA';
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
+      child: SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
         appBar: AppBar(
           title: Text('Carga'),
@@ -28,6 +35,16 @@ class _CargaPageState extends State<CargaPage> {
             Tab(child: Text('Autos que van a donde usted va',style: TextStyle(fontSize: 12),)),
             Tab(child: Text('Mis viajes',style: TextStyle(fontSize: 12),))
           ]),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
+          ),
         ),
         drawer: MenuScreens(activeScreenName: screenName),
         body: GestureDetector(
@@ -42,6 +59,7 @@ class _CargaPageState extends State<CargaPage> {
             ]
           ),
         )
+      )
       ),
     );
   }

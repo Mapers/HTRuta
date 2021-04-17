@@ -22,6 +22,7 @@ class MenuScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     final Session _session = Session();
     return Drawer(
+      elevation: 0,
       child: Column(
         children: <Widget>[
           FutureBuilder<UserSession>(

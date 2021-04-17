@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:flutter/cupertino.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class HomeScreen2 extends StatefulWidget {
   @override
@@ -38,6 +39,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
   List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m'},{'id': 2, 'title': '1 km'},{'id':3,'title': '3 km'}];
   String selectedDistance = '1';
   double _radius = 500;
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   List<dynamic> dataMarKer = [
     {
@@ -281,9 +283,14 @@ class _HomeScreen2State extends State<HomeScreen2> {
   @override
   Widget build(BuildContext context) {
     _createMarkerImageFromAsset(context);
-    return Scaffold(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
       key: _scaffoldKey,
-      drawer:MenuScreens(activeScreenName: screenName),
+      drawer: MenuScreens(activeScreenName: screenName),
       body:Container(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -319,11 +326,15 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         backgroundColor: Colors.transparent,
                         elevation: 0.0,
                         centerTitle: true,
-                        leading: FlatButton(
-                            onPressed: () {
-                              _scaffoldKey.currentState.openDrawer();
-                            },
-                            child: Icon(Icons.menu,color: blackColor,)
+                        leading: IconButton(
+                          icon: Icon(Icons.menu),
+                          onPressed: () {
+                            final _state = _sideMenuKey.currentState;
+                            if (_state.isOpened)
+                              _state.closeSideMenu(); // close side menu
+                            else
+                              _state.openSideMenu();// open side menu
+                          },
                         ),
                       ),
                       Padding(
@@ -338,6 +349,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
             )
         ),
       ),
+    )
     );
   }
 }

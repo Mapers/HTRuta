@@ -2,6 +2,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   final String screenName = 'HISTORY';
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
@@ -21,6 +22,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
+      child: SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
         appBar: AppBar(
           title: Text('Historia de viajes',style: TextStyle(color: Colors.white,fontSize: 16.0,)),
@@ -29,6 +35,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
               Tab(text: 'Servicio taxi',),
               Tab(text: 'Interprovincial',)
             ]
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
           ),
         ),
         drawer: MenuScreens(activeScreenName: screenName),
@@ -117,7 +133,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ] 
           ),
         ),
-      );
+      )
+    );
   }
 
   Widget rideHistory(){

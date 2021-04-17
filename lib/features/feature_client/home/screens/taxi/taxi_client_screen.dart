@@ -19,6 +19,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 
 class TaxiClientScreen extends StatefulWidget {
@@ -46,6 +47,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData =  <MapTypeModel>[];
   PersistentBottomSheetController _controller;
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   Position currentLocation;
   Position _lastKnownPosition;
@@ -278,7 +280,12 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   Widget build(BuildContext context) {
 
     final responsive = Responsive(context);
-    return Scaffold(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
         key: _scaffoldKey,
         drawer: MenuScreens(activeScreenName: screenName),
         body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
@@ -372,9 +379,31 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   ),
                 )
             ),
-            MenuButtonWidget(parentScaffoldKey: _scaffoldKey)
+            Positioned(
+              top: 50,
+              left: 10,
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.menu,size: 20.0,color: blackColor),
+                  onPressed: (){
+                    final _state = _sideMenuKey.currentState;
+                    if (_state.isOpened)
+                      _state.closeSideMenu(); // close side menu
+                    else
+                      _state.openSideMenu();// open side menu
+                  }
+                ),
+              )
+            )
           ],
         ),
+    )
     );
   }
 }
