@@ -232,7 +232,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       final _session = Session();
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
-                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name);
+                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios);
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;
