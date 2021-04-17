@@ -38,6 +38,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   var aceptados = <String>[];
   var rechazados = <String>[];
   String choferId = '';
+  bool newTravel = false;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   void navigateToDetail(Request requestItem) {
@@ -186,17 +187,22 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           }  
         })
       });
-      if(requestTaxi.length < requestPast.length){
-        Fluttertoast.showToast(
-            msg: 'Se canceló una solicitud de viaje',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0
-        ); 
+      if(!newTravel){
+        if(requestTaxi.length < requestPast.length){
+          Fluttertoast.showToast(
+              msg: 'Se canceló una solicitud de viaje',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          ); 
+        }
+      }else{
+        newTravel = false;
       }
+      
       if(requestTaxi.length > requestPast.length){
         Fluttertoast.showToast(
             msg: 'Tienes una nueva solicitud de viaje',
@@ -422,7 +428,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(taxi.names,style: textBoldBlack,),
-                        Text(taxi.registeredAt.toString(), style: textGrey,),
+                        Text(taxi.phone, style: textGrey,),
                         // Container(
                         //   child: Row(
                         //     children: <Widget>[
@@ -577,6 +583,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                           try{
                             final _prefs = UserPreferences();
                             await _prefs.initPrefs();
+                            newTravel = true;
                             Dialogs.openLoadingDialog(context);
                             final dato = await pickupApi.actionTravel(
                               _prefs.idChofer,
@@ -593,6 +600,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               taxi.finalname,
                               aceptar
                             );
+                            
                             Navigator.pop(context);
                             if(dato){
                               //Esperar solicitud
