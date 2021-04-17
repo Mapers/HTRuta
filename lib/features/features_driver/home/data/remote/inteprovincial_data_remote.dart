@@ -26,4 +26,14 @@ class InterprovincialDriverDataRemote {
     }
     throw ServerException(message: result.error);
   }
+
+  Future<bool> finishService({@required String serviceId}) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/finish',
+      data: { 'service_id': serviceId }
+    );
+    if(result.success){
+      return result.success;
+    }
+    throw ServerException(message: result.error);
+  }
 }
