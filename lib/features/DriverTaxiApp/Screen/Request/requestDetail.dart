@@ -185,7 +185,7 @@ class _RequestDetailState extends State<RequestDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text('note'.toUpperCase(),style: textGreyBold,),
-                              Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',style: textStyle,),
+                              Text(widget.requestItem.comentario,style: textStyle,),
                             ],
                           ),
                         ),
