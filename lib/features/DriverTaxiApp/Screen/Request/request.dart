@@ -14,6 +14,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
@@ -30,6 +31,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final String screenName = 'REQUEST';
   Channel _channel;
   List<Request> requestTaxi = [];
+  List<Map> requestPast = [];
   final pickupApi = PickupApi();
   final aceptar = '1';
   final rechazar = '2';
@@ -80,8 +82,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       });
 
       requestTaxi.removeWhere((element) => removeData.contains(element));
-        setState(() {
-        });
+      requestPast = requestTaxi.map((e) => {
+        'id': e.id,
+        'precio': e.mPrecio 
+      }).toList(); 
+      setState(() {});
       }
       await initPusher();
     });
@@ -144,6 +149,87 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       });
 
       requestTaxi.removeWhere((element) => removeData.contains(element));
+      print("actual");
+      print(requestTaxi);
+      print("pasado");
+      print(requestPast);
+      requestTaxi?.forEach((element1) => {
+        requestPast?.forEach((element2) {
+          if(element1.id == element2['id']){
+            if(element1.mPrecio != element2['precio']){
+              double precioAnt = double.parse(element2['precio']);
+              double precioAct = double.parse(element1.mPrecio);
+              double diff = precioAct - precioAnt;
+              if(diff > 0){
+                Fluttertoast.showToast(
+                  msg: '${element1.vchNombres} aumentó la puja en $diff soles',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+                );
+              }else if (diff < 0){ 
+                Fluttertoast.showToast(
+                  msg: '${element1.vchNombres} disminuyó la puja en $diff soles',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              }
+              
+            }
+          }  
+        })
+      });
+      if(requestTaxi.length < requestPast.length){
+        Fluttertoast.showToast(
+            msg: 'Se canceló una solicitud de viaje',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        ); 
+      }
+      if(requestTaxi.length > requestPast.length){
+        Fluttertoast.showToast(
+            msg: 'Tienes una nueva solicitud de viaje',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        ); 
+      }
+
+        /* List<String> ids = requestTaxi.map((e) => e.id).toList();
+        requestPast.forEach((element1) {
+          if(!ids.contains(element1['id'])){
+            Request foundRequest = requestTaxi.where((element) => element.id == element1['id']).toList().first;
+            Fluttertoast.showToast(
+              msg: '${foundRequest.vchNombres} canceló una solicitud de viaje',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );  
+          }
+        }); */
+      
+      requestPast = requestTaxi.map((e) => {
+        'id': e.id,
+        'precio': e.mPrecio 
+      }).toList();
+      
       setState(() {});
     });
 
