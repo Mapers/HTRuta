@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
@@ -21,7 +22,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../app_router.dart';
 
 class RegisterDriverPage extends StatefulWidget {
   @override
@@ -43,7 +43,9 @@ class _RegisterDriverPageState extends State<RegisterDriverPage> {
 
 
     return Scaffold(
-        appBar: AppBar(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(responsive.hp(7)), // here the desired height
+          child:  AppBar(
             elevation: 2,
             backgroundColor: Colors.white,
             title: Text(
@@ -104,20 +106,24 @@ class _RegisterDriverPageState extends State<RegisterDriverPage> {
                               fontSize: responsive.ip(1.9)),
                         )))
                 : Container()),
-        body: PageView(
-          pageSnapping: false,
-          physics: NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          children: [
-            PrimeraPagina(onAddButtonTapped),
-            SegundaPagina(onAddButtonTapped),
-            TerceraPagina(onAddButtonTapped),
-            CuartaPagina(onAddButtonTapped),
-            QuintaPagina(onAddButtonTapped),
-            SextaPagina(onAddButtonTapped),
-            SeptimaPagina(onAddButtonTapped),
-            OctavaPagina(onAddButtonTapped)
-          ]));
+        ),
+        body: SizedBox(
+          height: responsive.hp(93),
+          child: PageView(
+              pageSnapping: false,
+              physics: NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              children: [
+                PrimeraPagina(onAddButtonTapped),
+                SegundaPagina(onAddButtonTapped),
+                TerceraPagina(onAddButtonTapped),
+                CuartaPagina(onAddButtonTapped),
+                QuintaPagina(onAddButtonTapped),
+                SextaPagina(onAddButtonTapped),
+                SeptimaPagina(onAddButtonTapped),
+                OctavaPagina(onAddButtonTapped)
+              ]),
+        ));
   }
 }
 
@@ -154,45 +160,46 @@ class _OctavaPaginaState extends State<OctavaPagina> {
           ),
           Spacer(),
           Container(
-            color: Colors.white,
-            width: responsive.wp(100),
-            padding: EdgeInsets.symmetric(
-                horizontal: responsive.wp(5), vertical: responsive.wp(2)),
-            child: FlatButton(
-              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-              color: primaryColor,
-              onPressed: () async{
-                final provider = Provider.of<RegistroProvider>(context,listen: false);
-                try{
-                  final registroConductor = RegistroConductorApi();
-                  final authApi = AuthApi();
-                  UserSession datosUsuario = await _session.get();
-                  final _prefs = UserPreferences();
-                  await _prefs.initPrefs();
-                  Dialogs.openLoadingDialog(context);
-                  final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario.cellphone,  datosUsuario.cellphone, datosUsuario.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
-                  await authApi.loginUser(datosUsuario.email, datosUsuario.password);
-                  Navigator.pop(context);
-                  if(respuesta){
-                    Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
-                  }else{
-                    Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
-                  }
+                      color: Colors.white,
+                      width: responsive.wp(100),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5), vertical: responsive.wp(2)),
+                      child: FlatButton(
+                        padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                        color: primaryColor,
+                        onPressed: () async{
+                          final provider = Provider.of<RegistroProvider>(context,listen: false);
+                          try{
+                            final registroConductor = RegistroConductorApi();
+                            final authApi = AuthApi();
+                            dynamic datosUsuario = await _session.get();
+                            final _prefs = UserPreferences();
+                            await _prefs.initPrefs();
+                            Dialogs.openLoadingDialog(context);
+                            final respuesta = await registroConductor.registrarChofer(datosUsuario['dni'], datosUsuario['nombres'], datosUsuario['apellidoPaterno'], datosUsuario['apellidoMaterno'], '19950804', '1', 'Av. Federico Villarreal 872', 'Por la guisada', datosUsuario['celular'],  datosUsuario['celular'], datosUsuario['correo'], datosUsuario['password'], '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
+                            await authApi.loginUser(datosUsuario['correo'], datosUsuario['password']);
+                            Navigator.pop(context);
+                            if(respuesta){
+                              Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
+                            }else{
+                              Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
+                            }
 
-                }catch(error){
-                  Navigator.pop(context);
-                  print('Error ${error.toString()}');
-                  Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                }
-              },
-              child: Text(
-                'Enviar',
-                style: TextStyle(color: Colors.white),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(responsive.wp(10))),
-            ),
-          ),
+                          }catch(error){
+                            Navigator.pop(context);
+                            print('Error ${error.toString()}');
+                            Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
+                          }
+
+                        },
+                        child: Text(
+                          'Enviar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(responsive.wp(10))),
+                      ),
+                    ),
         ],
       ),
     );
@@ -223,19 +230,19 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Añadir una nueva foto'),
+            title: Text("Añadir una nueva foto"),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text('Seleccionar foto'),
+                    child: Text("Seleccionar foto"),
                     onTap: () async {
                       await _openGallery(index);
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text('Tomar una foto'),
+                    child: Text("Tomar una foto"),
                     onTap: () async{
                       await cameraImage(index);
                     },
@@ -249,12 +256,13 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
   Future cameraImage(int index) async {
     try{
-      // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
+
       await _cropImage(index);
-      setState(() {});
-      Navigator.of(context).pop();
+      this.setState(() {});
+       Navigator.of(context).pop();
+
     }catch(error){
       print(error.toString());
     }
@@ -262,17 +270,14 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
   Future _openGallery(int index) async {
     try {
-      // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
       print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
-      setState(() {});
+      this.setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   bool recortado = false;
@@ -310,71 +315,74 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
     final providerRegistro = Provider.of<RegistroProvider>(context);
     return Stack(
       children: <Widget>[
-        Padding(
+        Container(
+          width: responsive.wp(100),
+          height: responsive.hp(90),
           padding: EdgeInsets.only(top: responsive.hp(3),bottom: responsive.hp(7)),
-            child: Column(
-              children: <Widget>[
-                Text('Número de licencia de conducir', style: TextStyle(fontSize: responsive.ip(2)),),
-                SizedBox(height: responsive.hp(2),),
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  onChanged: (value){
-                    setState(() {
-                      licencia = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text('Número de licencia de conducir', style: TextStyle(fontSize: responsive.ip(2)),),
+                  SizedBox(height: responsive.hp(2),),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    onChanged: (value){
+                      setState(() {
+                        licencia = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                    hintText: 'Ingrese licencia',
+                    hintStyle: TextStyle(
+                      color: Colors.grey, fontFamily: 'Quicksand'),
+                    )
                   ),
-                  contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                  hintText: 'Ingrese licencia',
-                  hintStyle: TextStyle(
-                    color: Colors.grey, fontFamily: 'Quicksand'),
-                  )
-                ),
-                SizedBox(height: responsive.hp(2),),
-                ListView.builder(
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    List<String> titulo = cabecera[index].split('/');
-                    return Column(
-                      children: <Widget>[
-                        titulo.length > 1 ?
-                        Column(
-                          children: <Widget>[
-                            Text(titulo[0], style: TextStyle(fontSize: responsive.ip(2)),),
-                            Text(titulo[1], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
-                            Text(titulo[2], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
-                            Text(titulo[3], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
-                          ],
-                        ) : Text(cabecera[index], style: TextStyle(fontSize: responsive.ip(2)),),
-                                        SizedBox(height: responsive.hp(2),),
-                                        Container(
-                                                      width: responsive.wp(70),
-                                                      height: responsive.hp(20),
-                                                      decoration: BoxDecoration(
-                                                        color: primaryColor,
-                                                        borderRadius: BorderRadius.circular(10)
-                                                      ),
-                                                      child: imagenes[index] != null  ? ClipRRect(child: Image.file(imagenes[index], fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userCheck, size: responsive.ip(7),color: Colors.white,),
-                                                    ),
-                                        SizedBox(height: responsive.hp(1),),
-                                        OutlineButton(
-                                                      onPressed: ()async{
-                                                        buscarImagen(index);
-                                                      },
-                                                      borderSide: BorderSide(color: primaryColor),
-                                                      child: Text(imagenes[index] != null ? 'Editar' : 'Añadir', style: TextStyle(color: primaryColor),),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
-                                                      padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
-                                                    ),
-                                        SizedBox(height: responsive.hp(2),),
-                              ],
-                            );
-                          },
-                        ),
-              ],
+                  SizedBox(height: responsive.hp(2),),
+                  Column(
+                    children: List<Widget>.generate(4, (index){
+                      List<String> titulo = cabecera[index].split('/');
+                      return Column(
+                        children: <Widget>[
+                          titulo.length > 1 ?
+                          Column(
+                            children: <Widget>[
+                              Text(titulo[0], style: TextStyle(fontSize: responsive.ip(2)),),
+                              Text(titulo[1], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
+                              Text(titulo[2], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
+                              Text(titulo[3], style: TextStyle(fontSize: responsive.ip(2)),textAlign: TextAlign.center,),                    
+                            ],
+                          ) : Text(cabecera[index], style: TextStyle(fontSize: responsive.ip(2)),),
+                                  SizedBox(height: responsive.hp(2),),
+                                  Container(
+                                                width: responsive.wp(70),
+                                                height: responsive.hp(20),
+                                                decoration: BoxDecoration(
+                                                  color: primaryColor,
+                                                  borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                child: imagenes[index] != null  ? ClipRRect(child: Image.file(imagenes[index], fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userCheck, size: responsive.ip(7),color: Colors.white,),
+                                              ),
+                                  SizedBox(height: responsive.hp(1),),
+                                  OutlineButton(
+                                                onPressed: ()async{
+                                                  buscarImagen(index);
+                                                },
+                                                borderSide: BorderSide(color: primaryColor),
+                                                child: Text(imagenes[index] != null ? 'Editar' : 'Añadir', style: TextStyle(color: primaryColor),),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
+                                                padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
+                                              ),
+                                  SizedBox(height: responsive.hp(2),),
+                        ],
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
                   ),
                   Positioned(
@@ -416,7 +424,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
                             print('Error ${error.toString()}');
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                           }
-                          
+
                         },
                         child: Text(
                           'Siguiente',
@@ -566,7 +574,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       //                     final provider = Provider.of<RegistroProvider>(context,listen: false);
       //                     try{
       //                       if (licenciaFrente != null && licenciaTrasera != null && antecedentes != null && soat != null && licencia.isNotEmpty) {
-                              
+
       //                         provider.fotoLicenciaFrente = await obtenerBase64(licenciaFrente);
       //                         provider.fotoLicenciaTrasera = await obtenerBase64(licenciaTrasera);
       //                         provider.fotoAtencedente = await obtenerBase64(antecedentes);
@@ -584,7 +592,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       //                       print('Error ${error.toString()}');
       //                       Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
       //                     }
-                          
+
       //                   },
       //                   child: Text(
       //                     'Siguiente',
@@ -601,7 +609,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 }
 
 class SextaPagina extends StatefulWidget {
-  
+
   final void Function(int) onAddButtonTapped;
 
   const SextaPagina(this.onAddButtonTapped);
@@ -619,19 +627,19 @@ class _SextaPaginaState extends State<SextaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Añadir una nueva foto'),
+            title: Text("Añadir una nueva foto"),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text('Seleccionar foto'),
+                    child: Text("Seleccionar foto"),
                     onTap: () {
                       _openGallery();
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text('Tomar una foto'),
+                    child: Text("Tomar una foto"),
                     onTap: () {
                       cameraImage();
                     },
@@ -645,11 +653,10 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   Future cameraImage() async {
     try{
-      // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
-      setState(() {});
+      this.setState(() {});
       Navigator.of(context).pop();
     }catch(error){
       print(error.toString());
@@ -658,15 +665,12 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   void _openGallery() async {
     try {
-      // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
-      setState(() {});
+      this.setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   bool recortado = false;
@@ -694,12 +698,13 @@ class _SextaPaginaState extends State<SextaPagina> {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final providerRegistro = Provider.of<RegistroProvider>(context);
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 3,
-          child: Container(
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
             width: responsive.wp(100),
+            height: responsive.hp(30),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
@@ -711,17 +716,16 @@ class _SextaPaginaState extends State<SextaPagina> {
                 children: <Widget>[
                   Text('${providerRegistro.dataMarca.vchMarca} ${providerRegistro.dataModelo.vchModelo}', style: TextStyle(fontSize: responsive.ip(2.4), fontWeight: FontWeight.bold),),
                   SizedBox(height: responsive.hp(2),),
-                  Text('${providerRegistro.color}Negro',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600)),
+                  Text('${providerRegistro.color}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600)),
                   SizedBox(height: responsive.hp(2)),
-                  Text('${providerRegistro.placa}45YU65',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600))
+                  Text('${providerRegistro.placa}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600))
                 ],
               ),
             ),
-          )
-        ),
-        Expanded(
-          flex: 6,
-          child: Container(
+          ),
+          Container(
+            width: responsive.wp(100),
+            height: responsive.hp(40),
             child: Column(
               children: <Widget>[
                 Card(
@@ -762,46 +766,45 @@ class _SextaPaginaState extends State<SextaPagina> {
                 Spacer()
               ],
             ),
-          )
-        ),
-        Expanded(child: Container(
-                      color: Colors.white,
-                      width: responsive.wp(100),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(5), vertical: responsive.wp(2)),
-                      child: FlatButton(
-                        padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                        color: primaryColor,
-                        onPressed: () async{
-                          final provider = Provider.of<RegistroProvider>(context,listen: false);
-                          try{
-                            if (imageFile != null) {
-                              String base64Image;
-                              List<int> imageBytes = await imageFile.readAsBytes();
-                              base64Image = base64Encode(imageBytes);
-                              provider.fotoAuto = base64Image;
-                              providerRegistro.index = 6;
-                              providerRegistro.titulo = 'Documentos';
-                              widget.onAddButtonTapped(providerRegistro.index);
-                            }else{
-                              Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
-                            }
-                          }catch(error){
-                            print('Error ${error.toString()}');
-                            Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                          }
-                          
-                        },
-                        child: Text(
-                          'Siguiente',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(responsive.wp(10))),
-                      ),
-                    ),
-        )
-      ],
+          ),
+          Container(
+            color: Colors.white,
+            width: responsive.wp(100),
+            padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(5), vertical: responsive.wp(2)),
+            child: FlatButton(
+              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+              color: primaryColor,
+              onPressed: () async{
+                final provider = Provider.of<RegistroProvider>(context,listen: false);
+                try{
+                  if (imageFile != null) {
+                    String base64Image;
+                    List<int> imageBytes = await imageFile.readAsBytes();
+                    base64Image = base64Encode(imageBytes);
+                    provider.fotoAuto = base64Image;
+                    providerRegistro.index = 6;
+                    providerRegistro.titulo = 'Documentos';
+                    widget.onAddButtonTapped(providerRegistro.index);
+                  }else{
+                    Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
+                  }
+                }catch(error){
+                  print('Error ${error.toString()}');
+                  Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
+                }
+
+              },
+              child: Text(
+                'Siguiente',
+                style: TextStyle(color: Colors.white),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(responsive.wp(10))),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -817,16 +820,19 @@ class QuintaPagina extends StatefulWidget {
 
 class _QuintaPaginaState extends State<QuintaPagina> {
 
-  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
-  //Validations validations =Validations();
+  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  //Validations validations = new Validations();
   final Session _session = Session();
   File imageFile;
+  Future<dynamic> datosUsuario;
   //Cmabia de estado asi que declarar en state
   int sexo = 1;
 
   @override
   void initState() { 
     super.initState();
+    //Solucionar bug de recargar el futurebuilder
+    datosUsuario = _session.get();
   }
 
   Future<void> buscarImagen() {
@@ -834,19 +840,19 @@ class _QuintaPaginaState extends State<QuintaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Añadir una nueva foto'),
+            title: Text("Añadir una nueva foto"),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text('Seleccionar foto'),
+                    child: Text("Seleccionar foto"),
                     onTap: () async {
                       await _openGallery();
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text('Tomar una foto'),
+                    child: Text("Tomar una foto"),
                     onTap: () async{
                       await cameraImage();
                     },
@@ -860,11 +866,10 @@ class _QuintaPaginaState extends State<QuintaPagina> {
 
   Future cameraImage() async {
     try{
-      // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
-      setState(() {});
+      this.setState(() {});
     }catch(error){
       print(error.toString());
     }
@@ -872,15 +877,12 @@ class _QuintaPaginaState extends State<QuintaPagina> {
 
   Future _openGallery() async {
     try {
-      // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
-      setState(() {});
+      this.setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   bool recortado = false;
@@ -911,218 +913,218 @@ class _QuintaPaginaState extends State<QuintaPagina> {
     final providerRegistro = Provider.of<RegistroProvider>(context);
 
     return Stack(
-      children: <Widget>[
-        FutureBuilder<UserSession>(
-          future: _session.get(),
-          builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.done){
-              if(snapshot.hasData){
-                final data = snapshot.data;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: responsive.hp(2),),
-                      CircleAvatar(
-                        radius: responsive.wp(10),
-                        backgroundColor: imageFile!= null ? Colors.transparent : primaryColor,
-                        child: imageFile!= null ? ClipRRect(child: Image.file(imageFile, fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userAlt, size: responsive.ip(5.5),color: Colors.white,),
-                      ),
-                      SizedBox(height: responsive.hp(2),),
-                      OutlineButton(
-                        onPressed: (){
-                          buscarImagen();
-                        },
-                        borderSide: BorderSide(color: primaryColor),
-                        child: Text('Añadir', style: TextStyle(color: primaryColor),),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
-                        padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
-                      ),
-                      SizedBox(height: responsive.hp(2),),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Nombre', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.names ?? '',
-                              keyboardType: TextInputType.text,
-                              //validator: validations.validateName,
-                              decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Text('Apellido Paterno', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.lastNameFather ?? '',
-                              keyboardType: TextInputType.text,
-                              //validator: validations.validateName,
-                              decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Text('Apellido Materno', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.lastNameMother ?? '',
-                              keyboardType: TextInputType.text,
-                              //validator: validations.validateMobile,
-                              decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Text('Documento de indentidad', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.dni ?? '',
-                              keyboardType: TextInputType.phone,
-                              //validator: validations.validateName,
-                              decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: FlatButton(
-                                  onPressed: (){       
-                                    setState(() {
-                                      sexo = 1;
-                                    });
-                                  }, 
-                                  child: Text('Masculino', style: TextStyle(color: sexo == 1 ? Colors.white : primaryColor, fontSize: responsive.ip(2),)),
-                                  shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(responsive.wp(2)), bottomLeft: Radius.circular(responsive.wp(2))),
-                                    borderSide: BorderSide(
-                                      color: primaryColor
-                                    )
+                  children: <Widget>[
+                    FutureBuilder<dynamic>(
+                      future: datosUsuario,
+                      builder: (context, snapshot) {
+                        if(snapshot.connectionState == ConnectionState.done){
+                          if(snapshot.hasData){
+                            final data = snapshot.data;
+                            return SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(height: responsive.hp(2),),
+                                  CircleAvatar(
+                                    radius: responsive.wp(10),
+                                    backgroundColor: imageFile!= null ? Colors.transparent : primaryColor,
+                                    child: imageFile!= null ? ClipRRect(child: Image.file(imageFile, fit: BoxFit.contain)) : Icon(FontAwesomeIcons.userAlt, size: responsive.ip(5.5),color: Colors.white,),
                                   ),
-                                  color: sexo == 1 ? primaryColor : Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                                ),
-                              ),
-                              SizedBox(width: responsive.wp(1),),
-                              Expanded(
-                                child: FlatButton(
-                                  onPressed: (){
-                                    setState(() {
-                                      sexo = 2;
-                                    });
-                                  }, 
-                                  child: Text('Femenino',style: TextStyle(color: sexo == 2 ? Colors.white : primaryColor, fontSize: responsive.ip(2)),),
-                                  shape: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(topRight: Radius.circular(responsive.wp(2)), bottomRight: Radius.circular(responsive.wp(2))),
-                                    borderSide: BorderSide(color: primaryColor)
+                                  SizedBox(height: responsive.hp(2),),
+                                  OutlineButton(
+                                    onPressed: (){
+                                      buscarImagen();
+                                    },
+                                    borderSide: BorderSide(color: primaryColor),
+                                    child: Text('Añadir', style: TextStyle(color: primaryColor),),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.wp(5))),
+                                    padding: EdgeInsets.symmetric(horizontal: responsive.hp(10)),
                                   ),
-                                  color:  sexo == 2 ? primaryColor : Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                                  
-                                ),
+                                  SizedBox(height: responsive.hp(2),),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text('Nombre', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        TextFormField(
+                                          initialValue: data['nombres']??'',
+                                          keyboardType: TextInputType.text,
+                                          //validator: validations.validateName,
+                                          decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                                        )
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Text('Apellido Paterno', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        TextFormField(
+                                          initialValue: data['apellidoPaterno']??'',
+                                          keyboardType: TextInputType.text,
+                                          //validator: validations.validateName,
+                                          decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                                        )
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Text('Apellido Materno', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        TextFormField(
+                                          initialValue: data['apellidoMaterno']??'',
+                                          keyboardType: TextInputType.text,
+                                          //validator: validations.validateMobile,
+                                          decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                                        )
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Text('Documento de indentidad', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        TextFormField(
+                                          initialValue: data['dni']??'',
+                                          keyboardType: TextInputType.phone,
+                                          //validator: validations.validateName,
+                                          decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                                        )
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: FlatButton(
+                                              onPressed: (){       
+                                                setState(() {
+                                                  sexo = 1;
+                                                });
+                                              }, 
+                                              child: Text('Masculino', style: TextStyle(color: sexo == 1 ? Colors.white : primaryColor, fontSize: responsive.ip(2),)),
+                                              shape: OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(responsive.wp(2)), bottomLeft: Radius.circular(responsive.wp(2))),
+                                                borderSide: BorderSide(
+                                                  color: primaryColor
+                                                )
+                                              ),
+                                              color: sexo == 1 ? primaryColor : Colors.white,
+                                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                                            ),
+                                          ),
+                                          SizedBox(width: responsive.wp(1),),
+                                          Expanded(
+                                            child: FlatButton(
+                                              onPressed: (){
+                                                setState(() {
+                                                  sexo = 2;
+                                                });
+                                              }, 
+                                              child: Text('Femenino',style: TextStyle(color: sexo == 2 ? Colors.white : primaryColor, fontSize: responsive.ip(2)),),
+                                              shape: OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(topRight: Radius.circular(responsive.wp(2)), bottomRight: Radius.circular(responsive.wp(2))),
+                                                borderSide: BorderSide(color: primaryColor)
+                                              ),
+                                              color:  sexo == 2 ? primaryColor : Colors.white,
+                                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Text('Fecha de Nacimiento', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        OutlineButton(
+                                          onPressed: (){},
+                                          child: Text('04/08/1995', textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
+                                          padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)),
+                                      ),
+                                      SizedBox(height: responsive.hp(2),),
+                                      Text('Email', style: TextStyle(fontSize: responsive.ip(2)),),
+                                        SizedBox(height: responsive.hp(1),),
+                                        TextFormField(
+                                          initialValue: data['correo']??'',
+                                          keyboardType: TextInputType.emailAddress,
+                                          //validator: validations.validateEmail,
+                                          decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                          ),
+                                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
+                                        )
+                                      ),
+                                      SizedBox(height: responsive.hp(10),),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               )
-                            ],
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Text('Fecha de Nacimiento', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            OutlineButton(
-                              onPressed: (){},
-                              child: Text('04/08/1995', textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
-                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)),
-                          ),
-                          SizedBox(height: responsive.hp(2),),
-                          Text('Email', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.email ?? '',
-                              keyboardType: TextInputType.emailAddress,
-                              //validator: validations.validateEmail,
-                              decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
-                          ),
-                          SizedBox(height: responsive.hp(10),),
-                          ],
+                            );
+                          }else{
+                            return Center(child: Text('No se pudo obtener la informacion'));
+                          }
+                        }else{
+                          return Center(child: CircularProgressIndicator(),);
+                        }
+
+                      }
+                    ),
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                      color: Colors.white,
+                      width: responsive.wp(100),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: responsive.wp(5), vertical: responsive.wp(2)),
+                      child: FlatButton(
+                        padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                        color: primaryColor,
+                        onPressed: () async{
+                          final provider = Provider.of<RegistroProvider>(context,listen: false);
+                          try{
+                            if (imageFile != null) {
+                              String base64Image;
+                              List<int> imageBytes = await imageFile.readAsBytes();
+                              base64Image = base64Encode(imageBytes);
+                              provider.fotoPerfil = base64Image;
+                              providerRegistro.index = 5;
+                              providerRegistro.titulo = 'Foto de su auto';
+                              widget.onAddButtonTapped(providerRegistro.index);
+                            }else{
+                              Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
+                            }
+                          }catch(error){
+                            print('Error ${error.toString()}');
+                            Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
+                          }
+
+                        },
+                        child: Text(
+                          'Siguiente',
+                          style: TextStyle(color: Colors.white),
                         ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(responsive.wp(10))),
                       ),
-                    ],
-                  )
-                );
-              }else{
-                return Center(child: Text('No se pudo obtener la informacion'));
-              }
-            }else{
-              return Center(child: CircularProgressIndicator(),);
-            }
-            
-          }
-        ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-              color: Colors.white,
-              width: responsive.wp(100),
-              padding: EdgeInsets.symmetric(
-                  horizontal: responsive.wp(5), vertical: responsive.wp(2)),
-              child: FlatButton(
-                padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                color: primaryColor,
-                onPressed: () async{
-                  final provider = Provider.of<RegistroProvider>(context,listen: false);
-                  try{
-                    if (imageFile != null) {
-                      String base64Image;
-                      List<int> imageBytes = await imageFile.readAsBytes();
-                      base64Image = base64Encode(imageBytes);
-                      provider.fotoPerfil = base64Image;
-                      providerRegistro.index = 5;
-                      providerRegistro.titulo = 'Foto de su auto';
-                      widget.onAddButtonTapped(providerRegistro.index);
-                    }else{
-                      Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
-                    }
-                  }catch(error){
-                    print('Error ${error.toString()}');
-                    Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                  }
-                  
-                },
-                child: Text(
-                  'Siguiente',
-                  style: TextStyle(color: Colors.white),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(responsive.wp(10))),
-              ),
-            ),
-        )
-      ],
-    );
+                    ),
+                )
+              ],
+            );
   }
 }
 
@@ -1416,7 +1418,8 @@ class SegundaPagina extends StatelessWidget {
                             providerRegistro.dataMarca.iIdMarca.toString()),
                         builder: (context, snapshot) {
                           try {
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               if (snapshot.hasData) {
                                 return Expanded(
                                   child: ListView.builder(
@@ -1477,9 +1480,9 @@ class SegundaPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '${error.message}');
                           } catch (error) {
-                            Dialogs.alert(context, title: 'Error', message: '$error');
+                            Dialogs.alert(context,
+                                title: 'Error', message: '$error');
                           }
-                          return Container();
                         })
                   ],
                 ))));
@@ -1545,7 +1548,8 @@ class PrimeraPagina extends StatelessWidget {
                         future: registroConductorApi.obtenerMarca(),
                         builder: (context, snapshot) {
                           try {
-                            if (snapshot.connectionState == ConnectionState.done) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
                               if (snapshot.hasData) {
                                 return Expanded(
                                   child: ListView.builder(
@@ -1609,7 +1613,6 @@ class PrimeraPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
-                          return Container();
                         })
                   ],
                 ))));
