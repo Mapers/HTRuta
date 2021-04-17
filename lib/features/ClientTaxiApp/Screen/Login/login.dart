@@ -251,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )
                                     ),
                                     SizedBox(height: 20,),
-                                    FlatButton(
+                                    /* FlatButton(
                                       padding: EdgeInsets.symmetric(vertical: 10),
                                       color: Color(0xFF3D599F),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -263,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Text('Iniciar sesión con Facebook',style: TextStyle(color: Colors.white),)
                                         ],
                                       )
-                                    ),
+                                    ), */
                                   ],
                                 )
                             ),
