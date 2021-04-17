@@ -43,7 +43,7 @@ class MenuDriverScreens extends StatelessWidget {
                     height: 180.0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Row(
                           children: <Widget>[
@@ -106,7 +106,7 @@ class MenuDriverScreens extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Container(
+                        /* Container(
                           padding: EdgeInsets.only(top: 20.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +152,7 @@ class MenuDriverScreens extends StatelessWidget {
                               ),
                             ],
                           )
-                        ),
+                        ), */
                       ],
                     ),
                   );
