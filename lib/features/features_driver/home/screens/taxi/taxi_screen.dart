@@ -1,11 +1,13 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -61,6 +63,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   bool isWorking = false;
   bool isLoading = true;
 
+  List<Request> requestTaxi = List<Request>();
+  final pickupApi = PickupApi();
+  var aceptados = List<String>();
+  var rechazados = List<String>();
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +100,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       isLoading = false;
       setState(() {
       });
+      getSolicitudes();
     });
 
     listRequest = [
@@ -131,6 +139,48 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       },
 
     ];
+  }
+  Future<void> getSolicitudes() async {
+    final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      final data = await pickupApi.getRequest();
+      print(_prefs.idChofer);
+      if(data != null){
+        requestTaxi.addAll(data);
+        requestTaxi.reversed;
+        var removeData = [];
+
+
+        requestTaxi.forEach((data) {
+          if(data.aceptados != null){
+            aceptados = data.aceptados.split(',');
+            aceptados.forEach((element) {
+              if(element == _prefs.idChofer){
+                removeData.add(data);
+              }
+            });
+          }
+        });
+        requestTaxi.removeWhere((element) => removeData.contains(element));
+
+        removeData.clear();
+
+        requestTaxi.forEach((data) {
+          if(data.rechazados != null){
+            rechazados = data.rechazados.split(',');
+            rechazados.forEach((element) {
+              if(element == _prefs.idChofer){
+                removeData.add(data);
+              }
+            });
+          }
+        });
+
+        requestTaxi.removeWhere((element) => removeData.contains(element));
+        setState(() {
+          
+        });
+      }
   }
 
   Future<void> fetchEstadoConductor() async{
@@ -340,22 +390,28 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           height: 330,
           child: TinderSwapCard(
               orientation: AmassOrientation.TOP,
-              totalNum: listRequest.length,
+              totalNum: requestTaxi.length,
               stackNum: 3,
               maxWidth: MediaQuery.of(context).size.width,
               minWidth: MediaQuery.of(context).size.width * 0.9,
               maxHeight: MediaQuery.of(context).size.width * 0.9,
               minHeight: MediaQuery.of(context).size.width * 0.85,
               cardBuilder: (context, index) => ItemRequest(
-                avatar: listRequest[index]['avatar'],
-                userName: listRequest[index]['userName'],
-                date: listRequest[index]['date'],
-                price: listRequest[index]['price'].toString(),
-                distance: listRequest[index]['distance'],
-                addFrom: listRequest[index]['addFrom'],
-                addTo: listRequest[index]['addTo'],
-                locationForm: listRequest[index]['locationForm'],
-                locationTo: listRequest[index]['locationTo'],
+                avatar: 'https://source.unsplash.com/1600x900/?portrait',
+                userName: requestTaxi[index].vchNombres,
+                date: requestTaxi[index].dFecReg,
+                price: requestTaxi[index].mPrecio,
+                distance: '',
+                addFrom: requestTaxi[index].vchNombreInicial,
+                addTo: requestTaxi[index].vchNombreFinal,
+                locationForm: LatLng(
+                  double.parse(requestTaxi[index].vchLatInicial),
+                  double.parse(requestTaxi[index].vchLongInicial),
+                ),
+                locationTo: LatLng(
+                  double.parse(requestTaxi[index].vchLatFinal),
+                  double.parse(requestTaxi[index].vchLongFinal),
+                ),
                 onTap: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail()));
                 },
