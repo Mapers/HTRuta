@@ -349,7 +349,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
@@ -358,7 +358,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                           future: taxi.calculateDistance,
                           builder: (context, snapshot) {
                             if(snapshot.hasData){
-                              return Text('${snapshot.data.toStringAsPrecision(1)} Km',style: textGrey,);
+                              return Text('${snapshot.data.toStringAsFixed(2)} Km',style: textGrey,);
                             }else{
                               return CircularProgressIndicator();
                             }
@@ -395,6 +395,17 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       ],
                     ),
                   ),
+                  Divider(),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Comentario'.toUpperCase(),style: textGreyBold,),
+                          Text(taxi.names,style: textStyle,),
+
+                        ],
+                      ),
+                    ),
                 ],
               )
             ),
