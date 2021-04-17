@@ -145,22 +145,29 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
     var router;
     LatLng _fromLocation = LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial));
     LatLng _toLocation = LatLng(double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal));
-
+    bool routeFound = true;
     await apis.getRoutes(
       getRoutesRequest: GetRoutesRequestModel(
           fromLocation: _fromLocation,
           toLocation: _toLocation,
-          mode: 'driving'
+          mode: 'DRIVING'
       ),
     ).then((data) {
       if (data != null) {
-        router = data?.result?.routes[0]?.overviewPolyline?.points;
-        routesData = data?.result?.routes;
+        if(data.result.routes.isEmpty){
+          routeFound = false;
+        }else{
+          router = data?.result?.routes[0]?.overviewPolyline?.points;
+          routesData = data?.result?.routes;
+        }
       }
     }).catchError((error) {
       print('GetRoutesRequest > $error');
     });
-
+    if(!routeFound) {
+      _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+      return;
+    }
     distance = routesData[0]?.legs[0]?.distance?.text;
     duration = routesData[0]?.legs[0]?.duration?.text;
 
