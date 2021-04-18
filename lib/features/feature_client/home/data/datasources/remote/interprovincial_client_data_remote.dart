@@ -49,7 +49,7 @@ class InterprovincialClientRemoteDataSoruce {
   Future<List<AvailableRouteEntity>> getFiebaseAvailablesRoutes() async{
     List<AvailableRouteEntity> availablesRoutes =[];
     //! cambira nombre  cuado este listo el back-ent
-    QuerySnapshot xd =  await firestore.collection('drivers_in_service').get();
+    QuerySnapshot xd =  await firestore.collection('interprovincial_in_service').get();
     for (var item in xd.docs) {
       availablesRoutes.add(
         AvailableRouteEntity(

@@ -19,7 +19,7 @@ class InterprovincialDataFirestore{
 
   Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
-      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       PassengerEntity passengerEntity = await serviceDataRemote.getPassengerById(request.passengerId);
 
       List<dynamic> result = await Future.wait([
@@ -59,7 +59,7 @@ class InterprovincialDataFirestore{
 
   Future<bool> seeRoute({@required String documentId, @required InterprovincialRequestEntity request}) async{
     try {
-      await firestore.collection('drivers_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();
+      await firestore.collection('interprovincial_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo realizar esta acción.',toastLength: Toast.LENGTH_SHORT);
@@ -69,7 +69,7 @@ class InterprovincialDataFirestore{
 
   Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request, @required String driverFcmToken, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
-      await firestore.collection('drivers_in_service').doc(documentId)
+      await firestore.collection('interprovincial_in_service').doc(documentId)
       .collection('requests').doc(request.documentId).delete();
       if(origin == InterprovincialDataFirestoreOrigin.driver){
         pushMessage.sendPushMessage(
