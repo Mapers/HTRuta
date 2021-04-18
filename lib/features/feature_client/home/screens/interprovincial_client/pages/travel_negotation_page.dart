@@ -29,8 +29,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   String amount;
   @override
   void initState() {
-    amountController.text = '344';
-    // amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
+    amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
     super.initState();
   }
   @override
