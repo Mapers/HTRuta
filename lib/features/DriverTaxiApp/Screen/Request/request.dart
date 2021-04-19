@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
@@ -14,6 +15,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
@@ -40,6 +42,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   String choferId = '';
   bool newTravel = false;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  PushNotificationProvider pushProvider;
 
   void navigateToDetail(Request requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
@@ -47,113 +50,69 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
 
   @override
   void initState() {
+    pushProvider = PushNotificationProvider();
+    pushProvider.mensajes.listen((argumento) async{
+      Map data = argumento['data'];
+      if(data == null) return;
+      String newRequest = data['newRequest'] ?? '0';
+      if(newRequest == '1'){
+        await loadRequests();
+        analizeChanges();  
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      final _prefs = UserPreferences();
-      await _prefs.initPrefs();
-      final data = await pickupApi.getRequest();
-      print(_prefs.idChofer);
-      if(data != null){
-        requestTaxi.addAll(data);
-        requestTaxi.reversed;
-        var removeData = [];
-
-      requestTaxi.forEach((data) {
-        if(data.aceptados != null){
-          aceptados = data.aceptados.split(',');
-          aceptados.forEach((element) {
-            if(element == _prefs.idChofer){
-              removeData.add(data);
-            }
-          });
-        }
-      });
-      requestTaxi.removeWhere((element) => removeData.contains(element));
-
-      removeData.clear();
-
-      requestTaxi.forEach((data) {
-        if(data.rechazados != null){
-          rechazados = data.rechazados.split(',');
-          rechazados.forEach((element) {
-            if(element == _prefs.idChofer){
-              removeData.add(data);
-            }
-          });
-        }
-      });
-
-      requestTaxi.removeWhere((element) => removeData.contains(element));
+      await loadRequests();
       requestPast = requestTaxi.map((e) => {
         'id': e.id,
         'precio': e.mPrecio 
       }).toList(); 
       setState(() {});
-      }
-      await initPusher();
     });
     super.initState();
   }
-
-  Future<void> initPusher()async{
-    try{
-      await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
-    }catch(e){
-      print(e);
-    }
-
+  Future<void> loadRequests() async {
     final _prefs = UserPreferences();
-    await _prefs.initPrefs();
-    choferId = _prefs.idChofer;
-    print(choferId);
+    final data = await pickupApi.getRequest();
+      print(_prefs.idChofer);
+      if(data != null){
+        requestTaxi.clear();
+        aceptados.clear();
+        rechazados.clear();
+        requestTaxi.addAll(data);
+        requestTaxi.reversed;
 
-    Pusher.connect(
-      onConnectionStateChange: (val) {
-          print(val.currentState);
-      },
-      onError: (error){
+        var removeData = [];
+
+        requestTaxi.forEach((data) {
+          if(data.aceptados != null){
+            aceptados = data.aceptados.split(',');
+            aceptados.forEach((element) {
+              if(element == _prefs.idChofer){
+                removeData.add(data);
+              }
+            });
+          }
+        });
+        requestTaxi.removeWhere((element) => removeData.contains(element));
+
+        removeData.clear();
+
+        requestTaxi.forEach((data) {
+          if(data.rechazados != null){
+            rechazados = data.rechazados.split(',');
+            rechazados.forEach((element) {
+              if(element == _prefs.idChofer){
+                removeData.add(data);
+              }
+            });
+          }
+        });
+
+        requestTaxi.removeWhere((element) => removeData.contains(element));
       }
-    );
-
-    _channel = await Pusher.subscribe('solicitud');
-
-    _channel.bind('SendSolicitud', (onEvent) {
-      requestTaxi.clear();
-      aceptados.clear();
-      rechazados.clear();
-      requestTaxi.addAll(requestFromJson(onEvent.data));
-      requestTaxi.reversed;
-
-      var removeData = [];
-      requestTaxi.forEach((data) {
-        if(data.aceptados != null){
-          aceptados = data.aceptados.split(',');
-          aceptados.forEach((element) {
-            if(element == _prefs.idChofer){
-              removeData.add(data);
-            }
-          });
-        }
-      });
-      requestTaxi.removeWhere((element) => removeData.contains(element));
-
-      removeData.clear();
-
-      requestTaxi.forEach((data) {
-        if(data.rechazados != null){
-          rechazados = data.rechazados.split(',');
-          rechazados.forEach((element) {
-            if(element == _prefs.idChofer){
-              removeData.add(data);
-            }
-          });
-        }
-      });
-
-      requestTaxi.removeWhere((element) => removeData.contains(element));
-      print("actual");
-      print(requestTaxi);
-      print("pasado");
-      print(requestPast);
+  }
+  void analizeChanges(){
+    if(requestTaxi.length == requestPast.length){
       requestTaxi?.forEach((element1) => {
         requestPast?.forEach((element2) {
           if(element1.id == element2['id']){
@@ -182,72 +141,41 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   fontSize: 16.0
               );
               }
-              
             }
           }  
         })
       });
-      if(!newTravel){
-        if(requestTaxi.length < requestPast.length){
-          Fluttertoast.showToast(
-              msg: 'Se canceló una solicitud de viaje',
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0
-          ); 
-        }
-      }else{
-        newTravel = false;
-      }
-      
-      if(requestTaxi.length > requestPast.length){
-        Fluttertoast.showToast(
-            msg: 'Tienes una nueva solicitud de viaje',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0
-        ); 
-      }
-
-        /* List<String> ids = requestTaxi.map((e) => e.id).toList();
-        requestPast.forEach((element1) {
-          if(!ids.contains(element1['id'])){
-            Request foundRequest = requestTaxi.where((element) => element.id == element1['id']).toList().first;
-            Fluttertoast.showToast(
-              msg: '${foundRequest.vchNombres} canceló una solicitud de viaje',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );  
-          }
-        }); */
-      
-      requestPast = requestTaxi.map((e) => {
-        'id': e.id,
-        'precio': e.mPrecio 
-      }).toList();
-      
-      setState(() {});
-    });
-
-
-    _channel.bind('SendSolicitudUsuarioChofer${_prefs.idChofer}', (onEvent){
-      final data = json.decode(onEvent.data);
-      final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-      pedidoProvider.request = Request(id: data[0]['iIdViaje'],iIdUsuario: data[0]['iIdUsuario'],dFecReg: '',iTipoViaje: data[0]['iTipoViaje'],mPrecio: data[0]['mPrecio'],vchDni: data[0]['dni'],vchCelular: data[0]['celular'],vchCorreo: data[0]['correo'],vchLatInicial: data[0]['vchLatInicial'],vchLatFinal: data[0]['vchLatFinal'],vchLongInicial: data[0]['vchLongInicial'],vchLongFinal: data[0]['vchLongFinal'],vchNombreInicial: data[0]['vchNombreInicial'],vchNombreFinal: data[0]['vchNombreFinal'],vchNombres: data[0]['vchNombres'],idSolicitud: data[0]['IdSolicitud']);
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
-    });
+    }
+    if(requestTaxi.length < requestPast.length){
+      Fluttertoast.showToast(
+        msg: 'Se canceló una solicitud de viaje',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      ); 
+    }
+    
+    if(requestTaxi.length > requestPast.length){
+      Fluttertoast.showToast(
+          msg: 'Tienes una nueva solicitud de viaje',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      ); 
+    }
+    requestPast = requestTaxi.map((e) => {
+      'id': e.id,
+      'precio': e.mPrecio 
+    }).toList();
+    
+    setState(() {});  
   }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
