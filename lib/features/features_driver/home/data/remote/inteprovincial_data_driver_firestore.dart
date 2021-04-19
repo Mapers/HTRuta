@@ -22,7 +22,7 @@ class InterprovincialDataDriverFirestore{
   }) async{
     LocationEntity fromLocation = interprovincialRoute.from;
     final _prefs = UserPreferences();
-    DocumentReference dr = await firestore.collection('drivers_in_service').add({
+    DocumentReference dr = await firestore.collection('interprovincial_in_service').add({
       'status': toStringFirebaseInterprovincialStatus(status),
       'current_location': GeoPoint(fromLocation.latLang.latitude, fromLocation.latLang.longitude),
       'street': fromLocation.streetName,
@@ -40,7 +40,7 @@ class InterprovincialDataDriverFirestore{
     @required int availableSeats
   }) async{
     try {
-      await firestore.collection('drivers_in_service').doc(documentId).update({
+      await firestore.collection('interprovincial_in_service').doc(documentId).update({
         'available_seats': availableSeats
       });
       return true;
@@ -54,7 +54,7 @@ class InterprovincialDataDriverFirestore{
     @required InterprovincialStatus status
   }) async{
     try {
-      await firestore.collection('drivers_in_service').doc(documentId).update({
+      await firestore.collection('interprovincial_in_service').doc(documentId).update({
         'status': toStringFirebaseInterprovincialStatus(status)
       });
       return true;
@@ -68,7 +68,7 @@ class InterprovincialDataDriverFirestore{
     @required LocationEntity location
   }) async{
     try {
-      await firestore.collection('drivers_in_service').doc(documentId).update({
+      await firestore.collection('interprovincial_in_service').doc(documentId).update({
         'current_location': GeoPoint(location.latLang.latitude, location.latLang.longitude),
         'street': location.streetName,
         'district_name': location.districtName,
@@ -82,7 +82,7 @@ class InterprovincialDataDriverFirestore{
   }
 
   Stream<List<PassengerEntity>> getStreamPassengers({@required String documentId}){
-    return firestore.collection('drivers_in_service').doc(documentId)
+    return firestore.collection('interprovincial_in_service').doc(documentId)
     .collection('passengers').snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
       querySnapshot.docs.map<PassengerEntity>((doc){
@@ -94,7 +94,7 @@ class InterprovincialDataDriverFirestore{
   }
 
   Stream<List<InterprovincialRequestEntity>> getStreamEnabledRequests({@required String documentId}){
-    return firestore.collection('drivers_in_service').doc(documentId)
+    return firestore.collection('interprovincial_in_service').doc(documentId)
     .collection('requests').where('condition', whereNotIn: [
       getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
     ]).snapshots()
@@ -109,7 +109,7 @@ class InterprovincialDataDriverFirestore{
 
   Future<int> releaseSeatsFromPasenger({@required String documentId, @required PassengerEntity passenger}) async{
     try {
-      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       List<dynamic> result = await Future.wait([
         dr.get(),
         dr.collection('passengers').doc(passenger.documentId).delete()
@@ -128,7 +128,7 @@ class InterprovincialDataDriverFirestore{
 
   Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice}) async{
     try {
-      DocumentReference dr = firestore.collection('drivers_in_service').doc(documentId);
+      DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       await dr.collection('requests').doc(request.documentId).update({
         'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
         'price': newPrice

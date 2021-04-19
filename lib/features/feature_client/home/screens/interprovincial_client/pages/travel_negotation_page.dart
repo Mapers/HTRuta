@@ -29,8 +29,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   String amount;
   @override
   void initState() {
-    amountController.text = '344';
-    // amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
+    amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
     super.initState();
   }
   @override
@@ -115,7 +114,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               seats: param.requiredSeats
                             );
                             print(widget.availablesRoutesEntity.fcm_token);
-                            interprovincialClientDataFirebase.addRequestCliet(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
+                            interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
                           },
                         )

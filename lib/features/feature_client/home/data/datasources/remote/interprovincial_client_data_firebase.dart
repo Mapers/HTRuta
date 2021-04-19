@@ -9,10 +9,9 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  Future<bool> addRequestCliet({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver,bool update}) async{
+  Future<bool> addRequestClient({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver,bool update}) async{
     try {
-      print(fcmTokenDriver);
-      await firestore.collection('drivers_in_service').doc(documentId)
+      await firestore.collection('interprovincial_in_service').doc(documentId)
       .collection('requests').add(request.toFirestore);
       pushMessage.sendPushMessage(
         token: fcmTokenDriver, // Token del dispositivo del chofer
@@ -26,7 +25,7 @@ class InterprovincialClientDataFirebase {
   }
 
   Stream<List<InterprovincialRequestEntity>> getStreamContraoferta({@required String documentId}){
-    return firestore.collection('drivers_in_service').doc(documentId)
+    return firestore.collection('interprovincial_in_service').doc(documentId)
     .collection('requests').snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
@@ -41,7 +40,7 @@ class InterprovincialClientDataFirebase {
     try {
       String message = 'Revise las solicitudes';
       if(update){
-        await firestore.collection('drivers_in_service').doc(documentId)
+        await firestore.collection('interprovincial_in_service').doc(documentId)
         .collection('requests').doc(request.documentId).update(
           {
             'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
@@ -49,7 +48,7 @@ class InterprovincialClientDataFirebase {
         );
         message = 'El cliente acepto la oferta';
       }else{
-        await firestore.collection('drivers_in_service').doc(documentId)
+        await firestore.collection('interprovincial_in_service').doc(documentId)
         .collection('requests').doc(request.documentId).delete();
         message = 'Solicitud rechazada';
       }
@@ -65,14 +64,14 @@ class InterprovincialClientDataFirebase {
   }
 
   Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}){
-    return firestore.collection('drivers_in_service').doc(documentId).snapshots().map((documentSnapshot){
+    return firestore.collection('interprovincial_in_service').doc(documentId).snapshots().map((documentSnapshot){
       dynamic dataJson = documentSnapshot.data();
       return InterprovincialLocationDriverEntity.fromJson(dataJson);
     });
   }
 
   Future<bool> checkIfInterprovincialLocationDriverEntityOnService({@required String documentId}) async{
-    DocumentSnapshot ds = await firestore.collection('drivers_in_service').doc(documentId).get();
+    DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     print('..................');
     print(ds.exists);
     print('..................');
