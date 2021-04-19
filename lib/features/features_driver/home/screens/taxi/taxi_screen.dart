@@ -9,6 +9,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -90,21 +91,14 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       await _initCurrentLocation();
       _locationService.getPositionStream().listen((event) async{
         double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-        if(diferencia > 5){
+        if(diferencia > 20){
+          DriverFirestoreService driverFirestoreService = DriverFirestoreService();
           final _prefs = UserPreferences();
-          await _prefs.initPrefs();
-          final data = await referenceDatabase.child('Coordenada').child(_prefs.idChofer).once();
-          if(data.value != null && data.value!= ''){
-            referenceDatabase.child('Coordenada').child(_prefs.idChofer).update({
-              'latitud' : event.latitude,
-              'longitud': event.longitude
-            });
-          }else{
-            referenceDatabase.child('Coordenada').child(_prefs.idChofer).set({
-              'idConductor' : _prefs.idChofer,
-              'latitud' : event.latitude,
-              'longitud': event.longitude
-            });
+          String firestoreId = _prefs.idChofer;
+          double latitud = currentLocation.latitude;
+          double longitud = currentLocation.longitude;
+          if(firestoreId.isNotEmpty){
+            firestoreId = await driverFirestoreService.updateDriverPosition(latitud, longitud, firestoreId);
           }
         }
       });
@@ -389,7 +383,16 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   );
                   isWorking = false;
                 }else{
+                  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                  final _prefs = UserPreferences();
+                  String firestoreId = _prefs.idChofer;
                   isWorking = state;
+                  double latitud = currentLocation.latitude;
+                  double longitud = currentLocation.longitude;
+                  String token = _prefs.tokenPush;
+                  if(firestoreId.isNotEmpty){
+                    firestoreId = await driverFirestoreService.updateDriverAvailability(estado.iEstado, latitud, longitud, token, firestoreId);
+                  }
                 }
                 
               }else{

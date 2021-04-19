@@ -37,4 +37,10 @@ class UserPreferences{
     _prefs.setString('idChofer', value);
   }
 
+  
+  String get firestoreId => _prefs.getString('firestoreId') ?? '';
+
+  set firestoreId(String value) {
+    _prefs.setString('firestoreId', value);
+  }
 }
