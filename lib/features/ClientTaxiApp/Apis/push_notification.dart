@@ -11,12 +11,14 @@ var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 typedef BackgroundMessageHandler = Future<dynamic> Function(Map<String, dynamic> message);
 
 class PushNotificationProvider{
-  
+  PushNotificationProvider._privateConstructor();
+  static final PushNotificationProvider _instance = PushNotificationProvider._privateConstructor();
+  factory PushNotificationProvider() => _instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
+  
   final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final _mensajesStreamController = StreamController<String>.broadcast();
-  Stream<String> get mensajes => _mensajesStreamController.stream;
+  final _mensajesStreamController = StreamController<Map>.broadcast();
+  Stream<Map> get mensajes => _mensajesStreamController.stream;
 
   void initNotifications(BackgroundMessageHandler backgroundMessageHandler){
     _firebaseMessaging.requestNotificationPermissions();
@@ -49,7 +51,7 @@ class PushNotificationProvider{
         print('al display');
         _displayNotification(info, backgroundMessageHandler);
         print('enviar sink');
-        _mensajesStreamController.sink.add(argumento);
+        _mensajesStreamController.sink.add(info);
       },
       onLaunch: (info) async {
         print('============= On Launch ==========');
@@ -60,7 +62,7 @@ class PushNotificationProvider{
           argumento = info['notification']['title'];
         }
         _displayNotification(info, backgroundMessageHandler);
-        _mensajesStreamController.sink.add(argumento);
+        _mensajesStreamController.sink.add(info);
       },
       onResume: (info) async {
         print('============= On Resume ==========');
@@ -70,7 +72,7 @@ class PushNotificationProvider{
           argumento = info['notification']['title'];
         }
         _displayNotification(info, backgroundMessageHandler);
-        _mensajesStreamController.sink.add(argumento);
+        _mensajesStreamController.sink.add(info);
       }
     );
   }

@@ -69,7 +69,11 @@ class _MyAppState extends State<MyApp> {
     pushProvider = PushNotificationProvider();
     pushProvider.initNotifications(myBackgroundMessageHandler);
     pushProvider.mensajes.listen((argumento) async{
-      if(argumento.contains('Rechazados')){
+      Map notification = argumento['notification'];
+      if(notification == null) return;
+      String title = notification['title'];
+      if(title == null) return;
+      if(title.contains('Rechazados')){
         Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
       }
       //Navigator.pushNamed(context, AppRoute.homeDriverScreen);

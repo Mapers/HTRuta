@@ -2,6 +2,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -17,6 +18,7 @@ import 'package:HTRuta/google_map_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -64,14 +66,25 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   bool isLoading = true;
 
   List<Request> requestTaxi = List<Request>();
+  List<Map> requestPast = [];
   final pickupApi = PickupApi();
   var aceptados = List<String>();
   var rechazados = List<String>();
+  PushNotificationProvider pushProvider;
 
   @override
   void initState() {
     super.initState();
-
+    pushProvider = PushNotificationProvider();
+    pushProvider.mensajes.listen((argumento) async{
+      Map data = argumento['data'];
+      if(data == null) return;
+      String newRequest = data['newRequest'] ?? '0';
+      if(newRequest == '1'){
+        await getSolicitudes();
+        analizeChanges(); 
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await _initLastKnownLocation();
       await _initCurrentLocation();
@@ -97,59 +110,29 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       });
       fetchLocation();
       fetchEstadoConductor();
-      isLoading = false;
-      setState(() {
-      });
-      getSolicitudes();
+      isLoading = false; 
+      setState(() {});
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      await getSolicitudes();
+      requestPast = requestTaxi.map((e) => {
+        'id': e.id,
+        'precio': e.mPrecio 
+      }).toList();
+      setState(() {});
     });
-
-    listRequest = [
-      {'id': '0',
-        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
-        'userName' : 'Olivia Ramos',
-        'date' : '08 Ene 2019 12:00 PM',
-        'price' : 150,
-        'distance' : '21km',
-        'addFrom': 'Av. Peru 657',
-        'addTo' : 'Av. Tupac Amaru 567',
-        'locationForm' : LatLng(-8.1034303,-79.0206512),
-        'locationTo' : LatLng(-8.0994694,-79.0302491),
-      },
-      {'id': '1',
-        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
-        'userName' : 'Jordan Diaz',
-        'date' : '08 Ene 2019 12:00 PM',
-        'price' : 150,
-        'distance' : '5km',
-        'addFrom': 'Av. Juan Pablo II 657',
-        'addTo' : 'Av. Tupac Amaru 896',
-        'locationForm' : LatLng(-8.1183595,-79.0414019),
-        'locationTo' : LatLng(-8.0965296,-79.0325108),
-      },
-      {'id': '2',
-        'avatar' : 'https://source.unsplash.com/1600x900/?portrait',
-        'userName' : 'Olivia Ramos',
-        'date' : '08 Ene 2019 at 12:00 PM',
-        'price' : 152,
-        'distance' : '10km',
-        'addFrom': 'Av. America Nte. 657',
-        'addTo' : 'Av. Los Incas 345',
-        'locationForm' : LatLng(-8.0966565,-79.0198259),
-        'locationTo' : LatLng(-8.1159328,-79.0250643),
-      },
-
-    ];
   }
   Future<void> getSolicitudes() async {
-    final _prefs = UserPreferences();
-      await _prefs.initPrefs();
+      final _prefs = UserPreferences();
       final data = await pickupApi.getRequest();
       print(_prefs.idChofer);
       if(data != null){
+        requestTaxi.clear();
+        aceptados.clear();
+        rechazados.clear();
         requestTaxi.addAll(data);
         requestTaxi.reversed;
         var removeData = [];
-
 
         requestTaxi.forEach((data) {
           if(data.aceptados != null){
@@ -177,12 +160,73 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         });
 
         requestTaxi.removeWhere((element) => removeData.contains(element));
-        setState(() {
-          
-        });
       }
   }
-
+  void analizeChanges(){
+    if(requestTaxi.length == requestPast.length){
+      requestTaxi?.forEach((element1) => {
+        requestPast?.forEach((element2) {
+          if(element1.id == element2['id']){
+            if(element1.mPrecio != element2['precio']){
+              double precioAnt = double.parse(element2['precio']);
+              double precioAct = double.parse(element1.mPrecio);
+              double diff = precioAct - precioAnt;
+              if(diff > 0){
+                Fluttertoast.showToast(
+                  msg: '${element1.vchNombres} aumentó la puja en $diff soles',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+                );
+              }else if (diff < 0){ 
+                Fluttertoast.showToast(
+                  msg: '${element1.vchNombres} disminuyó la puja en $diff soles',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              }
+            }
+          }  
+        })
+      });
+    }
+    if(requestTaxi.length < requestPast.length){
+      Fluttertoast.showToast(
+        msg: 'Se canceló una solicitud de viaje',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+      ); 
+    }
+    
+    if(requestTaxi.length > requestPast.length){
+      Fluttertoast.showToast(
+          msg: 'Tienes una nueva solicitud de viaje',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      ); 
+    }
+    requestPast = requestTaxi.map((e) => {
+      'id': e.id,
+      'precio': e.mPrecio 
+    }).toList();
+    
+    setState(() {});  
+  }
   Future<void> fetchEstadoConductor() async{
     Dialogs.openLoadingDialog(context);
     final session = Session();
