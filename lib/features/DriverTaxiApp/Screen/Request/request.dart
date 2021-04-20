@@ -1,8 +1,8 @@
-import 'dart:convert';
-
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
@@ -10,17 +10,13 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_pag
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
-import '../../../../app_router.dart';
 import 'requestDetail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -47,7 +43,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   void navigateToDetail(Request requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
   }
-
   @override
   void initState() {
     pushProvider = PushNotificationProvider();
@@ -55,6 +50,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
+      if (!mounted) return;
       if(newRequest == '1'){
         await loadRequests();
         analizeChanges();  
@@ -72,7 +68,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   }
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
-    final data = await pickupApi.getRequest();
+    LocationEntity locationEntity = await LocationUtil.currentLocation();
+    final data = await pickupApi.getRequest(_prefs.idChofer, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       print(_prefs.idChofer);
       if(data != null){
         requestTaxi.clear();

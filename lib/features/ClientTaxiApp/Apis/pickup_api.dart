@@ -27,12 +27,18 @@ class PickupApi{
     }
   }
 
-  Future<List<Request>> getRequest()async{
+  Future<List<Request>> getRequest(String idChofer, String latitud, String longitud)async{
     final _prefs = UserPreferences();
     await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/obtener-viajes-solicitados';
     try{
-      final response = await http.post(url,body: {'idchofer': _prefs.idChofer});
+      final response = await http.post(
+        url,
+        body: {
+          'idchofer': idChofer,
+          'idLatitud': latitud,
+          'idLongitud': longitud
+        });
       final responseData = pickUpRequestFromJson(response.body);
       if(responseData.success){
         return responseData.data;

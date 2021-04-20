@@ -44,5 +44,37 @@ class PushMessage {
       'to': token,
     });
   }
+  Future<bool> sendPushMessageBroad({@required List<String> tokens, @required String title, @required String description, Map<String, String> data, bool displayNotification = true}) async {
+    data ??= {};
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$_keyCloudMessage'
+      };
 
+      final http.Response result = await http.post(
+        _uriHttps,
+        headers: headers,
+        body: _constructFCMPayloadBroad(tokens, title, description, data),
+      );
+      return result.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+  String _constructFCMPayloadBroad(List<String> tokens, String title, String description, Map<String, String> data) {
+    return jsonEncode({
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'display_notification': 'true',
+        ...data,
+      },
+      'notification': {
+        'title': title,
+        'body': description
+      },
+      'to': tokens,
+    });
+  }
 }

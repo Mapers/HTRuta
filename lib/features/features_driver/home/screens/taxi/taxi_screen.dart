@@ -72,7 +72,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   var aceptados = List<String>();
   var rechazados = List<String>();
   PushNotificationProvider pushProvider;
-
+  
   @override
   void initState() {
     super.initState();
@@ -81,7 +81,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
-      if(newRequest == '1'){
+      if (!mounted) return;
+      if(newRequest == '1' && isWorking){
         await getSolicitudes();
         analizeChanges(); 
       }
@@ -89,19 +90,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await _initLastKnownLocation();
       await _initCurrentLocation();
-      _locationService.getPositionStream().listen((event) async{
-        double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-        if(diferencia > 20){
-          DriverFirestoreService driverFirestoreService = DriverFirestoreService();
-          final _prefs = UserPreferences();
-          String firestoreId = _prefs.idChofer;
-          double latitud = currentLocation.latitude;
-          double longitud = currentLocation.longitude;
-          if(firestoreId.isNotEmpty){
-            firestoreId = await driverFirestoreService.updateDriverPosition(latitud, longitud, firestoreId);
-          }
-        }
-      });
       fetchLocation();
       fetchEstadoConductor();
       isLoading = false; 
@@ -118,7 +106,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   }
   Future<void> getSolicitudes() async {
       final _prefs = UserPreferences();
-      final data = await pickupApi.getRequest();
+      LocationEntity locationEntity = await LocationUtil.currentLocation();
+      final data = await pickupApi.getRequest(_prefs.idChofer, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       print(_prefs.idChofer);
       if(data != null){
         requestTaxi.clear();
@@ -152,7 +141,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
             });
           }
         });
-
         requestTaxi.removeWhere((element) => removeData.contains(element));
       }
   }
@@ -218,7 +206,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       'id': e.id,
       'precio': e.mPrecio 
     }).toList();
-    
+    if (!mounted) return;
     setState(() {});  
   }
   Future<void> fetchEstadoConductor() async{
@@ -298,7 +286,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    addMarker(listRequest[0]['locationForm'], listRequest[0]['locationTo']);
+    // addMarker(listRequest[0]['locationForm'], listRequest[0]['locationTo']);
   }
 
   Future<String> _getFileData(String path) async {
@@ -385,16 +373,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 }else{
                   DriverFirestoreService driverFirestoreService = DriverFirestoreService();
                   final _prefs = UserPreferences();
-                  String firestoreId = _prefs.idChofer;
-                  isWorking = state;
-                  double latitud = currentLocation.latitude;
-                  double longitud = currentLocation.longitude;
                   String token = _prefs.tokenPush;
-                  if(firestoreId.isNotEmpty){
-                    firestoreId = await driverFirestoreService.updateDriverAvailability(estado.iEstado, latitud, longitud, token, firestoreId);
-                  }
+                  String id = _prefs.idChofer;
+                  driverFirestoreService.setDriverData(token, id);
+                  isWorking = state;
                 }
-                
               }else{
                 Dialogs.confirm(context, title: 'Información', message: 'Para comenzar a ganar con Chasqui debe completar su información personal', 
                 onCancel: () { 
@@ -407,6 +390,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 });
               } 
             }else{
+              DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+              final _prefs = UserPreferences();
+              String id = _prefs.idChofer;
+              driverFirestoreService.updateDriverAvalability(false, id);
               isWorking = state;
             }
           },

@@ -6,21 +6,33 @@ class DriverFirestoreService{
   factory DriverFirestoreService() => _instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  //  Stream<QuerySnapshot> getUsers(String uid) => _db.collection("users").where("contactos", arrayContains: uid).snapshots(); 
-  Future<String> updateDriverAvailability(String status, double latitud, double longitud, String fcm_token, String path) async {
+  Future<String> setDriverData(String fcm_token, String path) async {
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
     await ref.set({
-      'current_location' : GeoPoint(latitud, longitud),
       'fcm_token': fcm_token,
-      'status': status,
+      'available': true,
     }).catchError((onError) => print(onError));
     return ref.id;
   }
-  Future<String> updateDriverPosition(double latitud, double longitud, String path) async {
+  Future<String> updateDriverAvalability(bool avaliability, String path) async {
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
     await ref.update({
-      'current_location' : GeoPoint(latitud, longitud),
+      'available': avaliability,
     }).catchError((onError) => print(onError));
     return ref.id;
+  }
+  Future<List<String>> getDrivers() async {
+    CollectionReference ref = _db.collection('taxis_in_service');
+    QuerySnapshot snapshot  = await ref.get();
+    List<String> tokens = [];
+    List<QueryDocumentSnapshot> documents = snapshot.docs;
+    if(documents.isEmpty) return tokens;
+    documents.forEach((QueryDocumentSnapshot element) {
+      Map queryData = element.data();
+      if(queryData['status'] == 'Aprobado'){
+        tokens = queryData['fcm_token'];
+      }
+    });
+    return tokens;
   }
 }

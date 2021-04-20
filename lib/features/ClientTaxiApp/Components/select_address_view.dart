@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
@@ -8,6 +9,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -233,6 +235,13 @@ class _SelectAddressState extends State<SelectAddress> {
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
                       final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios);
+                      PushMessage pushMessage = PushMessage();
+                      Map data = {
+                        'newRequest' : '1'
+                      };
+                      DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                      List<String> tokens = await driverFirestoreService.getDrivers();
+                      pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Solicitud de viaje', description: 'Nueva o actualización de solicitud', data: data);
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;
