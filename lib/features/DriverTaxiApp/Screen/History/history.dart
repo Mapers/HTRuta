@@ -61,7 +61,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                height: 120.0,
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: CalendarCarousel(
                   weekendTextStyle: TextStyle(
@@ -104,7 +103,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       color: Colors.deepPurple,
                       child: Container(
                         padding: EdgeInsets.all(10.0),
-                        height: 70,
                         width: screenSize.width*0.4,
                         child: Row(
                           children: <Widget>[
@@ -131,7 +129,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       color: Colors.deepPurple,
                       child: Container(
                         padding: EdgeInsets.all(10.0),
-                        height: 70,
                         width: screenSize.width*0.4,
                         child: Row(
                           children: <Widget>[
