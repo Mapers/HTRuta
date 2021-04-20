@@ -7,7 +7,7 @@ class LoadingBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    var bodyProgress = SpinKitRipple(color: primaryColor,size: responsive.hp(25),);
+    var bodyProgress = SpinKitRipple(color: primaryColor, size: responsive.hp(25),);
     return bodyProgress;
   }
 }
