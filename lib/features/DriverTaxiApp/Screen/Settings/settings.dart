@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
@@ -18,7 +19,8 @@ class SettingsDriverScreen extends StatefulWidget {
 class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
   final String screenName = 'SETTINGS';
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
-
+  final Session _session = Session();
+  
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -80,36 +82,51 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                               ),
                             ),
                           ),
-                          Container(
-                            width: screenSize.width-70 ,
-                            padding: EdgeInsets.only(left: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text('Steve Armas',style: textBoldBlack,),
-                                      ),
-                                      Container(
-                                          child: Text('Miembro Gold',style: TextStyle(
-                                            fontSize: 12,
-                                            color: greyColor2
-                                          ),)
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Icon(Icons.arrow_forward_ios,color: CupertinoColors.lightBackgroundGray,)
-                                )
-                              ],
-                            ),
-                          )
+                          FutureBuilder<UserSession>(
+                            future: _session.get(),
+                            builder: (context, snapshot) {
+                              if(snapshot.connectionState == ConnectionState.done){
+                                if(snapshot.hasData){
+                                  final data = snapshot.data;
+                                  return Container(
+                                    width: screenSize.width-70 ,
+                                    padding: EdgeInsets.only(left: 20.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                child: Text(data.names.toString(),style: textBoldBlack,),
+                                              ),
+                                              Container(
+                                                  child: Text('Miembro Gold',style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: greyColor2
+                                                  ),)
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerRight,
+                                          child: Icon(Icons.arrow_forward_ios,color: CupertinoColors.lightBackgroundGray,)
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }else{
+                                  return Center(child: Text('Sin informacion del perfil'),);
+                                }
+                              }else{
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                            }
+                          ),
+                          
                         ],
                       ),
                     ),
