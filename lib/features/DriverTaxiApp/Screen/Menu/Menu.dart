@@ -1,13 +1,16 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app_router.dart';
 import '../MyProfile/profile.dart';
 import '../../../../app/styles/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../MyProfile/myProfile.dart';
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class MenuItems {
@@ -228,13 +231,18 @@ class MenuDriverScreens extends StatelessWidget {
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
                           ),
-                          getItemMenu(
-                            onTap: () {
-                              Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
+                          BlocBuilder<DriverServiceBloc, DriverServiceState>(
+                            builder: (ctx, state){
+                              DataDriverServiceState data = state;
+                              return data.typeService != TypeServiceEnum.taxi ?  getItemMenu(
+                                onTap: () {
+                                  Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
+                                },
+                                isSelected: activeScreenName.compareTo('Rutas') == 0,
+                                icon: FontAwesomeIcons.mapMarkedAlt,
+                                text: 'Mis Rutas'
+                              ) : Container();
                             },
-                            isSelected: activeScreenName.compareTo('Rutas') == 0,
-                            icon: FontAwesomeIcons.mapMarkedAlt,
-                            text: 'Mis Rutas'
                           ),
                           getItemMenu(
                             onTap: () {
