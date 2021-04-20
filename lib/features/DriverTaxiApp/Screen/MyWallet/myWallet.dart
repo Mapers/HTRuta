@@ -59,7 +59,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
             Container(
               alignment: Alignment.center,
               child: BankCard(
-                card: BankCardModel('assets/image/icon/bg_blue_card.png','Debit Card', 'JOHN',
+                card: BankCardModel('assets/image/credit_card_empty.png','Debit Card', 'JOHN',
                     '4221 5168 7464 2283', '08/20', 10000000),
               ),
             ),
@@ -76,7 +76,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
 
             GestureDetector(
               onTap: (){
-                Navigator.of(context).pushNamed('/payment_method_driver');
+                // Navigator.of(context).pushNamed('/payment_method_driver');
               },
               child: Container(
                 margin: EdgeInsets.only(left: 20.0,right: 20.0),
