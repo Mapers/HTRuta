@@ -21,7 +21,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
   bool isLoading = true;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       RouterDriveRemoteDataSoruce routerDriverRemoteDataSource = getIt<RouterDriveRemoteDataSoruce>();
