@@ -236,7 +236,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       Dialogs.openLoadingDialog(context);
                       final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios);
                       PushMessage pushMessage = PushMessage();
-                      Map data = {
+                      Map<String, String> data = {
                         'newRequest' : '1'
                       };
                       DriverFirestoreService driverFirestoreService = DriverFirestoreService();

@@ -376,7 +376,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   final _prefs = UserPreferences();
                   String token = _prefs.tokenPush;
                   String id = _prefs.idChofer;
-                  driverFirestoreService.setDriverData(token, id);
+                  driverFirestoreService.setDriverData(token, id, 'Aprobado');
                   isWorking = state;
                 }
               }else{

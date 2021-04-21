@@ -1,5 +1,6 @@
 
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
@@ -153,5 +154,19 @@ class PickupApi{
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
-
+  Future<HistoricalModel> getHistoricalRequest(String idUser)async{
+    final url = '${Config.nuevaRutaApi}/historial-solicitudes-chofer';
+    try{
+      final response = await http.post(url,body : {'idUsuario': idUser});
+      final responseData = historicalModelFromJson(response.body);
+      if(responseData.success){
+        return responseData;
+      }else{
+        return null;
+      }
+    } catch(error){
+      print(error.toString());
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
 }

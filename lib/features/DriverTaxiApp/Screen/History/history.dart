@@ -1,5 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
@@ -18,10 +20,21 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   DateTime selectedDate;
   List<dynamic> event = [];
   String selectedMonth = '';
+  final pickupApi = PickupApi();
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async  {
+        final _prefs = UserPreferences();
+        final data = await pickupApi.getHistoricalRequest("1046");
+        print(data);
+    });
   }
 
   @override

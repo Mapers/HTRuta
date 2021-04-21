@@ -376,7 +376,7 @@ class _DirectionsViewState extends State<DirectionsView> {
             color: Colors.grey.withOpacity(0.7),
             child: Column(
               children: <Widget>[
-                Text('Puede aceptar o rechazar ofertas', style: TextStyle(fontSize: responsive.ip(2.6),color: Colors.white, fontWeight: FontWeight.bold),),
+                Text('Puede aceptar o rechazar ofertas', style: TextStyle(fontSize: responsive.ip(2.6),color: Colors.white, fontWeight: FontWeight.bold)),
                 SizedBox(height: responsive.hp(1),),
                 ListView.builder(
                   shrinkWrap: true,

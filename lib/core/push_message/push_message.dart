@@ -74,7 +74,7 @@ class PushMessage {
         'title': title,
         'body': description
       },
-      'to': tokens,
+      'registration_ids': tokens,
     });
   }
 }

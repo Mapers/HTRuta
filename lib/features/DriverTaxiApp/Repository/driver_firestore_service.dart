@@ -6,11 +6,12 @@ class DriverFirestoreService{
   factory DriverFirestoreService() => _instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<String> setDriverData(String fcm_token, String path) async {
+  Future<String> setDriverData(String fcm_token, String path, String status) async {
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
     await ref.set({
       'fcm_token': fcm_token,
       'available': true,
+      'status': status,
     }).catchError((onError) => print(onError));
     return ref.id;
   }
@@ -30,7 +31,7 @@ class DriverFirestoreService{
     documents.forEach((QueryDocumentSnapshot element) {
       Map queryData = element.data();
       if(queryData['status'] == 'Aprobado'){
-        tokens = queryData['fcm_token'];
+        tokens.add(queryData['fcm_token']);
       }
     });
     return tokens;
