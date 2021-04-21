@@ -66,11 +66,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   bool isWorking = false;
   bool isLoading = true;
 
-  List<Request> requestTaxi = List<Request>();
+  List<Request> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
-  var aceptados = List<String>();
-  var rechazados = List<String>();
+  List<String> aceptados = [];
+  List<String> rechazados = [];
   PushNotificationProvider pushProvider;
   
   @override
@@ -286,7 +286,9 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    // addMarker(listRequest[0]['locationForm'], listRequest[0]['locationTo']);
+    if(listRequest.isNotEmpty){
+      addMarker(listRequest.first['locationForm'], listRequest.first['locationTo']);
+    }
   }
 
   Future<String> _getFileData(String path) async {
@@ -331,7 +333,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     );
     _gMapViewHelper?.cameraMove(fromLocation: locationForm, toLocation: locationTo, mapController: _mapController);
   }
-
 
   @override
   Widget build(BuildContext context) {
