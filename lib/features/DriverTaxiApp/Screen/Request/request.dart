@@ -54,10 +54,15 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
+      String newConfirm = data['newConfirm'] ?? '0';
+      String idSolicitud = data['idSolicitud'] ?? '0';
       if (!mounted) return;
       if(newRequest == '1'){
         await loadRequests();
         analizeChanges();  
+      }
+      if(newConfirm == '1'){
+        await travelConfirmation(idSolicitud);
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
@@ -70,12 +75,13 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     });
     super.initState();
   }
-  /* Future<void> travelConfirmation(){
-    final data = json.decode(onEvent.data);
+  Future<void> travelConfirmation(String idSolicitud) async {
+    final _prefs = UserPreferences();
+    final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-    pedidoProvider.request = Request(id: data[0]['iIdViaje'],iIdUsuario: data[0]['iIdUsuario'],dFecReg: '',iTipoViaje: data[0]['iTipoViaje'],mPrecio: data[0]['mPrecio'],vchDni: data[0]['dni'],vchCelular: data[0]['celular'],vchCorreo: data[0]['correo'],vchLatInicial: data[0]['vchLatInicial'],vchLatFinal: data[0]['vchLatFinal'],vchLongInicial: data[0]['vchLongInicial'],vchLongFinal: data[0]['vchLongFinal'],vchNombreInicial: data[0]['vchNombreInicial'],vchNombreFinal: data[0]['vchNombreFinal'],vchNombres: data[0]['vchNombres'],idSolicitud: data[0]['IdSolicitud']);
+    pedidoProvider.request = Request(id: data.id,iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
-  } */
+  }
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
     LocationEntity locationEntity = await LocationUtil.currentLocation();

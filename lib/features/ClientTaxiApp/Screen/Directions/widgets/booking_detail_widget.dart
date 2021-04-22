@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
@@ -190,6 +191,11 @@ class BookingDetailWidget extends StatelessWidget {
                   try{
                     Dialogs.openLoadingDialog(context);
                     await pickupApi.updatePriceTravelUser(pedidoProvider.idSolicitud, pedidoProvider.precio.toString());
+                    PushMessage pushMessage = PushMessage();
+                    Map<String, String> data = {
+                      'newRequest' : '1'
+                    };
+                    pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cambio de precio', description: 'El cliente cambió el precio', data: data);
                     Navigator.pop(context);
                   }on ServerException catch(error){
                     Navigator.pop(context);

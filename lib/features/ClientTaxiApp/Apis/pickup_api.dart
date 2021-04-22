@@ -5,6 +5,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 
 import '../../../config.dart';
@@ -164,6 +165,18 @@ class PickupApi{
       }else{
         return null;
       }
+    } catch(error){
+      print(error.toString());
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+
+  Future<Request> solicitudesUsuarioChofer(String idSolicitud, String idChofer)async{
+    final url = '${Config.nuevaRutaApi}/solicitudes-usuario-chofer';
+    try{
+      final response = await http.post(url,body: {'idSolicitud': idSolicitud, 'idchofer' : idChofer});
+      final responseData = solicitudUsuarioResponseFromJson(response.body);
+      return responseData.data.first;
     } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');

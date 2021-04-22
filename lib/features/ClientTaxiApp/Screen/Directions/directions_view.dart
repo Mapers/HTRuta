@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -81,12 +82,8 @@ class _DirectionsViewState extends State<DirectionsView> {
       Map data = argumento['data'];
       if(data == null) return;
       String newOffer = data['newOffer'] ?? '0';
-      String newConfirm = data['newConfirm'] ?? '0';
       if (!mounted) return;
       if(newOffer == '1'){
-        await loadOffers();
-      }
-      if(newConfirm == '1'){
         await loadOffers();
       }
     });
@@ -440,7 +437,12 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            PushMessage pushMessage = PushMessage();
+                                            Map<String, String> data = {
+                                              'newConfirm' : '1'
+                                            };
+                                            pushMessage.sendPushMessage(token: actualRequest.token, title: 'Negación', description: 'El usuario rechazó su oferta', data: data);
                                             setState(() {
                                               isLoading = false;
                                             });
@@ -470,11 +472,18 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            PushMessage pushMessage = PushMessage();
+                                            Map<String, String> data = {
+                                              'newConfirm' : '1',
+                                              'idSolicitud': pedidoProvider.idSolicitud
+                                            };
+                                            pushMessage.sendPushMessage(token: actualRequest.token, title: 'Confirmación', description: 'El usuario aceptó su oferta', data: data);
                                             setState(() {
                                               isLoading = false;
                                             });
                                             pedidoProvider.requestDriver = actualRequest;
+
                                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
                                           } on ServerException catch(error){
                                             Navigator.pop(context);

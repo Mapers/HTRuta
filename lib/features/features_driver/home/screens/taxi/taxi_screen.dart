@@ -5,6 +5,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -31,6 +32,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 
 class TaxiDriverServiceScreen extends StatefulWidget {
@@ -86,10 +88,15 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
+      String newConfirm = data['newConfirm'] ?? '0';
+      String idSolicitud = data['idSolicitud'] ?? '0';
       if (!mounted) return;
       if(newRequest == '1' && isWorking){
         await getSolicitudes();
         analizeChanges(); 
+      }
+      if(newConfirm == '1'&& isWorking){
+        await travelConfirmation(idSolicitud);
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
@@ -108,6 +115,13 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       }).toList();
       setState(() {});
     });
+  }
+  Future<void> travelConfirmation(String idSolicitud) async {
+    final _prefs = UserPreferences();
+    final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
+    final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+    pedidoProvider.request = Request(id: data.id,iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+    Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
   }
   Future<void> getSolicitudes() async {
       final _prefs = UserPreferences();
