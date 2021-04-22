@@ -475,7 +475,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                         '', '', '',
                         requestTaxi[index].vchNombreInicial,
                         requestTaxi[index].vchNombreFinal,
-                        aceptar
+                        aceptar,
+                        _prefs.tokenPush
                       );
                       PushMessage pushMessage = PushMessage();
                       Map<String, String> data = {

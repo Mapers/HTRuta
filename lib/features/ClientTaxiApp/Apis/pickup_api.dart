@@ -57,7 +57,7 @@ class PickupApi{
     await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/obtener-viajes-choferes';
     try{
-      final response = await http.get(url,headers : {'idSolicitud': idSolicitud});
+      final response = await http.post(url,body : {'idSolicitud': idSolicitud});
       final responseData = pickUpDriverRequestFromJson(response.body);
       if(responseData.success){
         return responseData.data;
@@ -70,11 +70,11 @@ class PickupApi{
     }
   }
 
-  Future<bool> actionTravel(String idChofer,String idsolicitud, double vchLatInicial, double vchLatFinal, double vchLongInicial, double vchLongFinal,String mPropina,double mPrecio,String iTipoViaje,String vchOrigenReferencia, String vchDestinoReferencia,String vchObservacion,String vchNombreInicial, String vchNombreFinal,String iEstado)async{
+  Future<bool> actionTravel(String idChofer,String idsolicitud, double vchLatInicial, double vchLatFinal, double vchLongInicial, double vchLongFinal,String mPropina,double mPrecio,String iTipoViaje,String vchOrigenReferencia, String vchDestinoReferencia,String vchObservacion,String vchNombreInicial, String vchNombreFinal,String iEstado, String token)async{
     //idsolicitud(esta lo obtenies de la ruta donde se lista),vchLatInicial,vchLatFinal,vchLongInicial,vchLongFinal,mPrecio(este puede ser el precio q propone el chofer),mPropina,iTipoViaje,dFecReg,vchOrigenReferencia,vchDestinoReferencia,vchObservacion
     final url = '${Config.nuevaRutaApi}/registro-viaje-chofer';
     try{
-      final response = await http.post(url,body: {'idchofer':idChofer,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial.toString(), 'vchLatfinal': vchLatFinal.toString(), 'vchLonginicial': vchLongInicial.toString(), 'vchLongfinal': vchLongFinal.toString(), 'mPropina': '', 'mPrecio': mPrecio.toString(),'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
+      final response = await http.post(url,body: {'idchofer':idChofer,'IdTokenChofer': token,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial.toString(), 'vchLatfinal': vchLatFinal.toString(), 'vchLonginicial': vchLongInicial.toString(), 'vchLongfinal': vchLongFinal.toString(), 'mPropina': '', 'mPrecio': mPrecio.toString(),'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){

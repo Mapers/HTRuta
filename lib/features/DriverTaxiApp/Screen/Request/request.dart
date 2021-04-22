@@ -1,10 +1,12 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
@@ -16,6 +18,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'requestDetail.dart';
@@ -67,6 +70,12 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     });
     super.initState();
   }
+  /* Future<void> travelConfirmation(){
+    final data = json.decode(onEvent.data);
+    final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+    pedidoProvider.request = Request(id: data[0]['iIdViaje'],iIdUsuario: data[0]['iIdUsuario'],dFecReg: '',iTipoViaje: data[0]['iTipoViaje'],mPrecio: data[0]['mPrecio'],vchDni: data[0]['dni'],vchCelular: data[0]['celular'],vchCorreo: data[0]['correo'],vchLatInicial: data[0]['vchLatInicial'],vchLatFinal: data[0]['vchLatFinal'],vchLongInicial: data[0]['vchLongInicial'],vchLongFinal: data[0]['vchLongFinal'],vchNombreInicial: data[0]['vchNombreInicial'],vchNombreFinal: data[0]['vchNombreFinal'],vchNombres: data[0]['vchNombres'],idSolicitud: data[0]['IdSolicitud']);
+    Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
+  } */
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
     LocationEntity locationEntity = await LocationUtil.currentLocation();
@@ -477,8 +486,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               '', '', '',
                               taxi.startName,
                               taxi.finalname,
-                              rechazar
+                              rechazar,
+                              _prefs.tokenPush
                             );
+                            await loadRequests();
+                            analizeChanges();
                             Navigator.pop(context);
                             if(dato){
                               //Esperar solicitud
@@ -525,13 +537,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               '', '', '',
                               taxi.startName,
                               taxi.finalname,
-                              aceptar
+                              aceptar,
+                              _prefs.tokenPush
                             );
                             PushMessage pushMessage = PushMessage();
                             Map<String, String> data = {
                               'newOffer' : '1'
                             };
                             pushMessage.sendPushMessage(token: taxi.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+                            await loadRequests();
+                            analizeChanges();
                             Navigator.pop(context);
                             if(dato){
                               //Esperar solicitud

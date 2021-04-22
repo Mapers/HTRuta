@@ -81,8 +81,12 @@ class _DirectionsViewState extends State<DirectionsView> {
       Map data = argumento['data'];
       if(data == null) return;
       String newOffer = data['newOffer'] ?? '0';
+      String newConfirm = data['newConfirm'] ?? '0';
       if (!mounted) return;
       if(newOffer == '1'){
+        await loadOffers();
+      }
+      if(newConfirm == '1'){
         await loadOffers();
       }
     });
@@ -104,8 +108,10 @@ class _DirectionsViewState extends State<DirectionsView> {
   }
   Future<void> loadOffers() async {
     final data = await pickUpApi.getRequestDriver(pedidoProvider.idSolicitud);
+    if(data == null) return;
     requestTaxi.clear();
     requestTaxi.addAll(data);//TODO: Arreglar
+    setState(() {});
   }
 
   @override

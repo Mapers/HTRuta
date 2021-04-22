@@ -270,7 +270,8 @@ class _RequestDetailState extends State<RequestDetail> {
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            '1'
+                            '1',
+                            _prefs.tokenPush
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -295,7 +296,8 @@ class _RequestDetailState extends State<RequestDetail> {
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            '1'
+                            '1',
+                            _prefs.tokenPush
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -320,7 +322,8 @@ class _RequestDetailState extends State<RequestDetail> {
                             '','','',
                             widget.requestItem.vchNombreInicial,
                             widget.requestItem.vchNombreFinal,
-                            '1'
+                            '1',
+                            _prefs.tokenPush
                           );
                           Navigator.pop(context);
                           Navigator.pop(context);
