@@ -98,7 +98,7 @@ class _RequestDetailState extends State<RequestDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(widget.requestItem.vchNombres,style: textBoldBlack,),
+                            Text(widget.requestItem.vchNombres ?? '',style: textBoldBlack,),
                             Text(widget.requestItem.dFecReg, style: textGrey,),
                             Container(
                               child: Row(

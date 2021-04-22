@@ -1,5 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
@@ -57,6 +59,9 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
 
+  final aceptar = '1';
+  final rechazar = '2';
+  
   final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
 
@@ -431,25 +436,64 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               minWidth: MediaQuery.of(context).size.width * 0.9,
               maxHeight: MediaQuery.of(context).size.width * 0.9,
               minHeight: MediaQuery.of(context).size.width * 0.85,
-              cardBuilder: (context, index) => ItemRequest(
-                avatar: 'https://source.unsplash.com/1600x900/?portrait',
-                userName: requestTaxi[index].vchNombres,
-                date: requestTaxi[index].dFecReg,
-                price: requestTaxi[index].mPrecio,
-                distance: '',
-                addFrom: requestTaxi[index].vchNombreInicial,
-                addTo: requestTaxi[index].vchNombreFinal,
-                locationForm: LatLng(
-                  double.parse(requestTaxi[index].vchLatInicial),
-                  double.parse(requestTaxi[index].vchLongInicial),
-                ),
-                locationTo: LatLng(
-                  double.parse(requestTaxi[index].vchLatFinal),
-                  double.parse(requestTaxi[index].vchLongFinal),
-                ),
+              cardBuilder: (context, index) => InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
                 },
+                child: ItemRequest(
+                  avatar: 'https://source.unsplash.com/1600x900/?portrait',
+                  userName: requestTaxi[index].vchNombres,
+                  date: requestTaxi[index].dFecReg,
+                  price: requestTaxi[index].mPrecio,
+                  distance: '',
+                  addFrom: requestTaxi[index].vchNombreInicial,
+                  addTo: requestTaxi[index].vchNombreFinal,
+                  locationForm: LatLng(
+                    double.parse(requestTaxi[index].vchLatInicial),
+                    double.parse(requestTaxi[index].vchLongInicial),
+                  ),
+                  locationTo: LatLng(
+                    double.parse(requestTaxi[index].vchLatFinal),
+                    double.parse(requestTaxi[index].vchLongFinal),
+                  ),
+                  onTap: () async {
+                    print('Aceptar');
+                    try{
+                      final _prefs = UserPreferences();
+                      await _prefs.initPrefs();
+                      Dialogs.openLoadingDialog(context);
+                      final dato = await pickupApi.actionTravel(
+                        _prefs.idChofer,
+                        requestTaxi[index].id,
+                        double.parse(requestTaxi[index].vchLatInicial),
+                        double.parse(requestTaxi[index].vchLatFinal),
+                        double.parse(requestTaxi[index].vchLongInicial),
+                        double.parse(requestTaxi[index].vchLongFinal),
+                        '',
+                        double.parse(requestTaxi[index].mPrecio),
+                        requestTaxi[index].iTipoViaje,
+                        '', '', '',
+                        requestTaxi[index].vchNombreInicial,
+                        requestTaxi[index].vchNombreFinal,
+                        aceptar
+                      );
+                      PushMessage pushMessage = PushMessage();
+                      Map<String, String> data = {
+                        'newOffer' : '1'
+                      };
+                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+                      Navigator.pop(context);
+                      if(dato){
+                        //Esperar solicitud
+                      }else{
+                        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                      }
+                    }on ServerException catch(e){
+                      Navigator.pop(context);
+                      Dialogs.alert(context,title: 'Error', message: e.message);
+                    }
+                  },
+                ),
               ),
               swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
               },

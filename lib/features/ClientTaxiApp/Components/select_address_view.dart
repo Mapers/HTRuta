@@ -8,6 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -234,7 +235,9 @@ class _SelectAddressState extends State<SelectAddress> {
                       final _session = Session();
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
-                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios);
+                      final _prefs = UserPreferences();
+                      String token = _prefs.tokenPush;
+                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios, token);
                       PushMessage pushMessage = PushMessage();
                       Map<String, String> data = {
                         'newRequest' : '1'

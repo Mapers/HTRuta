@@ -17,12 +17,12 @@ class HistoricalModel {
 
     String message;
     bool success;
-    List<Datum> data;
+    List<HistoryItem> data;
 
     factory HistoricalModel.fromJson(Map<String, dynamic> json) => HistoricalModel(
         message: json['message'],
         success: json['success'],
-        data: List<Datum>.from(json['data'].map((x) => Datum.fromJson(x))),
+        data: List<HistoryItem>.from(json['data'].map((x) => HistoryItem.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -32,8 +32,8 @@ class HistoricalModel {
     };
 }
 
-class Datum {
-    Datum({
+class HistoryItem {
+    HistoryItem({
         this.id,
         this.iIdUsuario,
         this.vchCorreo,
@@ -69,23 +69,23 @@ class Datum {
     String vchNombreFinal;
     String comentario;
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json['Id'],
-        iIdUsuario: json['iIdUsuario'],
-        vchCorreo: json['vchCorreo'],
-        dFecReg: json['dFecReg'],
-        vchDni: json['vchDni'],
-        vchNombres: json['vchNombres'],
-        vchCelular: json['vchCelular'],
-        mPrecio: json['mPrecio'],
-        iTipoViaje: json['iTipoViaje'],
-        vchLatInicial: json['vchLatInicial'],
-        vchLatFinal: json['vchLatFinal'],
-        vchLongInicial: json['vchLongInicial'],
-        vchLongFinal: json['vchLongFinal'],
-        vchNombreInicial: json['vchNombreInicial'],
-        vchNombreFinal: json['vchNombreFinal'],
-        comentario: json['Comentario'],
+    factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
+        id: json['Id'] ?? '',
+        iIdUsuario: json['iIdUsuario'] ?? '',
+        vchCorreo: json['vchCorreo'] ?? '',
+        dFecReg: json['dFecReg'] ?? '',
+        vchDni: json['vchDni'] ?? '',
+        vchNombres: json['vchNombres'] ?? '',
+        vchCelular: json['vchCelular'] ?? '',
+        mPrecio: json['mPrecio'] ?? '',
+        iTipoViaje: json['iTipoViaje'] ?? '',
+        vchLatInicial: json['vchLatInicial'] ?? '',
+        vchLatFinal: json['vchLatFinal'] ?? '',
+        vchLongInicial: json['vchLongInicial'] ?? '',
+        vchLongFinal: json['vchLongFinal'] ?? '',
+        vchNombreInicial: json['vchNombreInicial'] ?? '',
+        vchNombreFinal: json['vchNombreFinal'] ?? '',
+        comentario: json['Comentario'] ?? '',
     );
 
     Map<String, dynamic> toJson() => {

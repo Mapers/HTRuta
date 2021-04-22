@@ -4,6 +4,8 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,15 +67,25 @@ class _DirectionsViewState extends State<DirectionsView> {
 
   Channel _channel;
   final pickUpApi = PickupApi();
-  List<RequestDriverData> requestTaxi = [];
-
+  List<DriverRequest> requestTaxi = [];
+  PushNotificationProvider pushProvider;
+  PedidoProvider pedidoProvider;
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
   }
-
   @override
   void initState() {
+    pushProvider = PushNotificationProvider();
+    pushProvider.mensajes.listen((argumento) async{
+      Map data = argumento['data'];
+      if(data == null) return;
+      String newOffer = data['newOffer'] ?? '0';
+      if (!mounted) return;
+      if(newOffer == '1'){
+        await loadOffers();
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       // final providerData = Provider.of<PedidoProvider>(context,listen: false);
       // final data = await pickUpApi.getRequestDriver(providerData.idSolicitud);
@@ -84,12 +96,16 @@ class _DirectionsViewState extends State<DirectionsView> {
       //   });
       // }
     });
-    initPusher();
     print(widget?.placeBloc?.formLocation);
     print(widget?.placeBloc?.locationSelect);
     addMakers();
     getRouter();
     super.initState();
+  }
+  Future<void> loadOffers() async {
+    final data = await pickUpApi.getRequestDriver(pedidoProvider.idSolicitud);
+    requestTaxi.clear();
+    requestTaxi.addAll(data);//TODO: Arreglar
   }
 
   @override
@@ -200,35 +216,6 @@ class _DirectionsViewState extends State<DirectionsView> {
         });
 
       }
-    });
-  }
-
-  Future<void> initPusher()async{ 
-    try{
-      await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
-    }catch(e){
-      print(e);
-    }
-
-    Pusher.connect(
-      onConnectionStateChange: (val) {
-          print(val.currentState);
-      },
-      onError: (error){
-        print(error.message);
-      }
-    );
-
-    _channel = await Pusher.subscribe('solicitud');
-    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
-
-    await _channel.bind('SendSolicitudChofer${pedidoProvider.idSolicitud}', (onEvent) {
-      print(onEvent.data);
-      requestTaxi.clear();
-      requestTaxi.addAll(requestDriverFromJson(onEvent.data));
-      setState(() {
-        
-      });
     });
   }
 
@@ -349,7 +336,7 @@ class _DirectionsViewState extends State<DirectionsView> {
 
   @override
   Widget build(BuildContext context) {
-    final pedidoProvider = Provider.of<PedidoProvider>(context);
+    pedidoProvider = Provider.of<PedidoProvider>(context);
     final responsive = Responsive(context);
     return Stack(
       children: <Widget>[

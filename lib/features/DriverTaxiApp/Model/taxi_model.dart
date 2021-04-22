@@ -21,6 +21,7 @@ class TaxiModel {
   final String accepteds;
   final String queryId;
   final String comentario;
+  final String token;
 
   TaxiModel({
     @required this.id,
@@ -42,6 +43,7 @@ class TaxiModel {
     @required this.accepteds,
     @required this.queryId,
     @required this.comentario,
+    @required this.token,
   });
 
   factory TaxiModel.empty(){

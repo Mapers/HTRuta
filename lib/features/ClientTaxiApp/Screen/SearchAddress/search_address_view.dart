@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +22,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
   FocusNode nodeTo = FocusNode();
   String formLocation;
   String toLocation;
+  Timer _timer;
 
   @override
   void initState() {
@@ -168,7 +171,10 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       ),
                       onChanged: (String value) async {
                         toLocation = value;
-                        await placeBloc?.search(value);
+                        _timer?.cancel();
+                        _timer = Timer(Duration(milliseconds: 500), (){
+                          placeBloc?.search(value);
+                        });
                       },
                       onTap: (){
                         setState(() {

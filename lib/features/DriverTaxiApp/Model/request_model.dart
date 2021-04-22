@@ -24,7 +24,8 @@ class Request {
       this.rechazados,
       this.aceptados,
       this.idSolicitud,
-      this.comentario
+      this.comentario,
+      this.token
   });
 
   String id;
@@ -46,6 +47,7 @@ class Request {
   String aceptados;
   String idSolicitud;
   String comentario;
+  String token;
 
   factory Request.fromJson(Map<String, dynamic> json) => Request(
       id: json['Id'],
@@ -67,6 +69,7 @@ class Request {
       aceptados: json['aceptados'],
       idSolicitud: json['IdSolicitud'],
       comentario: json['Comentario'] ?? '',
+      token: json['IdTokenCliente'] ?? '',
   );
 
   Map<String, dynamic> toJson() => {

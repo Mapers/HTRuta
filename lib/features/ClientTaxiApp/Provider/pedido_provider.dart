@@ -1,3 +1,4 @@
+import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/requestDriver_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class PedidoProvider extends ChangeNotifier{
   Request _request;
   int _contador = 0;
   double _precio;
-  RequestDriverData _requestDriver;
+  DriverRequest _requestDriver;
 
   String get idSolicitud => _idSolicitud;
 
@@ -24,9 +25,9 @@ class PedidoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  RequestDriverData get requestDriver => _requestDriver;
+  DriverRequest get requestDriver => _requestDriver;
 
-  set requestDriver(RequestDriverData data){
+  set requestDriver(DriverRequest data){
     _requestDriver = data;
     notifyListeners();
   }

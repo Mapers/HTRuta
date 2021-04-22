@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
-  @override
+  /* @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -35,7 +36,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
         final data = await pickupApi.getHistoricalRequest("1046");
         print(data);
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -179,18 +180,22 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                 child: Scrollbar(
                   child: TabBarView(
                     children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  print('$index');
-                                  navigateToDetail(index.toString());
-                                },
-                                child: historyItem()
-                            );
+                      FutureBuilder(
+                        future: pickupApi.getHistoricalRequest("1046"),
+                        builder: (context, snapshot) {
+                          if(snapshot.hasError) return Center(child: CircularProgressIndicator());
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                            case ConnectionState.none: return Center(child: CircularProgressIndicator());
+                            case ConnectionState.active: {
+                              return historyTaxisList(snapshot.data);
+                            }
+                            case ConnectionState.done: {
+                              return historyTaxisList(snapshot.data);
+                            }
                           }
+                          return Center(child: CircularProgressIndicator());
+                        }
                       ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -229,8 +234,23 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
     )
     );
   }
+  Widget historyTaxisList(HistoricalModel history){
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: history.data.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+            onTap: () {
+              print('$index');
+              navigateToDetail(index.toString());
+            },
+            child: historyItem(history.data[index])
+        );
+      }
+    );
+  }
 
-  Widget historyItem() {
+  Widget historyItem(HistoryItem item) {
     return Card(
         margin: EdgeInsets.all(10.0),
         elevation: 10.0,
@@ -269,8 +289,9 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Olivia Ramos',style: textBoldBlack,),
-                          Text('08 Ene 2019 12:00 PM', style: textGrey,),
+                          Text(item.vchNombres,style: textBoldBlack,),
+                          Text(item.dFecReg, style: textGrey,),
+                          // Text('08 Ene 2019 12:00 PM', style: textGrey,),
                           Container(
                             child: Row(
                               children: <Widget>[
@@ -306,7 +327,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('S/.250.0',style: textBoldBlack,),
+                          Text(item.mPrecio,style: textBoldBlack,),
+                          // Text('S/.250.0',style: textBoldBlack,),
                           Text('2.2 Km',style: textGrey,),
                         ],
                       ),
@@ -324,7 +346,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Recoger'.toUpperCase(),style: textGreyBold,),
-                          Text('Av. Peru 657',style: textStyle,),
+                          Text(item.vchNombreInicial,style: textStyle,),
 
                         ],
                       ),
@@ -335,7 +357,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Llegada'.toUpperCase(),style: textGreyBold,),
-                          Text('Av. Tupac Amaru 567',style: textStyle,),
+                          Text(item.vchNombreFinal,style: textStyle,),
 
                         ],
                       ),

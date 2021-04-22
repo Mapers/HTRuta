@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
@@ -236,7 +237,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       startName: request.vchNombreInicial,
                       typeTravel: request.iTipoViaje,
                       userId: request.iIdUsuario,
-                      comentario: request.comentario
+                      comentario: request.comentario,
+                      token: request.token,
                     );
                     return GestureDetector(
                       onTap: () {
@@ -525,7 +527,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               taxi.finalname,
                               aceptar
                             );
-                            
+                            PushMessage pushMessage = PushMessage();
+                            Map<String, String> data = {
+                              'newOffer' : '1'
+                            };
+                            pushMessage.sendPushMessage(token: taxi.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
                             Navigator.pop(context);
                             if(dato){
                               //Esperar solicitud
