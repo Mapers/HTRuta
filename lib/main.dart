@@ -76,7 +76,6 @@ class _MyAppState extends State<MyApp> {
       if(title.contains('Rechazados')){
         Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
       }
-      //Navigator.pushNamed(context, AppRoute.homeDriverScreen);
     });
   }
 

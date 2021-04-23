@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
@@ -110,7 +111,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     }else{
       if(serviceInCourseEntity.entityType == TypeEntityEnum.driver){
         BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourseEntity.serviceType));
-        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeDriverScreen, (route) => false);
+        Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourseEntity), (_) => false);
+      }else if(serviceInCourseEntity.entityType == TypeEntityEnum.passenger){
+        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
       }
     }
     // _showDialogQualification();

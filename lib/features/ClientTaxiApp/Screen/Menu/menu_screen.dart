@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -164,7 +165,7 @@ class MenuScreens extends StatelessWidget {
           FlatButton(
             onPressed: (){
               Navigator.pop(context);
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeDriverScreen, (Route<dynamic> route) => false);
+              Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
             }, 
             child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

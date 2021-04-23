@@ -12,3 +12,14 @@ String toStringFirebaseInterprovincialStatus(InterprovincialStatus status){
   }
   return null;
 }
+
+InterprovincialStatus toInterprovincialStatusFromString(String status){
+  switch (status) {
+    case 'ON_WHEREABOUTS':
+      return InterprovincialStatus.onWhereabouts;
+    case 'IN_ROUTE':
+      return InterprovincialStatus.inRoute;
+    default:
+  }
+  return null;
+}

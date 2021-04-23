@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
@@ -58,7 +59,7 @@ class _RegisterDriverPageState extends State<RegisterDriverPage> {
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
-                    Dialogs.confirm(context,message: '¿Está seguro de que quiere cerrar esta ventana?',onCancel: (){}, onConfirm: () => Navigator.pushNamedAndRemoveUntil(context, '/home_driver', (route) => false));
+                    Dialogs.confirm(context,message: '¿Está seguro de que quiere cerrar esta ventana?',onCancel: (){}, onConfirm: () => Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(), (_) => false));
                   },
                   child: Text(
                     'Cerrar',
@@ -180,7 +181,7 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                             await authApi.loginUser(datosUsuario['correo'], datosUsuario['password']);
                             Navigator.pop(context);
                             if(respuesta){
-                              Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
+                              Dialogs.confirm(context,title: 'Informacion', message: 'Se enviaron sus datos correctamente, revisara una notificacion con la respuesta en un plazo de 2 días, gracias', onConfirm: (){ Navigator.of(context).pushReplacement(Routes.toHomeDriverPage()); });
                             }else{
                               Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
                             }

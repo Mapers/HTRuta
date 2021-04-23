@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
+import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
@@ -13,7 +14,8 @@ import 'package:HTRuta/injection_container.dart' as ij;
 
 class InterprovincialScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
-  InterprovincialScreen({Key key, @required this.parentScaffoldKey}) : super(key: key);
+  final ServiceInCourseEntity serviceInCourse;
+  InterprovincialScreen({Key key, @required this.parentScaffoldKey, this.serviceInCourse}) : super(key: key);
 
   @override
   _InterprovincialScreenState createState() => _InterprovincialScreenState();
@@ -24,8 +26,9 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   @override
   void initState() { 
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      String documentID = widget.serviceInCourse?.documentId;
+      BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent(documentID));
     });
   }
 

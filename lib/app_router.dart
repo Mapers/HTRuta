@@ -27,7 +27,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Notification/notification.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/request.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Settings/settings.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/home_driver_page.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +64,6 @@ class AppRoute {
   static const String termsConditionsScreen = '/termsConditions';
   static const String chatScreen = '/chat';
   static const String cargaScreen = '/carga';
-  static const String homeDriverScreen = '/home_driver';
   static const String homeClientScreen = '/home_clien';
   static const String requestDriverScreen = '/request_driver';
   static const String walletDriverScreen = '/my_wallet_driver';
@@ -120,8 +118,6 @@ class AppRoute {
         return PageViewTransition(builder: (_) => ChatScreen());
       case cargaScreen:
         return PageViewTransition(builder: (_) => CargaPage());
-      case homeDriverScreen:
-        return PageViewTransition(builder: (_) => HomeDriverPage());
       case homeClientScreen:
         return PageViewTransition(builder: (_) => HomeClientPage());
       case requestDriverScreen:

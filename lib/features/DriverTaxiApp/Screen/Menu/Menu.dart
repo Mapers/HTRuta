@@ -207,7 +207,7 @@ class MenuDriverScreens extends StatelessWidget {
                           getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
-                              navigatorRemoveUntil(context,'home_driver');
+                              Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
                             },
                             isSelected: activeScreenName.compareTo('HOME') == 0,
                             icon: FontAwesomeIcons.home,
