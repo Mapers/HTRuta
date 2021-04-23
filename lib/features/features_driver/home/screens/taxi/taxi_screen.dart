@@ -19,6 +19,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
@@ -492,7 +493,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                         aceptar,
                         _prefs.tokenPush
                       );
-                      PushMessage pushMessage = PushMessage();
+                      PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
                         'newOffer' : '1'
                       };
