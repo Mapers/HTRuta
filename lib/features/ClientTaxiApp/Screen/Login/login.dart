@@ -34,43 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final isOk = await authApi.loginUser(_email, _password);
         Navigator.pop(context);
         if(isOk){
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
         }
       }
     } on ServerException catch (error){
       Navigator.pop(context);
       Dialogs.alert(context,title: 'Error', message: error.message);
     }
-    // if(isValid){
-    //   setState(() {
-    //     _isFetching = true;
-    //   });
-    //   final isOk = await authApi.loginFirebase(context,_email, _password);
-    //   setState(() {
-    //     _isFetching = false;
-    //   });
-    //   if(isOk != null){
-    //     if(isOk['ok']){
-    //       final usuario = await _usuarioApi.loginServer(
-    //         context,
-    //         email: _email,
-    //         password: _password,
-    //         idToken: isOk['idToken'],
-    //         refreshToken: isOk['refreshToken'],
-    //         expiresIn: int.parse(isOk['expiresIn'])
-    //       );
-    //       if(usuario != null){
-    //         print(usuario.token);
-    //         AppConfig.codigoUsuario = usuario.codUsu;
-    //         authProvider.isLogged = true;
-    //         Navigator.pushNamedAndRemoveUntil(context, 'route', (_) => false);
-    //       }
-    //     }else{
-    //       authProvider.isLogged = false;
-    //       utils.Dialogs.alert(context,title: 'Error',message: isOk['mensaje']);
-    //     }
-    //   }
-    // }
   }
 
   @override
