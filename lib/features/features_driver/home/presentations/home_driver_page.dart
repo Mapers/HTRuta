@@ -1,8 +1,8 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/interprovincial_screen.dart';
 import 'package:HTRuta/features/features_driver/home/screens/taxi/taxi_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class HomeDriverPage extends StatefulWidget {
-  HomeDriverPage({Key key}) : super(key: key);
+  final ServiceInCourseEntity serviceInCourse;
+  HomeDriverPage({Key key, @required this.serviceInCourse}) : super(key: key);
 
   @override
   _HomeDriverPageState createState() => _HomeDriverPageState();
@@ -41,7 +42,7 @@ class _HomeDriverPageState extends State<HomeDriverPage> {
                   case TypeServiceEnum.taxi:
                     return TaxiDriverServiceScreen(parentScaffoldKey: _scaffoldKey);
                   case TypeServiceEnum.interprovincial:
-                    return InterprovincialScreen(parentScaffoldKey: _scaffoldKey);
+                    return InterprovincialScreen(parentScaffoldKey: _scaffoldKey, serviceInCourse: widget.serviceInCourse);
                   default:
                     return Text('Service not found!');
                 }

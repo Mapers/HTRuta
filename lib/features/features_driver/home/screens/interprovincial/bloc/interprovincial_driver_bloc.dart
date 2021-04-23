@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
@@ -19,7 +20,8 @@ part 'interprovincial_driver_state.dart';
 class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, InterprovincialDriverState> {
   final InterprovincialDriverDataRemote interprovincialDriverDataRemote;
   final InterprovincialDataDriverFirestore interprovincialDataFirestore;
-  InterprovincialDriverBloc({@required this.interprovincialDataFirestore, @required this.interprovincialDriverDataRemote}) : super(DataInterprovincialDriverState.initial());
+  final ServiceDataRemote serviceDataRemote;
+  InterprovincialDriverBloc({@required this.interprovincialDataFirestore, @required this.interprovincialDriverDataRemote, @required this.serviceDataRemote}) : super(DataInterprovincialDriverState.initial());
 
   @override
   Stream<InterprovincialDriverState> mapEventToState(
@@ -27,10 +29,22 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
   ) async* {
     if(event is GetDataInterprovincialDriverEvent){
       yield DataInterprovincialDriverState.initial();
-      await Future.delayed(Duration(seconds: 1));
-      yield DataInterprovincialDriverState.initial().copyWith(
-        status: InterprovincialStatus.notEstablished
-      );
+      try {
+        if(event.documentId != null){
+          DataInterprovincialDriverState newState = await interprovincialDataFirestore.getDataInterprovincialDriver(documentId: event.documentId);
+          if(newState == null) throw LocalException(message: 'Documento no encontrado.');
+
+          yield newState.copyWith(
+            routeService: await serviceDataRemote.getInterprovincialRouteInServiceById(event.documentId),
+          );
+        }else{
+          throw LocalException(message: 'Documento no encontrado.');
+        }
+      } catch (_) {
+        yield DataInterprovincialDriverState.initial().copyWith(
+          status: InterprovincialStatus.notEstablished
+        );
+      }
     }else if(event is SelectRouteInterprovincialDriverEvent){
       yield DataInterprovincialDriverState.initial(loadingMessage: 'Seleccionando ruta');
       try {
@@ -45,6 +59,10 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           documentId: documentId,
           interprovincialRoute: event.interprovincialRoute,
           startDateTime: event.dateTime
+        );
+        await interprovincialDataFirestore.addServiceIdToDocumentService(
+          documentId: documentId,
+          serviceId: serviceId
         );
         final _session = Session();
         final dataUsuario = await _session.get();

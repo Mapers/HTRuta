@@ -4,6 +4,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,9 +31,39 @@ class InterprovincialDataDriverFirestore{
       'province_name': fromLocation.provinceName,
       'region_name': fromLocation.regionName,
       'available_seats': availableSeats,
+      'date_start_service': routeStartDateTime,
       'fcm_token': _prefs.tokenPush
     });
     return dr.id;
+  }
+  Future<bool> addServiceIdToDocumentService({
+    @required String documentId,
+    @required String serviceId,
+  }) async{
+    try {
+      await firestore.collection('interprovincial_in_service').doc(documentId).update({
+        'service_id': serviceId
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  Future<DataInterprovincialDriverState> getDataInterprovincialDriver({@required String documentId}) async{
+    try {
+      final ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
+      Map<String, dynamic> data = ds.data();
+      return DataInterprovincialDriverState(
+        availableSeats: data['available_seats'],
+        documentId: ds.id,
+        status: toInterprovincialStatusFromString(data['status']),
+        routeService: null,
+        routeStartDateTime: DateTime.fromMillisecondsSinceEpoch((data['date_start_service'] as Timestamp).microsecondsSinceEpoch),
+        loadingMessage: 'Cargando'
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<bool> updateSeatsQuantity({

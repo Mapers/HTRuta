@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/validations.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/home_driver_page.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 
@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                       color: primaryColor,
                                                       icon:  Text(''),
                                                       label:  Text('Registrate', style: headingWhite,),
-                                                      onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeDriverPage())),
+                                                      onPressed: () => Navigator.pushReplacement(context, Routes.toHomeDriverPage()),
                                                     ),
                                                   ),
                                                 ],

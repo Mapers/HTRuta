@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
@@ -198,7 +199,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
                               bool respuesta = await registroConductorApi.actualizarDocumentosRechazados(fotosData);
                               Navigator.pop(context);
                               if(respuesta){
-                                Dialogs.confirm(context, title: 'Informacion', message: 'Se envio la informacion exitosamente',onConfirm: (){Navigator.pushReplacementNamed(context, AppRoute.homeDriverScreen); });
+                                Dialogs.confirm(context, title: 'Informacion', message: 'Se envio la informacion exitosamente',onConfirm: (){Navigator.pushReplacement(context, Routes.toHomeDriverPage()); });
                               }else{
                                 Dialogs.alert(context, title: 'Error', message: 'No se pudo enviar la informacion, volver a intentarlo');
                               }

@@ -7,7 +7,12 @@ abstract class InterprovincialDriverEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetDataInterprovincialDriverEvent extends InterprovincialDriverEvent {}
+class GetDataInterprovincialDriverEvent extends InterprovincialDriverEvent {
+  final String documentId;
+  GetDataInterprovincialDriverEvent(this.documentId);
+  @override
+  List<Object> get props => [documentId];
+}
 
 class SelectRouteInterprovincialDriverEvent extends InterprovincialDriverEvent {
   final DateTime dateTime;

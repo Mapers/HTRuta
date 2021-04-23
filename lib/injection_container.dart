@@ -45,7 +45,8 @@ Future<void> init() async {
   getIt.registerLazySingleton<InterprovincialDriverBloc>(
     () => InterprovincialDriverBloc(
       interprovincialDataFirestore: getIt(),
-      interprovincialDriverDataRemote: getIt()
+      interprovincialDriverDataRemote: getIt(),
+      serviceDataRemote: getIt()
     )
   );
 
@@ -102,7 +103,7 @@ Future<void> init() async {
   //? General
   getIt.registerLazySingleton<ServiceDataRemote>(
     () => ServiceDataRemote(
-      client: getIt()
+      requestHttp: getIt()
     )
   );
   getIt.registerLazySingleton<RequestHttp>(
