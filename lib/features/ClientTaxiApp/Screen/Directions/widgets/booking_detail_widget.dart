@@ -9,6 +9,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 
 class BookingDetailWidget extends StatelessWidget {
   @required final VoidCallback bookingSubmit;
@@ -195,7 +196,9 @@ class BookingDetailWidget extends StatelessWidget {
                     Map<String, String> data = {
                       'newRequest' : '1'
                     };
-                    pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cambio de precio', description: 'El cliente cambió el precio', data: data);
+                    DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                    List<String> tokens = await driverFirestoreService.getDrivers();
+                    pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Actualización precio', description: 'El usuario actualizó la oferta', data: data);
                     Navigator.pop(context);
                   }on ServerException catch(error){
                     Navigator.pop(context);
