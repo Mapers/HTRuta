@@ -18,7 +18,7 @@ class PushMessage {
         'Authorization': 'key=$_keyCloudMessage'
       };
 
-      final http.Response result = await http.post(
+      final result = await client.post(
         _uriHttps,
         headers: headers,
         body: _constructFCMPayload(token, title, description, data),

@@ -2,6 +2,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
@@ -166,8 +167,7 @@ class BookingDetailWidget extends StatelessWidget {
                 OutlineButton(
                   borderSide: BorderSide(color: primaryColor, width: 2.0),
                   shape:RoundedRectangleBorder(
-                    borderRadius:
-                       BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   onPressed: (){
                     pedidoProvider.incrementarPrecio();
@@ -192,7 +192,7 @@ class BookingDetailWidget extends StatelessWidget {
                   try{
                     Dialogs.openLoadingDialog(context);
                     await pickupApi.updatePriceTravelUser(pedidoProvider.idSolicitud, pedidoProvider.precio.toString());
-                    PushMessage pushMessage = PushMessage();
+                    PushMessage pushMessage = getIt<PushMessage>();
                     Map<String, String> data = {
                       'newRequest' : '1'
                     };

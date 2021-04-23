@@ -14,7 +14,7 @@ class RequestHttp{
   Future<ResponseHttp> get(String url, { dynamic data = '' }) async {
     ResponseHttp response;
     try {
-      final result = await http.get(
+      final result = await client.get(
         url,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

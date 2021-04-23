@@ -7,6 +7,7 @@ import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -438,7 +439,7 @@ class _DirectionsViewState extends State<DirectionsView> {
                                               isLoading = true;
                                             });
                                             await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
-                                            PushMessage pushMessage = PushMessage();
+                                            PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1'
                                             };
@@ -473,7 +474,7 @@ class _DirectionsViewState extends State<DirectionsView> {
                                               isLoading = true;
                                             });
                                             await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
-                                            PushMessage pushMessage = PushMessage();
+                                            PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',
                                               'idSolicitud': pedidoProvider.idSolicitud
