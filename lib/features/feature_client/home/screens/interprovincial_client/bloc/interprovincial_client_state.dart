@@ -14,7 +14,7 @@ class DataInterprovincialClientState extends InterprovincialClientState {
   final InteprovincialClientStatus status;
   final String loadingMessage;
   final InterprovincialRouteInServiceEntity interprovincialRoute;
-  DataInterprovincialClientState({@required this.loadingMessage, @required this.status, @required this.interprovincialRoute});
+  DataInterprovincialClientState({ this.loadingMessage, this.status, this.interprovincialRoute});
 
   factory DataInterprovincialClientState.initial({String loadingMessage}){
     return DataInterprovincialClientState(
