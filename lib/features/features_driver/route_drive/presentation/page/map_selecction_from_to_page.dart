@@ -30,8 +30,8 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   bool messageController = false;
   String txtFrom;
   String txtTo;
-  LatLng from;
-  LatLng to;
+  LocationEntity from;
+  LocationEntity to;
   LocationEntity whereaboutsFrom;
   LocationEntity whereaboutsTo;
   TextEditingController fromController = TextEditingController();
@@ -132,14 +132,15 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     try {
       if(inputSelecter){
-        from = pos;
+        // ignore: missing_required_param
+        from =  LocationEntity( latLang: pos)  ;
         openLoadingDialog(context);
-        List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latitude, from.longitude);
+        List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latLang.latitude , from.latLang.longitude);
         Placemark placemark = placemarkFrom.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
           whereaboutsFrom = LocationEntity(
-            latLang: from,
+            latLang: from.latLang,
             regionName: placemark.administrativeArea,
             provinceName: placemark.subAdministrativeArea ,
             districtName: placemark.locality,
@@ -147,7 +148,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           );
             fromController.text = placemark.thoroughfare;
           Marker markerFrom = _mapViewerUtil.generateMarker(
-            latLng: from,
+            latLng: from.latLang,
             nameMarkerId: 'FROM_POSITION_MARKER',
           );
           _markers[markerFrom.markerId] = markerFrom;
@@ -157,14 +158,15 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           appearMesage();
         }
       } else {
-        to = pos;
+        // ignore: missing_required_param
+        to = LocationEntity(latLang:pos);
         openLoadingDialog(context);
-        List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latitude, to.longitude);
+        List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latLang.latitude , to.latLang.longitude);
         Placemark placemark = placemarkTo.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
           whereaboutsTo = LocationEntity(
-            latLang: to,
+            latLang: to.latLang,
             regionName: placemark.administrativeArea,
             provinceName: placemark.subAdministrativeArea ,
             districtName: placemark.locality,
@@ -172,7 +174,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           );
           toController.text = placemark.thoroughfare;
           Marker markerTo = _mapViewerUtil.generateMarker(
-            latLng: to,
+            latLng: to.latLang,
             nameMarkerId: 'TO_POSITION_MARKER',
           );
           _markers[markerTo.markerId] = markerTo;
@@ -191,7 +193,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   void drawRoute()async{
     if(_markers.length == 2){
       openLoadingDialog(context);
-      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', from, to);
+      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', from, to);
       Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
     }
@@ -227,12 +229,11 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     );
   }
   void cleanFrom(){
-    whereaboutsFrom = LocationEntity(latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' );
+    whereaboutsFrom = LocationEntity(latLang: from.latLang, regionName: '', provinceName: '' , districtName: '', streetName: '' );
   }
   void cleanTo(){
-    whereaboutsTo = LocationEntity( latLang: to, regionName: '', provinceName: '' , districtName: '', streetName: '' );
+    whereaboutsTo = LocationEntity( latLang: to.latLang, regionName: '', provinceName: '' , districtName: '', streetName: '' );
   }
-  //! cierre
 }
 
 class PositionedDarkCardWidget extends StatelessWidget {
