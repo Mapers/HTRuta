@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
@@ -15,6 +16,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -22,31 +24,33 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
-  Animation animation, delayedAnimation, muchDelayAnimation, transfor,fadeAnimation;
   AnimationController animationController;
   final Session _session =  Session();
   final _prefs = UserPreferences();
   final OnBoardingApi onboardingApi = OnBoardingApi();
   Onboarding dataOnBoarding;
+  VideoPlayerController _controller;
+  Animation<double> rotacion;
 
   @override
   void initState(){
     super.initState();
-    animationController = AnimationController(
-      duration: Duration(milliseconds: 1000),
-      vsync: this
-    );
-
-    animation = Tween(begin: 0.0, end: 0.0).animate(CurvedAnimation(
+    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1500));
+    rotacion = Tween(
+      begin: 0.0,
+      end: 2 * math.pi
+    ).animate(
+      CurvedAnimation(
         parent: animationController,
-        curve: Curves.fastOutSlowIn
-    ));
-    transfor = BorderRadiusTween(
-      begin: BorderRadius.circular(125.0),
-      end: BorderRadius.circular(0.0)).animate(
-      CurvedAnimation(parent: animationController, curve: Curves.ease)
+        curve: Curves.easeInOutCubic
+      )
     );
-    fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(animationController);
+    _controller = VideoPlayerController.asset('assets/splash_video.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.play();
+        _controller.setLooping(true);
+      });
     animationController.forward();
     Timer( Duration(seconds: 3), () async{
       final data = await _session.get();
@@ -121,30 +125,48 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (BuildContext context, Widget child) {
-        return Scaffold(
-          body:  Container(
-            decoration:  BoxDecoration(color: Color(0XFFF3E700)),
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child:  Center(
-                    child: FadeTransition(
-                      opacity: fadeAnimation,
-                      child: Image.asset('assets/image/logosplash.png', height: 200)
-                    ),
-                  ),
-                ),
-              ],
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Transform.scale(
+            scale: MediaQuery.of(context).size.aspectRatio /
+              _controller.value.aspectRatio,
+            child: Center(
+              child: Container(
+              child: _controller.value.initialized
+                ? AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                  )
+                : AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: Image.asset('assets/first_frame.jpg'),
+                  )
+              ),
             ),
           ),
-        );
-      }
+          AnimatedBuilder(
+            animation: animationController,
+            builder: (BuildContext context, Widget child){
+              return Transform.rotate(
+                angle: rotacion.value,
+                child: Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.width * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/image/logosplash.png')
+                      )
+                    )
+                  ),
+                )
+              );
+            }
+          )
+        ],
+      )
     );
   }
 }
