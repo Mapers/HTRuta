@@ -484,7 +484,6 @@ class _DirectionsViewState extends State<DirectionsView> {
                                               isLoading = false;
                                             });
                                             pedidoProvider.requestDriver = actualRequest;
-
                                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
                                           } on ServerException catch(error){
                                             Navigator.pop(context);

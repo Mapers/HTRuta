@@ -3,18 +3,23 @@ import 'dart:io' show Platform;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/select_service_widget.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/loading.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Model/requestDriver_model.dart';
+import 'package:HTRuta/injection_container.dart';
+// import 'package:HTRuta/features/DriverTaxiApp/Model/requestDriver_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/app_router.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,6 +32,7 @@ import '../../../../google_map_helper.dart';
 import '../../Networking/Apis.dart';
 import '../../data/Model/direction_model.dart';
 import '../../data/Model/get_routes_request_model.dart';
+import 'package:HTRuta/app/navigation/routes.dart' as Enrutador;
 
 class TravelDriverScreen extends StatefulWidget {
 
@@ -54,15 +60,15 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   LatLng positionDriver;
   bool isComplete = false;
   var apis = Apis();
+  final pickupApi = PickupApi();
   List<Routes> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();
   String selectedService;
+  PushNotificationProvider pushProvider;
 
   Channel _channel;
   final pickUpApi = PickupApi();
-  List<RequestDriverData> requestTaxi = <RequestDriverData>[];
-
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
@@ -72,36 +78,37 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   void initState() {
     addMakers();
     getRouter();
-    initPusher();
+    pushProvider = PushNotificationProvider();
+    pushProvider.mensajes.listen((argumento) async{
+      Map data = argumento['data'];
+      if(data == null) return;
+      String newCancel = data['newCancel'] ?? '0';
+      String idSolicitud = data['idSolicitud'] ?? '0';
+      if (!mounted) return;
+      if(newCancel == '1'){
+        final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+        if(idSolicitud == pedidoProvider.request.idSolicitud){
+          Fluttertoast.showToast(
+            msg: 'Se canceló una solicitud de viaje',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }
+        Navigator.pushAndRemoveUntil(context, Enrutador.Routes.toHomeDriverPage(), (_) => false);
+        // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
+      }
+    });
+    // initPusher();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Future<void> initPusher()async{
-    try{
-      await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
-    }catch(e){
-      print(e);
-    }
-
-    Pusher.connect(
-      onConnectionStateChange: (val) {
-          print(val.currentState);
-      },
-      onError: (error){
-      }
-    );
-
-    _channel = await Pusher.subscribe('solicitud');
-
-    _channel.bind('SendSolicitud', (onEvent) {
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.requestDriverScreen, (route) => false);
-    });
-
   }
 
   void addMakers(){
@@ -418,7 +425,14 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
                           onConfirm: () async{
                             final respuesta = await pickUpApi.cancelTravel(pedidoProvider.request.idSolicitud);
                             if(respuesta){
-                              Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
+                              PushMessage pushMessage = getIt<PushMessage>();
+                              Map<String, String> data = {
+                                'newCancel' : '1',
+                                'idSolicitud': pedidoProvider.request.idSolicitud
+                              };
+                              pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                              Navigator.pushAndRemoveUntil(context, Enrutador.Routes.toHomeDriverPage(), (_) => false);
+                              // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
                             }else{
                               Navigator.pop(context);
                               Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');

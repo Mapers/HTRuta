@@ -102,7 +102,9 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await _initLastKnownLocation();
-      await _initCurrentLocation();
+      await _initCurrentLocation().catchError((e) => {
+        debugPrint(e.toString())
+      });
       fetchLocation();
       fetchEstadoConductor();
       isLoading = false; 

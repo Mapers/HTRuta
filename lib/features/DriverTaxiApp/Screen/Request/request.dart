@@ -9,6 +9,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -42,6 +43,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   var rechazados = <String>[];
   String choferId = '';
   bool newTravel = false;
+  String lastUserToken;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   PushNotificationProvider pushProvider;
 
@@ -78,9 +80,13 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   }
   Future<void> travelConfirmation(String idSolicitud) async {
     final _prefs = UserPreferences();
+    DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+    String id = _prefs.idChofer;
+    await driverFirestoreService.updateDriverAvalability(false, id);
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-    pedidoProvider.request = Request(id: data.id,iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+    // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+    pedidoProvider.request = data;
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
   }
   Future<void> loadRequests() async {
@@ -551,6 +557,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                             Map<String, String> data = {
                               'newOffer' : '1'
                             };
+                            lastUserToken = taxi.token;
                             pushMessage.sendPushMessage(token: taxi.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
                             await loadRequests();
                             analizeChanges();

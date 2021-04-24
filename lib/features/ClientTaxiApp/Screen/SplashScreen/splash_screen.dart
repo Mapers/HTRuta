@@ -129,7 +129,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Transform.scale(
+          /* Transform.scale(
             scale: MediaQuery.of(context).size.aspectRatio /
               _controller.value.aspectRatio,
             child: Center(
@@ -137,11 +137,38 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               child: _controller.value.initialized
                 ? AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                  )
+                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: VideoPlayer(_controller)
+                  ),
+                )
                 : AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
-                  child: Image.asset('assets/first_frame.jpg'),
+                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
+                  child: Container(
+                    child: Image.asset(
+                      'assets/first_frame.jpg',
+                      fit: BoxFit.cover,
+                      height: double.infinity,
+                      width: double.infinity,
+                    )
+                    ),
+                  )
+              ),
+            ),
+          ), */
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: _controller.value.size?.width ?? 0,
+                height: _controller.value.size?.height ?? 0,
+                child: _controller.value.initialized ? 
+                  VideoPlayer(_controller):
+                  Image.asset(
+                    'assets/first_frame.jpg',
                   )
               ),
             ),
