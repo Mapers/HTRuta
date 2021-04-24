@@ -45,7 +45,8 @@ class DriverRequest {
       this.vchPlaca,
       this.vchModelo,
       this.vchMarca,
-      this.token
+      this.token,
+      this.idChofer
   });
 
   String iIdUsuario;
@@ -64,6 +65,7 @@ class DriverRequest {
   String vchModelo;
   String vchMarca;
   String token;
+  String idChofer;
 
   factory DriverRequest.fromJson(Map<String, dynamic> json) => DriverRequest(
     iIdUsuario: json['iIdUsuario'],
@@ -82,6 +84,7 @@ class DriverRequest {
     vchModelo: json['vchModelo'],
     vchMarca: json['vchMarca'],
     token: json['IdTokenChofer'],
+    idChofer: json['iIdChofer'],
   );
 
   Map<String, dynamic> toJson() => {

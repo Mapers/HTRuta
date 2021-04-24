@@ -1,10 +1,11 @@
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class Dialogs{
   static void alert(BuildContext context, {title = '', message= '', VoidCallback onConfirm  }){
-    showDialog(
+    /* showDialog(
       context: context,
       builder: (context){
         return CupertinoAlertDialog(
@@ -18,11 +19,25 @@ class Dialogs{
           ],
         );
       }
-    );
+    ); */
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.LEFTSLIDE,
+      width: MediaQuery.of(context).size.width * 0.8,
+      headerAnimationLoop: true,
+      dialogType: DialogType.INFO,
+      title: title,
+      desc: message,
+      btnOkOnPress: onConfirm,
+      btnOkIcon: Icons.check_circle,
+      onDissmissCallback: () {
+        debugPrint('Dialog Dissmiss from callback');
+      })
+    ..show();
   }
 
   static void confirm(BuildContext context, {title = '', message= '', VoidCallback onCancel, VoidCallback onConfirm, String textoConfirmar='Ok', String textoCancelar = 'Cancelar'}){
-    showDialog(
+    /* showDialog(
       context: context,
       builder: (context){
         return CupertinoAlertDialog(
@@ -40,7 +55,23 @@ class Dialogs{
           ],
         );
       }
-    );
+    ); */
+    AwesomeDialog(
+      context: context,
+      borderSide: BorderSide(color: Colors.green, width: 2),
+      width: MediaQuery.of(context).size.width * 0.8,
+      dialogType: DialogType.INFO,
+      buttonsBorderRadius: BorderRadius.all(Radius.circular(2)),
+      headerAnimationLoop: true,
+      animType: AnimType.BOTTOMSLIDE,
+      title: title,
+      desc: message,
+      btnOkText: 'Ok',
+      btnCancelText: 'Cancel',
+      showCloseIcon: true,
+      btnCancelOnPress: onCancel,
+      btnOkOnPress: onConfirm,
+    )..show();
   }
 
   static void openLoadingDialog(BuildContext context) {
