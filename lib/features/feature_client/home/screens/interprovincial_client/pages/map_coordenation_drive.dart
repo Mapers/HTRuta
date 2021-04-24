@@ -44,7 +44,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_marker_32.png'),
       ]);
       openLoadingDialog(context);
-      Polyline polyline = await _mapViewerUtil.generatePolylineXd('ROUTE_FROM_TO', widget.availablesRoutesEntity.route.fromLocation.latLang, widget.availablesRoutesEntity.route.toLocation.latLang);
+      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', widget.availablesRoutesEntity.route.fromLocation, widget.availablesRoutesEntity.route.toLocation);
       Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
       setState(() {

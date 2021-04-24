@@ -179,7 +179,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     color:Colors.red,
                     onPressed: ()async{
                       Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.deleteRequest(request: request , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
+                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
                     },
                   ),
                   SizedBox(width: 30,),
