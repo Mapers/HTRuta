@@ -9,8 +9,6 @@ class RouterDriveRemoteDataSoruce {
   final RequestHttp requestHttp;
   final _prefs = UserPreferences();
   RouterDriveRemoteDataSoruce({@required this.requestHttp});
-  //!borrar
-  List<InterprovincialRouteEntity> interprovincialRoutes =[];
   Future<List<InterprovincialRouteEntity>> getListRouterDrives() async{
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(

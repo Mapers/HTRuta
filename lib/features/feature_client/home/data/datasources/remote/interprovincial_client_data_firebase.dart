@@ -35,8 +35,8 @@ class InterprovincialClientDataFirebase {
       }).toList()
     );
   }
-  //! cambiar nombre del meotod
-  Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver, bool update = false}) async{
+  
+  Future<bool> messageRequestdFirebase({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver, bool update = false}) async{
     try {
       String message = 'Revise las solicitudes';
       if(update){
@@ -72,9 +72,6 @@ class InterprovincialClientDataFirebase {
 
   Future<bool> checkIfInterprovincialLocationDriverEntityOnService({@required String documentId}) async{
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
-    print('..................');
-    print(ds.exists);
-    print('..................');
     return ds.exists;
   }
 }
