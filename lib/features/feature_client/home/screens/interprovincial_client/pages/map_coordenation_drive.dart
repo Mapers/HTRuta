@@ -50,13 +50,13 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       setState(() {
       });
 
-      Marker markerFrom = _mapViewerUtil.generateMarker(
+      Marker markerFrom = MapViewerUtil.generateMarker(
         latLng: widget.availablesRoutesEntity.route.fromLocation.latLang ,
         nameMarkerId: 'FROM_POSITION_MARKER',
         icon: result[1]
       );
       _markers[markerFrom.markerId] = markerFrom;
-      Marker markerTo = _mapViewerUtil.generateMarker(
+      Marker markerTo = MapViewerUtil.generateMarker(
         latLng: widget.availablesRoutesEntity.route.toLocation.latLang ,
         nameMarkerId: 'TO_POSITION_MARKER',
         icon: result[1]
@@ -68,7 +68,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
 
       InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
       subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
-        Marker markerDrive = _mapViewerUtil.generateMarker(
+        Marker markerDrive = MapViewerUtil.generateMarker(
           latLng: interprovincialLocationDriver.location.latLang,
           nameMarkerId: 'DRIVE_POSITION_MARKER',
           icon: result[2],

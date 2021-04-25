@@ -55,7 +55,7 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
     widget.getFrom(_location);
-    Marker marker = _mapViewerUtil.generateMarker(
+    Marker marker = MapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon,
@@ -78,7 +78,7 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
         districtName: placemark.locality ,
         streetName: placemark.thoroughfare
       );
-      Marker marker = _mapViewerUtil.generateMarker(
+      Marker marker = MapViewerUtil.generateMarker(
         latLng: to.latLang ,
         nameMarkerId: 'DESTINATIPN_POSITION_MARKER',
         icon: currentPinLocationIcon,

@@ -57,7 +57,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   }
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
-    Marker marker = _mapViewerUtil.generateMarker(
+    Marker marker = MapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon
@@ -71,7 +71,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
         InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
         subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
           for (var passenger in passengers) {
-            Marker markerPassenger = _mapViewerUtil.generateMarker(
+            Marker markerPassenger = MapViewerUtil.generateMarker(
               //! Debe ser la ubicación actual
               latLng: passenger.toLocation.latLang,
               nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
@@ -98,12 +98,12 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       return;
     }
 
-    Marker markerFrom = _mapViewerUtil.generateMarker(
+    Marker markerFrom = MapViewerUtil.generateMarker(
       latLng: route.fromLocation.latLang,
       nameMarkerId: 'FROM_POSITION_MARKER',
       icon: fromPinLocationIcon,
     );
-    Marker markerTo = _mapViewerUtil.generateMarker(
+    Marker markerTo = MapViewerUtil.generateMarker(
       latLng: route.toLocation.latLang,
       nameMarkerId: 'TO_POSITION_MARKER',
       icon: toPinLocationIcon,
