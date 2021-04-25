@@ -44,7 +44,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
         child: Column(
           children: [
             SizedBox(height: 15,),
-            Text(widget.availablesRoutesEntity.route.name),
+            Text(widget.availablesRoutesEntity.route.name,style: TextStyle(fontWeight: FontWeight.bold),),
             SizedBox(height: 15,),
             Text( widget.availablesRoutesEntity.route.nameDriver ),
             SizedBox(height: 15,),

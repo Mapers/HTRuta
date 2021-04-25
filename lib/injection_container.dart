@@ -5,6 +5,7 @@ import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
@@ -42,6 +43,11 @@ Future<void> init() async {
     () => DriverServiceBloc()
   );
 
+  getIt.registerLazySingleton<CommentsDriveBloc>(
+    () => CommentsDriveBloc((getIt()),)
+  );
+
+
   getIt.registerLazySingleton<InterprovincialDriverBloc>(
     () => InterprovincialDriverBloc(
       interprovincialDataFirestore: getIt(),
@@ -73,6 +79,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
     () => InterprovincialClientRemoteDataSoruce(
       firestore: getIt(),
+      requestHttp: getIt()
     )
   );
   getIt.registerLazySingleton<InterprovincialClientDataFirebase>(

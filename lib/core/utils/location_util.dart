@@ -53,10 +53,9 @@ class LocationUtil {
   static double calculateDistance(LatLng from, LatLng to){
     var p = 0.017453292519943295;
     var c = cos;
-    var a = 0.5 - c((to.latitude - from.latitude) * p)/2 + 
-          c(from.latitude * p) * c(to.latitude * p) * 
+    var a = 0.5 - c((to.latitude - from.latitude) * p)/2 +
+          c(from.latitude * p) * c(to.latitude * p) *
           (1 - c((to.longitude - from.longitude) * p))/2;
     return 12742 * asin(sqrt(a));
   }
-  
 }
