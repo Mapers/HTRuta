@@ -16,3 +16,8 @@ class DestinationInterprovincialClientEvent extends InterprovincialClientEvent {
   @override
   List<Object> get props => [to];
 }
+
+class SendDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
+  final NegotiationEntity negotiationEntity;
+  SendDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
+}

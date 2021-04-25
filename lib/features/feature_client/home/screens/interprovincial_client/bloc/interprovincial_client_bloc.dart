@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
+import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,8 +14,8 @@ part 'interprovincial_client_event.dart';
 part 'interprovincial_client_state.dart';
 
 class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, InterprovincialClientState> {
-  InterprovincialClientBloc() : super(DataInterprovincialClientState.initial());
-
+  final InterprovincialClientRemoteDataSoruce interprovincialClientRemote;
+  InterprovincialClientBloc({ @required this.interprovincialClientRemote }) : super(DataInterprovincialClientState.initial());
   @override
   Stream<InterprovincialClientState> mapEventToState(
     InterprovincialClientEvent event,
@@ -34,8 +36,7 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       yield DataInterprovincialClientState.initial().copyWith(
         status: InteprovincialClientStatus.searchInterprovincial
       );
-    }
-    else if(event is DestinationInterprovincialClientEvent){
+    }else if(event is DestinationInterprovincialClientEvent){
       List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(event.to.latitude,event.to.longitude );
         Placemark placemark = placemarkFrom.first;
       yield DataInterprovincialClientState();
@@ -51,6 +52,8 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
           )
         )
       );
+    }else if(event is SendDataSolicitudInterprovincialClientEvent ){
+      await interprovincialClientRemote.sendRequest(negotiationEntity: event.negotiationEntity);
     }
   }
 }
