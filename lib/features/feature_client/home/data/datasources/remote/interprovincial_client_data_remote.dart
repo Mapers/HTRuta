@@ -4,11 +4,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/comnts_driver_entity.dart';
-<<<<<<< HEAD
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
-=======
->>>>>>> 4a944c316eeb7a1c00059f26ffd44f94aba0104a
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
