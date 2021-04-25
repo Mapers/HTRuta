@@ -109,16 +109,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   // }
   void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
-    ServiceInCourseEntity serviceInCourseEntity = await serviceDataRemote.getServiceInCourse();
-    if(serviceInCourseEntity == null){
+    ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
+    if(serviceInCourse == null){
       Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-    }else{
-      if(serviceInCourseEntity.entityType == TypeEntityEnum.driver){
-        BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourseEntity.serviceType));
-        Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourseEntity), (_) => false);
-      }else if(serviceInCourseEntity.entityType == TypeEntityEnum.passenger){
-        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
-      }
+      return;
+    }
+
+    if(serviceInCourse.entityType == TypeEntityEnum.driver){
+      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
+      Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourse), (_) => false);
+    }else if(serviceInCourse.entityType == TypeEntityEnum.passenger){
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
     }
     // _showDialogQualification();
   }

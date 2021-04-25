@@ -57,12 +57,12 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   }
 
   void _updateMarkerCurrentPosition(LocationEntity _location) async{
+    Marker marker = MapViewerUtil.generateMarker(
+      latLng: _location.latLang,
+      nameMarkerId: 'CURRENT_POSITION_MARKER',
+      icon: currentPinLocationIcon
+    );
     if(mounted){
-      Marker marker = MapViewerUtil.generateMarker(
-        latLng: _location.latLang,
-        nameMarkerId: 'CURRENT_POSITION_MARKER',
-        icon: currentPinLocationIcon
-      );
       DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
       if(_data.status == InterprovincialStatus.inRoute){
         Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.routeService.toLocation);
