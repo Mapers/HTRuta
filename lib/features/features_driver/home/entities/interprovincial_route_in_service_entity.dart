@@ -71,14 +71,16 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   }
 
   factory InterprovincialRouteInServiceEntity.fromJson(Map<String, dynamic> dataJson){
+    double starts;
+    dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
     return InterprovincialRouteInServiceEntity(
       id: dataJson['id'],
       name: dataJson['name'],
       nameDriver: dataJson['driver_name'],
-      cost: dataJson['cost'],
+      cost: double.parse(dataJson['cost']),
       fromLocation: LocationEntity.fromJson(dataJson['from']),
       toLocation: LocationEntity.fromJson(dataJson['to']),
-      starts: double.parse(dataJson['starts']),
+      starts: starts,
     );
   }
 

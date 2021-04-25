@@ -18,8 +18,6 @@ class InterprovincialClientRemoteDataSoruce {
   List<ClientInterporvincialRoutesEntity> routes =[];
 
   Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating}) async{
-    print('llege');
-    print(from);
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
       data: {
@@ -33,21 +31,22 @@ class InterprovincialClientRemoteDataSoruce {
       print(result.data);
       print('..................');
 
-    List<AvailableRouteEntity> availablesRoutes =[];
-    availablesRoutes = [
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
-      AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
-    ];
+
+    List<AvailableRouteEntity> availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
+    //! una ves que se aga los cambios en el back verificar como funcioan la linea 36
+    // availablesRoutes = [
+    //   AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+    //   AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+    //   AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+    //   AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+    //   AvailableRouteEntity(id: 1, availableSeats: 50, documentId: 'asd', status: InterprovincialStatus.inRoute, routeStartDateTime: DateTime.now(), route: InterprovincialRouteInServiceEntity.test(), vehicleSeatLayout: VehicleSeatLayout.miniban, fcm_token: '-'),
+    // ];
     return availablesRoutes;
   }
   Future<List<AvailableRouteEntity>> getFiebaseAvailablesRoutes() async{
     List<AvailableRouteEntity> availablesRoutes =[];
-    //! cambira nombre  cuado este listo el back-ent
-    QuerySnapshot xd =  await firestore.collection('interprovincial_in_service').get();
-    for (var item in xd.docs) {
+    QuerySnapshot lisAvailableRouteFirebase =  await firestore.collection('interprovincial_in_service').get();
+    for (var item in lisAvailableRouteFirebase.docs) {
       availablesRoutes.add(
         AvailableRouteEntity(
           id: 1,
