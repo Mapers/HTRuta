@@ -101,6 +101,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      
       await _initLastKnownLocation();
       await _initCurrentLocation().catchError((e) => {
         debugPrint(e.toString())
@@ -111,6 +112,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       setState(() {});
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
+      // readDrivingState();
       await getSolicitudes();
       requestPast = requestTaxi.map((e) => {
         'id': e.id,
@@ -119,6 +121,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       setState(() {});
     });
   }
+  /* void readDrivingState(){
+    final _prefs = UserPreferences();
+    isWorking = _prefs.drivingState;
+    setState(() {});
+  } */
   Future<void> travelConfirmation(String idSolicitud) async {
     final _prefs = UserPreferences();
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
@@ -342,7 +349,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     final MarkerId _markerTo = MarkerId('toLocation');
     _markers[_markerFrom] = GMapViewHelper.createMaker(
       markerIdVal: 'fromLocation',
-      icon: checkPlatform ? 'assets/image/marker/gps_point_24.png' : 'assets/image/marker/gps_point.png',
+      icon: checkPlatform ? 'assets/image/marker/car_top_96.png' : 'assets/image/marker/car_top_48.png',
       lat: locationForm.latitude,
       lng: locationForm.longitude,
     );
@@ -358,7 +365,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> bodyContent = [
       _buildMapLayer(),
       ChangeServiceDriverWidget(),
@@ -381,6 +387,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               if(estado != null){
                 if(estado.iEstado == 'Pendiente Aprobación'){
                   Dialogs.alert(context,title: 'Alerta', message: 'Su solicitud aun se encuentra pendiente de aprobación');
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   isWorking = false;
                 }else if(estado.iEstado == 'Rechazado'){
                   Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?',
@@ -392,6 +400,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       Navigator.pop(context);
                     }
                   );
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   isWorking = false;
                 }else{
                   DriverFirestoreService driverFirestoreService = DriverFirestoreService();
@@ -399,12 +409,15 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   String token = _prefs.tokenPush;
                   String id = _prefs.idChofer;
                   driverFirestoreService.setDriverData(token, id, 'Aprobado');
+                  _prefs.setDrivingState = state;
                   isWorking = state;
                 }
               }else{
                 Dialogs.confirm(context, title: 'Información', message: 'Para comenzar a ganar con Chasqui debe completar su información personal', 
                 onCancel: () { 
                   isWorking = !state;
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   Navigator.pop(context);
                 },
                 onConfirm: () {
@@ -415,6 +428,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
             }else{
               DriverFirestoreService driverFirestoreService = DriverFirestoreService();
               final _prefs = UserPreferences();
+              _prefs.setDrivingState = state;
               String id = _prefs.idChofer;
               driverFirestoreService.updateDriverAvalability(false, id);
               isWorking = state;

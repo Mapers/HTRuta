@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:math' show cos, sqrt, asin;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -37,6 +38,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
 
   CircleId selectedCircle;
   int _markerIdCounter = 0;
+  BitmapDescriptor _markerIcon;
   GoogleMapController _mapController;
   BitmapDescriptor markerIcon;
   String _placemark = '';
@@ -48,6 +50,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   List<MapTypeModel> sampleData =  <MapTypeModel>[];
   PersistentBottomSheetController _controller;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500},{'id': 2, 'title': '1 km', 'unidad': 'km', 'distancia': 1},{'id':3,'title': '3 km', 'unidad': 'km', 'distancia': 3},{'id':4,'title': '5 km', 'unidad': 'km', 'distancia': 5}, {'id':5,'title': '15 km', 'unidad': 'km', 'distancia': 15}];
+  Map<String, dynamic> distanceOptionSelected = {'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500};
+  String selectedDistance = '1';
 
   Position currentLocation;
   Position _lastKnownPosition;
@@ -55,6 +60,42 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   PermissionStatus permission;
   bool isEnabledLocation = false;
   bool loading = true;
+  double _radius = 500;
+  Map<CircleId, Circle> circles = <CircleId, Circle>{};
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  double distance = 0;
+
+  List<dynamic> dataMarKer = [
+    {
+      'id': '1',
+      'lat': -8.095180,
+      'lng':  -79.015397
+    },{
+      'id': '2',
+      'lat': -8.102633,
+      'lng': -79.017507
+    },{
+      'id': '3',
+      'lat': -8.109202,
+      'lng': -79.012449,
+    },{
+      'id': '4',
+      'lat': -8.112092,
+      'lng': -79.019249
+    },{
+      'id': '5',
+      'lat': -8.117724,
+      'lng': -79.015037
+    },{
+      'id': '6',
+      'lat': -8.117044,
+      'lng': -79.007141,
+    },{
+      'id': '7',
+      'lat': -8.126110,
+      'lng': -79.030460
+    }
+  ];
 
   @override
   void initState() {
@@ -276,9 +317,165 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     }
   }
 
+  Widget getListOptionDistance() {
+    final List<Widget> choiceChips = listDistance.map<Widget>((value) {
+      return Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: ChoiceChip(
+              key: ValueKey<String>(value['id'].toString()),
+              labelStyle: textGrey,
+              backgroundColor: greyColor2,
+              selectedColor: primaryColor,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(3.0),
+              ),
+              selected: selectedDistance == value['id'].toString(),
+              label: Text((value['title']), style: TextStyle(color: Colors.white)),
+              onSelected: (bool check) {
+                setState(() {
+                  distanceOptionSelected = listDistance.where((element) => element['id'] == value['id']).toList().first;
+                  selectedDistance = check ? value['id'].toString() : '';
+                  changeCircle(selectedDistance);
+                });
+              })
+      );
+    }).toList();
+    return Wrap(
+        children: choiceChips
+    );
+  }
+
+  void changeCircle(String selectedCircle){
+    if(selectedCircle == '1'){
+      setState(() {
+        _radius = 500;
+        _moveCamera(14);
+      });
+    }
+    if(selectedCircle == '2'){
+      setState(() {
+        _radius = 1000;
+        _moveCamera(13.9);
+      });
+    }
+    if(selectedCircle == '3'){
+      setState(() {
+        _radius = 3000;
+        _moveCamera(13);
+      });
+    }
+    if(selectedCircle == '4'){
+      setState(() {
+        _radius = 5000;
+        _moveCamera(12);
+      });
+    }
+    if(selectedCircle == '5'){
+      setState(() {
+        _radius = 15000;
+        _moveCamera(11);
+      });
+    }
+    _addCircle();
+    for(int i=0;i<dataMarKer.length;i++){
+      distance = calculateDistance(currentLocation.latitude,currentLocation.longitude,dataMarKer[i]['lat'],dataMarKer[i]['lng']);
+      if(distance*1000 < _radius){
+        _addMarker(dataMarKer[i]['id'], dataMarKer[i]['lat'], dataMarKer[i]['lng']);
+      } else {
+        print(dataMarKer[i]['id']);
+        _remove(dataMarKer[i]['id']);
+      }
+    }
+  }
+
+  
+
+  void _remove(String idMarker) {
+    final MarkerId markerId = MarkerId(idMarker);
+    setState(() {
+      markers.remove(markerId);
+    });
+  }
+
+  void _moveCamera(double zoom){
+    _mapController?.animateCamera(
+      CameraUpdate?.newCameraPosition(
+          CameraPosition(
+            target: LatLng(currentLocation.latitude,currentLocation.longitude),
+            zoom: zoom,
+          )
+      ),
+    );
+  }
+
+  void _addMarker(String markerIdVal, double lat, double lng) async {
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(lat, lng),
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
+      onTap: () {
+        // _onMarkerTapped(markerId);
+      },
+    );
+    setState(() {
+      markers[markerId] = marker;
+    });
+  }
+
+  void _addCircle() {
+    final int circleCount = circles.length;
+    if (circleCount == 12) {
+      return;
+    }
+    final String circleIdVal = 'circle_id';
+    final CircleId circleId = CircleId(circleIdVal);
+
+    final Circle circle = Circle(
+      circleId: circleId,
+      consumeTapEvents: true,
+      strokeColor: Color.fromRGBO(135, 206, 250, 0.9),
+      fillColor: Color.fromRGBO(135, 206, 250, 0.3),
+      strokeWidth: 4,
+      center: LatLng(currentLocation.latitude,currentLocation.longitude),
+      radius: _radius,
+    );
+    setState(() {
+      circles[circleId] = circle;
+    });
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  Future<void> _createMarkerImageFromAsset(BuildContext context) async {
+    if (_markerIcon == null) {
+      final ImageConfiguration imageConfiguration =
+      createLocalImageConfiguration(context);
+      BitmapDescriptor.fromAssetImage(
+          imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
+          .then(_updateBitmap);
+    }
+  }
+
+  void _updateBitmap(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIcon = bitmap;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    _createMarkerImageFromAsset(context);
     final responsive = Responsive(context);
     return SideMenu(
       key: _sideMenuKey,
@@ -294,6 +491,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
             SizedBox(
               //height: MediaQuery.of(context).size.height - 180,
               child: GoogleMap(
+                circles: Set<Circle>.of(circles.values),
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
@@ -329,18 +527,26 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               bottom: 30.0,
               left: 20.0,
               right: 20.0,
-              child: Container(
-                  height: 230,
-                  child: SelectAddress(
-                    fromAddress: widget?.placeBloc?.formLocation,
-                    toAddress: widget?.placeBloc?.locationSelect,
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchAddressScreen(),
-                          fullscreenDialog: true
-                      ));
-                    },
-                  )
+              child: Column(
+                children: [
+                  getListOptionDistance(),
+                  Container(height: 10),
+                  Container(
+                      height: 230,
+                      child: SelectAddress(
+                        fromAddress: widget?.placeBloc?.formLocation,
+                        toAddress: widget?.placeBloc?.locationSelect,
+                        unidad: distanceOptionSelected['unidad'],
+                        distancia: distanceOptionSelected['distancia'],
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SearchAddressScreen(),
+                              fullscreenDialog: true
+                          ));
+                        },
+                      )
+                  ),
+                ],
               ),
             ),
             Positioned(

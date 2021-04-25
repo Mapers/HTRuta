@@ -43,4 +43,10 @@ class UserPreferences{
   set firestoreId(String value) {
     _prefs.setString('firestoreId', value);
   }
+
+  bool get drivingState => _prefs.getBool('drivingState') ?? false;
+
+  set setDrivingState(bool value) {
+    _prefs.setBool('drivingState', value);
+  }
 }

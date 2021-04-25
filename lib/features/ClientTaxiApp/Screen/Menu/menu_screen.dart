@@ -92,7 +92,7 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
                               },
                             ),
-                            getItemMenu(
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.car,
                               text: 'Carros',
                               isSelected: activeScreenName.compareTo('HOME2') == 0,
@@ -100,7 +100,7 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
                               },
-                            ),
+                            ), */
                             getItemMenu(
                               icon: FontAwesomeIcons.wallet,
                               text: 'Pagos',

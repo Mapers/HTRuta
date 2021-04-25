@@ -314,9 +314,9 @@ class _TravelScreenState extends State<TravelScreen> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Text('${pedidoProvider.requestDriver.vchMarca} ${pedidoProvider.requestDriver.vchModelo}',style: TextStyle(fontSize: responsive.ip(2.2)),),
+                      Text('Modelo: ${pedidoProvider.requestDriver.vchModelo}',style: TextStyle(fontSize: responsive.ip(2.2)),),
                       SizedBox(height: responsive.hp(2),),
-                      Text('${pedidoProvider.requestDriver.vchPlaca}',style: TextStyle(fontSize: responsive.ip(2.2))),
+                      Text('Placa: ${pedidoProvider.requestDriver.vchPlaca}',style: TextStyle(fontSize: responsive.ip(2.2))),
                       Divider(color: Colors.grey,),
                       ListTile(
                         leading: Container(

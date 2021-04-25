@@ -18,10 +18,14 @@ import 'package:provider/provider.dart';
 class SelectAddress extends StatefulWidget {
   final Place fromAddress,toAddress;
   final VoidCallback onTap;
+  final int distancia;
+  final String unidad;
   SelectAddress({
     this.fromAddress,
     this.toAddress,
-    this.onTap
+    this.onTap,
+    this.distancia,
+    this.unidad
   });
 
   @override
@@ -238,7 +242,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       Dialogs.openLoadingDialog(context);
                       final _prefs = UserPreferences();
                       String token = _prefs.tokenPush;
-                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios, token);
+                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios, token, widget.unidad, widget.distancia);
                       PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
                         'newRequest' : '1'
