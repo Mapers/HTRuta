@@ -73,7 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
         final isOk = await authApi.registerUser(context,dni: _dni,nombre: _nombres,apellidoPaterno: _apellidoP,apellidoMaterno: _apellidoM,celular: _celular,correo: _email,password: _password,direccion: _direccion,fechaNacimiento: date.toString(),referencia: _referencia,tipoDispositivo: dispositivo.toString(),imei: imei,marca: marca,nombreDispositivo: nombreDispositivo,token: token,sexo: '1');
         Navigator.pop(context);
         if(isOk){
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
         }
       }
     }on ServerException catch (error){

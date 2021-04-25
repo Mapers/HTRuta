@@ -3,10 +3,14 @@ import 'dart:io' show Platform;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/map_type_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
@@ -54,17 +58,41 @@ class _TravelScreenState extends State<TravelScreen> {
   final pickupApi = PickupApi();
   final referenceDatabase = FirebaseDatabase.instance.reference();
   Channel _channel;
+  PushNotificationProvider pushProvider;
 
   dynamic posicionChofer;
 
   @override
   void initState() {
     super.initState();
+    
 //    _initLastKnownLocation();
 //    _initCurrentLocation();
     fetchLocation();
     fechDriverLocation();
-    initPusher();
+    pushProvider = PushNotificationProvider();
+    pushProvider.mensajes.listen((argumento) async{
+      Map data = argumento['data'];
+      if(data == null) return;
+      String newCancel = data['newCancel'] ?? '0';
+      String idSolicitud = data['idSolicitud'] ?? '0';
+      if (!mounted) return;
+      if(newCancel == '1'){
+        final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+        if(idSolicitud == pedidoProvider.request.idSolicitud){
+          Fluttertoast.showToast(
+            msg: 'Se canceló una solicitud de viaje',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }
+        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+      }
+    });
     // showPersBottomSheetCallBack = _showBottomSheet;
     sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
     sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
@@ -72,29 +100,6 @@ class _TravelScreenState extends State<TravelScreen> {
     sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
     sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
     sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
-  }
-
-  Future<void> initPusher()async{ 
-    try{
-      await Pusher.init('4b1d6dd1d636f15f0e59', PusherOptions(cluster: 'us2'));
-    }catch(e){
-      print(e);
-    }
-
-    Pusher.connect(
-      onConnectionStateChange: (val) {
-          print(val.currentState);
-      },
-      onError: (error){
-      }
-    );
-
-    _channel = await Pusher.subscribe('solicitud');
-
-    _channel.bind('SendSolicitud', (onEvent) {
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
-    });
-
   }
 
   Future<void> fechDriverLocation() async {
@@ -363,12 +368,24 @@ class _TravelScreenState extends State<TravelScreen> {
                   child: Row(
                     children: <Widget>[
                       Spacer(),
-                      FlatButton(onPressed: (){
+                      FlatButton(onPressed: () async {
                         try{
                           Dialogs.openLoadingDialog(context);
-                          pickupApi.cancelTravel(pedidoProvider.idSolicitud);
-                          Navigator.pop(context);
-                          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+                          bool respuesta = await pickupApi.cancelTravel(pedidoProvider.idSolicitud);
+                          if(respuesta){
+                            PushMessage pushMessage = getIt<PushMessage>();
+                            Map<String, String> data = {
+                              'newCancel' : '1',
+                              'idSolicitud': pedidoProvider.idSolicitud
+                            };
+                            pushMessage.sendPushMessage(token: pedidoProvider.requestDriver.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                            Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+                          }else{
+                            Navigator.pop(context);
+                            Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');
+                          }
+                         
                         }on ServerException catch(e){
                           Navigator.pop(context);
                           Dialogs.confirm(context,title: 'Error', message: e.message);

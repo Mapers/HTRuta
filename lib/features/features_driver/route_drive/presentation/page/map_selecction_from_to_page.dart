@@ -147,7 +147,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
             streetName: placemark.thoroughfare,
           );
             fromController.text = placemark.thoroughfare;
-          Marker markerFrom = _mapViewerUtil.generateMarker(
+          Marker markerFrom = MapViewerUtil.generateMarker(
             latLng: from.latLang,
             nameMarkerId: 'FROM_POSITION_MARKER',
           );
@@ -173,7 +173,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
             streetName: placemark.thoroughfare ,
           );
           toController.text = placemark.thoroughfare;
-          Marker markerTo = _mapViewerUtil.generateMarker(
+          Marker markerTo = MapViewerUtil.generateMarker(
             latLng: to.latLang,
             nameMarkerId: 'TO_POSITION_MARKER',
           );

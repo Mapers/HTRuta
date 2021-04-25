@@ -22,9 +22,7 @@ class MapViewerUtil {
     return SizedBox(
       height: height,
       child: GoogleMap(
-        onMapCreated:(mapContext){
-          googleMapController = mapContext;
-        },
+        onMapCreated:(mapContext) => googleMapController = mapContext,
         onTap: onTap,
         markers: Set<Marker>.of(markers.values),
         polylines: Set<Polyline>.of(polyLines.values),
@@ -74,7 +72,7 @@ class MapViewerUtil {
     );
   }
 
-  Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
+  static Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
     MarkerId markerId = MarkerId(nameMarkerId);
     Marker marker = Marker(
       markerId: markerId,

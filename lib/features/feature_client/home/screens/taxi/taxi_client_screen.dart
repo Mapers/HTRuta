@@ -5,7 +5,6 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -215,8 +214,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     setState(() {
       showPersBottomSheetCallBack = null;
     });
-    _controller = await _scaffoldKey.currentState
-        .showBottomSheet((context) {
+    _controller = await _scaffoldKey.currentState.showBottomSheet((context) {
       return  Container(
         height: 300.0,
         child: Container(
@@ -270,10 +268,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   }
 
   void _closeModalBottomSheet() {
-    if (_controller != null) {
-      _controller.close();
-      _controller = null;
-    }
+    _controller?.close();
+    _controller = null;
   }
 
   @override
@@ -403,7 +399,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
             )
           ],
         ),
-    )
+      )
     );
   }
 }
