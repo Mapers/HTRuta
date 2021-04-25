@@ -73,6 +73,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
     () => InterprovincialClientRemoteDataSoruce(
       firestore: getIt(),
+      requestHttp: getIt()
     )
   );
   getIt.registerLazySingleton<InterprovincialClientDataFirebase>(
