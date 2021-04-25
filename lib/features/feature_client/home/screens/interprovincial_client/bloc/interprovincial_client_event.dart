@@ -21,3 +21,13 @@ class SendDataSolicitudInterprovincialClientEvent extends InterprovincialClientE
   final NegotiationEntity negotiationEntity;
   SendDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
 }
+
+class AcceptDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
+  final NegotiationEntity negotiationEntity;
+  AcceptDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
+}
+class RejecDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
+  final NegotiationEntity negotiationEntity;
+  RejecDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
+}
+

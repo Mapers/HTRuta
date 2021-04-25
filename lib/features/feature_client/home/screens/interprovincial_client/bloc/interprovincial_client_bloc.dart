@@ -52,8 +52,12 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
           )
         )
       );
-    }else if(event is SendDataSolicitudInterprovincialClientEvent ){
+    }else if( event is SendDataSolicitudInterprovincialClientEvent ){
       await interprovincialClientRemote.sendRequest(negotiationEntity: event.negotiationEntity);
+    }else if( event is AcceptDataSolicitudInterprovincialClientEvent ){
+      await interprovincialClientRemote.acceptRequest(negotiationEntity: event.negotiationEntity);
+    }else if( event is RejecDataSolicitudInterprovincialClientEvent ){
+      await interprovincialClientRemote.rejectRequest(negotiationEntity: event.negotiationEntity);
     }
   }
 }

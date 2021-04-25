@@ -28,6 +28,7 @@ class TravelNegotationPage extends StatefulWidget {
 class _TravelNegotationPageState extends State<TravelNegotationPage> {
   final formKey = GlobalKey<FormState>();
   bool expectedSteate = true;
+  Session _session = Session();
   TextEditingController amountController = TextEditingController();
   String amount;
   @override
@@ -100,7 +101,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                             formKey.currentState.save();
                             //! Agregar modal de consulta
                             final _prefs = UserPreferences();
-                            Session _session = Session();
                             final user = await _session.get();
                             LocationEntity from = await LocationUtil.currentLocation();
                             DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
@@ -188,6 +188,12 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     onPressed: ()async{
                       Navigator.of(context).pop();
                       await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
+                      final user = await _session.get();
+                      NegotiationEntity negotiation = NegotiationEntity(
+                        service_id: widget.availablesRoutesEntity.id,
+                        passenger_id: int.parse(user.id),
+                      );
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity:  negotiation));
                     },
                   ),
                   SizedBox(width: 30,),
@@ -197,6 +203,12 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     onPressed: () async{
                       await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
                       acceptService(documentId, request);
+                      final user = await _session.get();
+                      NegotiationEntity negotiation = NegotiationEntity(
+                        service_id: widget.availablesRoutesEntity.id,
+                        passenger_id: int.parse(user.id),
+                      );
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                     }
                   ),
                 ],

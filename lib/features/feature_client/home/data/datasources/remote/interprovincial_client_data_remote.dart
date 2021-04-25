@@ -4,11 +4,8 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/comnts_driver_entity.dart';
-<<<<<<< HEAD
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
-=======
->>>>>>> 4a944c316eeb7a1c00059f26ffd44f94aba0104a
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -69,12 +66,30 @@ class InterprovincialClientRemoteDataSoruce {
     );
   }
   Future<void> sendRequest({@required NegotiationEntity negotiationEntity }) async{
-    print(negotiationEntity.service_id);
-    print(negotiationEntity.passenger_id);
-    print(negotiationEntity.cost);
-    print(negotiationEntity.seating);
     await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
+      data: {
+        'service_id': negotiationEntity.service_id,
+        'seating': negotiationEntity.seating,
+        'cost': negotiationEntity.cost ,
+        'passenger_id': negotiationEntity.passenger_id
+      }
+    );
+  }
+  Future<void> acceptRequest({@required NegotiationEntity negotiationEntity }) async{
+    await requestHttp.post(
+      Config.nuevaRutaApi + '/interprovincial/accept-request',
+      data: {
+        'service_id': negotiationEntity.service_id,
+        'seating': negotiationEntity.seating,
+        'cost': negotiationEntity.cost ,
+        'passenger_id': negotiationEntity.passenger_id
+      }
+    );
+  }
+  Future<void> rejectRequest({@required NegotiationEntity negotiationEntity }) async{
+    await requestHttp.post(
+      Config.nuevaRutaApi + '/interprovincial/reject-request',
       data: {
         'service_id': negotiationEntity.service_id,
         'seating': negotiationEntity.seating,

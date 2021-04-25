@@ -9,8 +9,8 @@ class NegotiationEntity extends Equatable{
 
   NegotiationEntity( {
     @required this.service_id,
-    @required this.seating,
-    @required this.cost,
+    this.seating,
+    this.cost,
     @required this.passenger_id,
   });
 
