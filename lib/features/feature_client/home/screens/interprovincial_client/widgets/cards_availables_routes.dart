@@ -4,9 +4,11 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CardsAvailablesRoutes extends StatefulWidget {
@@ -21,12 +23,14 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
   Widget build(BuildContext context) {
     return BlocBuilder<AvailablesRoutesBloc, AvailablesRoutesState>(
       builder: (context, state) {
-        if(state is LoadingAvailablesRoutes){
+        if (state is LoadingAvailablesRoutes) {
           return Center(child: CircularProgressIndicator());
         }
         DataAvailablesRoutes param = state;
-        if(param.availablesRoutes.isEmpty){
-          return Center(child: Text('- Sin resultados -'),);
+        if (param.availablesRoutes.isEmpty) {
+          return Center(
+            child: Text('- Sin resultados -'),
+          );
         }
         return Column(
           children: [
@@ -34,13 +38,21 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  child: Text(param.distictfrom , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                  child: Text(
+                    param.distictfrom,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(width: 5),
                 Icon(Icons.arrow_forward_sharp),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(param.distictTo, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.center,),
+                  child: Text(
+                    param.distictTo,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
@@ -48,15 +60,15 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: param.availablesRoutes.length ,
+              itemCount: param.availablesRoutes.length,
               itemBuilder: (BuildContext context, int index) {
                 return CardAvailiblesRoutes(
-                  availablesRoutesEntity: param.availablesRoutes[index],
-                  onTap: (){
-                    
-                    Navigator.of(context).push(Routes.toTravelNegotationPage(availablesRoutesEntity: param.availablesRoutes[index]));
-                  }
-                );
+                    availablesRoutesEntity: param.availablesRoutes[index],
+                    onTap: () {
+                      Navigator.of(context).push(Routes.toTravelNegotationPage(
+                          availablesRoutesEntity:
+                              param.availablesRoutes[index]));
+                    });
               },
             ),
           ],
@@ -69,7 +81,8 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
 class CardAvailiblesRoutes extends StatelessWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final Function onTap;
-  const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity, this.onTap}) : super(key: key);
+  const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity, this.onTap})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -87,13 +100,19 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text(
-                      availablesRoutesEntity.route.name,
-                      style: textStyleHeading18Black,
-                    )
-                  ),
+                      child: Text(
+                    availablesRoutesEntity.route.name,
+                    style: textStyleHeading18Black,
+                  )),
                   SizedBox(width: 10),
-                  Text('S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2), style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                  Text(
+                    'S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2),
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold
+                    )
+                  )
                 ],
               ),
               Row(
@@ -103,16 +122,24 @@ class CardAvailiblesRoutes extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     width: 90,
                     decoration: BoxDecoration(
-                      color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                      color: availablesRoutesEntity.status !=
+                              InterprovincialStatus.onWhereabouts
+                          ? Colors.green
+                          : Colors.amber,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                      availablesRoutesEntity.status !=
+                              InterprovincialStatus.onWhereabouts
+                          ? 'En paradero'
+                          : 'En ruta',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   RatingBar.builder(
                     initialRating: availablesRoutesEntity.route.starts,
                     allowHalfRating: true,
@@ -126,19 +153,21 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   ),
                   Spacer(),
                   InkWell(
-                    onTap: (){
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ComentsWirdgets();
-                        }
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('ver comen...'),
-                    )
-                  ),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return BlocProvider<CommentsDriveBloc>(
+                              create: (_) => ij.getIt<CommentsDriveBloc>(),
+                              child: ComentsWirdgets(availablesRoutesEntity: availablesRoutesEntity,),
+                            );
+                          }
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('ver comen...'),
+                      )),
                 ],
               ),
               Row(
@@ -146,7 +175,8 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Icon(Icons.person, color: Colors.black87),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(availablesRoutesEntity.route.nameDriver , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    child: Text(availablesRoutesEntity.route.nameDriver,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ),
                 ],
               ),
@@ -155,7 +185,9 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Icon(Icons.location_on, color: Colors.black87),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    child: Text(
+                        availablesRoutesEntity.route.fromLocation.streetName,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ),
                 ],
               ),
@@ -165,12 +197,19 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Icon(Icons.directions_bus_rounded, color: Colors.black87),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    child: Text(
+                        availablesRoutesEntity.route.toLocation.streetName,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ),
                   SizedBox(width: 15),
-                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
+                  Icon(Icons.airline_seat_recline_normal_rounded,
+                      color: Colors.green),
                   SizedBox(width: 8),
-                  Text(availablesRoutesEntity.availableSeats.toString(), style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.bold))
+                  Text(availablesRoutesEntity.availableSeats.toString(),
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold))
                 ],
               ),
               SizedBox(height: 5),
@@ -178,11 +217,15 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 children: [
                   Icon(Icons.access_time, color: Colors.black87),
                   SizedBox(width: 5),
-                  Text(availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  Text(
+                      availablesRoutesEntity
+                          .routeStartDateTime.formatOnlyTimeInAmPM,
+                      style: TextStyle(color: Colors.black87, fontSize: 14)),
                   SizedBox(width: 20),
                   Icon(Icons.calendar_today, color: Colors.black87),
                   SizedBox(width: 5),
-                  Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
+                      style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ],
               ),
             ],

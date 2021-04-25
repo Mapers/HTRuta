@@ -1,5 +1,5 @@
 enum InterprovincialStatus {
-  loading, notEstablished, onWhereabouts, inRoute, 
+  loading, notEstablished, onWhereabouts, inRoute,
 }
 
 String toStringFirebaseInterprovincialStatus(InterprovincialStatus status){

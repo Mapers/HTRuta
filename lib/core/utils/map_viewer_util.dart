@@ -74,7 +74,7 @@ class MapViewerUtil {
     );
   }
 
-  Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
+  static Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
     MarkerId markerId = MarkerId(nameMarkerId);
     Marker marker = Marker(
       markerId: markerId,

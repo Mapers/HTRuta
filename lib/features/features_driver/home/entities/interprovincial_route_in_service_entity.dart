@@ -22,6 +22,15 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     @required this.toLocation,
     @required this.starts,
   });
+  Map<String, dynamic> get toMap => {
+    'id': id,
+    'name': name,
+    'driver_name': nameDriver,
+    'from': fromLocation.toMap,
+    'to': toLocation.toMap,
+    'cost': cost,
+    'starts': starts,
+  };
 
   factory InterprovincialRouteInServiceEntity.test(){
     return InterprovincialRouteInServiceEntity(
@@ -58,6 +67,20 @@ class InterprovincialRouteInServiceEntity extends Equatable {
       fromLocation: interprovincialRoute.from,
       toLocation: interprovincialRoute.to,
       starts: starts
+    );
+  }
+
+  factory InterprovincialRouteInServiceEntity.fromJson(Map<String, dynamic> dataJson){
+    double starts;
+    dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
+    return InterprovincialRouteInServiceEntity(
+      id: dataJson['id'],
+      name: dataJson['name'],
+      nameDriver: dataJson['driver_name'],
+      cost: double.parse(dataJson['cost']),
+      fromLocation: LocationEntity.fromJson(dataJson['from']),
+      toLocation: LocationEntity.fromJson(dataJson['to']),
+      starts: starts,
     );
   }
 
