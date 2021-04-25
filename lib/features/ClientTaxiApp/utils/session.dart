@@ -31,9 +31,7 @@ class Session{
     return null;
   }
 
-  void clear() async{
-    await storage.deleteAll();
-  }
+  void clear() async => await storage.deleteAll();
 }
 
 class UserSession extends Equatable{
