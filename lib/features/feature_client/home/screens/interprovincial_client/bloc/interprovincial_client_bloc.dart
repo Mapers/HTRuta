@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -58,6 +59,8 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       await interprovincialClientRemote.acceptRequest(negotiationEntity: event.negotiationEntity);
     }else if( event is RejecDataSolicitudInterprovincialClientEvent ){
       await interprovincialClientRemote.rejectRequest(negotiationEntity: event.negotiationEntity);
+    }else if( event is SendQualificationInterprovincialClientEvent ){
+      await interprovincialClientRemote.quialificationRequest(qualification: event.qualificationEntity);
     }
   }
 }

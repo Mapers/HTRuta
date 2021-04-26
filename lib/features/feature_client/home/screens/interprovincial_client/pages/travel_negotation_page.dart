@@ -29,6 +29,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   final formKey = GlobalKey<FormState>();
   bool expectedSteate = true;
   Session _session = Session();
+  final _prefs = UserPreferences();
   TextEditingController amountController = TextEditingController();
   String amount;
   @override
@@ -100,7 +101,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                           onPressed: ()async{
                             formKey.currentState.save();
                             //! Agregar modal de consulta
-                            final _prefs = UserPreferences();
                             final user = await _session.get();
                             LocationEntity from = await LocationUtil.currentLocation();
                             DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
@@ -204,6 +204,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
                       acceptService(documentId, request);
                       final user = await _session.get();
+                      _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
                         service_id: widget.availablesRoutesEntity.id,
                         passenger_id: int.parse(user.id),

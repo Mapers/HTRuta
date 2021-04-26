@@ -31,8 +31,7 @@ class RejecDataSolicitudInterprovincialClientEvent extends InterprovincialClient
   RejecDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
 }
 class SendQualificationInterprovincialClientEvent extends InterprovincialClientEvent {
-  final String comment;
-  final String starts;
-  SendQualificationInterprovincialClientEvent({@required this.comment, @required this.starts});
+  final QualificationEntity qualificationEntity;
+  SendQualificationInterprovincialClientEvent({@required this.qualificationEntity});
 }
 

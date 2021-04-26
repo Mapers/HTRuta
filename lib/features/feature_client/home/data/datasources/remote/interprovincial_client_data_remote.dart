@@ -2,10 +2,12 @@ import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/enums/type_entity_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/comnts_driver_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -97,16 +99,16 @@ class InterprovincialClientRemoteDataSoruce {
       }
     );
   }
-  Future<void> quialificationRequest() async{
+  Future<void> quialificationRequest({ QualificationEntity qualification}) async{
     await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
       data: {
         {
-          'service_id': 2,
-          'passenger_id': 1042,
-          'qualifying_person': 'PASSENGER',
-          'stars': 4.5,
-          'comment':null
+          'service_id': qualification.service_id ,
+          'passenger_id': qualification.passenger_id ,
+          'qualifying_person':  getTypeEntity( qualification.qualifying_person ),
+          'stars': qualification.starts ,
+          'comment': qualification.comment
         }
       }
     );

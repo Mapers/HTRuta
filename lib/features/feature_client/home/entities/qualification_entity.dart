@@ -4,7 +4,7 @@ import 'package:HTRuta/enums/type_entity_enum.dart';
 
 class QualificationEntity extends Equatable{
   final int service_id;
-  final int comment;
+  final String comment;
   final TypeEntityEnum qualifying_person;
   final double starts;
   final int passenger_id;
