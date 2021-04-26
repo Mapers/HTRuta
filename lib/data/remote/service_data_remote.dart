@@ -24,11 +24,11 @@ class ServiceDataRemote{
       }
     );
     if(result.data == null) return null;
-    if(result.data.first['document_id'] == null) return null;
+    if(result.data['document_id'] == null) return null;
     return ServiceInCourseEntity(
-      entityType: getTypeEntityEnumByString(result.data.first['type_entity']),
+      entityType: getTypeEntityEnumByString(result.data['type_entity']),
       serviceType: TypeServiceEnum.interprovincial,
-      documentId: result.data.first['document_id']
+      documentId: result.data['document_id']
     );
   }
 

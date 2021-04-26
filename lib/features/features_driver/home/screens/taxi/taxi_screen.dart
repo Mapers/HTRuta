@@ -20,7 +20,6 @@ import 'package:HTRuta/features/features_driver/home/presentations/widgets/butto
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,14 +60,13 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   LatLng currentLocation;
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
+  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   final aceptar = '1';
   final rechazar = '2';
   
   final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
-
-  final referenceDatabase = FirebaseDatabase.instance.reference();
 
   final registroConductorApi = RegistroConductorApi();
   bool isWorking = false;
@@ -98,6 +96,13 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       }
       if(newConfirm == '1'&& isWorking){
         await travelConfirmation(idSolicitud);
+      }
+    });
+    _locationService.getPositionStream().listen((event) async{
+      double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(diferencia > 5 && isWorking && mounted){
+        final _prefs = UserPreferences();
+        driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
@@ -404,11 +409,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   _prefs.setDrivingState = false;
                   isWorking = false;
                 }else{
-                  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                  
                   final _prefs = UserPreferences();
                   String token = _prefs.tokenPush;
                   String id = _prefs.idChofer;
-                  driverFirestoreService.setDriverData(token, id, 'Aprobado');
+                  driverFirestoreService.setDriverData(token, id, 'Aprobado', currentLocation != null ? currentLocation.latitude : 0, currentLocation != null ? currentLocation.longitude: 0);
                   _prefs.setDrivingState = state;
                   isWorking = state;
                 }
