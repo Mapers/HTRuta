@@ -85,8 +85,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           routeTraveled: '',
           onAccepted: (stars, comments){
             //! Enviar calificacion al server
-            
             interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
+
           },
           onSkip: (){
             interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;

@@ -67,7 +67,6 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       if(_data.status == InterprovincialStatus.inRoute){
         Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.routeService.toLocation);
         polylines[polyline.polylineId] = polyline;
-        
         if(subscriptionPassengers == null){
           InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
           subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
