@@ -11,27 +11,30 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
   final String loadingMessage;
   final int availableSeats;
   final String documentId;
+  final String serviceId;
   final InterprovincialStatus status;
   final InterprovincialRouteInServiceEntity routeService;
   final DateTime routeStartDateTime;
-  DataInterprovincialDriverState({@required this.routeService, @required this.documentId, @required this.status, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
+  DataInterprovincialDriverState({@required this.routeService, @required this.documentId, @required this.status, @required this.serviceId, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
 
   factory DataInterprovincialDriverState.initial({String loadingMessage}){
     return DataInterprovincialDriverState(
       status: InterprovincialStatus.loading,
       documentId: null,
       routeService: null,
+      serviceId: null,
       routeStartDateTime: null,
       availableSeats: null,
       loadingMessage: loadingMessage ?? 'Cargando'
     );
   }
 
-  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, InterprovincialStatus status, InterprovincialRouteInServiceEntity routeService, DateTime routeStartDateTime, int availableSeats}){
+  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, String serviceId, InterprovincialStatus status, InterprovincialRouteInServiceEntity routeService, DateTime routeStartDateTime, int availableSeats}){
     return DataInterprovincialDriverState(
       loadingMessage: loadingMessage ?? this.loadingMessage,
       documentId: documentId ?? this.documentId,
       status: status ?? this.status,
+      serviceId: serviceId ?? this.serviceId,
       routeService: routeService ?? this.routeService,
       routeStartDateTime: routeStartDateTime ?? this.routeStartDateTime,
       availableSeats: availableSeats ?? this.availableSeats,
@@ -39,5 +42,5 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
   }
 
   @override
-  List<Object> get props => [routeService, status, documentId, loadingMessage, routeStartDateTime, availableSeats];
+  List<Object> get props => [routeService, status, documentId, loadingMessage, routeStartDateTime, availableSeats, serviceId];
 }

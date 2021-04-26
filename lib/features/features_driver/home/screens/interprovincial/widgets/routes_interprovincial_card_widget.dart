@@ -46,18 +46,30 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
                 height: 170,
                 child: isLoading ? Center(
                   child: CircularProgressIndicator()
-                ) : ListView.separated(
-                  separatorBuilder: (ctx, i) => Divider(height: 0),
-                  itemCount: interprovincialRoutes.length,
-                  itemBuilder: (ctx, i){
-                    return _getItemRoute(interprovincialRoutes[i]);
-                  },
-                ),
+                ) : getContent()
               )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget getContent(){
+    if(interprovincialRoutes.isEmpty){
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: Text('Sin rutas. Cree rutas para poder iniciar el servicio.', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black45), textAlign: TextAlign.center),
+        )
+      );
+    }
+    return ListView.separated(
+      separatorBuilder: (ctx, i) => Divider(height: 0),
+      itemCount: interprovincialRoutes.length,
+      itemBuilder: (ctx, i){
+        return _getItemRoute(interprovincialRoutes[i]);
+      },
     );
   }
 

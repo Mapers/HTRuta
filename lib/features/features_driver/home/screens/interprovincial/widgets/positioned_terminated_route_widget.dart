@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PositionedTerminatedRouteWidget extends StatelessWidget {
+  final double bottom;
   final Widget child;
-  const PositionedTerminatedRouteWidget({Key key, this.child}) : super(key: key);
+  const PositionedTerminatedRouteWidget({Key key, this.child, this.bottom = 80}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +18,14 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
         if(locationState is DataInteprovincialDriverLocationState){
           InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
           if(serviceState is DataInterprovincialDriverState){
-            if(serviceState.status == InterprovincialStatus.inRoute && locationState.location != null){
-              int diference = serviceState.routeStartDateTime.calculateDifferenceInDays();
+            final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
+            if(status.contains(serviceState.status) && locationState.location != null){
+              int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
+              print('diferenceDays: $diferenceDays');
               double distance = LocationUtil.calculateDistance(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
-              if(distance <= 3 || diference >= 2){
+              if(distance <= 3 || diferenceDays >= 2){
                 return Positioned(
-                  bottom: 80,
+                  bottom: bottom,
                   left: 80,
                   right: 80,
                   child: RaisedButton(
