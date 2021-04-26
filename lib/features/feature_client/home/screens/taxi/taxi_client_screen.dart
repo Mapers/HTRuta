@@ -456,6 +456,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       if(geoPoint != null){
         markers.add(
           iconTaxi == null ? 
+          
           MapViewerUtil.generateMarker(
             //! Debe ser la ubicación actual
             latLng: LatLng(geoPoint.latitude, geoPoint.longitude),

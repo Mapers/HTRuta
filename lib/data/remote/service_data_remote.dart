@@ -18,11 +18,16 @@ class ServiceDataRemote{
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
   Future<ServiceInCourseEntity> getServiceInCourse() async{
     await _prefs.initPrefs();
-    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
+    ResponseHttp result;
+    try{
+      result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
       data: {
         'user_id': _prefs.idChofer
       }
     );
+    }catch(e){
+      return null;
+    }
     if(result.data == null) return null;
     if(result.data['document_id'] == null) return null;
     return ServiceInCourseEntity(

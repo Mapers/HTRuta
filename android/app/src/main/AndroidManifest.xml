@@ -12,6 +12,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Tu Ruta"
         android:requestLegacyExternalStorage="true"
+        android:allowBackup="false"
         android:icon="@mipmap/launcher_icon">
 
         <meta-data
