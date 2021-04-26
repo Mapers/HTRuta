@@ -43,3 +43,5 @@ class SetLocalAvailabelSeatInterprovincialDriverEvent extends InterprovincialDri
 }
 
 class MinusOneAvailableSeatInterprovincialDriverEvent extends InterprovincialDriverEvent {}
+
+class FinishServiceInterprovincialDriverEvent extends InterprovincialDriverEvent {}

@@ -62,33 +62,36 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon
     );
-    DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
-    if(_data.status == InterprovincialStatus.inRoute){
-      Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.routeService.toLocation);
-      polylines[polyline.polylineId] = polyline;
-      
-      if(subscriptionPassengers == null){
-        InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
-        subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
-          for (var passenger in passengers) {
-            Marker markerPassenger = MapViewerUtil.generateMarker(
-              //! Debe ser la ubicación actual
-              latLng: passenger.toLocation.latLang,
-              nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
-              icon: fromPinLocationIcon,
-              onTap: () => BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: passenger))
-            );
-            _markers[markerPassenger.markerId] = markerPassenger;
-          }
+    if(mounted){
+      DataInterprovincialDriverState _data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+      if(_data.status == InterprovincialStatus.inRoute){
+        Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', _location, _data.routeService.toLocation);
+        polylines[polyline.polylineId] = polyline;
+        if(subscriptionPassengers == null){
+          InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
+          subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
+            for (var passenger in passengers) {
+              Marker markerPassenger = MapViewerUtil.generateMarker(
+                //! Debe ser la ubicación actual
+                latLng: passenger.toLocation.latLang,
+                nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
+                icon: fromPinLocationIcon,
+                onTap: () => BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: passenger))
+              );
+              _markers[markerPassenger.markerId] = markerPassenger;
+            }
+          });
+        }
+        // Lanzar listener de pasajeros
+      }
+      if(mounted){
+        BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialDriverLocationEvent(driverLocation: _location, status: _data.status));
+        setState(() {
+          location =_location;
+          _markers[marker.markerId] = marker;
         });
       }
-      // Lanzar listener de pasajeros
     }
-    BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialDriverLocationEvent(driverLocation: _location, status: _data.status));
-    setState(() {
-      location =_location;
-      _markers[marker.markerId] = marker;
-    });
   }
 
   void _addFromToMarkers(DataInterprovincialDriverState data) async{

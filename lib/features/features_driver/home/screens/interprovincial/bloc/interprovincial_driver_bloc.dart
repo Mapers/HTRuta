@@ -28,15 +28,17 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
     InterprovincialDriverEvent event,
   ) async* {
     if(event is GetDataInterprovincialDriverEvent){
+      DataInterprovincialDriverState prevState = state;
+      if(prevState.documentId != null) return;
+
       yield DataInterprovincialDriverState.initial();
       try {
         if(event.documentId != null){
           DataInterprovincialDriverState newState = await interprovincialDataFirestore.getDataInterprovincialDriver(documentId: event.documentId);
           if(newState == null) throw LocalException(message: 'Documento no encontrado.');
 
-          yield newState.copyWith(
-            routeService: await serviceDataRemote.getInterprovincialRouteInServiceById(event.documentId),
-          );
+          final routeService = await serviceDataRemote.getInterprovincialRouteInServiceById(event.documentId);
+          yield newState.copyWith(routeService: routeService);
         }else{
           throw LocalException(message: 'Documento no encontrado.');
         }
@@ -113,6 +115,17 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
     }else if(event is SetLocalAvailabelSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       yield data.copyWith(availableSeats: event.newSeats);
+    }else if(event is FinishServiceInterprovincialDriverEvent){
+      DataInterprovincialDriverState data = state;
+      yield DataInterprovincialDriverState.initial();
+      await Future.wait([
+        interprovincialDataFirestore.finishService(documentId: data.documentId),
+        interprovincialDriverDataRemote.finishService(serviceId: data.routeService.id)
+      ]);
+      yield DataInterprovincialDriverState.initial().copyWith(
+        status: InterprovincialStatus.notEstablished
+      );
+      Fluttertoast.showToast(msg: 'Servicio culminado exitosamente.');
     }
   }
 }

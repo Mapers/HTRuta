@@ -11,3 +11,13 @@ TypeEntityEnum getTypeEntityEnumByString(String type){
   }
   return null;
 }
+
+String getTypeEntity(TypeEntityEnum type){
+  switch (type) {
+    case TypeEntityEnum.passenger:
+      return 'PASSENGER';
+    case TypeEntityEnum.driver:
+      return 'DRIVER';
+  }
+  return null;
+}

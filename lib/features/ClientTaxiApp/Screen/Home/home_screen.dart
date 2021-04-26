@@ -7,7 +7,6 @@ class HomeScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<PlaceBloc>(context);
-
     return TaxiClientScreen(
       placeBloc: bloc,
     );

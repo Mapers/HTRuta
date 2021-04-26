@@ -33,7 +33,6 @@ class RequestDriverScreen extends StatefulWidget {
 
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final String screenName = 'REQUEST';
-  Channel _channel;
   List<Request> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();

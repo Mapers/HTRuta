@@ -22,9 +22,7 @@ class MapViewerUtil {
     return SizedBox(
       height: height,
       child: GoogleMap(
-        onMapCreated:(mapContext){
-          googleMapController = mapContext;
-        },
+        onMapCreated:(mapContext) => googleMapController = mapContext,
         onTap: onTap,
         markers: Set<Marker>.of(markers.values),
         polylines: Set<Polyline>.of(polyLines.values),

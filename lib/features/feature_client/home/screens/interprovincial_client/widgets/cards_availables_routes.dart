@@ -122,17 +122,15 @@ class CardAvailiblesRoutes extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     width: 90,
                     decoration: BoxDecoration(
-                      color: availablesRoutesEntity.status !=
-                              InterprovincialStatus.onWhereabouts
-                          ? Colors.green
-                          : Colors.amber,
+                      color: availablesRoutesEntity.status !=InterprovincialStatus.onWhereabouts
+                      ? Colors.green
+                      : Colors.amber,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      availablesRoutesEntity.status !=
-                              InterprovincialStatus.onWhereabouts
-                          ? 'En paradero'
-                          : 'En ruta',
+                      availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts
+                      ? 'En paradero'
+                      : 'En ruta',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                       textAlign: TextAlign.center,
                     ),
@@ -198,18 +196,20 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   SizedBox(width: 5),
                   Expanded(
                     child: Text(
-                        availablesRoutesEntity.route.toLocation.streetName,
-                        style: TextStyle(color: Colors.black87, fontSize: 14)),
+                      availablesRoutesEntity.route.toLocation.streetName,
+                      style: TextStyle(color: Colors.black87, fontSize: 14)
+                    ),
                   ),
                   SizedBox(width: 15),
-                  Icon(Icons.airline_seat_recline_normal_rounded,
-                      color: Colors.green),
+                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
                   SizedBox(width: 8),
                   Text(availablesRoutesEntity.availableSeats.toString(),
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold))
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    )
+                  )
                 ],
               ),
               SizedBox(height: 5),
@@ -218,14 +218,16 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   Icon(Icons.access_time, color: Colors.black87),
                   SizedBox(width: 5),
                   Text(
-                      availablesRoutesEntity
-                          .routeStartDateTime.formatOnlyTimeInAmPM,
-                      style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
+                    style: TextStyle(color: Colors.black87, fontSize: 14)
+                  ),
                   SizedBox(width: 20),
                   Icon(Icons.calendar_today, color: Colors.black87),
                   SizedBox(width: 5),
-                  Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
-                      style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  Text(
+                    availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
+                    style: TextStyle(color: Colors.black87, fontSize: 14)
+                  ),
                 ],
               ),
             ],

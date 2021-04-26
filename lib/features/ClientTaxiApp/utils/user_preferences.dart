@@ -25,6 +25,14 @@ class UserPreferences{
     _prefs.setBool('primeraSesion', value);
   }
 
+  String get service_id{
+    return _prefs.getString('service_id') ?? '';
+  }
+
+  set service_id(String value){
+    _prefs.setString('service_id', value);
+  }
+
   String get tokenPush => _prefs.getString('tokenPush') ?? '';
 
   set tokenPush(String value) {

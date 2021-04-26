@@ -229,8 +229,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     setState(() {
       showPersBottomSheetCallBack = null;
     });
-    _controller = await _scaffoldKey.currentState
-        .showBottomSheet((context) {
+    _controller = await _scaffoldKey.currentState.showBottomSheet((context) {
       return  Container(
         height: 300.0,
         child: Container(
@@ -284,10 +283,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   }
 
   void _closeModalBottomSheet() {
-    if (_controller != null) {
-      _controller.close();
-      _controller = null;
-    }
+    _controller?.close();
+    _controller = null;
   }
 
   Widget getListOptionDistance() {
@@ -682,7 +679,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
             )
           ],
         ),
-    )
+      )
     );
   }
 }

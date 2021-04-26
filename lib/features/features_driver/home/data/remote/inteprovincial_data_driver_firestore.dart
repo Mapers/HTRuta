@@ -45,7 +45,7 @@ class InterprovincialDataDriverFirestore{
         'service_id': serviceId
       });
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -58,7 +58,7 @@ class InterprovincialDataDriverFirestore{
         documentId: ds.id,
         status: toInterprovincialStatusFromString(data['status']),
         routeService: null,
-        routeStartDateTime: DateTime.fromMillisecondsSinceEpoch((data['date_start_service'] as Timestamp).microsecondsSinceEpoch),
+        routeStartDateTime: DateTime.parse((data['date_start_service'] as Timestamp).toDate().toString()),
         loadingMessage: 'Cargando'
       );
     } catch (_) {
@@ -75,7 +75,7 @@ class InterprovincialDataDriverFirestore{
         'available_seats': availableSeats
       });
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -89,7 +89,7 @@ class InterprovincialDataDriverFirestore{
         'status': toStringFirebaseInterprovincialStatus(status)
       });
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -151,7 +151,7 @@ class InterprovincialDataDriverFirestore{
         'available_seats': newAvailableSeats
       });
       return newAvailableSeats;
-    } catch (e) {
+    } catch (_) {
       Fluttertoast.showToast(msg: 'No se pudo liberar los asientos.',toastLength: Toast.LENGTH_SHORT);
       return null;
     }
@@ -170,9 +170,17 @@ class InterprovincialDataDriverFirestore{
         description: 'Revise la contraoferta'
       );
       return true;
-    } catch (e) {
-      print(e.toString());
+    } catch (_) {
       Fluttertoast.showToast(msg: 'No se pudo enviar la contraoferta.',toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+  }
+
+  Future<bool> finishService({@required String documentId}) async{
+    try {
+      await firestore.collection('interprovincial_in_service').doc(documentId).delete();
+      return true;
+    } catch (_) {
       return false;
     }
   }

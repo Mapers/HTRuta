@@ -5,8 +5,12 @@ import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/enums/type_entity_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
@@ -33,6 +37,9 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   bool drawCircle = false;
   double initialCircularRadio;
   int initialSeat;
+  Session _session = Session();
+  final _prefs = UserPreferences();
+
   @override
   void initState() {
     initialCircularRadio = 3;
@@ -83,9 +90,19 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           title: 'Califica el servicio',
           nameUserQuelify: '',
           routeTraveled: '',
-          onAccepted: (stars, comments){
+          onAccepted: (stars, comments)async{
             //! Enviar calificacion al server
+            final user = await _session.get();
             interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
+            QualificationEntity qualification = QualificationEntity(
+              passenger_id: int.parse(user.id),
+              service_id: int.parse(_prefs.service_id),
+              qualifying_person: TypeEntityEnum.passenger ,
+              comment: comments,
+              starts: stars,
+            );
+            BlocProvider.of<InterprovincialClientBloc>(context).add(SendQualificationInterprovincialClientEvent(qualificationEntity: qualification ));
+            _prefs.service_id = '';
           },
           onSkip: (){
             interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
