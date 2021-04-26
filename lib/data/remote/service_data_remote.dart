@@ -38,7 +38,11 @@ class ServiceDataRemote{
   }
 
   Future<InterprovincialRouteInServiceEntity> getInterprovincialRouteInServiceById(String serviceId) async{
-    //! Esta data debe venir desde backend
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/service/get-by-id',
+      data: {
+        'user_id': serviceId
+      }
+    );
     return InterprovincialRouteInServiceEntity.test();
   }
 
