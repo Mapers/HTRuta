@@ -42,4 +42,9 @@ extension DateTimeExtension on DateTime {
     return '-';
   }
 
+  int calculateDifferenceInDays({DateTime otherDay}) {
+    DateTime comparationDay = otherDay ?? DateTime.now();
+    return comparationDay.difference(this).inDays;
+  }
+
 }
