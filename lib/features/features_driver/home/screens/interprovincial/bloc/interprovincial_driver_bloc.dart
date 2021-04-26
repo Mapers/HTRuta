@@ -115,6 +115,17 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
     }else if(event is SetLocalAvailabelSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       yield data.copyWith(availableSeats: event.newSeats);
+    }else if(event is FinishServiceInterprovincialDriverEvent){
+      DataInterprovincialDriverState data = state;
+      yield DataInterprovincialDriverState.initial();
+      await Future.wait([
+        interprovincialDataFirestore.finishService(documentId: data.documentId),
+        interprovincialDriverDataRemote.finishService(serviceId: data.routeService.id)
+      ]);
+      yield DataInterprovincialDriverState.initial().copyWith(
+        status: InterprovincialStatus.notEstablished
+      );
+      Fluttertoast.showToast(msg: 'Servicio culminado exitosamente.');
     }
   }
 }

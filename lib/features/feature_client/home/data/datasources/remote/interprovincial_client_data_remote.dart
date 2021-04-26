@@ -1,3 +1,4 @@
+import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -5,11 +6,12 @@ import 'package:HTRuta/features/feature_client/home/entities/available_route_eni
 import 'package:HTRuta/features/feature_client/home/entities/client_interprovicial_routes_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/comnts_driver_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
+<<<<<<< HEAD
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
+=======
+>>>>>>> 9e30d5df66c90d2d6f547d3368161adca30ebf4b
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../../config.dart';
 
 class InterprovincialClientRemoteDataSoruce {
   final RequestHttp requestHttp;

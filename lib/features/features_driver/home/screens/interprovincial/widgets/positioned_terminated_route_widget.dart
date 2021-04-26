@@ -1,4 +1,5 @@
 import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -12,21 +13,21 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
-      builder: (context, state) {
-        if(state is DataInteprovincialDriverLocationState){
-          InterprovincialDriverState stateService = BlocProvider.of<InterprovincialDriverBloc>(context).state;
-          if(stateService is DataInterprovincialDriverState){
-            if(stateService.status == InterprovincialStatus.inRoute && state.location != null){
-              //? Considerar días transcurridos :D
-              double distance = LocationUtil.calculateDistance(stateService.routeService.toLocation.latLang, state.location.latLang);
-              if(distance <= 3){
+      builder: (context, locationState) {
+        if(locationState is DataInteprovincialDriverLocationState){
+          InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+          if(serviceState is DataInterprovincialDriverState){
+            if(serviceState.status == InterprovincialStatus.inRoute && locationState.location != null){
+              int diference = serviceState.routeStartDateTime.calculateDifferenceInDays();
+              double distance = LocationUtil.calculateDistance(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
+              if(distance <= 3 || diference >= 2){
                 return Positioned(
                   bottom: 80,
                   left: 80,
                   right: 80,
                   child: RaisedButton(
                     child: Text('Culminar ruta'),
-                    onPressed: (){}
+                    onPressed: () => showQuestionTerminatedService(context)
                   )
                 );
               }
@@ -35,6 +36,29 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
         }
         return Container();
       },
+    );
+  }
+
+
+  void showQuestionTerminatedService(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('¿Estas seguro de culminar su servicio?'),
+        actions: [
+          OutlineButton(
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.of(ctx).pop(),
+          ),
+          RaisedButton(
+            child: Text('Sí, culminar'),
+            onPressed: () async{
+              Navigator.of(ctx).pop();
+              BlocProvider.of<InterprovincialDriverBloc>(context).add(FinishServiceInterprovincialDriverEvent());
+            },
+          )
+        ],
+      )
     );
   }
 }
