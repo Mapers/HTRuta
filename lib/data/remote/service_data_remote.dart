@@ -24,7 +24,8 @@ class ServiceDataRemote{
       }
     );
     if(result.data == null) return null;
-    if(result.data.first['document_id'] == null) return null;
+    if(result.data['document_id'] == null) return null;
+
     return ServiceInCourseEntity(
       entityType: getTypeEntityEnumByString(result.data.first['type_entity']),
       serviceType: TypeServiceEnum.interprovincial,
