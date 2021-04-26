@@ -153,6 +153,9 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           );
           _markers[markerFrom.markerId] = markerFrom;
         }else{
+          print('..................');
+          print('entreeeeee');
+          print('..................');
           cleanFrom();
           fromController.clear();
           appearMesage();
@@ -229,10 +232,10 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     );
   }
   void cleanFrom(){
-    whereaboutsFrom = LocationEntity(latLang: from.latLang, regionName: '', provinceName: '' , districtName: '', streetName: '' );
+    whereaboutsFrom = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
   }
   void cleanTo(){
-    whereaboutsTo = LocationEntity( latLang: to.latLang, regionName: '', provinceName: '' , districtName: '', streetName: '' );
+    whereaboutsTo = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
   }
 }
 
