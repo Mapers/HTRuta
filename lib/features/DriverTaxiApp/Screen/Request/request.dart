@@ -21,7 +21,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'requestDetail.dart';
 import 'package:cached_network_image/cached_network_image.dart';

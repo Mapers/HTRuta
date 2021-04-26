@@ -19,7 +19,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/booking_
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Model/requestDriver_model.dart';
 import 'package:HTRuta/app_router.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
