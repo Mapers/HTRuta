@@ -98,9 +98,9 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         await travelConfirmation(idSolicitud);
       }
     });
-    _locationService.getPositionStream().listen((event) async{
+    Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
-      double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
       if(diferencia > 5 && isWorking && mounted){
         final _prefs = UserPreferences();
         driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
@@ -281,9 +281,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator?.getLastKnownPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
     } on PlatformException {
       position = null;
     }

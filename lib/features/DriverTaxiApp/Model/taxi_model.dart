@@ -72,6 +72,6 @@ class TaxiModel {
 
   Future<double> get calculateDistance async{
     final Geolocator _locationService = Geolocator();
-    return await _locationService.distanceBetween(initialLat, initialLong, finalLat, finalLong)/1000;
+    return await Geolocator.distanceBetween(initialLat, initialLong, finalLat, finalLong)/1000;
   }
 }

@@ -8,7 +8,6 @@ import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_button_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +19,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -98,9 +98,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator?.getLastKnownPosition(desiredAccuracy: LocationAccuracy.best);
+      position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
     } on PlatformException {
       position = null;
     }
@@ -125,9 +123,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    await _locationService.isLocationServiceEnabled();
-    currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+    await Geolocator.isLocationServiceEnabled();
+    currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {
@@ -159,7 +157,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   /// Get current location name
   void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
-      List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(lat, lng);
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;
@@ -170,13 +168,14 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
           lat: lat,
           lng: lng
         ));
-      }
+      };
     }
   }
 
   void _onMapCreated(GoogleMapController controller) async {
     MarkerId markerId = MarkerId(_markerIdVal());
-    LatLng position = LatLng(currentLocation?.latitude,currentLocation?.longitude);
+    Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
+    LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
     Marker marker = Marker(
       markerId: markerId,
       position: position,

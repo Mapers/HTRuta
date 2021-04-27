@@ -2,6 +2,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
@@ -38,9 +39,7 @@ class _SelectAddressState extends State<SelectAddress> {
   Future<void> _getCurrentLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator.getCurrentPosition(
+      position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
@@ -53,7 +52,7 @@ class _SelectAddressState extends State<SelectAddress> {
       print(_currentPosition.longitude);
       print(_currentPosition.latitude);
     });
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {
@@ -65,7 +64,7 @@ class _SelectAddressState extends State<SelectAddress> {
   }
 
   void getLocationName(double lat, double lng) async {
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(lat, lng);
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {

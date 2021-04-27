@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
-import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';

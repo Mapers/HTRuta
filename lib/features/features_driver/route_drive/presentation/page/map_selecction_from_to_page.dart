@@ -6,7 +6,7 @@ import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapSelecctionFromToMapPage extends StatefulWidget {
@@ -135,7 +135,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         // ignore: missing_required_param
         from =  LocationEntity( latLang: pos)  ;
         openLoadingDialog(context);
-        List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(from.latLang.latitude , from.latLang.longitude);
+        List<Placemark> placemarkFrom = await placemarkFromCoordinates(from.latLang.latitude , from.latLang.longitude);
         Placemark placemark = placemarkFrom.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
@@ -164,7 +164,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         // ignore: missing_required_param
         to = LocationEntity(latLang:pos);
         openLoadingDialog(context);
-        List<Placemark> placemarkTo = await Geolocator().placemarkFromCoordinates(to.latLang.latitude , to.latLang.longitude);
+        List<Placemark> placemarkTo = await placemarkFromCoordinates(to.latLang.latitude , to.latLang.longitude);
         Placemark placemark = placemarkTo.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
