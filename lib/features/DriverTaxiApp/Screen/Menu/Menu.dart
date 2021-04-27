@@ -1,5 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,7 @@ class MenuItems {
 class MenuDriverScreens extends StatelessWidget {
   final String activeScreenName;
   final Session _session = Session();
+  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   MenuDriverScreens({this.activeScreenName});
 
@@ -273,7 +276,9 @@ class MenuDriverScreens extends StatelessWidget {
                           ),
                           getItemMenu(
                             onTap: () async{
+                              final _prefs = UserPreferences();
                               await _session.clear();
+                              driverFirestoreService.updateDriverAvalability(false, _prefs.idChofer);
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'login');
                             },
