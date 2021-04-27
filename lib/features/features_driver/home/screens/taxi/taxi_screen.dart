@@ -99,6 +99,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       }
     });
     _locationService.getPositionStream().listen((event) async{
+      if(currentLocation == null) return;
       double diferencia = await _locationService.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
       if(diferencia > 5 && isWorking && mounted){
         final _prefs = UserPreferences();
