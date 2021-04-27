@@ -73,9 +73,13 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      checkPermission();
+      await checkPermission();
       await _initLastKnownLocation();
-      await _initCurrentLocation();
+      if(_lastKnownPosition != null){
+        _initCurrentLocation();
+      }else{
+        await _initCurrentLocation();
+      }
       iconTaxi = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/taxi_marker.png');
       fetchLocation();
       loading = false;
