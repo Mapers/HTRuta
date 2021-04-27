@@ -44,8 +44,7 @@ class ServiceDataRemote{
       }
     );
     if(result.success){
-      //! Debe fixearse por el .first
-      return InterprovincialRouteInServiceEntity.fromJson(result.data.first);
+      return InterprovincialRouteInServiceEntity.fromJson(result.data);
     }
     return null;
   }
