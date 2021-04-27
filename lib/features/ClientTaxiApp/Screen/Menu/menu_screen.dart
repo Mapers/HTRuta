@@ -101,15 +101,15 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
                               },
                             ), */
-                            getItemMenu(
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.wallet,
                               text: 'Mis métodos de pago',
                               isSelected: activeScreenName.compareTo('PAYMENT') == 0,
                               onTap: () {
-                                /* Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false); */
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.clientPaymentMethods, (Route<dynamic> route) => false);
                               },
-                            ),
+                            ), */
                             getItemMenu(
                               icon: FontAwesomeIcons.history,
                               text: 'Mis viajes',

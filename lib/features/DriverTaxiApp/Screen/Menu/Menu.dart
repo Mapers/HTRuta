@@ -234,6 +234,15 @@ class MenuDriverScreens extends StatelessWidget {
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
                           ),
+                          getItemMenu(
+                            onTap: () {
+                              Navigator.pop(context);
+                              navigatorRemoveUntil(context,'paymentMethods');
+                            },
+                            isSelected: activeScreenName.compareTo('PAYMENTS') == 0,
+                            icon: FontAwesomeIcons.creditCard,
+                            text: 'Mis métodos de pago'
+                          ),
                           BlocBuilder<DriverServiceBloc, DriverServiceState>(
                             builder: (ctx, state){
                               DataDriverServiceState data = state;
