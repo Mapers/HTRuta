@@ -235,7 +235,10 @@ class _SelectAddressState extends State<SelectAddress> {
               child: FlatButton(
                 onPressed: ()async{
                   try{
+                    if(widget.toAddress == null) return;
+                    if(widget.toAddress.name.isEmpty) return;
                     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+                    
                     if(precio.isNotEmpty){
                       final _session = Session();
                       final dataUsuario = await _session.get();
