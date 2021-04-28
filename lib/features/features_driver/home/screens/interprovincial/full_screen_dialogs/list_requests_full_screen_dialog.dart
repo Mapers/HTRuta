@@ -145,7 +145,10 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Rechazando solicitud...');
               final _prefs = UserPreferences();
-              await interprovincialDataFirestore.rejectRequest(documentId: widget.documentId, request: interprovincialRequest, driverFcmToken: _prefs.tokenPush, origin: InterprovincialDataFirestoreOrigin.driver);
+              await Future.wait([
+                interprovincialDataFirestore.rejectRequest(documentId: widget.documentId, request: interprovincialRequest, driverFcmToken: _prefs.tokenPush, origin: InterprovincialDataFirestoreOrigin.driver),
+                serviceDataRemote.rejectRequest(widget.serviceId, interprovincialRequest.passengerId)
+              ]);
               _loadingFullScreen.close();
             },
           )

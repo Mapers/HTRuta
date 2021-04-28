@@ -48,19 +48,28 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 5),
-                  //! Corregir en dos líneas el distrito y provincia
                   Expanded(
-                    child: Text('${route.fromLocation.streetName} - ${route.fromLocation.districtName} - ${route.fromLocation.provinceName}'),
+                    child: Column(
+                      children: [
+                        Text(route.fromLocation.streetName),
+                        Text('${route.fromLocation.districtName} - ${route.fromLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                      ],
+                    ),
                   )
                 ],
               ),
-              Icon(Icons.more_vert, size: 15, color: Colors.black26,),
+              Icon(Icons.more_vert, size: 15, color: Colors.black26),
               Row(
                 children: [
                   Icon(Icons.location_on_outlined, color: Colors.red, size: 18),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text('${route.toLocation.streetName} - ${route.toLocation.districtName} - ${route.toLocation.provinceName}'),
+                    child: Column(
+                      children: [
+                        Text(route.toLocation.streetName),
+                        Text('${route.toLocation.districtName} - ${route.toLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                      ],
+                    ),
                   )
                 ],
               ),

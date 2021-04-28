@@ -2,9 +2,9 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
@@ -65,7 +65,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   final aceptar = '1';
   final rechazar = '2';
   
-  final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
 
   final registroConductorApi = RegistroConductorApi();
