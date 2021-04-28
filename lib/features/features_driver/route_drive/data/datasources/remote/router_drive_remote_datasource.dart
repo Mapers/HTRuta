@@ -19,16 +19,10 @@ class RouterDriveRemoteDataSoruce {
         'user_id': _prefs.idChofer,
       }
     );
-<<<<<<< HEAD
-    print(result.data );
-    List<InterprovincialRouteEntity> routeDrives = InterprovincialRouteEntity.fromListJson(result.data);
-    return routeDrives;
-=======
 
     if(result.success) return InterprovincialRouteEntity.fromListJson(result.data);
 
     return [];
->>>>>>> d745c96c20b77d4d91af1595f3ffd90ed6a5bad7
   }
 
   Future<void> addListRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
