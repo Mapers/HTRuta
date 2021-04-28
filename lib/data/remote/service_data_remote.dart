@@ -37,7 +37,7 @@ class ServiceDataRemote{
     );
   }
 
-  Future<PassengerEntity> getPassengerById(int passengerId) async{
+  Future<PassengerEntity> getPassengerById(String passengerId) async{
     //! Esta data debe venir desde backend
     return PassengerEntity.mock();
   }
@@ -52,6 +52,24 @@ class ServiceDataRemote{
       return InterprovincialRouteInServiceEntity.fromJson(result.data);
     }
     return null;
+  }
+
+  Future<bool> acceptRequest(String serviceId, String passengerId) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/accept-request',
+      data: {
+        'service_id': serviceId, 'passenger_id': passengerId
+      }
+    );
+    return result.success;
+  }
+
+  Future<bool> rejectRequest(String serviceId, String passengerId) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/reject-request',
+      data: {
+        'service_id': serviceId, 'passenger_id': passengerId
+      }
+    );
+    return result.success;
   }
 
 }

@@ -1,6 +1,5 @@
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -44,10 +43,6 @@ class PushNotificationProvider{
         print('${info['notification']['title']}');
         print(info);
 
-        String argumento = 'no-data';
-        if(Platform.isAndroid){
-          argumento = info['notification']['title'];
-        }
         print('al display');
         _displayNotification(info, backgroundMessageHandler);
         print('enviar sink');
@@ -57,20 +52,12 @@ class PushNotificationProvider{
         print('============= On Launch ==========');
         print(info);
         print('${info['notification']['title']}');
-        String argumento = 'no-data';
-        if(Platform.isAndroid){
-          argumento = info['notification']['title'];
-        }
         _displayNotification(info, backgroundMessageHandler);
         _mensajesStreamController.sink.add(info);
       },
       onResume: (info) async {
         print('============= On Resume ==========');
         print('${info['notification']['title']}');
-        String argumento = 'no-data';
-        if(Platform.isAndroid){
-          argumento = info['notification']['title'];
-        }
         _displayNotification(info, backgroundMessageHandler);
         _mensajesStreamController.sink.add(info);
       }
