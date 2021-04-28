@@ -120,6 +120,14 @@ class MenuScreens extends StatelessWidget {
                               },
                             ),
                             getItemMenu(
+                              icon: Icons.settings,
+                              text: 'Configuracion',
+                              isSelected: activeScreenName.compareTo('CONFIG') == 0,
+                              onTap: () {
+                                
+                              },
+                            ),
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.truck,
                               text: 'Carga',
                               isSelected: activeScreenName.compareTo('CARGA') == 0,
@@ -127,9 +135,9 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.cargaScreen);
                               },
-                            ),
+                            ), */
                             getItemMenu(
-                              icon: FontAwesomeIcons.cogs,
+                              icon: FontAwesomeIcons.fileAlt,
                               text: 'Términos y Condiciones',
                               isSelected: activeScreenName.compareTo('TERMS') == 0,
                               onTap: () {

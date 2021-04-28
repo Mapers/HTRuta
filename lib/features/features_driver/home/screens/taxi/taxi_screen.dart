@@ -103,6 +103,16 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
       if(diferencia > 5 && isWorking && mounted){
         final _prefs = UserPreferences();
+        _markers.clear();
+        final MarkerId _markerMy = MarkerId('toLocation');
+        if(currentLocation != null){
+          _markers[_markerMy] = GMapViewHelper.createMaker(
+            markerIdVal: 'fromLocation',
+            icon: 'assets/image/marker/taxi_marker.png',
+            lat: currentLocation.latitude,
+            lng: currentLocation.longitude,
+          );
+        }
         driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
     });
@@ -319,6 +329,15 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
+    final MarkerId _markerMy = MarkerId('toLocation');
+    if(currentLocation != null){
+      _markers[_markerMy] = GMapViewHelper.createMaker(
+        markerIdVal: 'fromLocation',
+        icon: 'assets/image/marker/taxi_marker.png',
+        lat: currentLocation.latitude,
+        lng: currentLocation.longitude,
+      );
+    }
     if(listRequest.isNotEmpty){
       addMarker(listRequest.first['locationForm'], listRequest.first['locationTo']);
     }
@@ -581,6 +600,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         ),
         markers: _markers,
         polyLines: _polyLines,
+        myLocationEnabled: false,
         onTap: (_){
         }
       ),

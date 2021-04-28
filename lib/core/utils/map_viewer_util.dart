@@ -79,7 +79,10 @@ class MapViewerUtil {
       position: latLng,
       draggable: false,
       icon: icon,
-      onTap: onTap
+      onTap: onTap,
+      infoWindow: InfoWindow(
+        title: nameMarkerId
+      )
     );
     return marker;
   }
