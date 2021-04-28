@@ -35,15 +35,6 @@ class InterprovincialRouteEntity extends Equatable {
     );
   }
 
-  factory InterprovincialRouteEntity.empty({@required int orderBranch}) {
-    return InterprovincialRouteEntity(
-      id: 0,
-      name: '',
-      from: null,
-      to: null,
-      cost: null,
-    );
-  }
   static List<InterprovincialRouteEntity> fromListJson(List<dynamic> listJson){
     List<InterprovincialRouteEntity> list = [];
     listJson.forEach((data) => list.add(InterprovincialRouteEntity.fromJson(data)));

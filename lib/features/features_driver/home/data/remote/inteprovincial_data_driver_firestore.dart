@@ -56,6 +56,7 @@ class InterprovincialDataDriverFirestore{
       return DataInterprovincialDriverState(
         availableSeats: data['available_seats'],
         documentId: ds.id,
+        serviceId: data['service_id'],
         status: toInterprovincialStatusFromString(data['status']),
         routeService: null,
         routeStartDateTime: DateTime.parse((data['date_start_service'] as Timestamp).toDate().toString()),
