@@ -5,6 +5,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -69,10 +70,10 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
 
   void _addFromToMarkers({DataInterprovincialClientState datan, LatLng pos}) async{
     if(pos != null){
-      List<Placemark> placemarkFrom = await Geolocator().placemarkFromCoordinates(pos.latitude,pos.longitude);
+      List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude,pos.longitude);
       Placemark placemark = placemarkFrom.first;
       LocationEntity to = LocationEntity(
-        latLang: LatLng( placemark.position.latitude,placemark.position.longitude),
+        latLang: LatLng( pos.latitude, pos.longitude),
         regionName: placemark.administrativeArea,
         provinceName: placemark.subAdministrativeArea ,
         districtName: placemark.locality ,

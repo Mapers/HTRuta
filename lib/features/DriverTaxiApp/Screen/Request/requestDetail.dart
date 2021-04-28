@@ -29,7 +29,7 @@ class _RequestDetailState extends State<RequestDetail> {
   final requestApi = PickupApi();
 
   Future<double> calcularDistancia(Request requestActual)async{
-    return await _locationService.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
+    return await Geolocator.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io' show Platform;
 import 'package:geolocator/geolocator.dart';
@@ -116,9 +117,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
   Future<void> _getCurrentLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator.getCurrentPosition(
+      position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
@@ -130,7 +129,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
       _position = position;
 
     });
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(_position.latitude, _position.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(_position.latitude, _position.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {

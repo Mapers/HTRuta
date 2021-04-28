@@ -13,6 +13,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -75,9 +76,7 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator?.getLastKnownPosition(desiredAccuracy: LocationAccuracy.best);
+      position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
     } on PlatformException {
       position = null;
     }
@@ -103,10 +102,10 @@ class _HomeViewState extends State<HomeView> {
   /// Get current location
   Future<void> _initCurrentLocation() async {
     print('1');
-    await _locationService.isLocationServiceEnabled();
-    currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    await Geolocator.isLocationServiceEnabled();
+    currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     print('1.1');
-    List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     print('2');
     if (placemarks != null && placemarks.isNotEmpty) {
     print('3');
@@ -144,7 +143,7 @@ class _HomeViewState extends State<HomeView> {
   /// Get current location name
   void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
-      List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(lat, lng);
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;

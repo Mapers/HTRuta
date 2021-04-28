@@ -103,11 +103,11 @@ class MenuScreens extends StatelessWidget {
                             ), */
                             getItemMenu(
                               icon: FontAwesomeIcons.wallet,
-                              text: 'Pagos',
+                              text: 'Mis métodos de pago',
                               isSelected: activeScreenName.compareTo('PAYMENT') == 0,
                               onTap: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
+                                /* Navigator.pop(context);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false); */
                               },
                             ),
                             getItemMenu(

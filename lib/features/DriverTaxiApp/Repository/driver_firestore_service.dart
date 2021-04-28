@@ -18,16 +18,24 @@ class DriverFirestoreService{
   }
   Future<String> updateDriverAvalability(bool avaliability, String path) async {
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
-    await ref.update({
-      'available': avaliability,
-    }).catchError((onError) => print(onError));
+    try{
+      await ref.update({
+        'available': avaliability,
+      }).catchError((onError) => print(onError));
+    }catch(e){
+      print(e);
+    }
     return ref.id;
   }
   Future<String> updateDriverPosition(double latitud, double longitud, String path) async {
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
-    await ref.update({
-      'posicion': GeoPoint(latitud, longitud),
-    }).catchError((onError) => print(onError));
+    try{
+      await ref.update({
+        'posicion': GeoPoint(latitud, longitud),
+      }).catchError((onError) => print(onError));
+    }catch(e){
+      print(e);
+    }
     return ref.id;
   }
   Future<List<String>> getDrivers() async {

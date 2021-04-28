@@ -66,7 +66,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     InputButton(
                       enabled: false,
                       onTap: () async {
-                        final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        final geoposition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
                       hinText: 'Seleccionar ruta',
