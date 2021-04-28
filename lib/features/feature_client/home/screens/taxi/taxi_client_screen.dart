@@ -57,7 +57,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500},{'id': 2, 'title': '1 km', 'unidad': 'km', 'distancia': 1},{'id':3,'title': '3 km', 'unidad': 'km', 'distancia': 3},{'id':4,'title': '5 km', 'unidad': 'km', 'distancia': 5}, {'id':5,'title': '15 km', 'unidad': 'km', 'distancia': 15}];
   Map<String, dynamic> distanceOptionSelected = {'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500};
   String selectedDistance = '1';
-
+  bool showing = false;
   Position currentLocation;
   Position _lastKnownPosition;
   final Geolocator _locationService = Geolocator();
@@ -69,6 +69,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   double distance = 0;
   BitmapDescriptor iconTaxi;
+  List<DocumentSnapshot> markersSnapshotList;
   @override
   void initState() {
     super.initState();
@@ -468,7 +469,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
             //! Debe ser la ubicación actual
             latLng: LatLng(geoPoint.latitude, geoPoint.longitude),
             nameMarkerId: 'PASSENGER_MARKER_${markerSnap.id}',
-            icon: iconTaxi
+            icon: iconTaxi,
           )
         );
       }

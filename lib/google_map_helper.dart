@@ -12,7 +12,8 @@ class GMapViewHelper {
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
     MapCreatedCallback onMapCreated,
     ArgumentCallback<LatLng> onTap,
-    @required LatLng currentLocation
+    @required LatLng currentLocation,
+    bool myLocationEnabled = true
   }) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -21,7 +22,7 @@ class GMapViewHelper {
         onTap: onTap,
         markers: Set<Marker>.of(markers.values),
         polylines: Set<Polyline>.of(polyLines.values),
-        myLocationEnabled: true,
+        myLocationEnabled: myLocationEnabled,
         myLocationButtonEnabled: false,
         indoorViewEnabled: false,
         mapToolbarEnabled: false,

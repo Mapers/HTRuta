@@ -6,6 +6,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart'
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
+import 'package:HTRuta/features/DriverTaxiApp/providers/availability_provider.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
@@ -93,7 +94,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
-
+        ChangeNotifierProvider(create: (_) => AvailabilityProvider(),),
       ],
       child: MultiBlocProvider(
         providers: [
