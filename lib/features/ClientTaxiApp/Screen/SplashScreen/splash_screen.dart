@@ -55,12 +55,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     animationController.forward();
     Timer( Duration(seconds: 3), () async{
       final data = await _session.get();
-      await _prefs.initPrefs();
+      // await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
-      final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
+      // final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
       if(data != null){
         if(data.email != null || data.email != ''){
-          availabilityProvider.available = _prefs.drivingState;
+          // availabilityProvider.available = _prefs.drivingState;
           _sendToPage();
         }else{
           if(_prefs.primeraSesion){
