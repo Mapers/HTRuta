@@ -4,8 +4,8 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/select_service_widget.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
@@ -67,7 +67,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   String selectedService;
   PushNotificationProvider pushProvider;
 
-  Channel _channel;
   final pickUpApi = PickupApi();
 
   void _onMapCreated(GoogleMapController controller) {

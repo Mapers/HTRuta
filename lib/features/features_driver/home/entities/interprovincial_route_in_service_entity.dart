@@ -22,6 +22,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     @required this.toLocation,
     @required this.starts,
   });
+
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,

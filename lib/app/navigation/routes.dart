@@ -17,5 +17,5 @@ class Routes {
   static Route toPickSeatPage() => MaterialPageRoute(builder: (context)=> PickSeatPage());
   static Route toTravelNegotationPage({@required AvailableRouteEntity availablesRoutesEntity}) => MaterialPageRoute(builder: (context)=> TravelNegotationPage(availablesRoutesEntity: availablesRoutesEntity,));
   static Route toListPassengersFullScreenDialog(String documentId) => MaterialPageRoute(builder: (context)=> ListPassengersFullScreenDialog(documentId: documentId), fullscreenDialog: true);
-  static Route toListInterprovincialRequestFullScreenDialog(String documentId) => MaterialPageRoute(builder: (context)=> ListRequestsFullScreenDialog(documentId: documentId), fullscreenDialog: true);
+  static Route toListInterprovincialRequestFullScreenDialog(String documentId, String serviceId) => MaterialPageRoute(builder: (context)=> ListRequestsFullScreenDialog(documentId: documentId, serviceId: serviceId), fullscreenDialog: true);
 }

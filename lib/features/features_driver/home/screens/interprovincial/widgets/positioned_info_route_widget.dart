@@ -30,6 +30,14 @@ class PositionedInfoRouteWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  Expanded(
+                    child: Text(route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+              SizedBox(height: 5),
+              Row(
+                children: [
                   Container(
                     width: 13,
                     height: 13,
@@ -41,30 +49,36 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(route.fromLocation.streetName),
+                    child: Column(
+                      children: [
+                        Text(route.fromLocation.streetName),
+                        Text('${route.fromLocation.districtName} - ${route.fromLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                      ],
+                    ),
                   )
                 ],
               ),
-              Icon(Icons.more_vert, size: 15, color: Colors.black26,),
+              Icon(Icons.more_vert, size: 15, color: Colors.black26),
               Row(
                 children: [
                   Icon(Icons.location_on_outlined, color: Colors.red, size: 18),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(route.toLocation.streetName),
+                    child: Column(
+                      children: [
+                        Text(route.toLocation.streetName),
+                        Text('${route.toLocation.districtName} - ${route.toLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                      ],
+                    ),
                   )
                 ],
               ),
               SizedBox(height: showDataTime ? 10 : 0),
               showDataTime ? Row(
                 children: [
-                  Icon(Icons.access_time_rounded),
+                  Icon(Icons.departure_board),
                   SizedBox(width: 5),
-                  Text(routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black54)),
-                  Spacer(),
-                  Icon(Icons.calendar_today),
-                  SizedBox(width: 5),
-                  Text(routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black54)),
+                  Text('${routeStartDateTime.formatOnlyTimeInAmPM} ${routeStartDateTime.formatOnlyDate}', style: TextStyle(color: Colors.black54)),
                 ],
               ) : Container()
             ],

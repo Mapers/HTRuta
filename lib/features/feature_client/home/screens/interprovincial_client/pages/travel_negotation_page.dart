@@ -3,6 +3,7 @@ import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -31,6 +32,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   Session _session = Session();
   final _prefs = UserPreferences();
   TextEditingController amountController = TextEditingController();
+  ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
   String amount;
   @override
   void initState() {
@@ -110,14 +112,14 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               passengerFcmToken: _prefs.tokenPush,
                               from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
                               to: param.distictTo,
-                              passengerId: int.parse(user.id) ,
+                              passengerId: user.id,
                               fullNames: user.fullNames,
                               price: double.parse(amount),
                               seats: param.requiredSeats
                             );
                             NegotiationEntity negotiation = NegotiationEntity(
                               service_id: widget.availablesRoutesEntity.id,
-                              passenger_id: int.parse(user.id),
+                              passenger_id: user.id,
                               cost: double.parse(amount),
                               seating: param.requiredSeats,
                             );
@@ -191,7 +193,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       final user = await _session.get();
                       NegotiationEntity negotiation = NegotiationEntity(
                         service_id: widget.availablesRoutesEntity.id,
-                        passenger_id: int.parse(user.id),
+                        passenger_id: user.id,
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity:  negotiation));
                     },
@@ -201,13 +203,16 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
+                      await Future.wait([
+                        interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client),
+                        serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId)
+                      ]);
                       acceptService(documentId, request);
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
                         service_id: widget.availablesRoutesEntity.id,
-                        passenger_id: int.parse(user.id),
+                        passenger_id: user.id,
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                     }
