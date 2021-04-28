@@ -11,14 +11,15 @@ class RouterDriveRemoteDataSoruce {
   RouterDriveRemoteDataSoruce({@required this.requestHttp});
   Future<List<InterprovincialRouteEntity>> getListRouterDrives() async{
     await _prefs.initPrefs();
-    ResponseHttp result = await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
+    ResponseHttp result = await requestHttp.post(Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
       data: {
         'user_id': _prefs.idChofer,
       }
     );
-    List<InterprovincialRouteEntity> routeDrives = InterprovincialRouteEntity.fromListJson(result.data);
-    return routeDrives;
+
+    if(result.success) return InterprovincialRouteEntity.fromListJson(result.data);
+
+    return [];
   }
 
   Future<void> addListRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{

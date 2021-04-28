@@ -10,8 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class LocationUtil {
 
   static Future<LocationEntity> currentLocation() async {
-    Geolocator _locationService = Geolocator();
-    Position currentLocation = await Geolocator.getCurrentPosition();
+    Position currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
     LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
 
@@ -30,7 +29,6 @@ class LocationUtil {
   StreamSubscription subscription;
 
   void initListener({@required Function(LocationEntity) listen}){
-    Geolocator _locationService = Geolocator();
     subscription = Geolocator.getPositionStream().listen((location) async{
       List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
       LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
