@@ -16,7 +16,7 @@ class PickupApi{
   Future<RequestData> registerTravel(String idusuario,String vchLatInicial,String vchLatFinal,String vchLongInicial,String vchLongFinal,String mPrecio,String iTipoViaje,String nombreInicio, String nombreFinal, String comentarios, String token, String unidad, int distancia)async{
     final url = '${Config.nuevaRutaApi}/registro-viaje-solicitado';
     try{
-      final response = await http.post(url,body: {"IdTokenCliente": token, "idusuario" : idusuario, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchNombreInicial':nombreInicio,'vchNombreFinal':nombreFinal, 'Comentario': comentarios, 'unidad': unidad, 'distancia': distancia.toString()} );//TODO: unidad: M, distancia: 1
+      final response = await http.post(url,body: {'IdTokenCliente': token, 'idusuario' : idusuario, 'vchLatinicial': vchLatInicial, 'vchLatfinal': vchLatFinal, 'vchLonginicial': vchLongInicial,'vchLongfinal': vchLongFinal,'mPrecio': mPrecio,'iTipoViaje': iTipoViaje,'vchNombreInicial':nombreInicio,'vchNombreFinal':nombreFinal, 'Comentario': comentarios, 'unidad': unidad, 'distancia': distancia.toString()} );//TODO: unidad: M, distancia: 1
       final responseData = requestDataFromJson(response.body);
       if(responseData.success){
         return responseData;

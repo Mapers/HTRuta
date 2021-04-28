@@ -103,7 +103,9 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         formKey.currentState.save();
         InterprovincialRouteEntity data = InterprovincialRouteEntity(
           from: whereaboutsFrom,
-          to: whereaboutsTo
+          to: whereaboutsTo,
+          cost: null,
+          name: null
         );
         widget.getFromAndTo(data);
         Navigator.of(context).pop();

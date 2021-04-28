@@ -45,10 +45,13 @@ class ServiceDataRemote{
   Future<InterprovincialRouteInServiceEntity> getInterprovincialRouteInServiceById(String serviceId) async{
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/service/get-by-id',
       data: {
-        'user_id': serviceId
+        'service_id': serviceId
       }
     );
-    return InterprovincialRouteInServiceEntity.test();
+    if(result.success){
+      return InterprovincialRouteInServiceEntity.fromJson(result.data);
+    }
+    return null;
   }
 
 }
