@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:math' show cos, sqrt, asin;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -15,6 +19,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -33,9 +38,11 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   final String screenName = 'HOME';
   var _scaffoldKey =  GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   CircleId selectedCircle;
   int _markerIdCounter = 0;
+  BitmapDescriptor _markerIcon;
   GoogleMapController _mapController;
   BitmapDescriptor markerIcon;
   String _placemark = '';
@@ -47,21 +54,34 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   List<MapTypeModel> sampleData =  <MapTypeModel>[];
   PersistentBottomSheetController _controller;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
-
+  List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500},{'id': 2, 'title': '1 km', 'unidad': 'km', 'distancia': 1},{'id':3,'title': '3 km', 'unidad': 'km', 'distancia': 3},{'id':4,'title': '5 km', 'unidad': 'km', 'distancia': 5}, {'id':5,'title': '15 km', 'unidad': 'km', 'distancia': 15}];
+  Map<String, dynamic> distanceOptionSelected = {'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500};
+  String selectedDistance = '1';
+  bool showing = false;
   Position currentLocation;
   Position _lastKnownPosition;
   final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
   bool isEnabledLocation = false;
   bool loading = true;
-
+  double _radius = 500;
+  Map<CircleId, Circle> circles = <CircleId, Circle>{};
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  double distance = 0;
+  BitmapDescriptor iconTaxi;
+  List<DocumentSnapshot> markersSnapshotList;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      checkPermission();
+      await checkPermission();
       await _initLastKnownLocation();
-      await _initCurrentLocation();
+      if(_lastKnownPosition != null){
+        _initCurrentLocation();
+      }else{
+        await _initCurrentLocation();
+      }
+      iconTaxi = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/taxi_marker.png');
       fetchLocation();
       loading = false;
       setState(() {});
@@ -79,9 +99,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator?.getLastKnownPosition(desiredAccuracy: LocationAccuracy.best);
+      position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
     } on PlatformException {
       position = null;
     }
@@ -106,9 +124,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    await _locationService.isLocationServiceEnabled();
-    currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+    await Geolocator.isLocationServiceEnabled();
+    currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {
@@ -140,7 +158,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   /// Get current location name
   void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
-      List<Placemark> placemarks = await Geolocator()?.placemarkFromCoordinates(lat, lng);
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;
@@ -151,13 +169,14 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
           lat: lat,
           lng: lng
         ));
-      }
+      };
     }
   }
 
   void _onMapCreated(GoogleMapController controller) async {
     MarkerId markerId = MarkerId(_markerIdVal());
-    LatLng position = LatLng(currentLocation?.latitude,currentLocation?.longitude);
+    Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
+    LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
     Marker marker = Marker(
       markerId: markerId,
       position: position,
@@ -272,9 +291,265 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     _controller = null;
   }
 
+  Widget getListOptionDistance() {
+    final List<Widget> choiceChips = listDistance.map<Widget>((value) {
+      return Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: ChoiceChip(
+              key: ValueKey<String>(value['id'].toString()),
+              labelStyle: textGrey,
+              backgroundColor: greyColor2,
+              selectedColor: primaryColor,
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(3.0),
+              ),
+              selected: selectedDistance == value['id'].toString(),
+              label: Text((value['title']), style: TextStyle(color: Colors.white)),
+              onSelected: (bool check) {
+                setState(() {
+                  distanceOptionSelected = listDistance.where((element) => element['id'] == value['id']).toList().first;
+                  selectedDistance = check ? value['id'].toString() : '';
+                  changeCircle(selectedDistance);
+                });
+              })
+      );
+    }).toList();
+    return Wrap(
+        children: choiceChips
+    );
+  }
+
+  void changeCircle(String selectedCircle){
+    if(selectedCircle == '1'){
+      setState(() {
+        _radius = 500;
+        _moveCamera(14);
+      });
+    }
+    if(selectedCircle == '2'){
+      setState(() {
+        _radius = 1000;
+        _moveCamera(13.9);
+      });
+    }
+    if(selectedCircle == '3'){
+      setState(() {
+        _radius = 3000;
+        _moveCamera(13);
+      });
+    }
+    if(selectedCircle == '4'){
+      setState(() {
+        _radius = 5000;
+        _moveCamera(12);
+      });
+    }
+    if(selectedCircle == '5'){
+      setState(() {
+        _radius = 15000;
+        _moveCamera(11);
+      });
+    }
+    _addCircle();
+  }
+
+  
+
+  void _remove(String idMarker) {
+    final MarkerId markerId = MarkerId(idMarker);
+    setState(() {
+      markers.remove(markerId);
+    });
+  }
+
+  void _moveCamera(double zoom){
+    _mapController?.animateCamera(
+      CameraUpdate?.newCameraPosition(
+          CameraPosition(
+            target: LatLng(currentLocation.latitude,currentLocation.longitude),
+            zoom: zoom,
+          )
+      ),
+    );
+  }
+
+  void _addMarker(String markerIdVal, double lat, double lng) async {
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(lat, lng),
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
+      onTap: () {
+        // _onMarkerTapped(markerId);
+      },
+    );
+    setState(() {
+      markers[markerId] = marker;
+    });
+  }
+
+  void _addCircle() {
+    final int circleCount = circles.length;
+    if (circleCount == 12) {
+      return;
+    }
+    final String circleIdVal = 'circle_id';
+    final CircleId circleId = CircleId(circleIdVal);
+
+    final Circle circle = Circle(
+      circleId: circleId,
+      consumeTapEvents: true,
+      strokeColor: Color.fromRGBO(135, 206, 250, 0.9),
+      fillColor: Color.fromRGBO(135, 206, 250, 0.3),
+      strokeWidth: 4,
+      center: LatLng(currentLocation.latitude,currentLocation.longitude),
+      radius: _radius,
+    );
+    setState(() {
+      circles[circleId] = circle;
+    });
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  Future<void> _createMarkerImageFromAsset(BuildContext context) async {
+    if (_markerIcon == null) {
+      final ImageConfiguration imageConfiguration =
+      createLocalImageConfiguration(context);
+      BitmapDescriptor.fromAssetImage(
+          imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
+          .then(_updateBitmap);
+    }
+  }
+
+  void _updateBitmap(BitmapDescriptor bitmap) {
+    setState(() {
+      _markerIcon = bitmap;
+    });
+  }
+  Widget streamMap(){
+    return StreamBuilder(
+      stream: driverFirestoreService.getDriversStream(),
+      builder:(BuildContext context, AsyncSnapshot snapshot){
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting: return emptyMap();
+          case ConnectionState.none: return emptyMap();
+          case ConnectionState.active: return createMap(parseMarkers(snapshot.data.docs));
+          case ConnectionState.done: return createMap(parseMarkers(snapshot.data.docs));
+        }
+        return CircularProgressIndicator();
+      }
+    );
+  }
+  List<Marker> parseMarkers(List<DocumentSnapshot> markersSnapshot){
+    List<Marker> markers = [];
+    if(markersSnapshot.isEmpty) return markers;
+    for(DocumentSnapshot markerSnap in markersSnapshot){
+      Map<dynamic, dynamic> info = markerSnap.data();
+      GeoPoint geoPoint = info['posicion'];
+      if(geoPoint != null){
+        markers.add(
+          iconTaxi == null ? 
+          
+          MapViewerUtil.generateMarker(
+            //! Debe ser la ubicación actual
+            latLng: LatLng(geoPoint.latitude, geoPoint.longitude),
+            nameMarkerId: 'PASSENGER_MARKER_${markerSnap.id}',
+          ) : MapViewerUtil.generateMarker(
+            //! Debe ser la ubicación actual
+            latLng: LatLng(geoPoint.latitude, geoPoint.longitude),
+            nameMarkerId: 'PASSENGER_MARKER_${markerSnap.id}',
+            icon: iconTaxi,
+          )
+        );
+      }
+      
+    }
+    return markers;
+  }
+  Widget createMap(List<Marker> markers){
+    return SizedBox(
+      child: GoogleMap(
+        circles: Set<Circle>.of(circles.values),
+        markers: Set<Marker>.of(markers),
+        onMapCreated: _onMapCreated,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        compassEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+              currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
+              currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
+          zoom: 12.0,
+        ),
+        onCameraMove: (CameraPosition position) {
+          if(_markers.isNotEmpty) {
+            MarkerId markerId = MarkerId(_markerIdVal());
+            Marker marker = _markers[markerId];
+            Marker updatedMarker = marker?.copyWith(
+              positionParam: position?.target,
+            );
+            setState(() {
+              _markers[markerId] = updatedMarker;
+              _position = position;
+            });
+          }
+        },
+        onCameraIdle: () => getLocationName(
+            _position?.target?.latitude ?? currentLocation?.latitude,
+            _position?.target?.longitude ?? currentLocation?.longitude
+        ),
+      ),
+    );
+  }
+  Widget emptyMap(){
+    return SizedBox(
+      child: GoogleMap(
+        circles: Set<Circle>.of(circles.values),
+        onMapCreated: _onMapCreated,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        compassEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+              currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
+              currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
+          zoom: 12.0,
+        ),
+        onCameraMove: (CameraPosition position) {
+          if(_markers.isNotEmpty) {
+            MarkerId markerId = MarkerId(_markerIdVal());
+            Marker marker = _markers[markerId];
+            Marker updatedMarker = marker?.copyWith(
+              positionParam: position?.target,
+            );
+            setState(() {
+              _markers[markerId] = updatedMarker;
+              _position = position;
+            });
+          }
+        },
+        onCameraIdle: () => getLocationName(
+            _position?.target?.latitude ?? currentLocation?.latitude,
+            _position?.target?.longitude ?? currentLocation?.longitude
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    _createMarkerImageFromAsset(context);
     final responsive = Responsive(context);
     return SideMenu(
       key: _sideMenuKey,
@@ -287,9 +562,10 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
         body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            SizedBox(
+            /* SizedBox(
               //height: MediaQuery.of(context).size.height - 180,
               child: GoogleMap(
+                circles: Set<Circle>.of(circles.values),
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
@@ -319,24 +595,33 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                     _position?.target?.longitude ?? currentLocation?.longitude
                 ),
               ),
-            ),
+            ), */
+            streamMap(),
             ChangeServiceClientWidget(),
             Positioned(
               bottom: 30.0,
               left: 20.0,
               right: 20.0,
-              child: Container(
-                  height: 230,
-                  child: SelectAddress(
-                    fromAddress: widget?.placeBloc?.formLocation,
-                    toAddress: widget?.placeBloc?.locationSelect,
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchAddressScreen(),
-                          fullscreenDialog: true
-                      ));
-                    },
-                  )
+              child: Column(
+                children: [
+                  getListOptionDistance(),
+                  Container(height: 10),
+                  Container(
+                      height: 230,
+                      child: SelectAddress(
+                        fromAddress: widget?.placeBloc?.formLocation,
+                        toAddress: widget?.placeBloc?.locationSelect,
+                        unidad: distanceOptionSelected['unidad'],
+                        distancia: distanceOptionSelected['distancia'],
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SearchAddressScreen(),
+                              fullscreenDialog: true
+                          ));
+                        },
+                      )
+                  ),
+                ],
               ),
             ),
             Positioned(

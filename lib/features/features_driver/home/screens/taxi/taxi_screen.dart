@@ -20,7 +20,6 @@ import 'package:HTRuta/features/features_driver/home/presentations/widgets/butto
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,14 +60,13 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   LatLng currentLocation;
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
+  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   final aceptar = '1';
   final rechazar = '2';
   
   final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
-
-  final referenceDatabase = FirebaseDatabase.instance.reference();
 
   final registroConductorApi = RegistroConductorApi();
   bool isWorking = false;
@@ -100,7 +98,26 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         await travelConfirmation(idSolicitud);
       }
     });
+    Geolocator.getPositionStream().listen((event) async{
+      if(currentLocation == null) return;
+      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(diferencia > 5 && isWorking && mounted){
+        final _prefs = UserPreferences();
+        _markers.clear();
+        final MarkerId _markerMy = MarkerId('toLocation');
+        if(currentLocation != null){
+          _markers[_markerMy] = GMapViewHelper.createMaker(
+            markerIdVal: 'fromLocation',
+            icon: 'assets/image/marker/taxi_marker.png',
+            lat: currentLocation.latitude,
+            lng: currentLocation.longitude,
+          );
+        }
+        driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      
       await _initLastKnownLocation();
       await _initCurrentLocation().catchError((e) => {
         debugPrint(e.toString())
@@ -111,6 +128,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       setState(() {});
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
+      // readDrivingState();
       await getSolicitudes();
       requestPast = requestTaxi.map((e) => {
         'id': e.id,
@@ -119,6 +137,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       setState(() {});
     });
   }
+  /* void readDrivingState(){
+    final _prefs = UserPreferences();
+    isWorking = _prefs.drivingState;
+    setState(() {});
+  } */
   Future<void> travelConfirmation(String idSolicitud) async {
     final _prefs = UserPreferences();
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
@@ -268,9 +291,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Future<void> _initLastKnownLocation() async {
     Position position;
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = true;
-      position = await geolocator?.getLastKnownPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
     } on PlatformException {
       position = null;
     }
@@ -308,6 +329,15 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
+    final MarkerId _markerMy = MarkerId('toLocation');
+    if(currentLocation != null){
+      _markers[_markerMy] = GMapViewHelper.createMaker(
+        markerIdVal: 'fromLocation',
+        icon: 'assets/image/marker/taxi_marker.png',
+        lat: currentLocation.latitude,
+        lng: currentLocation.longitude,
+      );
+    }
     if(listRequest.isNotEmpty){
       addMarker(listRequest.first['locationForm'], listRequest.first['locationTo']);
     }
@@ -342,7 +372,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     final MarkerId _markerTo = MarkerId('toLocation');
     _markers[_markerFrom] = GMapViewHelper.createMaker(
       markerIdVal: 'fromLocation',
-      icon: checkPlatform ? 'assets/image/marker/gps_point_24.png' : 'assets/image/marker/gps_point.png',
+      icon: checkPlatform ? 'assets/image/marker/car_top_96.png' : 'assets/image/marker/car_top_48.png',
       lat: locationForm.latitude,
       lng: locationForm.longitude,
     );
@@ -358,7 +388,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   @override
   Widget build(BuildContext context) {
-
     List<Widget> bodyContent = [
       _buildMapLayer(),
       ChangeServiceDriverWidget(),
@@ -381,6 +410,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               if(estado != null){
                 if(estado.iEstado == 'Pendiente Aprobación'){
                   Dialogs.alert(context,title: 'Alerta', message: 'Su solicitud aun se encuentra pendiente de aprobación');
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   isWorking = false;
                 }else if(estado.iEstado == 'Rechazado'){
                   Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?',
@@ -392,19 +423,24 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       Navigator.pop(context);
                     }
                   );
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   isWorking = false;
                 }else{
-                  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                  
                   final _prefs = UserPreferences();
                   String token = _prefs.tokenPush;
                   String id = _prefs.idChofer;
-                  driverFirestoreService.setDriverData(token, id, 'Aprobado');
+                  driverFirestoreService.setDriverData(token, id, 'Aprobado', currentLocation != null ? currentLocation.latitude : 0, currentLocation != null ? currentLocation.longitude: 0);
+                  _prefs.setDrivingState = state;
                   isWorking = state;
                 }
               }else{
                 Dialogs.confirm(context, title: 'Información', message: 'Para comenzar a ganar con Chasqui debe completar su información personal', 
                 onCancel: () { 
                   isWorking = !state;
+                  final _prefs = UserPreferences();
+                  _prefs.setDrivingState = false;
                   Navigator.pop(context);
                 },
                 onConfirm: () {
@@ -415,6 +451,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
             }else{
               DriverFirestoreService driverFirestoreService = DriverFirestoreService();
               final _prefs = UserPreferences();
+              _prefs.setDrivingState = state;
               String id = _prefs.idChofer;
               driverFirestoreService.updateDriverAvalability(false, id);
               isWorking = state;
@@ -563,6 +600,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         ),
         markers: _markers,
         polyLines: _polyLines,
+        myLocationEnabled: false,
         onTap: (_){
         }
       ),

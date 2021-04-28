@@ -37,7 +37,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           DataInterprovincialDriverState newState = await interprovincialDataFirestore.getDataInterprovincialDriver(documentId: event.documentId);
           if(newState == null) throw LocalException(message: 'Documento no encontrado.');
 
-          final routeService = await serviceDataRemote.getInterprovincialRouteInServiceById(event.documentId);
+          final routeService = await serviceDataRemote.getInterprovincialRouteInServiceById(newState.serviceId);
           yield newState.copyWith(routeService: routeService);
         }else{
           throw LocalException(message: 'Documento no encontrado.');
@@ -76,6 +76,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
             starts: -1,
             interprovincialRoute: event.interprovincialRoute
           ),
+          serviceId: serviceId,
           status: InterprovincialStatus.onWhereabouts,
           routeStartDateTime: event.dateTime,
           documentId: documentId,

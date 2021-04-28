@@ -116,7 +116,8 @@ class BookingDetailWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.attach_money),
+                      Text('S/', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)),
+                      // Icon(Icons.attach_money),
                     ],
                   ),
                 ),

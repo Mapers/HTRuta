@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,12 +10,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class LocationUtil {
 
   static Future<LocationEntity> currentLocation() async {
-    Geolocator _locationService = Geolocator();
-    Position currentLocation = await _locationService.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    Position currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
     LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
 
-    List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       Placemark pos = placemarks.first;
       locationEntity = locationEntity.copyWith(
@@ -29,9 +29,8 @@ class LocationUtil {
   StreamSubscription subscription;
 
   void initListener({@required Function(LocationEntity) listen}){
-    Geolocator _locationService = Geolocator();
-    subscription = _locationService.getPositionStream().listen((location) async{
-      List<Placemark> placemarks = await _locationService.placemarkFromCoordinates(location.latitude, location.longitude);
+    subscription = Geolocator.getPositionStream().listen((location) async{
+      List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
       LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
 
       if (placemarks != null && placemarks.isNotEmpty) {

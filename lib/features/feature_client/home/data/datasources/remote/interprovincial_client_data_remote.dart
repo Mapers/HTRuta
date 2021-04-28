@@ -8,7 +8,6 @@ import 'package:HTRuta/features/feature_client/home/entities/client_interprovici
 import 'package:HTRuta/features/feature_client/home/entities/comnts_driver_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -77,28 +76,7 @@ class InterprovincialClientRemoteDataSoruce {
       }
     );
   }
-  Future<void> acceptRequest({@required NegotiationEntity negotiationEntity }) async{
-    await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/accept-request',
-      data: {
-        'service_id': negotiationEntity.service_id,
-        'seating': negotiationEntity.seating,
-        'cost': negotiationEntity.cost ,
-        'passenger_id': negotiationEntity.passenger_id
-      }
-    );
-  }
-  Future<void> rejectRequest({@required NegotiationEntity negotiationEntity }) async{
-    await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/reject-request',
-      data: {
-        'service_id': negotiationEntity.service_id,
-        'seating': negotiationEntity.seating,
-        'cost': negotiationEntity.cost ,
-        'passenger_id': negotiationEntity.passenger_id
-      }
-    );
-  }
+
   Future<void> quialificationRequest({ QualificationEntity qualification}) async{
     await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',

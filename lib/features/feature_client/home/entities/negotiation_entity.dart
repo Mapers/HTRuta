@@ -2,10 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class NegotiationEntity extends Equatable{
-  final int service_id;
+  final String service_id;
   final int seating;
   final double cost;
-  final int passenger_id;
+  final String passenger_id;
 
   NegotiationEntity( {
     @required this.service_id,

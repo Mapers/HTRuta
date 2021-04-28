@@ -81,7 +81,7 @@ class ItemRequest extends StatelessWidget {
                           style: textGrey,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Container(
+                        /* Container(
                           child: Row(
                             children: <Widget>[
                               Container(
@@ -107,7 +107,7 @@ class ItemRequest extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ),
+                        ), */
                       ],
                     ),
                   ),

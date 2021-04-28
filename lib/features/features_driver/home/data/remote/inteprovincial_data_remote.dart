@@ -36,4 +36,14 @@ class InterprovincialDriverDataRemote {
     }
     throw ServerException(message: result.error);
   }
+
+  Future<bool> sendCounterOffertInRequest({@required String serviceId, @required String passengerId, @required double cost}) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/send-counteroffer',
+      data: { 'service_id': serviceId, 'passenger_id': passengerId, 'cost': cost }
+    );
+    if(result.success){
+      return result.success;
+    }
+    throw ServerException(message: result.error);
+  }
 }

@@ -18,29 +18,58 @@ class ServiceDataRemote{
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
   Future<ServiceInCourseEntity> getServiceInCourse() async{
     await _prefs.initPrefs();
-    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
+    ResponseHttp result;
+    try{
+      result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
       data: {
         'user_id': _prefs.idChofer
       }
     );
+    }catch(e){
+      return null;
+    }
     if(result.data == null) return null;
     if(result.data['document_id'] == null) return null;
-
     return ServiceInCourseEntity(
-      entityType: getTypeEntityEnumByString(result.data.first['type_entity']),
+      entityType: getTypeEntityEnumByString(result.data['type_entity']),
       serviceType: TypeServiceEnum.interprovincial,
-      documentId: result.data.first['document_id']
+      documentId: result.data['document_id']
     );
   }
 
-  Future<PassengerEntity> getPassengerById(int passengerId) async{
+  Future<PassengerEntity> getPassengerById(String passengerId) async{
     //! Esta data debe venir desde backend
     return PassengerEntity.mock();
   }
 
   Future<InterprovincialRouteInServiceEntity> getInterprovincialRouteInServiceById(String serviceId) async{
-    //! Esta data debe venir desde backend
-    return InterprovincialRouteInServiceEntity.test();
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/service/get-by-id',
+      data: {
+        'service_id': serviceId
+      }
+    );
+    if(result.success){
+      return InterprovincialRouteInServiceEntity.fromJson(result.data);
+    }
+    return null;
+  }
+
+  Future<bool> acceptRequest(String serviceId, String passengerId) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/accept-request',
+      data: {
+        'service_id': serviceId, 'passenger_id': passengerId
+      }
+    );
+    return result.success;
+  }
+
+  Future<bool> rejectRequest(String serviceId, String passengerId) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/reject-request',
+      data: {
+        'service_id': serviceId, 'passenger_id': passengerId
+      }
+    );
+    return result.success;
   }
 
 }

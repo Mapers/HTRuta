@@ -3,6 +3,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/blo
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_actions_side_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_info_route_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_seat_manager_widget.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/positioned_terminated_route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +19,8 @@ class OnWhereaboutsWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         PositionedInfoRouteWidget(route: route, routeStartDateTime: routeStartDateTime),
-        PositionedActionsSideWidget(documentId: documentId),
+        PositionedActionsSideWidget(documentId: documentId, serviceId: route.id,),
+        PositionedTerminatedRouteWidget(bottom: 130),
         PositionedSeatManagerWidget(
           child: RaisedButton.icon(
             icon: Icon(Icons.directions_bus_outlined, color: Colors.white),

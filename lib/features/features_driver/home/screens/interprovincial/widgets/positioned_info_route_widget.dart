@@ -30,6 +30,14 @@ class PositionedInfoRouteWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  Expanded(
+                    child: Text(route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.center),
+                  )
+                ],
+              ),
+              SizedBox(height: 5),
+              Row(
+                children: [
                   Container(
                     width: 13,
                     height: 13,
@@ -40,8 +48,9 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 5),
+                  //! Corregir en dos líneas el distrito y provincia
                   Expanded(
-                    child: Text(route.fromLocation.streetName),
+                    child: Text('${route.fromLocation.streetName} - ${route.fromLocation.districtName} - ${route.fromLocation.provinceName}'),
                   )
                 ],
               ),
@@ -51,20 +60,16 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   Icon(Icons.location_on_outlined, color: Colors.red, size: 18),
                   SizedBox(width: 5),
                   Expanded(
-                    child: Text(route.toLocation.streetName),
+                    child: Text('${route.toLocation.streetName} - ${route.toLocation.districtName} - ${route.toLocation.provinceName}'),
                   )
                 ],
               ),
               SizedBox(height: showDataTime ? 10 : 0),
               showDataTime ? Row(
                 children: [
-                  Icon(Icons.access_time_rounded),
+                  Icon(Icons.departure_board),
                   SizedBox(width: 5),
-                  Text(routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black54)),
-                  Spacer(),
-                  Icon(Icons.calendar_today),
-                  SizedBox(width: 5),
-                  Text(routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black54)),
+                  Text('${routeStartDateTime.formatOnlyTimeInAmPM} ${routeStartDateTime.formatOnlyDate}', style: TextStyle(color: Colors.black54)),
                 ],
               ) : Container()
             ],

@@ -92,7 +92,7 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
                               },
                             ),
-                            getItemMenu(
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.car,
                               text: 'Carros',
                               isSelected: activeScreenName.compareTo('HOME2') == 0,
@@ -100,16 +100,16 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
                               },
-                            ),
-                            getItemMenu(
+                            ), */
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.wallet,
-                              text: 'Pagos',
+                              text: 'Mis métodos de pago',
                               isSelected: activeScreenName.compareTo('PAYMENT') == 0,
                               onTap: () {
                                 Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen2, (Route<dynamic> route) => false);
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.clientPaymentMethods, (Route<dynamic> route) => false);
                               },
-                            ),
+                            ), */
                             getItemMenu(
                               icon: FontAwesomeIcons.history,
                               text: 'Mis viajes',
@@ -120,6 +120,14 @@ class MenuScreens extends StatelessWidget {
                               },
                             ),
                             getItemMenu(
+                              icon: Icons.settings,
+                              text: 'Configuracion',
+                              isSelected: activeScreenName.compareTo('CONFIG') == 0,
+                              onTap: () {
+                                
+                              },
+                            ),
+                            /* getItemMenu(
                               icon: FontAwesomeIcons.truck,
                               text: 'Carga',
                               isSelected: activeScreenName.compareTo('CARGA') == 0,
@@ -127,9 +135,9 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.cargaScreen);
                               },
-                            ),
+                            ), */
                             getItemMenu(
-                              icon: FontAwesomeIcons.cogs,
+                              icon: FontAwesomeIcons.fileAlt,
                               text: 'Términos y Condiciones',
                               isSelected: activeScreenName.compareTo('TERMS') == 0,
                               onTap: () {

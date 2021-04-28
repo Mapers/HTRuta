@@ -10,6 +10,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/login.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/phone_verification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/profile.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Notification/notification.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Payment/driver_payments_method.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/PaymentMethod/payment_method.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/ReviewTrip/review_trip_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/settings.dart';
@@ -79,6 +80,7 @@ class AppRoute {
   static const String sendDocumentScreen = '/send_document';
   static const String travelScreen = '/travelScreen';
   static const String travelDriverScreen = '/travelDriverScreen';
+  static const String driverPaymentMethods = '/paymentMethods';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -130,6 +132,8 @@ class AppRoute {
         return PageViewTransition(builder: (_) => NotificationDriverScreens());
       case settingsDriverScreen:
         return PageViewTransition(builder: (_) => SettingsDriverScreen());
+      case driverPaymentMethods:
+        return PageViewTransition(builder: (_) => DriverPaymentsMethods());
       case paymentMethodDriverScreen:
         return PageViewTransition(builder: (_) => PaymentMethodDriver());
       case profileDriverScreen:
@@ -140,7 +144,7 @@ class AppRoute {
         return PageViewTransition(builder: (_) => SendDocumentPage());
       case travelScreen:
         return PageViewTransition(builder: (_) => TravelScreen());
-        case travelDriverScreen:
+      case travelDriverScreen:
         return PageViewTransition(builder: (_) => TravelDriverScreen());
       default:
         return PageViewTransition(

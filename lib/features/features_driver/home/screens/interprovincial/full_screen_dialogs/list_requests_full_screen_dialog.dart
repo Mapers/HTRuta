@@ -1,7 +1,9 @@
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -11,7 +13,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ListRequestsFullScreenDialog extends StatefulWidget {
   final String documentId;
-  ListRequestsFullScreenDialog({Key key, @required this.documentId}) : super(key: key);
+  final String serviceId;
+  ListRequestsFullScreenDialog({Key key, @required this.documentId, @required this.serviceId}) : super(key: key);
 
   @override
   _ListRequestsFullScreenDialogState createState() => _ListRequestsFullScreenDialogState();
@@ -19,6 +22,8 @@ class ListRequestsFullScreenDialog extends StatefulWidget {
 
 class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDialog> {
 
+  ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
+  InterprovincialDriverDataRemote interprovincialDriverDataRemote = getIt<InterprovincialDriverDataRemote>();
   InterprovincialDataDriverFirestore interprovincialDataDriverFirestore = getIt<InterprovincialDataDriverFirestore>();
   InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
   LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
@@ -208,7 +213,10 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               }
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Enviando contraoferta...');
-              await interprovincialDataDriverFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice);
+              await Future.wait([
+                interprovincialDataDriverFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice),
+                interprovincialDriverDataRemote.sendCounterOffertInRequest(cost: newPrice, passengerId: interprovincialRequest.passengerId, serviceId: widget.serviceId)
+              ]);
               _loadingFullScreen.close();
             },
           )
@@ -237,7 +245,11 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             onPressed: () async{
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Aceptando solicitud...');
-              int newAvailableSeats = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver);
+              List<dynamic> result = await Future.wait([
+                interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver),
+                serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId)
+              ]);
+              int newAvailableSeats = result.first;
               _loadingFullScreen.close();
               if(newAvailableSeats == null) return;
               BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: newAvailableSeats));
@@ -262,4 +274,5 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
       )
     );
   }
+
 }

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class AvailableRouteEntity extends Equatable{
-  final int id;
+  final String id;
   final int availableSeats;
   final String documentId;
   final VehicleSeatLayout vehicleSeatLayout; //? se usara cuando  se habilite tipos de movilidad
@@ -37,7 +37,7 @@ class AvailableRouteEntity extends Equatable{
 
   factory AvailableRouteEntity.fromJson(Map<String, dynamic> dataJson){
     return AvailableRouteEntity(
-      id: int.parse(dataJson['id']),
+      id: dataJson['id'].toString(),
       availableSeats: int.parse(dataJson['available_seats']) ,
       documentId: dataJson['document_id'],
       status: toInterprovincialStatusFromString(dataJson['status']),

@@ -66,7 +66,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                     InputButton(
                       enabled: false,
                       onTap: () async {
-                        final geoposition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        final geoposition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
                       hinText: 'Seleccionar ruta',
@@ -103,20 +103,15 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                                              Text(routerDrives.from.provinceName),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                                              Text(routerDrives.from.districtName),
-                                            ],
-                                          ),
+                                          Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                          Text(routerDrives.from.provinceName),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text(routerDrives.from.districtName),
                                         ],
                                       ),
                                       Row(
@@ -146,20 +141,15 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                                              Text(routerDrives.to.provinceName),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                                              Text(routerDrives.to.districtName),
-                                            ],
-                                          ),
+                                          Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                          Text(routerDrives.to.provinceName),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Distrito: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text(routerDrives.to.districtName),
                                         ],
                                       ),
                                       Row(
