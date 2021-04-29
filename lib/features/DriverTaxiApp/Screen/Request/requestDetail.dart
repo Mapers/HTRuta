@@ -2,15 +2,17 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'pickUp.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../data/Model/get_routes_request_model.dart';
 import '../../data/Model/direction_model.dart';
@@ -115,6 +117,44 @@ class _RequestDetailState extends State<RequestDetail> {
       markers[markerIdTo] = markerTo;
     });
   }
+  void acceptTravel(Request request) async {
+    try{
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      Dialogs.openLoadingDialog(context);
+      final dato = await requestApi.actionTravel(
+        _prefs.idChofer,
+        request.id,
+        double.parse(request.vchLatInicial),
+        double.parse(request.vchLatFinal),
+        double.parse(request.vchLongInicial),
+        double.parse(request.vchLongFinal),
+        '',
+        double.parse(request.mPrecio),
+        request.iTipoViaje,
+        '', '', '',
+        request.vchNombreInicial,
+        request.vchNombreFinal,
+        '1',
+        _prefs.tokenPush
+      );
+      PushMessage pushMessage = getIt<PushMessage>();
+      Map<String, String> data = {
+        'newOffer' : '1'
+      };
+      Navigator.pop(context);
+      if(!dato){
+        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+        return;
+      }
+      pushMessage.sendPushMessage(token: request.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+      Navigator.pop(context, true);
+      
+    }on ServerException catch(e){
+      Navigator.pop(context);
+      Dialogs.alert(context,title: 'Error', message: e.message);
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -143,11 +183,11 @@ class _RequestDetailState extends State<RequestDetail> {
             shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
             elevation: 0.0,
             color: primaryColor,
-            child: Text('Ir a recoger'.toUpperCase(),style: headingWhite,
+            child: Text('Aceptar solicitud'.toUpperCase(),style: headingWhite,
             ),
             onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PickUp()));
-            },
+              acceptTravel(widget.requestItem);
+            }
           ),
         ),
       ),
@@ -189,33 +229,6 @@ class _RequestDetailState extends State<RequestDetail> {
                           children: <Widget>[
                             Text(widget.requestItem.vchNombres ?? '',style: textBoldBlack,),
                             Text(widget.requestItem.dFecReg, style: textGrey,),
-                            Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    height: 25.0,
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: primaryColor
-                                    ),
-                                    child: Text('ApplePay',style: textBoldWhite,),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Container(
-                                    height: 25.0,
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: primaryColor
-                                    ),
-                                    child: Text('Descuento',style: textBoldWhite,),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),

@@ -490,8 +490,14 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               maxHeight: MediaQuery.of(context).size.width * 0.9,
               minHeight: MediaQuery.of(context).size.width * 0.85,
               cardBuilder: (context, index) => InkWell(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                onTap: () async {
+                  bool accepted = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                  if(accepted != null){
+                    if(accepted){
+                      await getSolicitudes();
+                      analizeChanges();
+                    }
+                  }
                 },
                 child: ItemRequest(
                   avatar: 'https://source.unsplash.com/1600x900/?portrait',
