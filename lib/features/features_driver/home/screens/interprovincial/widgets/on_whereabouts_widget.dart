@@ -19,7 +19,7 @@ class OnWhereaboutsWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         PositionedInfoRouteWidget(route: route, routeStartDateTime: routeStartDateTime),
-        PositionedActionsSideWidget(documentId: documentId),
+        PositionedActionsSideWidget(documentId: documentId, serviceId: route.id,),
         PositionedTerminatedRouteWidget(bottom: 130),
         PositionedSeatManagerWidget(
           child: RaisedButton.icon(

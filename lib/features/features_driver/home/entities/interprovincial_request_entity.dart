@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 class InterprovincialRequestEntity extends Equatable {
   final String documentId;
-  final int passengerId;
+  final String passengerId;
   final String fullNames;
   final String from;
   final String to;
@@ -27,7 +27,7 @@ class InterprovincialRequestEntity extends Equatable {
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
     return InterprovincialRequestEntity(
       documentId: dataJson['id'],
-      passengerId: (dataJson['passenger_id'] as num).toInt(),
+      passengerId: dataJson['passenger_id'].toString(),
       fullNames: dataJson['full_names'],
       seats: (dataJson['seats'] as num).toInt(),
       price: (dataJson['price'] as num).toDouble(),
@@ -55,7 +55,7 @@ class InterprovincialRequestEntity extends Equatable {
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       from: 'Huacho - Huaura - Huacho',
       to: 'Independencia - Lima - Lima',
-      passengerId: 1,
+      passengerId: '1',
       seats: 12,
       price: 55.99,
       condition: InterprovincialRequestCondition.offer,

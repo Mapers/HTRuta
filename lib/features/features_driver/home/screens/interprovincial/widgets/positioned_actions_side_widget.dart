@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 
 class PositionedActionsSideWidget extends StatelessWidget {
   final String documentId;
-  const PositionedActionsSideWidget({Key key, @required this.documentId}) : super(key: key);
+  final String serviceId;
+  const PositionedActionsSideWidget({Key key, @required this.documentId, @required this.serviceId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
     return Positioned(
       right: 10,
-      top: 180,
+      top: 250,
       child: Column(
         children: [
           StreamBuilder<List<PassengerEntity>>(
@@ -43,7 +44,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
                   icon: Icons.assignment_ind,
                   text: '$length Solicitud${length == 1 ? "" : "es"}',
                   onTap: length > 0 ? () {
-                    Navigator.of(context).push(Routes.toListInterprovincialRequestFullScreenDialog(documentId));
+                    Navigator.of(context).push(Routes.toListInterprovincialRequestFullScreenDialog(documentId, serviceId));
                   } : null
                 );
               }

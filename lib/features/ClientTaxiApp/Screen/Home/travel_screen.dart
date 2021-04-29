@@ -4,11 +4,11 @@ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
@@ -52,13 +52,11 @@ class _TravelScreenState extends State<TravelScreen> {
 
   Position currentLocation;
   Position _lastKnownPosition;
-  final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
   bool isEnabledLocation = false;
 
   final pickupApi = PickupApi();
   final referenceDatabase = FirebaseDatabase.instance.reference();
-  Channel _channel;
   PushNotificationProvider pushProvider;
 
   dynamic posicionChofer;

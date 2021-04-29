@@ -80,14 +80,14 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
       subtitle: Row(
         children: [
           Expanded(
-            child: Text(interprovincialRoute.from.streetName)
+            child: Text('${interprovincialRoute.from.streetName} - ${interprovincialRoute.from.districtName} - ${interprovincialRoute.from.provinceName}')
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: Icon(Icons.arrow_right_alt_outlined, size: 28,),
           ),
           Expanded(
-            child: Text(interprovincialRoute.to.streetName),
+            child: Text('${interprovincialRoute.to.streetName} - ${interprovincialRoute.to.districtName} - ${interprovincialRoute.to.provinceName}')
           )
         ],
       ),

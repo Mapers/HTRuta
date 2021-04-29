@@ -21,7 +21,6 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
             final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
             if(status.contains(serviceState.status) && locationState.location != null){
               int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
-              print('diferenceDays: $diferenceDays');
               double distance = LocationUtil.calculateDistance(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
               if(distance <= 3 || diferenceDays >= 2){
                 return Positioned(

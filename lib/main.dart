@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';

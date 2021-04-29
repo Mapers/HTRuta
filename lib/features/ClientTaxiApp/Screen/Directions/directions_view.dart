@@ -5,7 +5,7 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/push_notification.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -24,7 +24,6 @@ import 'package:HTRuta/app_router.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../../google_map_helper.dart';
@@ -67,7 +66,6 @@ class _DirectionsViewState extends State<DirectionsView> {
   PanelController panelController =PanelController();
   String selectedService;
 
-  Channel _channel;
   final pickUpApi = PickupApi();
   List<DriverRequest> requestTaxi = [];
   PushNotificationProvider pushProvider;
