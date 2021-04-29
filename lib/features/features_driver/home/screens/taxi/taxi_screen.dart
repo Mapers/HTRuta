@@ -146,7 +146,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     final _prefs = UserPreferences();
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-    pedidoProvider.request = Request(id: data.id,iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+    pedidoProvider.request = data;
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
   }
   Future<void> getSolicitudes() async {
@@ -510,7 +510,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     double.parse(requestTaxi[index].vchLatFinal),
                     double.parse(requestTaxi[index].vchLongFinal),
                   ),
-                  onTap: () async {
+                  onAccept: () async {
                     print('Aceptar');
                     try{
                       final _prefs = UserPreferences();
@@ -547,6 +547,40 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       Navigator.pop(context);
                       Dialogs.alert(context,title: 'Error', message: e.message);
                     }
+                  },
+                  onRefuse: () async {
+                  try{
+                    final _prefs = UserPreferences();
+                    await _prefs.initPrefs();
+                    Dialogs.openLoadingDialog(context);
+                    final dato = await pickupApi.actionTravel(
+                      _prefs.idChofer,
+                      requestTaxi[index].id,
+                      double.parse(requestTaxi[index].vchLatInicial),
+                      double.parse(requestTaxi[index].vchLatFinal),
+                      double.parse(requestTaxi[index].vchLongInicial),
+                      double.parse(requestTaxi[index].vchLongInicial),
+                      '',
+                      double.parse(requestTaxi[index].mPrecio),
+                      requestTaxi[index].iTipoViaje,
+                       '', '','',
+                      requestTaxi[index].vchNombreInicial,
+                      requestTaxi[index].vchNombreFinal,
+                      rechazar,
+                      _prefs.tokenPush
+                    );
+                    await getSolicitudes();
+                    analizeChanges();
+                    Navigator.pop(context);
+                    if(dato){
+                      //Esperar solicitud
+                    }else{
+                      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                    }
+                  }on ServerException catch(e){
+                    Navigator.pop(context);
+                    Dialogs.alert(context,title: 'Error', message: e.message);
+                  }
                   },
                 ),
               ),

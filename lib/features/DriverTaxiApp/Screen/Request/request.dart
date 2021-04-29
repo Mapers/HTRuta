@@ -14,6 +14,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_pag
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -70,7 +71,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       await loadRequests();
       requestPast = requestTaxi.map((e) => {
         'id': e.id,
-        'precio': e.mPrecio 
+        'precio': e.mPrecio,
+        'precioOferta': e.mPrecio
       }).toList(); 
       setState(() {});
     });
@@ -127,6 +129,11 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
         });
 
         requestTaxi.removeWhere((element) => removeData.contains(element));
+        requestPast = requestTaxi.map((e) => {
+          'id': e.id,
+          'precio' : e.mPrecio,
+          'precioOferta': e.mPrecio
+        }).toList();
       }
   }
   void analizeChanges(){
@@ -189,13 +196,15 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     }
     requestPast = requestTaxi.map((e) => {
       'id': e.id,
-      'precio': e.mPrecio 
+      'precio': e.mPrecio,
+      'precioOferta': e.mPrecio
     }).toList();
     
     setState(() {});  
   }
   @override
   Widget build(BuildContext context) {
+    
     return DefaultTabController(
       length: 3,
       child: SideMenu(
@@ -336,6 +345,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   // }
 
   Widget cardTaxi(TaxiModel taxi){
+    final responsive = Responsive(context);
+    Map requestActual = requestPast.where((element) => element['id'] == taxi.id).toList().first;
     return Card(
       margin: EdgeInsets.all(10),
       elevation: 10,
@@ -467,6 +478,98 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                 ],
               )
             ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  OutlineButton(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                    borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    shape:RoundedRectangleBorder(
+                      borderRadius:
+                        BorderRadius.circular(10.0),
+                    ),
+                    onPressed: (){
+                      double price = double.parse(requestActual['precioOferta']);
+                      price-=0.5;
+                      requestActual['precioOferta']=price.toStringAsFixed(2);
+                      setState(() {});
+                    },
+                    child: Text('-0.5', style: TextStyle(color:Colors.grey)),
+                  ),
+                  Text('S/${requestActual['precioOferta']}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
+                  OutlineButton(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                    borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    onPressed: (){
+                      double price = double.parse(requestActual['precioOferta']);
+                      price+=0.5;
+                      requestActual['precioOferta']=price.toStringAsFixed(2);
+                      setState(() {});
+                      // pedidoProvider.incrementarPrecio();
+                    },
+                    child: Text('+0.5',style: TextStyle(color: primaryColor),),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10.0,bottom: 10.0),
+              child: ButtonTheme(
+                minWidth: MediaQuery.of(context).size.width - 50.0,
+                height: 50.0,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  elevation: 0.0,
+                  color: Colors.blue.withOpacity(0.8),
+                  child: Text('Modificar precio',style: headingWhite,
+                  ),
+                  onPressed: () async{
+                    try{
+                      final _prefs = UserPreferences();
+                      await _prefs.initPrefs();
+                      newTravel = true;
+                      Dialogs.openLoadingDialog(context);
+                      final dato = await pickupApi.actionTravel(
+                        _prefs.idChofer,
+                        taxi.id,
+                        taxi.initialLat,
+                        taxi.finalLat,
+                        taxi.initialLong,
+                        taxi.finalLong,
+                        '',
+                        double.parse(requestActual['precioOferta']),
+                        taxi.typeTravel,
+                        '', '', '',
+                        taxi.startName,
+                        taxi.finalname,
+                        aceptar,
+                        _prefs.tokenPush
+                      );
+                      PushMessage pushMessage = getIt<PushMessage>();
+                      Map<String, String> data = {
+                        'newOffer' : '1'
+                      };
+                      lastUserToken = taxi.token;
+                      pushMessage.sendPushMessage(token: taxi.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+                      Navigator.pop(context);
+                      if(dato){
+                        //Esperar solicitud
+                      }else{
+                        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                      }
+                    }on ServerException catch(e){
+                      Navigator.pop(context);
+                      Dialogs.alert(context,title: 'Error', message: e.message);
+                    }
+                  },
+                ),
+              ),
+            ),
             Row(
               children: <Widget>[
                 Expanded(
@@ -557,8 +660,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                             };
                             lastUserToken = taxi.token;
                             pushMessage.sendPushMessage(token: taxi.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
-                            await loadRequests();
-                            analizeChanges();
                             Navigator.pop(context);
                             if(dato){
                               //Esperar solicitud
@@ -577,7 +678,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                 ),
               ],
             ),
-
           ],
         ),
       ),

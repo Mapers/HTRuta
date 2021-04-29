@@ -12,7 +12,8 @@ class ItemRequest extends StatelessWidget {
   @required final String distance;
   @required final String addFrom;
   @required final String addTo;
-  @required final VoidCallback onTap;
+  @required final VoidCallback onAccept;
+  @required final VoidCallback onRefuse;
   final LatLng locationForm;
   final LatLng locationTo;
 
@@ -25,7 +26,8 @@ class ItemRequest extends StatelessWidget {
     this.distance,
     this.addFrom,
     this.addTo,
-    this.onTap,
+    this.onAccept,
+    this.onRefuse,
     this.locationForm,
     this.locationTo
 
@@ -158,7 +160,7 @@ class ItemRequest extends StatelessWidget {
                   ],
                 )
             ),
-            Padding(
+            /* Padding(
               padding: EdgeInsets.only(left: 10.0,right: 10.0),
               child: ButtonTheme(
                 minWidth: screenSize.width ,
@@ -172,8 +174,43 @@ class ItemRequest extends StatelessWidget {
                   onPressed: onTap,
                 ),
               ),
+            ), */
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ButtonTheme(
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        elevation: 0,
+                        color: Colors.redAccent,
+                        child: Text('Rechazar',style: headingWhite,
+                        ),
+                        onPressed: onRefuse
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: ButtonTheme(
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        elevation: 0,
+                        color: primaryColor,
+                        child: Text('Aceptar',style: headingWhite,
+                        ),
+                        onPressed: onAccept
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-
           ],
         ),
       ),
