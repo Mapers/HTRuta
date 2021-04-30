@@ -15,6 +15,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
@@ -389,7 +390,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Widget build(BuildContext context) {
     List<Widget> bodyContent = [
       _buildMapLayer(),
-      ChangeServiceDriverWidget(),
+      // ChangeServiceDriverWidget(),
+      CustomDropdown(),
       Positioned(
         top: 110,
         child: LiteRollingSwitch(
