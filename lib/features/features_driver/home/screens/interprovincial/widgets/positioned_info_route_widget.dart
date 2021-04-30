@@ -31,7 +31,7 @@ class PositionedInfoRouteWidget extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.center),
+                    child: Text(route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.center),
                   )
                 ],
               ),
@@ -39,8 +39,8 @@ class PositionedInfoRouteWidget extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    width: 13,
-                    height: 13,
+                    width: 14,
+                    height: 14,
                     margin: EdgeInsets.symmetric(horizontal: 2),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black45, width: 2),
@@ -51,8 +51,8 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        Text(route.fromLocation.streetName),
-                        Text('${route.fromLocation.districtName} - ${route.fromLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                        Text(route.fromLocation.streetName, style: TextStyle(fontSize: 12),),
+                        Text('${route.fromLocation.districtName} - ${route.fromLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 11))
                       ],
                     ),
                   )
@@ -61,13 +61,13 @@ class PositionedInfoRouteWidget extends StatelessWidget {
               Icon(Icons.more_vert, size: 15, color: Colors.black26),
               Row(
                 children: [
-                  Icon(Icons.location_on_outlined, color: Colors.red, size: 18),
+                  Icon(Icons.location_on_outlined, color: Colors.red, size: 19),
                   SizedBox(width: 5),
                   Expanded(
                     child: Column(
                       children: [
-                        Text(route.toLocation.streetName),
-                        Text('${route.toLocation.districtName} - ${route.toLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54))
+                        Text(route.toLocation.streetName, style: TextStyle(fontSize: 12),),
+                        Text('${route.toLocation.districtName} - ${route.toLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 11))
                       ],
                     ),
                   )
