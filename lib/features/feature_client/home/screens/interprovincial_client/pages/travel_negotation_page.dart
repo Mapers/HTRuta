@@ -148,10 +148,27 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
-        return WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
-          BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
-        });
+        return Center(
+          child: Column(
+            children: [
+              Text( 'Tu oferta fue rechazado',style: TextStyle(fontWeight: FontWeight.bold),),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center ,
+                children: [
+                  PrincipalButton(
+                    text: 'Ver otras rutas',
+                    width: 100,
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+                    }
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       break;
       case InterprovincialRequestCondition.offer:
           return Center(
