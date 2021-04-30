@@ -1,6 +1,5 @@
 
 import 'dart:async';
-import 'dart:js';
 
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/data/conts/interprovincial_consts.dart';
