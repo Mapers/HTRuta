@@ -108,7 +108,10 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
       DataInterprovincialDriverState data = state;
       if(data.availableSeats < event.maxSeats){
         int newAvailableSeats = data.availableSeats + 1;
-        await interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
+        await Future.wait([
+          interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats),
+          interprovincialDriverDataRemote.updateSeatsAvailable(serviceId: data.routeService.id, seatsAvailable: newAvailableSeats)
+        ]);
         yield data.copyWith(
           availableSeats: newAvailableSeats
         );
@@ -117,7 +120,10 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
       DataInterprovincialDriverState data = state;
       if(data.availableSeats > 0){
         int newAvailableSeats = data.availableSeats - 1;
-        await interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
+        await Future.wait([
+          interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats),
+          interprovincialDriverDataRemote.updateSeatsAvailable(serviceId: data.routeService.id, seatsAvailable: newAvailableSeats)
+        ]);
         yield data.copyWith(
           availableSeats: newAvailableSeats
         );
