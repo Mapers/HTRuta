@@ -81,7 +81,7 @@ class InterprovincialRequestEntity extends Equatable {
   List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, passengerFcmToken, passengerId];
 }
 
-enum InterprovincialRequestCondition { offer, counterOffer , accepted, reject}
+enum InterprovincialRequestCondition { offer, counterOffer , accepted, rejected}
 
 String getStringInterprovincialRequestCondition(InterprovincialRequestCondition condition){
   switch (condition) {
@@ -91,8 +91,8 @@ String getStringInterprovincialRequestCondition(InterprovincialRequestCondition 
       return 'COUNTER_OFFER';
     case InterprovincialRequestCondition.accepted:
       return 'ACCEPTED';
-    case InterprovincialRequestCondition.reject:
-      return 'REJECT';
+    case InterprovincialRequestCondition.rejected:
+      return 'REJECTED';
     default:
       return null;
   }
@@ -106,8 +106,8 @@ InterprovincialRequestCondition getInterprovincialRequestConditionFromString(Str
       return InterprovincialRequestCondition.counterOffer;
     case 'ACCEPTED':
       return InterprovincialRequestCondition.accepted;
-    case 'REJECT':
-      return InterprovincialRequestCondition.reject;
+    case 'REJECTED':
+      return InterprovincialRequestCondition.rejected;
     default:
       return null;
   }

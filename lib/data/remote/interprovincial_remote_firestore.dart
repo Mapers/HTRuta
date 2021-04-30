@@ -71,15 +71,14 @@ class InterprovincialDataFirestore{
   Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request, @required String driverFcmToken, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId)
-      .collection('requests').doc(request.documentId).delete();
+      .collection('requests').doc(request.documentId).update({
+        'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.rejected),
+      });
       if(origin == InterprovincialDataFirestoreOrigin.driver){
         pushMessage.sendPushMessage(
           token: request.passengerFcmToken,
           title: 'Su solicitud ha sido rechazada',
-          description: 'Puede realizar otra solicitud',
-          data: {
-            'key': INTERPROVINCIAL_PASSENGER_REJECTED_REQUEST
-          }
+          description: 'Puede realizar otra solicitud'
         );
       }else{
         pushMessage.sendPushMessage(

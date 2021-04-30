@@ -1,12 +1,8 @@
 
 import 'dart:async';
 
-import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_drive.dart';
-import 'package:HTRuta/features/features_driver/home/data/conts/interprovincial_consts.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -72,17 +68,6 @@ class PushNotificationProvider{
     dynamic data = info['data'];
     if(data['display_notification'] == 'true'){
       backgroundMessageHandler(info);
-    }
-    print('............');
-    print(info);
-    print(data);
-    print('............');
-    if(data['key'] == INTERPROVINCIAL_PASSENGER_REJECTED_REQUEST){
-      BuildContext ctx;
-      print('redirije!!!!');
-      // context;
-      // Navigator.of().pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(null, currenActual: null, availablesRoutesEntity: null, interprovincialRequest: null,)), (_) => false);
-      print('redirije!!!!');
     }
   }
 
