@@ -146,6 +146,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
+      case InterprovincialRequestCondition.rejected:
+        return Container(child: Text('Fuiste rechazado'));
+      break;
       case InterprovincialRequestCondition.offer:
           return Center(
             child: Column(
