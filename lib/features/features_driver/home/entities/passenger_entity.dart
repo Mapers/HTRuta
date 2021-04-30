@@ -23,12 +23,29 @@ class PassengerEntity extends Equatable {
     @required this.urlImage,
   });
 
-  factory PassengerEntity.fromJsonLocal(Map<String, dynamic> dataJson){
+  factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
     return PassengerEntity(
       id: dataJson['id'],
       documentId: dataJson['document_id'],
       fullNames: dataJson['full_names'],
       fcmToken: dataJson['fcm_token'],
+      urlImage: dataJson['url_image'],
+      seats: dataJson['seats'],
+      toLocation: LocationEntity(
+        districtName: dataJson['to_district_name'],
+        provinceName: dataJson['to_province_name'],
+        regionName: dataJson['to_region_name'],
+        streetName: dataJson['to_street_name'],
+        latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
+      )
+    );
+  }
+  factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
+    return PassengerEntity(
+      id: dataJson['id'],
+      documentId: documentId,
+      fullNames: dataJson['full_names'],
+      fcmToken: fcmToken,
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
       toLocation: LocationEntity(

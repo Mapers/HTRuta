@@ -21,11 +21,11 @@ class ServiceDataRemote{
     ResponseHttp result;
     try{
       result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
-      data: {
-        'user_id': _prefs.idChofer
-      }
-    );
-    }catch(e){
+        data: {
+          'user_id': _prefs.idChofer
+        }
+      );
+    } catch(_){
       return null;
     }
     if(result.data == null) return null;
@@ -37,9 +37,13 @@ class ServiceDataRemote{
     );
   }
 
-  Future<PassengerEntity> getPassengerById(String passengerId) async{
-    //! Esta data debe venir desde backend
-    return PassengerEntity.mock();
+  Future<PassengerEntity> getPassengerById(String passengerId, String documentId, String fcmToken) async{
+    //! Passenger está mockeado :c
+    return PassengerEntity.fromJsonServer(
+      PassengerEntity.mock().toFirestore,
+      documentId,
+      fcmToken
+    );
   }
 
   Future<InterprovincialRouteInServiceEntity> getInterprovincialRouteInServiceById(String serviceId) async{
