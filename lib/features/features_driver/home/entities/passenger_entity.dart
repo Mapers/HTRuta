@@ -93,5 +93,5 @@ class PassengerEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [documentId, fullNames, toLocation, urlImage, seats, fcmToken];
+  List<Object> get props => [id, documentId, fullNames, toLocation, urlImage, seats, fcmToken];
 }

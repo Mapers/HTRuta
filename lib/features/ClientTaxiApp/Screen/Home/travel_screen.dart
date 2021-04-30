@@ -23,7 +23,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app_router.dart';
