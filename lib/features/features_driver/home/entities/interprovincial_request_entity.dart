@@ -26,7 +26,7 @@ class InterprovincialRequestEntity extends Equatable {
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
     return InterprovincialRequestEntity(
-      documentId: dataJson['id'],
+      documentId: dataJson['document_id'],
       passengerId: dataJson['passenger_id'].toString(),
       fullNames: dataJson['full_names'],
       seats: (dataJson['seats'] as num).toInt(),

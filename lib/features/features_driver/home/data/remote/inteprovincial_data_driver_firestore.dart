@@ -119,7 +119,7 @@ class InterprovincialDataDriverFirestore{
     .map<List<PassengerEntity>>((querySnapshot) =>
       querySnapshot.docs.map<PassengerEntity>((doc){
         Map<String, dynamic> data = doc.data();
-        data['id'] = doc.id;
+        data['document_id'] = doc.id;
         return PassengerEntity.fromJsonLocal(data);
       }).toList()
     );
@@ -133,7 +133,7 @@ class InterprovincialDataDriverFirestore{
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
         Map<String, dynamic> data = doc.data();
-        data['id'] = doc.id;
+        data['document_id'] = doc.id;
         return InterprovincialRequestEntity.fromJsonLocal(data);
       }).toList()
     );

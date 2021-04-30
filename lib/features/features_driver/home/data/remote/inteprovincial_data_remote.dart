@@ -46,15 +46,22 @@ class InterprovincialDriverDataRemote {
 
   Future<bool> changeToInRoute({@required String serviceId}) async{
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/to-in-route',
-      data: { 'service_id': serviceId}
+      data: { 'service_id': serviceId }
     );
     if(result.success) return result.success;
 
     throw ServerException(message: result.error);
   }
 
+  Future<bool> releaseSeats({@required String serviceId, @required String passengerId}) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/release-seats',
+      data: { 'service_id': serviceId }
+    );
+    if(result.success) return result.success;
 
-  //! Agregar al bloc
+    throw ServerException(message: result.error);
+  }
+
   Future<bool> updateSeatsAvailable({@required String serviceId, @required int seatsAvailable}) async{
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/update-available-seats',
       data: { 'service_id': serviceId, 'available_seats': seatsAvailable}

@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -8,8 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListPassengersFullScreenDialog extends StatefulWidget {
+  final String serviceId;
   final String documentId;
-  ListPassengersFullScreenDialog({Key key, @required this.documentId}) : super(key: key);
+  ListPassengersFullScreenDialog({Key key, @required this.documentId, @required this.serviceId}) : super(key: key);
 
   @override
   _ListPassengersFullScreenDialogState createState() => _ListPassengersFullScreenDialogState();
@@ -134,8 +136,10 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
 
   Future<void> removePassenger(int index, PassengerEntity passenger) async{
     InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
+    InterprovincialDriverDataRemote interprovincialDriverDataRemote = getIt<InterprovincialDriverDataRemote>();
     _loadingFullScreen.show(context, label: 'Liberando asientos...');
     int newAvailableSeats = await interprovincialDataFirestore.releaseSeatsFromPasenger(documentId: widget.documentId, passenger: passenger);
+    interprovincialDriverDataRemote.releaseSeats(passengerId: passenger.id, serviceId: widget.serviceId);
     _loadingFullScreen.close();
     if(newAvailableSeats == null){
       return;
