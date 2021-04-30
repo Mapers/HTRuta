@@ -12,6 +12,7 @@ import 'package:HTRuta/features/feature_client/home/entities/available_route_eni
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_drive.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -112,7 +113,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               documentId: null,
                               passengerFcmToken: _prefs.tokenPush,
                               from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
-                              to: param.distictTo,
+                              to: param.distictTo.districtName,
                               passengerId: user.id,
                               fullNames: user.fullNames,
                               price: double.parse(amount),
@@ -143,11 +144,14 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
-  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
+  contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
-        return Container(child: Text('Fuiste rechazado'));
+        return WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
+          BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+        });
       break;
       case InterprovincialRequestCondition.offer:
           return Center(

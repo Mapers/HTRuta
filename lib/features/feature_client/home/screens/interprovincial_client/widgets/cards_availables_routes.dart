@@ -39,7 +39,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
               children: [
                 Expanded(
                   child: Text(
-                    param.distictfrom,
+                    param.distictfrom.districtName ,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
@@ -49,7 +49,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
                 SizedBox(width: 5),
                 Expanded(
                   child: Text(
-                    param.distictTo,
+                    param.distictTo.districtName ,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
