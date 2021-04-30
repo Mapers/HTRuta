@@ -1,15 +1,23 @@
+import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
+import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:geolocator/geolocator.dart';
-import 'pickUp.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../data/Model/get_routes_request_model.dart';
+import '../../data/Model/direction_model.dart';
+import '../../Networking/Apis.dart';
+import '../../../../google_map_helper.dart';
 
 class RequestDetail extends StatefulWidget {
   final Request requestItem;
@@ -27,11 +35,132 @@ class _RequestDetailState extends State<RequestDetail> {
   double ratingScore;
   final Geolocator _locationService = Geolocator();
   final requestApi = PickupApi();
+  var apis = Apis();
+  GoogleMapController _mapController;
+  Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
+  int _polylineIdCounter = 1;
+  List<Routes> routesData;
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  bool checkPlatform = Platform.isIOS;
+  String distance, duration;
+  final GMapViewHelper _gMapViewHelper = GMapViewHelper();
 
   Future<double> calcularDistancia(Request requestActual)async{
     return await Geolocator.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
   }
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+  }
+  void getRouter() async {
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+    polyLines.clear();
+    var router;
+    LatLng _fromLocation = LatLng(double.parse(widget.requestItem.vchLatInicial), double.parse(widget.requestItem.vchLongInicial));
+    LatLng _toLocation = LatLng(double.parse(widget.requestItem.vchLatFinal), double.parse(widget.requestItem.vchLongFinal));
 
+    await apis.getRoutes(
+      getRoutesRequest: GetRoutesRequestModel(
+        fromLocation: _fromLocation,
+        toLocation: _toLocation,
+        mode: 'driving'
+      ),
+    ).then((data) {
+      if (data != null) {
+        router = data?.result?.routes[0]?.overviewPolyline?.points;
+        routesData = data?.result?.routes;
+      }
+    }).catchError((error) {
+      print('GetRoutesRequest > $error');
+    });
+
+    distance = routesData[0]?.legs[0]?.distance?.text;
+    duration = routesData[0]?.legs[0]?.duration?.text;
+
+    polyLines[polylineId] = GMapViewHelper.createPolyline(
+      polylineIdVal: polylineIdVal,
+      router: router,
+      formLocation: _fromLocation,
+      toLocation: _toLocation,
+    );
+    setState(() {});
+    // _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+  }
+  void addMakers(){
+    checkPlatform ? print('ios'): print('android');
+    final MarkerId markerIdFrom = MarkerId('from_address');
+    final MarkerId markerIdTo = MarkerId('to_address');
+
+    final Marker marker = Marker(
+      markerId: markerIdFrom,
+      position: LatLng(double.parse(widget.requestItem.vchLatInicial), double.parse(widget.requestItem.vchLongInicial)),
+      infoWindow: InfoWindow(title: widget.requestItem.vchNombreInicial, snippet: 'Inicio'),
+      // ignore: deprecated_member_use
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
+      onTap: () {
+      },
+    );
+
+    final Marker markerTo = Marker(
+      markerId: markerIdTo,
+      position: LatLng(double.parse(widget.requestItem.vchLatFinal), double.parse(widget.requestItem.vchLongFinal)),
+      infoWindow: InfoWindow(title: widget.requestItem.vchNombreFinal, snippet: 'Destino'),
+      // ignore: deprecated_member_use
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
+      onTap: () {
+      },
+    );
+
+    setState(() {
+      markers[markerIdFrom] = marker;
+      markers[markerIdTo] = markerTo;
+    });
+  }
+  void acceptTravel(Request request) async {
+    try{
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      Dialogs.openLoadingDialog(context);
+      final dato = await requestApi.actionTravel(
+        _prefs.idChofer,
+        request.id,
+        double.parse(request.vchLatInicial),
+        double.parse(request.vchLatFinal),
+        double.parse(request.vchLongInicial),
+        double.parse(request.vchLongFinal),
+        '',
+        double.parse(request.mPrecio),
+        request.iTipoViaje,
+        '', '', '',
+        request.vchNombreInicial,
+        request.vchNombreFinal,
+        '1',
+        _prefs.tokenPush
+      );
+      PushMessage pushMessage = getIt<PushMessage>();
+      Map<String, String> data = {
+        'newOffer' : '1'
+      };
+      Navigator.pop(context);
+      if(!dato){
+        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+        return;
+      }
+      pushMessage.sendPushMessage(token: request.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+      Navigator.pop(context, true);
+      
+    }on ServerException catch(e){
+      Navigator.pop(context);
+      Dialogs.alert(context,title: 'Error', message: e.message);
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    addMakers();
+    getRouter();
+  }
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -54,11 +183,11 @@ class _RequestDetailState extends State<RequestDetail> {
             shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(5.0)),
             elevation: 0.0,
             color: primaryColor,
-            child: Text('Ir a recoger'.toUpperCase(),style: headingWhite,
+            child: Text('Aceptar solicitud'.toUpperCase(),style: headingWhite,
             ),
             onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PickUp()));
-            },
+              acceptTravel(widget.requestItem);
+            }
           ),
         ),
       ),
@@ -100,33 +229,6 @@ class _RequestDetailState extends State<RequestDetail> {
                           children: <Widget>[
                             Text(widget.requestItem.vchNombres ?? '',style: textBoldBlack,),
                             Text(widget.requestItem.dFecReg, style: textGrey,),
-                            Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    height: 25.0,
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: primaryColor
-                                    ),
-                                    child: Text('ApplePay',style: textBoldWhite,),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Container(
-                                    height: 25.0,
-                                    padding: EdgeInsets.all(5.0),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color: primaryColor
-                                    ),
-                                    child: Text('Descuento',style: textBoldWhite,),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -191,6 +293,21 @@ class _RequestDetailState extends State<RequestDetail> {
                         ),
                       ],
                     )
+                ),
+                SizedBox(
+                  height: responsive.hp(30),
+                  child: GoogleMap(
+                    padding: EdgeInsets.all(0),
+                    onMapCreated: _onMapCreated,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(double.parse(widget.requestItem.vchLatFinal), double.parse(widget.requestItem.vchLongFinal)),
+                      zoom: 13,
+                    ),
+                    markers: Set<Marker>.of( markers.values),
+                    polylines: Set<Polyline>.of(polyLines.values),
+                  )
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 5.0,bottom: 5.0),

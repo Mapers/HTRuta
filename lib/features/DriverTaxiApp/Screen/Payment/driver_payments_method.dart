@@ -24,6 +24,8 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
 
   bool agora = false;
 
+  bool bitcoin = false;
+
   @override
   Widget build(BuildContext context) {
     return SideMenu(
@@ -129,6 +131,27 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
                 },
               ),
               title: Text('POS')
+            ),
+            Divider(height: 50),
+            ListTile(
+              leading: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: AssetImage('assets/image/bitcoin.png')
+                  )
+                ),
+              ),
+              trailing: Checkbox(
+                value: bitcoin,
+                onChanged: (bool newValue){
+                  bitcoin = newValue;
+                  setState(() {});
+                },
+              ),
+              title: Text('Bitcoin')
             ),
             Divider(height: 50),
             ListTile(

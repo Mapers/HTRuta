@@ -145,7 +145,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     final _prefs = UserPreferences();
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-    pedidoProvider.request = Request(id: data.id,iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+    pedidoProvider.request = data;
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
   }
   Future<void> getSolicitudes() async {
@@ -490,8 +490,14 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               maxHeight: MediaQuery.of(context).size.width * 0.9,
               minHeight: MediaQuery.of(context).size.width * 0.85,
               cardBuilder: (context, index) => InkWell(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                onTap: () async {
+                  bool accepted = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                  if(accepted != null){
+                    if(accepted){
+                      await getSolicitudes();
+                      analizeChanges();
+                    }
+                  }
                 },
                 child: ItemRequest(
                   avatar: 'https://source.unsplash.com/1600x900/?portrait',
@@ -509,7 +515,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     double.parse(requestTaxi[index].vchLatFinal),
                     double.parse(requestTaxi[index].vchLongFinal),
                   ),
-                  onTap: () async {
+                  onAccept: () async {
                     print('Aceptar');
                     try{
                       final _prefs = UserPreferences();
@@ -547,12 +553,53 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       Dialogs.alert(context,title: 'Error', message: e.message);
                     }
                   },
+                  onRefuse: () async {
+                  try{
+                    final _prefs = UserPreferences();
+                    await _prefs.initPrefs();
+                    Dialogs.openLoadingDialog(context);
+                    final dato = await pickupApi.actionTravel(
+                      _prefs.idChofer,
+                      requestTaxi[index].id,
+                      double.parse(requestTaxi[index].vchLatInicial),
+                      double.parse(requestTaxi[index].vchLatFinal),
+                      double.parse(requestTaxi[index].vchLongInicial),
+                      double.parse(requestTaxi[index].vchLongInicial),
+                      '',
+                      double.parse(requestTaxi[index].mPrecio),
+                      requestTaxi[index].iTipoViaje,
+                       '', '','',
+                      requestTaxi[index].vchNombreInicial,
+                      requestTaxi[index].vchNombreFinal,
+                      rechazar,
+                      _prefs.tokenPush
+                    );
+                    await getSolicitudes();
+                    analizeChanges();
+                    Navigator.pop(context);
+                    if(dato){
+                      //Esperar solicitud
+                    }else{
+                      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                    }
+                  }on ServerException catch(e){
+                    Navigator.pop(context);
+                    Dialogs.alert(context,title: 'Error', message: e.message);
+                  }
+                  },
                 ),
               ),
               swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
               },
               swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
                 /// Get orientation & index of swiped card!
+                if(orientation.index == 0){
+                  cancelTravel(requestTaxi[index]);
+                }else{
+                  acceptTravel(requestTaxi[index]);
+                }
+                
+                /* print(orientation.index);
                 print('index $index');
                 print('aaa ${listRequest.length}');
                 setState(() {
@@ -563,7 +610,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   }else{
                     addMarker(listRequest[index+1]['locationForm'], listRequest[index+1]['locationTo']);
                   }
-                });
+                }); */
               }
             ),
         ): MyActivity(
@@ -585,6 +632,77 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         alignment: Alignment.center,
       )
     );
+  }
+  void acceptTravel(Request request) async {
+    try{
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      Dialogs.openLoadingDialog(context);
+      final dato = await pickupApi.actionTravel(
+        _prefs.idChofer,
+        request.id,
+        double.parse(request.vchLatInicial),
+        double.parse(request.vchLatFinal),
+        double.parse(request.vchLongInicial),
+        double.parse(request.vchLongFinal),
+        '',
+        double.parse(request.mPrecio),
+        request.iTipoViaje,
+        '', '', '',
+        request.vchNombreInicial,
+        request.vchNombreFinal,
+        aceptar,
+        _prefs.tokenPush
+      );
+      PushMessage pushMessage = getIt<PushMessage>();
+      Map<String, String> data = {
+        'newOffer' : '1'
+      };
+      pushMessage.sendPushMessage(token: request.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+      Navigator.pop(context);
+      if(dato){
+        //Esperar solicitud
+      }else{
+        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+      }
+    }on ServerException catch(e){
+      Navigator.pop(context);
+      Dialogs.alert(context,title: 'Error', message: e.message);
+    }
+  }
+  void cancelTravel(Request request) async {
+    try{
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      Dialogs.openLoadingDialog(context);
+      final dato = await pickupApi.actionTravel(
+        _prefs.idChofer,
+        request.id,
+        double.parse(request.vchLatInicial),
+        double.parse(request.vchLatFinal),
+        double.parse(request.vchLongInicial),
+        double.parse(request.vchLongInicial),
+        '',
+        double.parse(request.mPrecio),
+        request.iTipoViaje,
+          '', '','',
+        request.vchNombreInicial,
+        request.vchNombreFinal,
+        rechazar,
+        _prefs.tokenPush
+      );
+      await getSolicitudes();
+      analizeChanges();
+      Navigator.pop(context);
+      if(dato){
+        //Esperar solicitud
+      }else{
+        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+      }
+    }on ServerException catch(e){
+      Navigator.pop(context);
+      Dialogs.alert(context,title: 'Error', message: e.message);
+    }
   }
 
   Widget _buildMapLayer(){
