@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/features_driver/home/data/conts/interprovincial_consts.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -68,6 +69,9 @@ class PushNotificationProvider{
     dynamic data = info['data'];
     if(data['display_notification'] == 'true'){
       backgroundMessageHandler(info);
+    }
+    if(data['key'] == INTERPROVINCIAL_PASSENGER_REJECTED_REQUEST){
+      print('redirije!!!!');
     }
   }
 
