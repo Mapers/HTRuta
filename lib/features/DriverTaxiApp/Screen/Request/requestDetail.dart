@@ -33,24 +33,20 @@ class _RequestDetailState extends State<RequestDetail> {
   final GlobalKey<ScaffoldState> scaffoldKey =GlobalKey<ScaffoldState>();
   String yourReview;
   double ratingScore;
-  final Geolocator _locationService = Geolocator();
   final requestApi = PickupApi();
   var apis = Apis();
-  GoogleMapController _mapController;
   Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
   int _polylineIdCounter = 1;
   List<Routes> routesData;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   bool checkPlatform = Platform.isIOS;
   String distance, duration;
-  final GMapViewHelper _gMapViewHelper = GMapViewHelper();
 
   Future<double> calcularDistancia(Request requestActual)async{
     return await Geolocator.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
   }
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-  }
+  void _onMapCreated(_) {}
+
   void getRouter() async {
     final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
     final PolylineId polylineId = PolylineId(polylineIdVal);
@@ -84,7 +80,6 @@ class _RequestDetailState extends State<RequestDetail> {
       toLocation: _toLocation,
     );
     setState(() {});
-    // _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
   void addMakers(){
     checkPlatform ? print('ios'): print('android');
