@@ -1,6 +1,7 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
+import 'package:HTRuta/features/features_driver/home/data/conts/interprovincial_consts.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,7 +76,10 @@ class InterprovincialDataFirestore{
         pushMessage.sendPushMessage(
           token: request.passengerFcmToken,
           title: 'Su solicitud ha sido rechazada',
-          description: 'Puede realizar otra solicitud'
+          description: 'Puede realizar otra solicitud',
+          data: {
+            'key': INTERPROVINCIAL_PASSENGER_REJECTED_REQUEST
+          }
         );
       }else{
         pushMessage.sendPushMessage(

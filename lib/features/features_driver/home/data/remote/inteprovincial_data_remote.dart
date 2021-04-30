@@ -21,9 +21,8 @@ class InterprovincialDriverDataRemote {
         'status': toStringFirebaseInterprovincialStatus(InterprovincialStatus.onWhereabouts) 
       }
     );
-    if(result.success){
-      return result.data;
-    }
+    if(result.success) return result.data;
+
     throw ServerException(message: result.error);
   }
 
@@ -31,9 +30,8 @@ class InterprovincialDriverDataRemote {
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/finish',
       data: { 'service_id': serviceId }
     );
-    if(result.success){
-      return result.success;
-    }
+    if(result.success) return result.success;
+
     throw ServerException(message: result.error);
   }
 
@@ -41,9 +39,28 @@ class InterprovincialDriverDataRemote {
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/send-counteroffer',
       data: { 'service_id': serviceId, 'passenger_id': passengerId, 'cost': cost }
     );
-    if(result.success){
-      return result.success;
-    }
+    if(result.success) return result.success;
+
+    throw ServerException(message: result.error);
+  }
+
+  Future<bool> changeToInRoute({@required String serviceId}) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/to-in-route',
+      data: { 'service_id': serviceId}
+    );
+    if(result.success) return result.success;
+
+    throw ServerException(message: result.error);
+  }
+
+
+  //! Agregar al bloc
+  Future<bool> updateSeatsAvailable({@required String serviceId, @required int seatsAvailable}) async{
+    ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/update-available-seats',
+      data: { 'service_id': serviceId, 'available_seats': seatsAvailable}
+    );
+    if(result.success) return result.success;
+
     throw ServerException(message: result.error);
   }
 }
