@@ -47,7 +47,6 @@ class _HomeViewState extends State<HomeView> {
 
   Position currentLocation;
   Position _lastKnownPosition;
-  final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
   bool isEnabledLocation = false;
   bool loading = true;

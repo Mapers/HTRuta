@@ -90,28 +90,53 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
       }
     }else if(event is StartRouteInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
-      yield data.copyWith(loadingMessage: 'Iniciando ruta', status: InterprovincialStatus.loading);
-      await interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.inRoute);
-      yield data.copyWith(
-        status: InterprovincialStatus.inRoute
-      );
+      try {
+        yield data.copyWith(loadingMessage: 'Iniciando ruta', status: InterprovincialStatus.loading);
+        await Future.wait([
+          interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.inRoute),
+          interprovincialDriverDataRemote.changeToInRoute(serviceId: data.serviceId)
+        ]);
+        yield data.copyWith(
+          status: InterprovincialStatus.inRoute
+        );
+      } on ServerException catch (e) {
+        Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);
+        interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.onWhereabouts);
+        yield data;
+      }
     }else if(event is PlusOneAvailableSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       if(data.availableSeats < event.maxSeats){
         int newAvailableSeats = data.availableSeats + 1;
-        await interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
-        yield data.copyWith(
-          availableSeats: newAvailableSeats
-        );
+        try {
+          await Future.wait([
+            interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats),
+            interprovincialDriverDataRemote.updateSeatsAvailable(serviceId: data.routeService.id, seatsAvailable: newAvailableSeats)
+          ]);
+          yield data.copyWith(
+            availableSeats: newAvailableSeats
+          );
+        } on ServerException catch (e) {
+          Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);
+          yield data;
+        }
       }
     }else if(event is MinusOneAvailableSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;
       if(data.availableSeats > 0){
         int newAvailableSeats = data.availableSeats - 1;
-        await interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats);
-        yield data.copyWith(
-          availableSeats: newAvailableSeats
-        );
+        try {
+          await Future.wait([
+            interprovincialDataFirestore.updateSeatsQuantity(documentId: data.documentId, availableSeats: newAvailableSeats),
+            interprovincialDriverDataRemote.updateSeatsAvailable(serviceId: data.routeService.id, seatsAvailable: newAvailableSeats)
+          ]);
+          yield data.copyWith(
+            availableSeats: newAvailableSeats
+          );
+        } on ServerException catch (e) {
+          Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);
+          yield data;
+        }
       }
     }else if(event is SetLocalAvailabelSeatInterprovincialDriverEvent){
       DataInterprovincialDriverState data = state;

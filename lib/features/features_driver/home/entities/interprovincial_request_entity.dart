@@ -26,7 +26,7 @@ class InterprovincialRequestEntity extends Equatable {
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
     return InterprovincialRequestEntity(
-      documentId: dataJson['id'],
+      documentId: dataJson['document_id'],
       passengerId: dataJson['passenger_id'].toString(),
       fullNames: dataJson['full_names'],
       seats: (dataJson['seats'] as num).toInt(),
@@ -81,7 +81,7 @@ class InterprovincialRequestEntity extends Equatable {
   List<Object> get props => [documentId, fullNames, from, to, seats, price, condition, passengerFcmToken, passengerId];
 }
 
-enum InterprovincialRequestCondition { offer, counterOffer , accepted,}
+enum InterprovincialRequestCondition { offer, counterOffer , accepted, rejected}
 
 String getStringInterprovincialRequestCondition(InterprovincialRequestCondition condition){
   switch (condition) {
@@ -91,6 +91,8 @@ String getStringInterprovincialRequestCondition(InterprovincialRequestCondition 
       return 'COUNTER_OFFER';
     case InterprovincialRequestCondition.accepted:
       return 'ACCEPTED';
+    case InterprovincialRequestCondition.rejected:
+      return 'REJECTED';
     default:
       return null;
   }
@@ -104,6 +106,8 @@ InterprovincialRequestCondition getInterprovincialRequestConditionFromString(Str
       return InterprovincialRequestCondition.counterOffer;
     case 'ACCEPTED':
       return InterprovincialRequestCondition.accepted;
+    case 'REJECTED':
+      return InterprovincialRequestCondition.rejected;
     default:
       return null;
   }

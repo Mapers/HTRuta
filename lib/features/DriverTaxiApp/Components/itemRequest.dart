@@ -35,8 +35,6 @@ class ItemRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Card(
       margin: EdgeInsets.all(10.0),
       elevation: 10.0,

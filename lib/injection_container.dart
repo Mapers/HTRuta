@@ -96,7 +96,7 @@ Future<void> init() async {
     () => ClientServiceBloc()
   );
   getIt.registerLazySingleton<InterprovincialClientBloc>(
-    () => InterprovincialClientBloc(interprovincialClientRemote: getIt())
+    () => InterprovincialClientBloc(interprovincialClientRemote: getIt(), serviceDataRemote: getIt())
   );
 
   getIt.registerLazySingleton<AvailablesRoutesBloc>(

@@ -59,6 +59,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
               stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
               builder: (ctx, asyncSnapshot){
                 if(asyncSnapshot.connectionState == ConnectionState.active){
+                  //! ver como formular el rechazo
                   if(asyncSnapshot.data.isEmpty){
                     return Column(
                       children: [
@@ -145,6 +146,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
+      case InterprovincialRequestCondition.rejected:
+        return Container(child: Text('Fuiste rechazado'));
+      break;
       case InterprovincialRequestCondition.offer:
           return Center(
             child: Column(

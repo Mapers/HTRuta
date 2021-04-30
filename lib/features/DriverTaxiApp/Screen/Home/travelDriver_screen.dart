@@ -24,7 +24,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,7 +31,7 @@ import '../../../../google_map_helper.dart';
 import '../../Networking/Apis.dart';
 import '../../data/Model/direction_model.dart';
 import '../../data/Model/get_routes_request_model.dart';
-import 'package:HTRuta/app/navigation/routes.dart' as Enrutador;
+import 'package:HTRuta/app/navigation/routes.dart' as enrutador;
 
 class TravelDriverScreen extends StatefulWidget {
 
@@ -97,7 +96,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
             fontSize: 16.0
           );
         }
-        Navigator.pushAndRemoveUntil(context, Enrutador.Routes.toHomeDriverPage(), (_) => false);
+        Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
         // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
       }
     });
@@ -430,7 +429,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
                                 'idSolicitud': pedidoProvider.request.idSolicitud
                               };
                               pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
-                              Navigator.pushAndRemoveUntil(context, Enrutador.Routes.toHomeDriverPage(), (_) => false);
+                              Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
                               // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
                             }else{
                               Navigator.pop(context);

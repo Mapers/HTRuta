@@ -18,6 +18,9 @@ class InterprovincialLocationDriverEntity extends Equatable{
   });
 
   factory InterprovincialLocationDriverEntity.fromJson(Map<String, dynamic> dataJson){
+    print('tonkennnnnnnnnnnnnnn drive');
+    print(dataJson['fcm_token'] );
+    print('tonkennnnnnnnnnnnnnn drive');
     GeoPoint currentLocation = dataJson['current_location'];
     return InterprovincialLocationDriverEntity(
       availableSeats: dataJson['available_seats'],

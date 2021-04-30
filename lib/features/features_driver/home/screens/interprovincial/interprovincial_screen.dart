@@ -1,7 +1,6 @@
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/change_service_driver_widget.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/in_route_widget.dart';
@@ -54,7 +53,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
                 }else if(state.status == InterprovincialStatus.onWhereabouts){
                   return OnWhereaboutsWidget(route: state.routeService, routeStartDateTime: state.routeStartDateTime, documentId: state.documentId);
                 }else if(state.status == InterprovincialStatus.inRoute){
-                  return InRouteWidget(route: state.routeService, routeStartDateTime: state.routeStartDateTime);
+                  return InRouteWidget(route: state.routeService, routeStartDateTime: state.routeStartDateTime, documentId: state.documentId);
                 }
               }
               return Container();

@@ -119,21 +119,22 @@ class InterprovincialDataDriverFirestore{
     .map<List<PassengerEntity>>((querySnapshot) =>
       querySnapshot.docs.map<PassengerEntity>((doc){
         Map<String, dynamic> data = doc.data();
-        data['id'] = doc.id;
-        return PassengerEntity.fromJsonLocal(data);
+        data['document_id'] = doc.id;
+        return PassengerEntity.fromJsonFirestore(data);
       }).toList()
     );
   }
 
   Stream<List<InterprovincialRequestEntity>> getStreamEnabledRequests({@required String documentId}){
     return firestore.collection('interprovincial_in_service').doc(documentId)
-    .collection('requests').where('condition', whereNotIn: [
-      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
+    .collection('requests').where('condition', whereIn: [
+      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.offer),
+      getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer)
     ]).snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
         Map<String, dynamic> data = doc.data();
-        data['id'] = doc.id;
+        data['document_id'] = doc.id;
         return InterprovincialRequestEntity.fromJsonLocal(data);
       }).toList()
     );

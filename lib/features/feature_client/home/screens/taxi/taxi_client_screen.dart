@@ -61,7 +61,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   bool showing = false;
   Position currentLocation;
   Position _lastKnownPosition;
-  final Geolocator _locationService = Geolocator();
   PermissionStatus permission;
   bool isEnabledLocation = false;
   bool loading = true;
@@ -355,15 +354,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     _addCircle();
   }
 
-  
-
-  void _remove(String idMarker) {
-    final MarkerId markerId = MarkerId(idMarker);
-    setState(() {
-      markers.remove(markerId);
-    });
-  }
-
   void _moveCamera(double zoom){
     _mapController?.animateCamera(
       CameraUpdate?.newCameraPosition(
@@ -373,23 +363,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
           )
       ),
     );
-  }
-
-  void _addMarker(String markerIdVal, double lat, double lng) async {
-    final MarkerId markerId = MarkerId(markerIdVal);
-
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(lat, lng),
-      // ignore: deprecated_member_use
-      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/car_top_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/car_top_96.png'),
-      onTap: () {
-        // _onMarkerTapped(markerId);
-      },
-    );
-    setState(() {
-      markers[markerId] = marker;
-    });
   }
 
   void _addCircle() {

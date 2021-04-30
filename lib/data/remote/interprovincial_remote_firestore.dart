@@ -20,7 +20,7 @@ class InterprovincialDataFirestore{
   Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
-      PassengerEntity passengerEntity = await serviceDataRemote.getPassengerById(request.passengerId);
+      PassengerEntity passengerEntity = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
 
       List<dynamic> result = await Future.wait([
         dr.get(),
@@ -70,7 +70,9 @@ class InterprovincialDataFirestore{
   Future<bool> rejectRequest({@required String documentId, @required InterprovincialRequestEntity request, @required String driverFcmToken, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId)
-      .collection('requests').doc(request.documentId).delete();
+      .collection('requests').doc(request.documentId).update({
+        'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.rejected),
+      });
       if(origin == InterprovincialDataFirestoreOrigin.driver){
         pushMessage.sendPushMessage(
           token: request.passengerFcmToken,

@@ -230,19 +230,19 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Añadir una nueva foto"),
+            title: Text('Añadir una nueva foto'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text("Seleccionar foto"),
+                    child: Text('Seleccionar foto'),
                     onTap: () async {
                       await _openGallery(index);
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text("Tomar una foto"),
+                    child: Text('Tomar una foto'),
                     onTap: () async{
                       await cameraImage(index);
                     },
@@ -627,19 +627,19 @@ class _SextaPaginaState extends State<SextaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Añadir una nueva foto"),
+            title: Text('Añadir una nueva foto'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text("Seleccionar foto"),
+                    child: Text('Seleccionar foto'),
                     onTap: () {
                       _openGallery();
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text("Tomar una foto"),
+                    child: Text('Tomar una foto'),
                     onTap: () {
                       cameraImage();
                     },
@@ -840,19 +840,19 @@ class _QuintaPaginaState extends State<QuintaPagina> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Añadir una nueva foto"),
+            title: Text('Añadir una nueva foto'),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    child: Text("Seleccionar foto"),
+                    child: Text('Seleccionar foto'),
                     onTap: () async {
                       await _openGallery();
                     },
                   ),
                   Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
-                    child: Text("Tomar una foto"),
+                    child: Text('Tomar una foto'),
                     onTap: () async{
                       await cameraImage();
                     },
