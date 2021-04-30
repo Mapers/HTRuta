@@ -6,6 +6,7 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
@@ -123,7 +124,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           radiusCircle: initialCircularRadio,
           getFrom: getfrom,
         ),
-        ChangeServiceClientWidget(),
+        // ChangeServiceClientWidget(),
+        CustomDropdownClient(),
         BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
           builder: (context, state) {
             print(state);

@@ -11,7 +11,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/wid
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
-import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown_driver.dart';
 
 class InterprovincialScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
@@ -42,7 +42,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
         children: [
           MapInterprovincialDriverWidget(),
           // ChangeServiceDriverWidget(),
-          CustomDropdown(),
+          CustomDropdownDriver(),
           BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
             builder: (context, state) {
               if(state is DataInterprovincialDriverState){
