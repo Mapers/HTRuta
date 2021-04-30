@@ -59,6 +59,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
               stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
               builder: (ctx, asyncSnapshot){
                 if(asyncSnapshot.connectionState == ConnectionState.active){
+                  //! ver como formular el rechazo
                   if(asyncSnapshot.data.isEmpty){
                     return Column(
                       children: [

@@ -70,6 +70,7 @@ class PushMessage {
         'display_notification': 'true',
         ...data,
       },
+      
       'notification': {
         'title': title,
         'body': description
