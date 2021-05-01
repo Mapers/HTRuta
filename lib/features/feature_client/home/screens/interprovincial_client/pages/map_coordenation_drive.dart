@@ -47,9 +47,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', widget.availablesRoutesEntity.route.fromLocation, widget.availablesRoutesEntity.route.toLocation);
       Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
-      setState(() {
-      });
-
+      currenActual = result[0];
       Marker markerFrom = MapViewerUtil.generateMarker(
         latLng: widget.availablesRoutesEntity.route.fromLocation.latLang ,
         nameMarkerId: 'FROM_POSITION_MARKER',
@@ -67,7 +65,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       interprovincialClientDataLocal.saveDocumentIdOnServiceInterprovincial(widget.documentId);
 
       InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
+      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId, passengerPosition: result[0] ).listen((interprovincialLocationDriver,){
+        print(interprovincialLocationDriver.location.latLang.latitude );
+        print(interprovincialLocationDriver.location.latLang.longitude );
         Marker markerDrive = MapViewerUtil.generateMarker(
           latLng: interprovincialLocationDriver.location.latLang,
           nameMarkerId: 'DRIVE_POSITION_MARKER',
@@ -77,7 +77,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           }
         );
         _markers[markerDrive.markerId] = markerDrive;
+        setState(() {});
       });
+      setState(() {});
     });
     super.initState();
   }
@@ -95,7 +97,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
         SizedBox(
           height: MediaQuery.of(context).size.height,
           child: _mapViewerUtil.build(
-            currentLocation: widget.currenActual.latLang,
+            currentLocation: currenActual.latLang,
             markers: _markers,
             polyLines: polylines,
             height: MediaQuery.of(context).size.height,

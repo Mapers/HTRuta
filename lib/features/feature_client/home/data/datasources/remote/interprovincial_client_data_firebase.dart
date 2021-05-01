@@ -1,4 +1,5 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,7 +69,14 @@ class InterprovincialClientDataFirebase {
     }
   }
 
-  Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}){
+  Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId,@required LocationEntity passengerPosition}) {
+    // firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc().update(
+    //   'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
+    //     'street': passengerPosition.streetName,
+    //     'district_name': passengerPosition.districtName,
+    //     'province_name': passengerPosition.provinceName,
+    //     'region_name': passengerPosition.regionName,
+    // );
     return firestore.collection('interprovincial_in_service').doc(documentId).snapshots().map((documentSnapshot){
       dynamic dataJson = documentSnapshot.data();
       return InterprovincialLocationDriverEntity.fromJson(dataJson);
