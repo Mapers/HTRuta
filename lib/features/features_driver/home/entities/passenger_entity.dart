@@ -13,7 +13,7 @@ class PassengerEntity extends Equatable {
   final int seats;
   final LocationEntity currentLocation;
   final LocationEntity toLocation;
-  final double distanceInMinutes;
+  final int distanceInMinutes;
   final double distanceInMeters;
 
   PassengerEntity({
@@ -37,8 +37,8 @@ class PassengerEntity extends Equatable {
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
-      distanceInMeters: dataJson['distance_in_meters'],
-      distanceInMinutes: dataJson['distance_in_minutes'],
+      distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),
+      distanceInMinutes: (dataJson['distance_in_minutes'] as num).toInt(),
       currentLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
