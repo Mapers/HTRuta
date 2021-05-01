@@ -1,4 +1,4 @@
-part of 'inteprovincial_location_bloc.dart';
+part of 'interprovincial_location_bloc.dart';
 
 abstract class InterprovincialDriverLocationEvent extends Equatable {
   const InterprovincialDriverLocationEvent();

@@ -13,6 +13,8 @@ class PassengerEntity extends Equatable {
   final int seats;
   final LocationEntity currentLocation;
   final LocationEntity toLocation;
+  final double distanceInMinutes;
+  final double distanceInMeters;
 
   PassengerEntity({
     @required this.id,
@@ -23,6 +25,8 @@ class PassengerEntity extends Equatable {
     @required this.fcmToken,
     @required this.seats,
     @required this.urlImage,
+    @required this.distanceInMinutes,
+    @required this.distanceInMeters,
   });
 
   factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
@@ -33,6 +37,8 @@ class PassengerEntity extends Equatable {
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      distanceInMeters: dataJson['distance_in_meters'],
+      distanceInMinutes: dataJson['distance_in_minutes'],
       currentLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
@@ -57,6 +63,8 @@ class PassengerEntity extends Equatable {
       fcmToken: fcmToken,
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      distanceInMeters: 0,
+      distanceInMinutes: 0,
       currentLocation: LocationEntity(
         districtName: dataJson['current_district_name'],
         provinceName: dataJson['current_province_name'],
@@ -80,6 +88,8 @@ class PassengerEntity extends Equatable {
     'url_image': urlImage,
     'seats': seats,
     'fcm_token': fcmToken,
+    'distance_in_meters': distanceInMeters,
+    'distance_in_minutes': distanceInMinutes,
     'current_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
     'current_district_name': toLocation.districtName,
     'current_province_name': toLocation.provinceName,
@@ -100,6 +110,8 @@ class PassengerEntity extends Equatable {
       documentId: 'LGSDFbEzf4WIP5GvGgKm',
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       seats: 12,
+      distanceInMeters: 2031,
+      distanceInMinutes: 1200,
       currentLocation: LocationEntity(
         latLang: LatLng(-11.114660, -77.594774),
         streetName: 'Antigua Panamericana Nte. 1035',
@@ -122,5 +134,5 @@ class PassengerEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, documentId, fullNames, toLocation, currentLocation, urlImage, seats, fcmToken];
+  List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken];
 }

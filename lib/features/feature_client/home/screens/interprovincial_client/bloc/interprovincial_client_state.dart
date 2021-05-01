@@ -7,24 +7,24 @@ abstract class InterprovincialClientState extends Equatable {
   List<Object> get props => [];
 }
 
-enum InteprovincialClientStatus {
+enum InterprovincialClientStatus {
   loading, notEstablished, selectedRoute, searchInterprovincial
 }
 class DataInterprovincialClientState extends InterprovincialClientState {
-  final InteprovincialClientStatus status;
+  final InterprovincialClientStatus status;
   final String loadingMessage;
   final InterprovincialRouteInServiceEntity interprovincialRoute;
   DataInterprovincialClientState({ this.loadingMessage, this.status, this.interprovincialRoute});
 
   factory DataInterprovincialClientState.initial({String loadingMessage}){
     return DataInterprovincialClientState(
-      status: InteprovincialClientStatus.loading,
+      status: InterprovincialClientStatus.loading,
       loadingMessage: loadingMessage ?? 'Cargando',
       interprovincialRoute: null
     );
   }
 
-  DataInterprovincialClientState copyWith({InteprovincialClientStatus status, String loadingMessage, InterprovincialRouteInServiceEntity interprovincialRoute}){
+  DataInterprovincialClientState copyWith({InterprovincialClientStatus status, String loadingMessage, InterprovincialRouteInServiceEntity interprovincialRoute}){
     return DataInterprovincialClientState(
       status: status ?? this.status,
       loadingMessage: loadingMessage ?? this.loadingMessage,

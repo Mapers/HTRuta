@@ -38,20 +38,12 @@ class PositionedInfoRouteWidget extends StatelessWidget {
               SizedBox(height: 5),
               Row(
                 children: [
-                  Container(
-                    width: 14,
-                    height: 14,
-                    margin: EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black45, width: 2),
-                      borderRadius: BorderRadius.circular(50)
-                    ),
-                  ),
+                  Icon(Icons.trip_origin, color: Colors.black45, size: 19),
                   SizedBox(width: 5),
                   Expanded(
                     child: Column(
                       children: [
-                        Text(route.fromLocation.streetName, style: TextStyle(fontSize: 12),),
+                        Text(route.fromLocation.streetName, style: TextStyle(fontSize: 12)),
                         Text('${route.fromLocation.districtName} - ${route.fromLocation.provinceName}', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 11))
                       ],
                     ),
