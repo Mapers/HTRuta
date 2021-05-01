@@ -6,7 +6,6 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
@@ -23,7 +22,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
-  InterprovincialClientScreen({Key key, @required this.parentScaffoldKey}) : super(key: key);
+  final bool rejected;
+  InterprovincialClientScreen({Key key, @required this.parentScaffoldKey, this.rejected = false}) : super(key: key);
 
   @override
   _InterprovincialClientScreenState createState() => _InterprovincialClientScreenState();
@@ -56,6 +56,15 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     WidgetsBinding.instance.addPostFrameCallback((_)async{
       BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
       await _showDialogQualification();
+      if(widget.rejected){
+        BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+        changeStateCircle();
+        DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+        initialSeat = param.requiredSeats;
+        destinationInpit( param.distictTo);
+        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats ));
+        Navigator.of(context).push(Routes.toAvailableRoutesPage());
+      }
     });
   }
   void destinationInpit(LocationEntity to){
@@ -115,101 +124,100 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        MapInterprovincialClientWidget(
-          destinationInpit: destinationInpit,
-          drawCircle: drawCircle,
-          radiusCircle: initialCircularRadio,
-          getFrom: getfrom,
-        ),
-        // ChangeServiceClientWidget(),
-        CustomDropdownClient(),
-        BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
-          builder: (context, state) {
-            print(state);
-            if(state is DataInterprovincialClientState){
-              print(state.status);
-              if(state.status == InteprovincialClientStatus.loading){
-                return LoadingPositioned(label: state.loadingMessage);
-              }else if(state.status == InteprovincialClientStatus.notEstablished){
-                return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle,);
-              }else if(state.status == InteprovincialClientStatus.searchInterprovincial){
-                return Stack(
-                  children: [
-                    InputMapSelecction(
-                      controller: toController,
-                      onTap: (){
-                      },
-                      top: 110,
-                      labelText: 'Seleccione destino',
-                      province: toLocation.provinceName ==''?'':toLocation.provinceName  ,
-                      district: toLocation.districtName ==''?'':toLocation.districtName  ,
-                    ),
-                    SaveButtonWidget(context),
-                    Positioned(
-                      left: 15,
-                      top: 180,
-                      child: Row(
-                        children: [
-                          Card(
-                            elevation: 5,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Select<double>(
-                                value: initialCircularRadio,
-                                // placeholderIsSelected: true,
-                                showPlaceholder: false,
-                                items:circularRadio.map((item) => DropdownMenuItem(
-                                  child: Center(child: Text(item.toString()+' km')),
-                                  value: item
-                                )).toList(),
-                                onChanged: (val){
-                                  initialCircularRadio = val;
-                                    setState((){});
-                                },
-                              ),
-                            ),
-                          ),
-                          Card(
-                            elevation: 5,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Select<int>(
-                                value: initialSeat,
-                                // placeholderIsSelected: true,
-                                showPlaceholder: false,
-                                items:seating.map((item) => DropdownMenuItem(
-                                  child: Center(child: Row(
-                                    children: [
-                                      Text(item.toString()),
-                                      SizedBox(width: 5,),
-                                      Icon(Icons.airline_seat_recline_normal ,size: 20,color: Colors.black,)
-                                    ],
-                                  )),
-                                  value: item
-                                )).toList(),
-                                onChanged: (val){
-                                  initialSeat = val;
-                                    setState((){});
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+    return Scaffold(
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          MapInterprovincialClientWidget(
+            destinationInpit: destinationInpit,
+            drawCircle: drawCircle,
+            radiusCircle: initialCircularRadio,
+            getFrom: getfrom,
+          ),
+          ChangeServiceClientWidget(),
+          BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
+            builder: (context, state) {
+              print(state);
+              if(state is DataInterprovincialClientState){
+                print(state.status);
+                if(state.status == InteprovincialClientStatus.loading){
+                  return LoadingPositioned(label: state.loadingMessage);
+                }else if(state.status == InteprovincialClientStatus.notEstablished){
+                  return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle,);
+                }else if(state.status == InteprovincialClientStatus.searchInterprovincial){
+                  return Stack(
+                    children: [
+                      InputMapSelecction(
+                        controller: toController,
+                        top: 110,
+                        labelText: 'Seleccione destino',
+                        province: toLocation.provinceName ==''?'':toLocation.provinceName  ,
+                        district: toLocation.districtName ==''?'':toLocation.districtName  ,
                       ),
-                    ),
-                  ],
-                );
+                      SaveButtonWidget(context),
+                      Positioned(
+                        left: 15,
+                        top: 180,
+                        child: Row(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Select<double>(
+                                  value: initialCircularRadio,
+                                  // placeholderIsSelected: true,
+                                  showPlaceholder: false,
+                                  items:circularRadio.map((item) => DropdownMenuItem(
+                                    child: Center(child: Text(item.toString()+' km')),
+                                    value: item
+                                  )).toList(),
+                                  onChanged: (val){
+                                    initialCircularRadio = val;
+                                      setState((){});
+                                  },
+                                ),
+                              ),
+                            ),
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Select<int>(
+                                  value: initialSeat,
+                                  // placeholderIsSelected: true,
+                                  showPlaceholder: false,
+                                  items:seating.map((item) => DropdownMenuItem(
+                                    child: Center(child: Row(
+                                      children: [
+                                        Text(item.toString()),
+                                        SizedBox(width: 5,),
+                                        Icon(Icons.airline_seat_recline_normal ,size: 20,color: Colors.black,)
+                                      ],
+                                    )),
+                                    value: item
+                                  )).toList(),
+                                  onChanged: (val){
+                                    initialSeat = val;
+                                      setState((){});
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
               }
-            }
-            return Container();
-          },
-        )
-      ],
+              return Container();
+            },
+          )
+        ],
+      ),
     );
   }
   Positioned SaveButtonWidget(BuildContext context) {

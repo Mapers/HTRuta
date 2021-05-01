@@ -22,7 +22,7 @@ class AvailablesRoutesBloc extends Bloc<AvailablesRoutesEvent, AvailablesRoutesS
       yield LoadingAvailablesRoutes();
       List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes(from: event.from ,to: event.to,radio: event.radio,seating: event.seating);
 
-      yield DataAvailablesRoutes(availablesRoutes: availablesRoutes,distictfrom: event.from.districtName,distictTo: event.to.districtName,requiredSeats: event.seating);
+      yield DataAvailablesRoutes(availablesRoutes: availablesRoutes,distictfrom: event.from ,distictTo: event.to, requiredSeats: event.seating, radio: event.radio);
     }
   }
 }
