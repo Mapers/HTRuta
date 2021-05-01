@@ -72,7 +72,6 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
           subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
             for (var passenger in passengers) {
               Marker markerPassenger = MapViewerUtil.generateMarker(
-                //! Debe ser la ubicación actual
                 latLng: passenger.toLocation.latLang,
                 nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
                 icon: fromPinLocationIcon,

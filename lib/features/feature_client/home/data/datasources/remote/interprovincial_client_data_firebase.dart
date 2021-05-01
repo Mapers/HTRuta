@@ -16,9 +16,6 @@ class InterprovincialClientDataFirebase {
       dr.collection('requests').add(request.toFirestore);
       DocumentSnapshot  ds = await dr.get();
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
-      print('###################');
-      print( interprovincialLocationDriver.fcmToken );
-      print('###################');
       pushMessage.sendPushMessage(
         token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
         title: 'Ha recibido una nueva solicitud',
@@ -35,7 +32,7 @@ class InterprovincialClientDataFirebase {
     .collection('requests').snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
-        Map<String, dynamic> data = doc.data();
+        final data = doc.data();
         data['document_id'] = doc.id;
         return InterprovincialRequestEntity.fromJsonLocal(data);
       }).toList()
