@@ -6,13 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:HTRuta/app/colors.dart';
 
-class CustomDropdown extends StatefulWidget {
+class CustomDropdownDriver extends StatefulWidget {
 
   @override
-  _CustomDropdownState createState() => _CustomDropdownState();
+  _CustomDropdownDriverState createState() => _CustomDropdownDriverState();
 }
 
-class _CustomDropdownState extends State<CustomDropdown> {
+class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
   GlobalKey actionKey;
   double height, width, xPosition, yPosition;
   bool isDropdownOpened = false;

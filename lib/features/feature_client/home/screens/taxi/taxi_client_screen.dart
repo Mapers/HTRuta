@@ -5,6 +5,7 @@ import 'dart:math' show cos, sqrt, asin;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/change_service_client_widget.dart';
@@ -570,7 +571,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               ),
             ), */
             streamMap(),
-            ChangeServiceClientWidget(),
+            // ChangeServiceClientWidget(),
+            CustomDropdownClient(),
             Positioned(
               bottom: 30.0,
               left: 20.0,

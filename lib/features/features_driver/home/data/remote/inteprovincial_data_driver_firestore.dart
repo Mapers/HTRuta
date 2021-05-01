@@ -52,7 +52,7 @@ class InterprovincialDataDriverFirestore{
   Future<DataInterprovincialDriverState> getDataInterprovincialDriver({@required String documentId}) async{
     try {
       final ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
-      Map<String, dynamic> data = ds.data();
+      final data = ds.data();
       return DataInterprovincialDriverState(
         availableSeats: data['available_seats'],
         documentId: ds.id,
@@ -118,7 +118,7 @@ class InterprovincialDataDriverFirestore{
     .collection('passengers').snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
       querySnapshot.docs.map<PassengerEntity>((doc){
-        Map<String, dynamic> data = doc.data();
+        final data = doc.data();
         data['document_id'] = doc.id;
         return PassengerEntity.fromJsonFirestore(data);
       }).toList()
@@ -133,7 +133,7 @@ class InterprovincialDataDriverFirestore{
     ]).snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
-        Map<String, dynamic> data = doc.data();
+        final data = doc.data();
         data['document_id'] = doc.id;
         return InterprovincialRequestEntity.fromJsonLocal(data);
       }).toList()

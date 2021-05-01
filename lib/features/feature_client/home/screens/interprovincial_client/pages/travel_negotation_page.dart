@@ -144,6 +144,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 277dfaed3e90b6619a2f728ff2772d6073c7f735
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {

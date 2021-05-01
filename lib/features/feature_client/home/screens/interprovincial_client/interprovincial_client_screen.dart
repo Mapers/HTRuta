@@ -21,9 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
-  final GlobalKey<ScaffoldState> parentScaffoldKey;
   final bool rejected;
-  InterprovincialClientScreen({Key key, @required this.parentScaffoldKey, this.rejected = false}) : super(key: key);
+  InterprovincialClientScreen({Key key, this.rejected = false}) : super(key: key);
 
   @override
   _InterprovincialClientScreenState createState() => _InterprovincialClientScreenState();
@@ -143,7 +142,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                 if(state.status == InteprovincialClientStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
                 }else if(state.status == InteprovincialClientStatus.notEstablished){
-                  return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle,);
+                  return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle);
                 }else if(state.status == InteprovincialClientStatus.searchInterprovincial){
                   return Stack(
                     children: [

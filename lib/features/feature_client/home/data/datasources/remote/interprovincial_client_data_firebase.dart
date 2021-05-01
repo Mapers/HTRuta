@@ -31,7 +31,7 @@ class InterprovincialClientDataFirebase {
     .collection('requests').snapshots()
     .map<List<InterprovincialRequestEntity>>((querySnapshot) =>
       querySnapshot.docs.map<InterprovincialRequestEntity>((doc){
-        Map<String, dynamic> data = doc.data();
+        final data = doc.data();
         data['document_id'] = doc.id;
         return InterprovincialRequestEntity.fromJsonLocal(data);
       }).toList()
