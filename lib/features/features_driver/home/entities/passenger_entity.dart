@@ -11,12 +11,14 @@ class PassengerEntity extends Equatable {
   final String urlImage;
   final String fcmToken;
   final int seats;
+  final LocationEntity currentLocation;
   final LocationEntity toLocation;
 
   PassengerEntity({
     @required this.id,
     @required this.documentId,
     @required this.fullNames,
+    @required this.currentLocation,
     @required this.toLocation,
     @required this.fcmToken,
     @required this.seats,
@@ -31,6 +33,13 @@ class PassengerEntity extends Equatable {
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      currentLocation: LocationEntity(
+        districtName: dataJson['to_district_name'],
+        provinceName: dataJson['to_province_name'],
+        regionName: dataJson['to_region_name'],
+        streetName: dataJson['to_street_name'],
+        latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
+      ),
       toLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
@@ -48,6 +57,13 @@ class PassengerEntity extends Equatable {
       fcmToken: fcmToken,
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      currentLocation: LocationEntity(
+        districtName: dataJson['current_district_name'],
+        provinceName: dataJson['current_province_name'],
+        regionName: dataJson['current_region_name'],
+        streetName: dataJson['current_street_name'],
+        latLang: LatLng(dataJson['current_location'].latitude, dataJson['current_location'].longitude)
+      ),
       toLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
@@ -64,6 +80,11 @@ class PassengerEntity extends Equatable {
     'url_image': urlImage,
     'seats': seats,
     'fcm_token': fcmToken,
+    'current_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
+    'current_district_name': toLocation.districtName,
+    'current_province_name': toLocation.provinceName,
+    'current_region_name': toLocation.regionName,
+    'current_street_name': toLocation.streetName,
     'to_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
     'to_district_name': toLocation.districtName,
     'to_province_name': toLocation.provinceName,
@@ -79,6 +100,14 @@ class PassengerEntity extends Equatable {
       documentId: 'LGSDFbEzf4WIP5GvGgKm',
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       seats: 12,
+      currentLocation: LocationEntity(
+        latLang: LatLng(-11.114660, -77.594774),
+        streetName: 'Antigua Panamericana Nte. 1035',
+        districtName: 'Huacho',
+        provinceName: 'Huaura',
+        regionName: 'Lima',
+        zoom: 12
+      ),
       toLocation: LocationEntity(
         latLang: LatLng(-11.114660, -77.594774),
         streetName: 'Antigua Panamericana Nte. 1035',
@@ -93,5 +122,5 @@ class PassengerEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, documentId, fullNames, toLocation, urlImage, seats, fcmToken];
+  List<Object> get props => [id, documentId, fullNames, toLocation, currentLocation, urlImage, seats, fcmToken];
 }

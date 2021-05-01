@@ -107,7 +107,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
               Navigator.of(ctx).pop();
               qualificationShowDialog(passenger: passenger);
             },
-            child: Text('Liberar asientos'),
+            child: Text('Sí, liberar asientos'),
           )
         ]
       )
