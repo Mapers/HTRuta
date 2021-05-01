@@ -1,6 +1,6 @@
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_location_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
       builder: (ctx, state){
-        DataInteprovincialDriverLocationState data = state;
+        DataInterprovincialDriverLocationState data = state;
         if(data.passengerSelected == null){
           return Container();
         }

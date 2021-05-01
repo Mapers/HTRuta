@@ -1,7 +1,7 @@
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
-import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/inteprovincial_location_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,7 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
       builder: (context, locationState) {
-        if(locationState is DataInteprovincialDriverLocationState){
+        if(locationState is DataInterprovincialDriverLocationState){
           InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
           if(serviceState is DataInterprovincialDriverState){
             final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];

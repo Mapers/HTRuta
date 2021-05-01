@@ -1,4 +1,4 @@
-part of 'inteprovincial_location_bloc.dart';
+part of 'interprovincial_location_bloc.dart';
 
 abstract class InterprovincialDriverLocationState extends Equatable {
   const InterprovincialDriverLocationState();
@@ -7,29 +7,29 @@ abstract class InterprovincialDriverLocationState extends Equatable {
   List<Object> get props => [];
 }
 
-class DataInteprovincialDriverLocationState extends InterprovincialDriverLocationState {
+class DataInterprovincialDriverLocationState extends InterprovincialDriverLocationState {
   final String documentId;
   final LocationEntity location;
   final PassengerEntity passengerSelected;
-  DataInteprovincialDriverLocationState({@required this.documentId, @required this.location, @required this.passengerSelected});
+  DataInterprovincialDriverLocationState({@required this.documentId, @required this.location, @required this.passengerSelected});
 
-  factory DataInteprovincialDriverLocationState.initial(){
-    return DataInteprovincialDriverLocationState(
+  factory DataInterprovincialDriverLocationState.initial(){
+    return DataInterprovincialDriverLocationState(
       documentId: null,
       location: null,
       passengerSelected: null
     );
   }
 
-  DataInteprovincialDriverLocationState copyWith({ String documentId, LocationEntity location, PassengerEntity passengerSelected }){
-    return DataInteprovincialDriverLocationState(
+  DataInterprovincialDriverLocationState copyWith({ String documentId, LocationEntity location, PassengerEntity passengerSelected }){
+    return DataInterprovincialDriverLocationState(
       documentId: documentId ?? this.documentId,
       location: location ?? this.location,
       passengerSelected: passengerSelected ?? this.passengerSelected
     );
   }
-  DataInteprovincialDriverLocationState copyWithPassengerNull(){
-    return DataInteprovincialDriverLocationState(
+  DataInterprovincialDriverLocationState copyWithPassengerNull(){
+    return DataInterprovincialDriverLocationState(
       documentId: documentId,
       location: location,
       passengerSelected: null

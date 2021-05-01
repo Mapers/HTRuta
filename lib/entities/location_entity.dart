@@ -78,6 +78,8 @@ class LocationEntity extends Equatable {
     'zoom': zoom
   };
 
+  String get addressAdministrative => districtName + ' - ' + provinceName + ' - ' + regionName;
+
   @override
   List<Object> get props => [streetName, districtName, provinceName, latLang, zoom, regionName];
 }

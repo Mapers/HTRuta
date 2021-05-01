@@ -136,14 +136,12 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           ChangeServiceClientWidget(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
-              print(state);
               if(state is DataInterprovincialClientState){
-                print(state.status);
-                if(state.status == InteprovincialClientStatus.loading){
+                if(state.status == InterprovincialClientStatus.loading){
                   return LoadingPositioned(label: state.loadingMessage);
-                }else if(state.status == InteprovincialClientStatus.notEstablished){
+                }else if(state.status == InterprovincialClientStatus.notEstablished){
                   return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle);
-                }else if(state.status == InteprovincialClientStatus.searchInterprovincial){
+                }else if(state.status == InterprovincialClientStatus.searchInterprovincial){
                   return Stack(
                     children: [
                       InputMapSelecction(

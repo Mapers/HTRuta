@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_driver_firestore.dart';
-import 'package:HTRuta/features/features_driver/home/data/remote/inteprovincial_data_remote.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
+import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -66,11 +66,43 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
         SizedBox(height: 5),
         Row(
           children: [
+            Icon(Icons.trip_origin, color: Colors.black45),
+            SizedBox(width: 5),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
+                  Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                ],
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 5),
+        Row(
+          children: [
             Icon(Icons.person_pin_circle_outlined),
             SizedBox(width: 5),
             Expanded(
-              child: Text(passenger.destination),
-            )
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(passenger.currentLocation.streetName, style: TextStyle(fontSize: 13)),
+                  Text(passenger.currentLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                children: [
+                  Text('10Km', style: TextStyle(fontSize: 13)),
+                  Text('a 15 mins', style: TextStyle(fontSize: 13)),
+                ],
+              ),
+            ),
           ],
         ),
         SizedBox(height: 5),

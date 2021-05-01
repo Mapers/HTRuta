@@ -27,24 +27,24 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       print('Entre');
       await Future.delayed(Duration(seconds: 2));
       yield DataInterprovincialClientState.initial().copyWith(
-        status: InteprovincialClientStatus.notEstablished
+        status: InterprovincialClientStatus.notEstablished
       );
     }else if(event is InitialInterprovincialClientEvent){
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
-        status: InteprovincialClientStatus.notEstablished
+        status: InterprovincialClientStatus.notEstablished
       );
     }else if(event is SearchcInterprovincialClientEvent){
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
-        status: InteprovincialClientStatus.searchInterprovincial
+        status: InterprovincialClientStatus.searchInterprovincial
       );
     }else if(event is DestinationInterprovincialClientEvent){
       List<Placemark> placemarkFrom = await placemarkFromCoordinates(event.to.latitude,event.to.longitude );
       Placemark placemark = placemarkFrom.first;
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
-        status: InteprovincialClientStatus.searchInterprovincial,
+        status: InterprovincialClientStatus.searchInterprovincial,
         interprovincialRoute: InterprovincialRouteInServiceEntity(
           toLocation: LocationEntity(
             latLang: LatLng(event.to.latitude, event.to.longitude ),
