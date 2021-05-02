@@ -84,6 +84,17 @@ class InterprovincialRouteInServiceEntity extends Equatable {
       starts: starts,
     );
   }
+  factory InterprovincialRouteInServiceEntity.onlyLocation(LocationEntity toLocation){
+    return InterprovincialRouteInServiceEntity(
+      id: null,
+      name: null,
+      nameDriver: null,
+      cost: null,
+      fromLocation: null,
+      toLocation: toLocation,
+      starts: null,
+    );
+  }
 
   @override
   List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, starts];

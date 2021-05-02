@@ -133,7 +133,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       ],
                     );
                   }else{
-                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
+                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, serviceDocumentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
                   }
                 }
                 return Container();
@@ -144,8 +144,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
-  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
-    InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
+  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String serviceDocumentId, String fcmTokenDriver} ){
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
         return Center(
@@ -192,7 +191,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver ruta',
                     width: 100,
                     onPressed: () {
-                      acceptService(documentId, request);
+                      deleteRequestAndRedirectionalPage(serviceDocumentId, request);
                     }
                   ),
                 ],
@@ -214,7 +213,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     color:Colors.red,
                     onPressed: ()async{
                       Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
+                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: serviceDocumentId, fcmTokenDriver: fcmTokenDriver);
                       final user = await _session.get();
                       NegotiationEntity negotiation = NegotiationEntity(
                         service_id: widget.availablesRoutesEntity.id,
@@ -228,18 +227,18 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      await Future.wait([
-                        interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client),
-                        serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId)
-                      ]);
-                      acceptService(documentId, request);
+                      deleteRequestAndRedirectionalPage(serviceDocumentId, request);
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
                         service_id: widget.availablesRoutesEntity.id,
                         passenger_id: user.id,
                       );
-                      BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(AcceptDataSolicitudInterprovincialClientEvent(
+                        serviceDocumentId: serviceDocumentId,
+                        negotiationEntity: negotiation,
+                        interprovincialRequest: request
+                      ));
                     }
                   ),
                 ],
@@ -252,7 +251,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     return Container();
   }
 
-  void acceptService(String documentId, InterprovincialRequestEntity request) async {
+  void deleteRequestAndRedirectionalPage(String documentId, InterprovincialRequestEntity request) async {
     LocationEntity currenActual = await LocationUtil.currentLocation();
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     interprovincialDataFirestore.seeRoute(documentId: widget.availablesRoutesEntity.documentId, request: request);

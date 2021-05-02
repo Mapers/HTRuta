@@ -312,7 +312,7 @@ class MenuDriverScreens extends StatelessWidget {
           FlatButton(
             onPressed: (){
               Navigator.pop(context);
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeClientScreen, (Route<dynamic> route) => false);
+              Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
             },
             child: Text('Modo Pasajero',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
