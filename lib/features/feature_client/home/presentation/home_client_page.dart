@@ -1,3 +1,4 @@
+import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
@@ -7,7 +8,8 @@ import 'package:HTRuta/features/features_driver/home/presentations/widgets/menu_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeClientPage extends StatefulWidget {
-  const HomeClientPage({Key key}) : super(key: key);
+  final ServiceInCourseEntity serviceInCourse;
+  const HomeClientPage({Key key, @required this.serviceInCourse}) : super(key: key);
 
   @override
   _HomeClientPageState createState() => _HomeClientPageState();

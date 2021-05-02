@@ -118,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     print(serviceInCourse.documentId );
     print('###################');
     if(serviceInCourse == null){
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
 
@@ -126,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourse), (_) => false);
     }else if(serviceInCourse.entityType == TypeEntityEnum.passenger){
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeClientScreen, (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
     }
     // _showDialogQualification();
   }

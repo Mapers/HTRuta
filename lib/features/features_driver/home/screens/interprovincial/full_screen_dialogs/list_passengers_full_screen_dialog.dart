@@ -1,5 +1,7 @@
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
+import 'package:HTRuta/core/utils/extensions/double_extension.dart';
+import 'package:HTRuta/core/utils/extensions/int_extension.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -66,23 +68,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
         SizedBox(height: 5),
         Row(
           children: [
-            Icon(Icons.trip_origin, color: Colors.black45),
-            SizedBox(width: 5),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
-                  Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
-                ],
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Icon(Icons.person_pin_circle_outlined),
+            Icon(Icons.trip_origin),
             SizedBox(width: 5),
             Expanded(
               flex: 2,
@@ -98,11 +84,27 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
               flex: 1,
               child: Column(
                 children: [
-                  Text('10Km', style: TextStyle(fontSize: 13)),
-                  Text('a 15 mins', style: TextStyle(fontSize: 13)),
+                  Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
+                  Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
                 ],
               ),
             ),
+          ],
+        ),
+        SizedBox(height: 5),
+        Row(
+          children: [
+            Icon(Icons.person_pin_circle_outlined, color: Colors.black45),
+            SizedBox(width: 5),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
+                  Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                ],
+              ),
+            )
           ],
         ),
         SizedBox(height: 5),
