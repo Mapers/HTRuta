@@ -31,6 +31,10 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
   LocationEntity currenActual;
+  LocationUtil _locationUtil = LocationUtil();
+  BitmapDescriptor currentPinLocationIcon;
+  InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+
 
   StreamSubscription subscription;
   
@@ -64,10 +68,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
       interprovincialClientDataLocal.saveDocumentIdOnServiceInterprovincial(widget.documentId);
 
-      InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId, passengerPosition: result[0] ).listen((interprovincialLocationDriver,){
-        print(interprovincialLocationDriver.location.latLang.latitude );
-        print(interprovincialLocationDriver.location.latLang.longitude );
+      _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
+      subscription = interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId ).listen((interprovincialLocationDriver,){
         Marker markerDrive = MapViewerUtil.generateMarker(
           latLng: interprovincialLocationDriver.location.latLang,
           nameMarkerId: 'DRIVE_POSITION_MARKER',
@@ -83,9 +85,19 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     });
     super.initState();
   }
+  void _updateMarkerCurrentPosition(LocationEntity _location) async{
+    Marker markerPassenger = MapViewerUtil.generateMarker(
+      latLng: _location.latLang,
+      nameMarkerId: 'CURRENT_POSITION_MARKER',
+      icon: currentPinLocationIcon
+    );
+    _markers[markerPassenger.markerId] = markerPassenger;
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: null);
+  }
 
   @override
   void dispose() {
+    _locationUtil.disposeListener();
     subscription?.cancel();
     super.dispose();
   }

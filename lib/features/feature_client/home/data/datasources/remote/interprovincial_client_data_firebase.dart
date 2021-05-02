@@ -69,14 +69,7 @@ class InterprovincialClientDataFirebase {
     }
   }
 
-  Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId,@required LocationEntity passengerPosition}) {
-    // firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc().update(
-    //   'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
-    //     'street': passengerPosition.streetName,
-    //     'district_name': passengerPosition.districtName,
-    //     'province_name': passengerPosition.provinceName,
-    //     'region_name': passengerPosition.regionName,
-    // );
+  Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}) {
     return firestore.collection('interprovincial_in_service').doc(documentId).snapshots().map((documentSnapshot){
       dynamic dataJson = documentSnapshot.data();
       return InterprovincialLocationDriverEntity.fromJson(dataJson);
@@ -84,6 +77,19 @@ class InterprovincialClientDataFirebase {
   }
 
   Future<bool> checkIfInterprovincialLocationDriverEntityOnService({@required String documentId}) async{
+    DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
+    return ds.exists;
+  }
+  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required InterprovincialRequestEntity interprovincialRequestEntiy}) async{
+    
+    firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(interprovincialRequestEntiy.documentId).update({
+      'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
+      'current_street_name': passengerPosition.streetName,
+      'current_district_name': passengerPosition.districtName,
+      'current_province_name': passengerPosition.provinceName,
+      'current_region_name': passengerPosition.regionName,
+    }
+    );
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }

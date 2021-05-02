@@ -133,6 +133,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       ],
                     );
                   }else{
+                    print('..................');
+                    print(asyncSnapshot.data.first);
+                    print('..................');
                     return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
                   }
                 }
