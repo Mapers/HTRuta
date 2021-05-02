@@ -17,24 +17,23 @@ class ServiceDataRemote{
   /// Obtener cómo ha iniciado (cliente o conductor) su último servicio
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
   Future<ServiceInCourseEntity> getServiceInCourse() async{
-    await _prefs.initPrefs();
-    ResponseHttp result;
     try{
-      result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
+      await _prefs.initPrefs();
+      final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: {
           'user_id': _prefs.idChofer
         }
       );
+      if(result.data == null) return null;
+      if(result.data['document_id'] == null) return null;
+      return ServiceInCourseEntity(
+        entityType: getTypeEntityEnumByString(result.data['type_entity']),
+        serviceType: TypeServiceEnum.interprovincial,
+        documentId: result.data['document_id']
+      );
     } catch(_){
       return null;
     }
-    if(result.data == null) return null;
-    if(result.data['document_id'] == null) return null;
-    return ServiceInCourseEntity(
-      entityType: getTypeEntityEnumByString(result.data['type_entity']),
-      serviceType: TypeServiceEnum.interprovincial,
-      documentId: result.data['document_id']
-    );
   }
 
   Future<PassengerEntity> getPassengerById(String passengerId, String documentId, String fcmToken) async{
