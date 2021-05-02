@@ -23,8 +23,10 @@ class SendDataSolicitudInterprovincialClientEvent extends InterprovincialClientE
 }
 
 class AcceptDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
+  final String serviceDocumentId;
   final NegotiationEntity negotiationEntity;
-  AcceptDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});
+  final InterprovincialRequestEntity interprovincialRequest;
+  AcceptDataSolicitudInterprovincialClientEvent({@required this.serviceDocumentId, @required this.negotiationEntity, @required this.interprovincialRequest});
 }
 class RejecDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
   final NegotiationEntity negotiationEntity;
