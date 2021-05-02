@@ -65,7 +65,6 @@ class AppRoute {
   static const String termsConditionsScreen = '/termsConditions';
   static const String chatScreen = '/chat';
   static const String cargaScreen = '/carga';
-  static const String homeClientScreen = '/home_clien';
   static const String requestDriverScreen = '/request_driver';
   static const String walletDriverScreen = '/my_wallet_driver';
   // static const String walletDriverScreen = '/my_wallet_driver';
@@ -120,8 +119,6 @@ class AppRoute {
         return PageViewTransition(builder: (_) => ChatScreen());
       case cargaScreen:
         return PageViewTransition(builder: (_) => CargaPage());
-      case homeClientScreen:
-        return PageViewTransition(builder: (_) => HomeClientPage());
       case requestDriverScreen:
         return PageViewTransition(builder: (_) => RequestDriverScreen());
       case walletDriverScreen:
