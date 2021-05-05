@@ -28,7 +28,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Notification/notification.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/request.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Settings/settings.dart';
-import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
 import 'package:flutter/material.dart';
 
 class PageViewTransition<T> extends MaterialPageRoute<T> {

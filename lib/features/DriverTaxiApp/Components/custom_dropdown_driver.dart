@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:HTRuta/app/colors.dart';
 
 class CustomDropdownDriver extends StatefulWidget {
 
