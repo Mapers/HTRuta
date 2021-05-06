@@ -3,12 +3,12 @@ import 'dart:io' show Platform;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/models/map_type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/select_address_view.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/map_type_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';

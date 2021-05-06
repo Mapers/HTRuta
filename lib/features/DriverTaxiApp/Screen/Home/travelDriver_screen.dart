@@ -15,6 +15,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/loading.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:HTRuta/models/direction_model.dart';
 // import 'package:HTRuta/features/DriverTaxiApp/Model/requestDriver_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -30,7 +31,6 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/Model/direction_model.dart';
 import 'package:HTRuta/app/navigation/routes.dart' as enrutador;
 
 class TravelDriverScreen extends StatefulWidget {
@@ -60,7 +60,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   bool isComplete = false;
   var apis = MapNetwork();
   final pickupApi = PickupApi();
-  List<Routes> routesData;
+  List<RoutesDirectionModel> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();
   String selectedService;

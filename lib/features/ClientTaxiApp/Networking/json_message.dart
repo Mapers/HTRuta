@@ -1,5 +1,6 @@
-import '../data/Model/direction_model.dart';
-import '../data/equatable.dart';
+import 'package:HTRuta/features/ClientTaxiApp/data/equatable_client_taxi_app.dart';
+import 'package:HTRuta/models/direction_model.dart';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'json_message.g.dart';
@@ -39,7 +40,7 @@ class ResultData extends EquatableClientTaxiApp {
   List<GeocodedWaypoint> geocodedWaypoints;
 
   @JsonKey(name: 'routes')
-  List<Routes> routes;
+  List<RoutesDirectionModel> routes;
 
   factory ResultData.fromJson(Map<String, dynamic> json) =>
       _$ResultDataFromJson(json);

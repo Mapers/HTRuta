@@ -4,6 +4,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/models/direction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
@@ -17,7 +18,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../data/Model/direction_model.dart';
 
 class RequestDetail extends StatefulWidget {
   final Request requestItem;
@@ -37,7 +37,7 @@ class _RequestDetailState extends State<RequestDetail> {
   var apis = MapNetwork();
   Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
   int _polylineIdCounter = 1;
-  List<Routes> routesData;
+  List<RoutesDirectionModel> routesData;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   bool checkPlatform = Platform.isIOS;
   String distance, duration;

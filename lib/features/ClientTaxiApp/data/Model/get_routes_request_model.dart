@@ -1,7 +1,6 @@
+import 'package:HTRuta/features/ClientTaxiApp/data/equatable_client_taxi_app.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import '../../data/equatable.dart';
 
 part 'get_routes_request_model.g.dart';
 

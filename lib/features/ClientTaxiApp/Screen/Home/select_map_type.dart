@@ -1,5 +1,5 @@
+import 'package:HTRuta/models/map_type_model.dart';
 import 'package:flutter/material.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/map_type_model.dart';
 
 class SelectMapTypeView extends StatelessWidget {
   final MapTypeModel _item;

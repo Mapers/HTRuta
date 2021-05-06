@@ -19,10 +19,12 @@ class InterprovincialDataFirestore{
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       PassengerEntity passenger = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
 
+      DocumentReference drPassenger = await dr.collection('passengers').add(passenger.toFirestore);
+
       List<dynamic> result = await Future.wait([
         dr.get(),
-        dr.collection('passengers').add(passenger.toFirestore),
         dr.collection('requests').doc(request.documentId).update({
+          'passenger_document_id': drPassenger.id,
           'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
         }),
       ]);
@@ -43,7 +45,6 @@ class InterprovincialDataFirestore{
         );
       }
 
-      DocumentReference drPassenger = result[1];
       int newAvailableSeats = interprovincialLocationDriver.availableSeats - request.seats;
       await dr.update({
         'available_seats': newAvailableSeats

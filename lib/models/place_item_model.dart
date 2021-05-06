@@ -6,7 +6,7 @@ class PlaceItemRes {
   PlaceItemRes(this.name, this.address, this.lat, this.lng);
 
   static List<PlaceItemRes> fromJson(Map<String, dynamic> json) {
-    List<PlaceItemRes> rs = [];
+    List<PlaceItemRes> rs =[];
 
     var results = json['results'] as List;
     for (var item in results) {

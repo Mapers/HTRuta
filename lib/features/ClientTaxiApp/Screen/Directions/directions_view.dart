@@ -9,6 +9,7 @@ import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:HTRuta/models/direction_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,6 @@ import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../Networking/Apis.dart';
-import '../../data/Model/direction_model.dart';
 import '../../data/Model/get_routes_request_model.dart';
 
 import 'widgets/select_service_widget.dart';
@@ -61,7 +61,7 @@ class _DirectionsViewState extends State<DirectionsView> {
   LatLng positionDriver;
   bool isComplete = false;
   var apis = Apis();
-  List<Routes> routesData;
+  List<RoutesDirectionModel> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();
   String selectedService;

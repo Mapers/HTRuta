@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:HTRuta/models/direction_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'json_message.dart';
-import '../data/Model/direction_model.dart';
 
 part 'googleMap_message.g.dart';
 
@@ -16,7 +16,7 @@ class GMapMessage extends JsonMessage {
   @JsonKey(name: 'geocoded_waypoints')
   final List<GeocodedWaypoint> geocodedWaypoints;
   @JsonKey(name: 'routes')
-  final List<Routes> routes;
+  final List<RoutesDirectionModel> routes;
   @override
   @JsonKey(name: 'error_message')
   final String errorMessage;

@@ -48,6 +48,7 @@ class TaxiModel {
 
   factory TaxiModel.empty(){
     return TaxiModel(
+      token: null,
       id: '1',
       userId: '2',
       email: 'emailtest@email.test',
