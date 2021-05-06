@@ -18,12 +18,6 @@ class InterprovincialClientRemoteDataSoruce {
   List<ClientInterporvincialRoutesEntity> routes =[];
 
   Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating}) async{
-    print('..................');
-    print(radio);
-    print(seating);
-    print(from.toMap);
-    print(to.toMap);
-    print('..................');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
       data: {
@@ -33,9 +27,7 @@ class InterprovincialClientRemoteDataSoruce {
         'to': to.toMap
       }
     );
-    print('###################');
-    print(result.data);
-    print('###################');
+
     List<AvailableRouteEntity> availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
     return availablesRoutes;
   }

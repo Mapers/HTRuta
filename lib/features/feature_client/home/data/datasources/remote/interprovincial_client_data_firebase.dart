@@ -10,14 +10,12 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  Future<bool> addRequestClient({String documentId,InterprovincialRequestEntity request,bool update}) async{
+  Future<String> addRequestClient({String documentId,InterprovincialRequestEntity request,bool update}) async{
     try {
-      DocumentReference  dr =  await firestore.collection('interprovincial_in_service').doc(documentId);
-      dr.collection('requests').add(request.toFirestore);
-      DocumentSnapshot  ds = await dr.get();
-      print('..................');
-      print(ds.data());
-      print('..................');
+      DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
+      DocumentReference dRequests = await dr.collection('requests').add(request.toFirestore);
+      DocumentSnapshot ds = await dr.get();
+      print(dRequests.id);
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       // print('###################');
       // print(interprovincialLocationDriver. );
@@ -27,10 +25,11 @@ class InterprovincialClientDataFirebase {
         title: 'Ha recibido una nueva solicitud',
         description: 'Revise las solicitudes'
       );
-      return true;
+      return dRequests.id;
     } catch (e) {
-      return false;
+      print(e.toString());
     }
+    return null;
   }
 
   Stream<List<InterprovincialRequestEntity>> getStreamContraoferta({@required String documentId}){
