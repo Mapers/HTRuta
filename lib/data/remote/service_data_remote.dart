@@ -2,8 +2,6 @@ import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/http/response.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
-import 'package:HTRuta/enums/type_entity_enum.dart';
-import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -24,13 +22,7 @@ class ServiceDataRemote{
           'user_id': _prefs.idChofer
         }
       );
-      if(result.data == null) return null;
-      if(result.data['document_id'] == null) return null;
-      return ServiceInCourseEntity(
-        entityType: getTypeEntityEnumByString(result.data['type_entity']),
-        serviceType: TypeServiceEnum.interprovincial,
-        documentId: result.data['document_id']
-      );
+      return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;
     }
