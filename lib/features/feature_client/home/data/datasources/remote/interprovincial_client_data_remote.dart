@@ -69,10 +69,11 @@ class InterprovincialClientRemoteDataSoruce {
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
       data: {
-        'service_id': negotiationEntity.service_id,
+        'service_id': negotiationEntity.serviceId,
         'seating': negotiationEntity.seating,
         'cost': negotiationEntity.cost ,
-        'passenger_id': negotiationEntity.passenger_id
+        'passenger_id': negotiationEntity.passengerId,
+        'request_document_id':  negotiationEntity.requestDocumentId ,
       }
     );
     print(result.success);
