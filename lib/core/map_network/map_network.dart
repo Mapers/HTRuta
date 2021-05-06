@@ -1,16 +1,16 @@
+import 'dart:async';
+
+import 'package:HTRuta/config.dart';
+import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
-import 'dart:async';
-import '../../../config.dart';
+
 import 'json_message.dart';
 import 'web_api_client.dart';
-import '../data/Model/get_routes_request_model.dart';
 
-class Apis {
+class MapNetwork {
   static const domain = 'https://maps.googleapis.com/maps/api/directions/json';
   static final GMapClient _gmapClient = GMapClient();
-
-  Apis();
 
   Future getHttp(String query) async {
     try {

@@ -1,10 +1,10 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
-import 'json_message.dart';
 import 'googleMap_message.dart';
-
+import 'json_message.dart';
 
 typedef OnError = JsonMessage Function(
     {@required int status,

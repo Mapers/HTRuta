@@ -62,10 +62,13 @@ class LocationUtil {
   static double calculateDistanceInListPoints(List<LatLng> list){
     List<LatLng> _list = [...list];
     double distance = 0;
+    if(list.isEmpty || list.length == 1) return 0;
     do {
       distance += calculateDistance(_list.first, _list[1]);
       _list.removeAt(0);
     } while (_list.length != 1);
     return distance;
   }
+
+  static double kilometersToMeters(double distanceInKms) => distanceInKms * 1000;
 }

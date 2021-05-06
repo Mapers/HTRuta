@@ -1,6 +1,5 @@
 import 'package:HTRuta/features/ClientTaxiApp/data/equatable.dart';
-
-import '../data/Model/direction_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/data/Model/direction_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'json_message.g.dart';
