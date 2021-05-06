@@ -33,7 +33,7 @@ class RequestDriverScreen extends StatefulWidget {
 
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final String screenName = 'REQUEST';
-  List<Request> requestTaxi = [];
+  List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
   final aceptar = '1';
@@ -46,7 +46,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   PushNotificationProvider pushProvider;
 
-  void navigateToDetail(Request requestItem) {
+  void navigateToDetail(RequestModel requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
   }
   @override
@@ -245,7 +245,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   shrinkWrap: true,
                   itemCount: requestTaxi.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Request request = requestTaxi[index];
+                    RequestModel request = requestTaxi[index];
                     TaxiModel taxiModel = TaxiModel(
                       accepteds: request.aceptados,
                       dni: request.vchDni,

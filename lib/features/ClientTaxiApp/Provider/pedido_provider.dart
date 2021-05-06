@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class PedidoProvider extends ChangeNotifier{
   //Datos de pedido -> punto inicial, punto final, precio y observaciones
   String _idSolicitud;
-  Request _request;
+  RequestModel _request;
   int _contador = 0;
   double _precio;
   DriverRequest _requestDriver;
@@ -17,9 +17,9 @@ class PedidoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Request get request => _request;
+  RequestModel get request => _request;
 
-  set request(Request data){
+  set request(RequestModel data){
     _request = data;
     notifyListeners();
   }

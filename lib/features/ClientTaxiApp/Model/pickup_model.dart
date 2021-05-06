@@ -19,12 +19,12 @@ class PickUpRequest {
 
     String message;
     bool success;
-    List<Request> data;
+    List<RequestModel> data;
 
     factory PickUpRequest.fromJson(Map<String, dynamic> json) => PickUpRequest(
         message: json['message'],
         success: json['success'],
-        data: List<Request>.from(json['data'].map((x) => Request.fromJson(x))),
+        data: List<RequestModel>.from(json['data'].map((x) => RequestModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-List<Request> requestFromJson(String str) => List<Request>.from(json.decode(str).map((x) => Request.fromJson(x)));
+List<RequestModel> requestFromJson(String str) => List<RequestModel>.from(json.decode(str).map((x) => RequestModel.fromJson(x)));
 
-String requestToJson(List<Request> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String requestToJson(List<RequestModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Request {
-  Request({
+class RequestModel {
+  RequestModel({
       this.id,
       this.iIdUsuario,
       this.vchCorreo,
@@ -49,7 +49,7 @@ class Request {
   String comentario;
   String token;
 
-  factory Request.fromJson(Map<String, dynamic> json) => Request(
+  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
       id: json['Id'],
       iIdUsuario: json['iIdUsuario'],
       vchCorreo: json['vchCorreo'],

@@ -71,7 +71,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   bool isWorking = false;
   bool isLoading = true;
 
-  List<Request> requestTaxi = [];
+  List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
   List<String> aceptados = [];
@@ -634,7 +634,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       )
     );
   }
-  void acceptTravel(Request request) async {
+  void acceptTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
@@ -671,7 +671,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       Dialogs.alert(context,title: 'Error', message: e.message);
     }
   }
-  void cancelTravel(Request request) async {
+  void cancelTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();

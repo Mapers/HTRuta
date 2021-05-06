@@ -256,7 +256,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;
-                        pedidoProvider.request = Request(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
+                        pedidoProvider.request = RequestModel(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
                         pedidoProvider.precio = double.parse(precio);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => DirectionScreen())

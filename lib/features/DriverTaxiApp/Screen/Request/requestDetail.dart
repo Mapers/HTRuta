@@ -20,7 +20,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class RequestDetail extends StatefulWidget {
-  final Request requestItem;
+  final RequestModel requestItem;
 
   RequestDetail({this.requestItem});
 
@@ -42,7 +42,7 @@ class _RequestDetailState extends State<RequestDetail> {
   bool checkPlatform = Platform.isIOS;
   String distance, duration;
 
-  Future<double> calcularDistancia(Request requestActual)async{
+  Future<double> calcularDistancia(RequestModel requestActual)async{
     return await Geolocator.distanceBetween(double.parse(requestActual.vchLatInicial), double.parse(requestActual.vchLongInicial), double.parse(requestActual.vchLatFinal), double.parse(requestActual.vchLongFinal))/1000;
   }
   void _onMapCreated(_) {}
@@ -110,7 +110,7 @@ class _RequestDetailState extends State<RequestDetail> {
       markers[markerIdTo] = markerTo;
     });
   }
-  void acceptTravel(Request request) async {
+  void acceptTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();

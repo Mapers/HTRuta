@@ -19,12 +19,12 @@ class SolicitudUsuarioResponse {
 
     String message;
     bool success;
-    List<Request> data;
+    List<RequestModel> data;
 
     factory SolicitudUsuarioResponse.fromJson(Map<String, dynamic> json) => SolicitudUsuarioResponse(
         message: json['message'],
         success: json['success'],
-        data: List<Request>.from(json['data'].map((x) => Request.fromJson(x))),
+        data: List<RequestModel>.from(json['data'].map((x) => RequestModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
