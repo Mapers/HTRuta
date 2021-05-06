@@ -1,5 +1,6 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
+import 'package:HTRuta/entities/on_accept_request_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -7,24 +8,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 
-enum InterprovincialDataFirestoreOrigin {
-  client, driver
-}
-
 class InterprovincialDataFirestore{
   final FirebaseFirestore firestore;
   final PushMessage pushMessage;
   final ServiceDataRemote serviceDataRemote;
   InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage, @required this.serviceDataRemote});
 
-  Future<int> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
+  Future<OnAcceptRequestEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
-      PassengerEntity passengerEntity = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
+      PassengerEntity passenger = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
 
       List<dynamic> result = await Future.wait([
         dr.get(),
-        dr.collection('passengers').add(passengerEntity.toFirestore),
+        dr.collection('passengers').add(passenger.toFirestore),
         dr.collection('requests').doc(request.documentId).update({
           'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
         }),
@@ -46,11 +43,15 @@ class InterprovincialDataFirestore{
         );
       }
 
+      DocumentReference drPassenger = result[1];
       int newAvailableSeats = interprovincialLocationDriver.availableSeats - request.seats;
       await dr.update({
         'available_seats': newAvailableSeats
       });
-      return newAvailableSeats;
+      return OnAcceptRequestEntity(
+        availableSeats: newAvailableSeats,
+        passenger: passenger.copyWith(documentId: drPassenger.id)
+      );
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
       return null;
@@ -92,5 +93,8 @@ class InterprovincialDataFirestore{
       return false;
     }
   }
+}
 
+enum InterprovincialDataFirestoreOrigin {
+  client, driver
 }

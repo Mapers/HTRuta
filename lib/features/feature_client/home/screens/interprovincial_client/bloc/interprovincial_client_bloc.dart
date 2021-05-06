@@ -60,10 +60,8 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
     }else if(event is SendDataSolicitudInterprovincialClientEvent){
       await interprovincialClientRemote.sendRequest(negotiationEntity: event.negotiationEntity);
     }else if(event is AcceptDataSolicitudInterprovincialClientEvent){
-      await Future.wait([
-        interprovincialDataFirestore.acceptRequest(documentId: event.serviceDocumentId, request: event.interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client),
-        serviceDataRemote.acceptRequest(event.negotiationEntity.service_id, event.negotiationEntity.passenger_id)
-      ]);
+      final onAcceptRequest = await interprovincialDataFirestore.acceptRequest(documentId: event.serviceDocumentId, request: event.interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client);
+      await serviceDataRemote.acceptRequest(event.negotiationEntity.service_id, event.negotiationEntity.passenger_id, onAcceptRequest.passenger.documentId);
     }else if(event is RejecDataSolicitudInterprovincialClientEvent){
       await serviceDataRemote.rejectRequest(event.negotiationEntity.service_id, event.negotiationEntity.passenger_id);
     }else if(event is SendQualificationInterprovincialClientEvent){
