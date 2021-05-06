@@ -5,6 +5,7 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/entities/on_accept_request_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
@@ -230,8 +231,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      final onRequestAccept = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
-                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccept.passenger.documentId);
+                      final onRequestAccepted = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
+                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccepted.passenger.documentId);
                       acceptService(documentId, request);
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();

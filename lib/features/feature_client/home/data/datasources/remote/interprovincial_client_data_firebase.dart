@@ -44,7 +44,7 @@ class InterprovincialClientDataFirebase {
     );
   }
   
-  Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
+  Future<bool> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
       String message = 'Solicitud rechazada';
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);

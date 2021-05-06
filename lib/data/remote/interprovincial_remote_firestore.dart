@@ -14,7 +14,7 @@ class InterprovincialDataFirestore{
   final ServiceDataRemote serviceDataRemote;
   InterprovincialDataFirestore({@required this.firestore, @required this.pushMessage, @required this.serviceDataRemote});
 
-  Future<OnAcceptRequestEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
+  Future<OnRequestAcceptedEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       PassengerEntity passenger = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
@@ -51,7 +51,7 @@ class InterprovincialDataFirestore{
       });
       print('remote');
       print(drPassenger.id);
-      return OnAcceptRequestEntity(
+      return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
         passenger: passenger.copyWith(documentId: drPassenger.id)
       );

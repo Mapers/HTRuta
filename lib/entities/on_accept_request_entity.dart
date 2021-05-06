@@ -2,11 +2,11 @@ import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.d
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class OnAcceptRequestEntity extends Equatable{
+class OnRequestAcceptedEntity extends Equatable{
   final PassengerEntity passenger;
   final int availableSeats;
 
-  OnAcceptRequestEntity({
+  OnRequestAcceptedEntity({
     @required this.passenger,
     @required this.availableSeats
   });
