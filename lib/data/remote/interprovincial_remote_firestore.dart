@@ -1,6 +1,6 @@
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
-import 'package:HTRuta/entities/on_accept_request_entity.dart';
+import 'package:HTRuta/entities/on_request_accepted_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';

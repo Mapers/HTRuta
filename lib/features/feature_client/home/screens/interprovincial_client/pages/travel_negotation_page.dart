@@ -5,7 +5,6 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/entities/on_accept_request_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
