@@ -34,7 +34,7 @@ import '../../data/Model/get_routes_request_model.dart';
 import 'widgets/select_service_widget.dart';
 
 class DirectionsView extends StatefulWidget {
-  final PlaceBloc placeBloc;
+  final ClientTaxiPlaceBloc placeBloc;
   DirectionsView({this.placeBloc});
 
   @override

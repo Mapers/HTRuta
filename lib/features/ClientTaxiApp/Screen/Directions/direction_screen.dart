@@ -7,7 +7,7 @@ import 'directions_view.dart';
 class DirectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var placeBloc = Provider.of<PlaceBloc>(context);
+    var placeBloc = Provider.of<ClientTaxiPlaceBloc>(context);
 
     return Scaffold(
       body: DirectionsView(

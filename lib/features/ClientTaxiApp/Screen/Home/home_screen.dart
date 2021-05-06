@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class HomeScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var bloc = Provider.of<PlaceBloc>(context);
+    var bloc = Provider.of<ClientTaxiPlaceBloc>(context);
     return TaxiClientScreen(
       placeBloc: bloc,
     );

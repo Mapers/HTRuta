@@ -21,7 +21,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'select_map_type.dart';
 
 class HomeView extends StatefulWidget {
-  final PlaceBloc placeBloc;
+  final ClientTaxiPlaceBloc placeBloc;
   HomeView({this.placeBloc});
   @override
   _HomeViewState createState() => _HomeViewState();

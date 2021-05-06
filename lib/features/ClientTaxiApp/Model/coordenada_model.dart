@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-Coordenada coordenadaFromJson(String str) => Coordenada.fromJson(json.decode(str));
+CoordinateModel coordenadaFromJson(String str) => CoordinateModel.fromJson(json.decode(str));
 
-String coordenadaToJson(Coordenada data) => json.encode(data.toJson());
+String coordenadaToJson(CoordinateModel data) => json.encode(data.toJson());
 
-class Coordenada {
-    Coordenada({
+class CoordinateModel {
+    CoordinateModel({
         this.latitud,
         this.longitud,
         this.idConductor,
@@ -15,7 +15,7 @@ class Coordenada {
     double longitud;
     String idConductor;
 
-    factory Coordenada.fromJson(Map<String, dynamic> json) => Coordenada(
+    factory CoordinateModel.fromJson(Map<String, dynamic> json) => CoordinateModel(
         latitud: json['latitud'].toDouble(),
         longitud: json['longitud'].toDouble(),
         idConductor: json['idConductor'],
