@@ -221,6 +221,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       NegotiationEntity negotiation = NegotiationEntity(
                         serviceId: widget.availablesRoutesEntity.id,
                         passengerId: user.id,
+                        requestDocumentId: null
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity:  negotiation));
                     },
@@ -230,16 +231,15 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      await Future.wait([
-                        interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client),
-                        serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId)
-                      ]);
+                      final onRequestAccept = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
+                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccept.passenger.documentId);
                       acceptService(documentId, request);
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
                         serviceId: widget.availablesRoutesEntity.id,
                         passengerId: user.id,
+                        requestDocumentId: null
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(AcceptDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                     }
