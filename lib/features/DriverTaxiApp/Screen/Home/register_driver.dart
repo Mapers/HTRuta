@@ -1616,11 +1616,7 @@ class PrimeraPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
-<<<<<<< HEAD
-                          return null;
-=======
                           return Container();
->>>>>>> f533ba488c49676667aa7c6db58ceebda70d3877
                         })
                   ],
                 ))));

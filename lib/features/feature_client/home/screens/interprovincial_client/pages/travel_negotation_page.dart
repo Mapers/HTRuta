@@ -120,7 +120,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                             );
                             String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
                             NegotiationEntity negotiation = NegotiationEntity(
-                              requestDocumentId: null,
                               serviceId: widget.availablesRoutesEntity.id,
                               passengerId: user.id,
                               cost: double.parse(amount),
