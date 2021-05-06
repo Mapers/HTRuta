@@ -104,6 +104,21 @@ class PassengerEntity extends Equatable {
 
   String get destination => toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
 
+  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, String seats, String urlImage, String distanceInMinutes, String distanceInMeters}){
+    return PassengerEntity(
+      id: id ?? this.id,
+      documentId: documentId ?? this.documentId,
+      fullNames: fullNames ?? this.fullNames,
+      currentLocation: currentLocation ?? this.currentLocation,
+      toLocation: toLocation ?? this.toLocation,
+      fcmToken: fcmToken ?? this.fcmToken,
+      seats: seats ?? this.seats,
+      urlImage: urlImage ?? this.urlImage,
+      distanceInMinutes: distanceInMinutes ?? this.distanceInMinutes,
+      distanceInMeters: distanceInMeters ?? this.distanceInMeters,
+    );
+  }
+
   factory PassengerEntity.mock(){
     return PassengerEntity(
       id: '1',

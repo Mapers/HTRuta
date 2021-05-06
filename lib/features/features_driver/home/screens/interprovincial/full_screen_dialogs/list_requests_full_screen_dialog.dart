@@ -248,14 +248,11 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             onPressed: () async{
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Aceptando solicitud...');
-              List<dynamic> result = await Future.wait([
-                interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver),
-                serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId)
-              ]);
-              int newAvailableSeats = result.first;
+              final onAcceptedRequest = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver);
+              await serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId, onAcceptedRequest.passenger.documentId);
               _loadingFullScreen.close();
-              if(newAvailableSeats == null) return;
-              BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: newAvailableSeats));
+              if(onAcceptedRequest.availableSeats == null) return;
+              BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: onAcceptedRequest.availableSeats));
             },
           )
         ],

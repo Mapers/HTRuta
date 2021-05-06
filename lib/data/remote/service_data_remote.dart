@@ -49,10 +49,10 @@ class ServiceDataRemote{
     return null;
   }
 
-  Future<bool> acceptRequest(String serviceId, String passengerId) async{
+  Future<bool> acceptRequest(String serviceId, String passengerId, String passengerDocumentId) async{
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/accept-request',
       data: {
-        'service_id': serviceId, 'passenger_id': passengerId
+        'service_id': serviceId, 'passenger_id': passengerId, 'passenger_document_id': passengerDocumentId
       }
     );
     return result.success;
