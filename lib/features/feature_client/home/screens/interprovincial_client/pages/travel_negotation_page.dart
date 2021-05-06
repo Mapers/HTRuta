@@ -124,8 +124,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               passengerId: user.id,
                               cost: double.parse(amount),
                               seating: param.requiredSeats,
+                              // requestDocumentId: 
                             );
-                            await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token );
+                            await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
                             BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
                           },
@@ -133,9 +134,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       ],
                     );
                   }else{
-                    print('..................');
-                    print(asyncSnapshot.data.first);
-                    print('..................');
                     return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
                   }
                 }
