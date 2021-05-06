@@ -6,22 +6,26 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:meta/meta.dart';
-
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 class ServiceDataRemote{
   final RequestHttp requestHttp;
   final _prefs = UserPreferences();
+  Session _session = Session();
   ServiceDataRemote({@required this.requestHttp});
 
   /// Obtener cómo ha iniciado (cliente o conductor) su último servicio
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
   Future<ServiceInCourseEntity> getServiceInCourse() async{
+      final user = await _session.get();
     try{
       await _prefs.initPrefs();
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: {
-          'user_id': _prefs.idChofer
+          'user_id': _prefs.idChofer,
         }
       );
+        print( 'driver.id: ${_prefs.idChofer}');
+        print('user.id: ${user.id}');
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;

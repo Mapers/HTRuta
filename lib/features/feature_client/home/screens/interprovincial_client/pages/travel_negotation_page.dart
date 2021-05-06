@@ -13,7 +13,7 @@ import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_drive.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -159,7 +159,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                   PrincipalButton(
                     text: 'Ver otras rutas',
                     width: 100,
-                    onPressed: () {
+                    onPressed: () async {
+                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, notificationLaunch: false);
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
                       BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
                     }
@@ -214,7 +215,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     color:Colors.red,
                     onPressed: ()async{
                       Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, fcmTokenDriver: fcmTokenDriver);
+                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId);
                       final user = await _session.get();
                       NegotiationEntity negotiation = NegotiationEntity(
                         serviceId: widget.availablesRoutesEntity.id,

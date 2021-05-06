@@ -44,7 +44,7 @@ class InterprovincialClientDataFirebase {
     );
   }
   
-  Future<bool> messageRequestdFirebase({String documentId,InterprovincialRequestEntity request, @required String fcmTokenDriver, bool update = false}) async{
+  Future<bool> messageRequestdFirebase({String documentId,InterprovincialRequestEntity request, bool update = false, bool notificationLaunch = true}) async{
     try {
       String message = 'Revise las solicitudes';
       DocumentReference  dr;
@@ -63,11 +63,13 @@ class InterprovincialClientDataFirebase {
       }
       DocumentSnapshot  ds = await dr.get();
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
-      pushMessage.sendPushMessage(
-        token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
-        title: message,
-        description: 'Revise las solicitudes'
-      );
+      if( notificationLaunch){
+        pushMessage.sendPushMessage(
+          token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
+          title: message,
+          description: 'Revise las solicitudes'
+        );
+      }
       return true;
     } catch (e) {
       return false;
@@ -85,9 +87,9 @@ class InterprovincialClientDataFirebase {
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }
-  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required InterprovincialRequestEntity interprovincialRequestEntiy}) async{
+  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId}) async{
     
-    firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(interprovincialRequestEntiy.documentId).update({
+    firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).update({
       'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
       'current_street_name': passengerPosition.streetName,
       'current_district_name': passengerPosition.districtName,
