@@ -1548,8 +1548,7 @@ class PrimeraPagina extends StatelessWidget {
                         future: registroConductorApi.obtenerMarca(),
                         builder: (context, snapshot) {
                           try {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
+                            if (snapshot.connectionState == ConnectionState.done) {
                               if (snapshot.hasData) {
                                 return Expanded(
                                   child: ListView.builder(
@@ -1613,6 +1612,7 @@ class PrimeraPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
+                          return null;
                         })
                   ],
                 ))));

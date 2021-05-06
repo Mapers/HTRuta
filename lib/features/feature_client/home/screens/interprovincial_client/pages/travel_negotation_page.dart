@@ -118,14 +118,14 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               price: double.parse(amount),
                               seats: param.requiredSeats
                             );
+                            String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
                             NegotiationEntity negotiation = NegotiationEntity(
                               serviceId: widget.availablesRoutesEntity.id,
                               passengerId: user.id,
                               cost: double.parse(amount),
                               seating: param.requiredSeats,
-                              // requestDocumentId: 
+                              requestDocumentId: requestDocumentId
                             );
-                            await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
                             BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
                           },
@@ -239,7 +239,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                         passengerId: user.id,
                         requestDocumentId: null
                       );
-                      BlocProvider.of<InterprovincialClientBloc>(context).add(AcceptDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(AcceptDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation, serviceDocumentId: documentId,interprovincialRequest: request ));
                     }
                   ),
                 ],
