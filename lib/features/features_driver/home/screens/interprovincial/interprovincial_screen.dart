@@ -27,7 +27,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      String documentID = widget.serviceInCourse?.documentId;
+      String documentID = widget.serviceInCourse?.serviceDocumentId;
       BlocProvider.of<InterprovincialDriverBloc>(context).add(GetDataInterprovincialDriverEvent(documentID));
     });
   }
