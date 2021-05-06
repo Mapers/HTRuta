@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../../app/styles/style.dart';
 
 class MyActivity extends StatelessWidget {
 
@@ -104,7 +104,7 @@ class MyActivity extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.access_time,color: greyColor,),
-                      Text(hoursOnline.toString() ?? '',style: heading18,),
+                      Text(hoursOnline.toString() ?? '',style: heading18),
                       Text('Horas en linea',style: TextStyle(
                         fontSize: 11,
                         color: greyColor,

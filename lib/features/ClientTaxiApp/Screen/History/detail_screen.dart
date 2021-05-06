@@ -1,11 +1,10 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
-import '../../../../app_router.dart';
 
 class HistoryDetail extends StatefulWidget {
   final String id;
@@ -39,9 +38,6 @@ class _HistoryDetailState extends State<HistoryDetail> {
             child: Text('Enviar',style: headingWhite,
             ),
             onPressed: (){
-//              Navigator.of(context).pushReplacementNamed('/history');
-//              //and
-//              Navigator.popAndPushNamed(context, '/history');
                 Navigator.of(context).pushReplacementNamed(AppRoute.historyScreen);
             },
           ),

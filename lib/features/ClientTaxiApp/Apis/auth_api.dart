@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/usuario_model.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../app/styles/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ItemRequest extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
-import '../../../../app/styles/style.dart';
 
 class ItemNotification extends StatelessWidget {
   final IconData icon;
@@ -31,7 +31,7 @@ class ItemNotification extends StatelessWidget {
                   padding: EdgeInsets.only(left: 10.0,right: 10.0),
                   child: CircleAvatar(
                     backgroundColor: primaryColor,
-                    child: Icon(icon,color: whiteColor,),
+                    child: Icon(icon,color: whiteColor),
                   ),
                 ),
                 Expanded(

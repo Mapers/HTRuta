@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import '../../../../app/styles/style.dart';
 
 class StepsPartView extends StatelessWidget {
   final String instructions;

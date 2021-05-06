@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
@@ -8,7 +9,6 @@ import 'package:HTRuta/models/direction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -325,8 +325,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text('Impuestos', style: textStyle,),
-                           Text('S/.0.00', style: textBoldBlack,),
+                            Text('Impuestos', style: textStyle,),
+                            Text('S/.0.00', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -335,8 +335,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text('Descuento', style: textStyle,),
-                           Text('- S/.0.00', style: textBoldBlack,),
+                            Text('Descuento', style: textStyle,),
+                            Text('- S/.0.00', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -350,8 +350,8 @@ class _RequestDetailState extends State<RequestDetail> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           Text('Ganancia total', style: textStyleHeading18Black,),
-                           Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textStyleHeading18Black,),
+                            Text('Ganancia total', style: textStyleHeading18Black,),
+                            Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textStyleHeading18Black,),
                           ],
                         ),
                       ),
