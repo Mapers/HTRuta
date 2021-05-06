@@ -15,27 +15,15 @@ class ResponseHttp extends Equatable{
   @override
   List<Object> get props => [success, error, data];
 
-  factory ResponseHttp.fromJson(Map<String, dynamic> json) {
-    return ResponseHttp(
-      data: json['data'],
-      success: json['success'],
-      error: json['error']
-    );
-  }
+  factory ResponseHttp.fromJson(Map<String, dynamic> json) => ResponseHttp(
+    data: json['data'],
+    success: json['success'],
+    error: json['error']
+  );
 
-  factory ResponseHttp.success(Map<String, dynamic> json) {
-    return ResponseHttp(
-      data: json,
-      success: true,
-      error: null
-    );
-  }
-
-  factory ResponseHttp.error(String error){
-    return ResponseHttp(
-      data: null,
-      success: false,
-      error: error
-    );
-  }
+  factory ResponseHttp.error(String error) => ResponseHttp(
+    data: null,
+    success: false,
+    error: error
+  );
 }

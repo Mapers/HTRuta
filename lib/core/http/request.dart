@@ -56,17 +56,17 @@ class RequestHttp{
           }
           return response;
         case 401:
-          response = ResponseHttp(success: false, data: null, error: 'No autorizado');
+          response = ResponseHttp.error('No autorizado');
           return response;
         case 404:
-          response = ResponseHttp(success: false, data: null, error: 'Ruta no encontrada');
+          response = ResponseHttp.error('Ruta no encontrada');
           return response;
         default:
-          response = ResponseHttp(success: false, data: null, error: 'Algo ha pasado');
+          response = ResponseHttp.error('Algo ha pasado');
           return response;
       }
     } on SocketException catch (e) {
-      response = ResponseHttp(success: false, data: null, error: e.toString());
+      response = ResponseHttp.error(e.toString());
     }
     return response;
   }

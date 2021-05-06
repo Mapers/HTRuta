@@ -119,6 +119,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               seats: param.requiredSeats
                             );
                             NegotiationEntity negotiation = NegotiationEntity(
+                              requestDocumentId: null,
                               serviceId: widget.availablesRoutesEntity.id,
                               passengerId: user.id,
                               cost: double.parse(amount),

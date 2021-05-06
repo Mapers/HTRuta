@@ -23,7 +23,7 @@ class MenuItems {
 class MenuDriverScreens extends StatelessWidget {
   final String activeScreenName;
   final Session _session = Session();
-  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+  final DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   MenuDriverScreens({this.activeScreenName});
 
