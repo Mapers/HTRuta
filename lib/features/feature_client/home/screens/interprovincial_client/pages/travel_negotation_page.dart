@@ -151,7 +151,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
         return Center(
           child: Column(
             children: [
-              Text( 'Tu oferta fue rechazado',style: TextStyle(fontWeight: FontWeight.bold),),
+              Text( 'Tu oferta fue rechazada',style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center ,
@@ -160,7 +160,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver otras rutas',
                     width: 100,
                     onPressed: () async {
-                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId, notificationLaunch: false);
+                      await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
                       BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
                     }
@@ -204,7 +204,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       case InterprovincialRequestCondition.counterOffer:
           return Column(
             children: [
-              Text('S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center ,
@@ -215,7 +215,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     color:Colors.red,
                     onPressed: ()async{
                       Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.messageRequestdFirebase(request: request , documentId: documentId);
+                      await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
                       final user = await _session.get();
                       NegotiationEntity negotiation = NegotiationEntity(
                         serviceId: widget.availablesRoutesEntity.id,

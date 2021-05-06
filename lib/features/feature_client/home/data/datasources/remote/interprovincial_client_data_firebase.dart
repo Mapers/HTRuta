@@ -44,26 +44,14 @@ class InterprovincialClientDataFirebase {
     );
   }
   
-  Future<bool> messageRequestdFirebase({String documentId,InterprovincialRequestEntity request, bool update = false, bool notificationLaunch = true}) async{
+  Future<bool> deleteRequest({String documentId,InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
-      String message = 'Revise las solicitudes';
-      DocumentReference  dr;
-      if(update){
-        dr = await firestore.collection('interprovincial_in_service').doc(documentId);
-        dr.collection('requests').doc(request.documentId).update(
-          {
-            'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted)
-          }
-        );
-        message = 'El cliente acepto la oferta';
-      }else{
-        dr = await firestore.collection('interprovincial_in_service').doc(documentId);
-        dr.collection('requests').doc(request.documentId).delete();
-        message = 'Solicitud rechazada';
-      }
+      String message = 'Solicitud rechazada';
+      DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
+      dr.collection('requests').doc(request.documentId).delete();
       DocumentSnapshot  ds = await dr.get();
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
-      if( notificationLaunch){
+      if(notificationLaunch){
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
           title: message,
