@@ -222,10 +222,11 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
   List<File> imagenes = List(4);
   List<String> base64Data = List(4);
   File imageFile;
+  final picker = ImagePicker();
 
   List<String> cabecera = ['Número de licencia de conducir', 'Licencia de conducir (frente)', 'Licencia de conducir (parte trasera)', 'Cargue cualquiera de los siguientes:/- Tarjeta de taxista o antecendentes penales (Fotocheck)/- Foto de la cuenta de otra aplicación de taxi/- Carta de antecedentes no penales','SOAT'];
 
-   Future<void> buscarImagen(int index) {
+  Future<void> buscarImagen(int index) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -256,7 +257,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
   Future cameraImage(int index) async {
     try{
-      var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
+      var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
 
       await _cropImage(index);
@@ -270,14 +271,14 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
   Future _openGallery(int index) async {
     try {
-      var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
+      var picture = await picker.getImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
       print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (_) {}
   }
 
   bool recortado = false;
@@ -621,6 +622,7 @@ class SextaPagina extends StatefulWidget {
 class _SextaPaginaState extends State<SextaPagina> {
 
   File imageFile;
+  final picker = ImagePicker();
 
   Future<void> buscarImagen() {
     return showDialog(
@@ -653,7 +655,7 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   Future cameraImage() async {
     try{
-      var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
+      var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
       setState(() {});
@@ -665,12 +667,12 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   void _openGallery() async {
     try {
-      var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
+      var picture = await picker.getImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
       setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (_) {}
   }
 
   bool recortado = false;
@@ -820,10 +822,11 @@ class QuintaPagina extends StatefulWidget {
 
 class _QuintaPaginaState extends State<QuintaPagina> {
 
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   //Validations validations = new Validations();
   final Session _session = Session();
   File imageFile;
+  final picker = ImagePicker();
   Future<dynamic> datosUsuario;
   //Cmabia de estado asi que declarar en state
   int sexo = 1;
@@ -866,7 +869,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
 
   Future cameraImage() async {
     try{
-      var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
+      var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       await _cropImage();
       setState(() {});
@@ -877,12 +880,12 @@ class _QuintaPaginaState extends State<QuintaPagina> {
 
   Future _openGallery() async {
     try {
-      var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
+      var picture = await picker.getImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
       await _cropImage();
       setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {}
+    } catch (_) {}
   }
 
   bool recortado = false;
@@ -1483,6 +1486,7 @@ class SegundaPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
+                          return Container();
                         })
                   ],
                 ))));
@@ -1612,7 +1616,11 @@ class PrimeraPagina extends StatelessWidget {
                             Dialogs.alert(context,
                                 title: 'Error', message: '$error');
                           }
+<<<<<<< HEAD
                           return null;
+=======
+                          return Container();
+>>>>>>> f533ba488c49676667aa7c6db58ceebda70d3877
                         })
                   ],
                 ))));

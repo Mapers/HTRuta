@@ -92,7 +92,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       icon: currentPinLocationIcon
     );
     _markers[markerPassenger.markerId] = markerPassenger;
-    interprovincialClientDataFirebase.updateCurrentPosition(documentId: null);
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: null, passengerPosition: null, interprovincialRequestEntiy: null);
   }
 
   @override
