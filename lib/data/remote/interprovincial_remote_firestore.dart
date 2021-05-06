@@ -48,6 +48,8 @@ class InterprovincialDataFirestore{
       await dr.update({
         'available_seats': newAvailableSeats
       });
+      print('remote');
+      print(drPassenger.id);
       return OnAcceptRequestEntity(
         availableSeats: newAvailableSeats,
         passenger: passenger.copyWith(documentId: drPassenger.id)
