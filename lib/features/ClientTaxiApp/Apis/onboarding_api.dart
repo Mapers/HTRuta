@@ -1,8 +1,7 @@
+import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
 import 'package:http/http.dart' as http;
-
-import '../../../config.dart';
 
 class OnBoardingApi{
 

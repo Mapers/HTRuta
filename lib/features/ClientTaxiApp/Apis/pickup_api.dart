@@ -1,4 +1,5 @@
 
+import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
@@ -8,7 +9,6 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 
-import '../../../config.dart';
 import 'package:http/http.dart' as http;
 
 class PickupApi{

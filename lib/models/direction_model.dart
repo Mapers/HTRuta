@@ -27,7 +27,7 @@ class GeocodedWaypoint {
   };
 }
 
-class Routes {
+class RoutesDirectionModel {
   Bounds bounds;
   String copyrights;
   List<Leg> legs;
@@ -36,7 +36,7 @@ class Routes {
   List<dynamic> warnings;
   List<dynamic> waypointOrder;
 
-  Routes({
+  RoutesDirectionModel({
     this.bounds,
     this.copyrights,
     this.legs,
@@ -46,7 +46,7 @@ class Routes {
     this.waypointOrder,
   });
 
-  factory Routes.fromJson(Map<String, dynamic> json) =>Routes(
+  factory RoutesDirectionModel.fromJson(Map<String, dynamic> json) =>RoutesDirectionModel(
     bounds: json['bounds'] == null ? null : Bounds.fromJson(json['bounds']),
     // ignore: prefer_if_null_operators
     copyrights: json['copyrights'] == null ? null : json['copyrights'],

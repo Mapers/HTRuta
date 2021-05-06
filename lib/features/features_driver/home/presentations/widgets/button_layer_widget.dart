@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/radioSelectMapType.dart';
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
+import 'package:HTRuta/models/map_type_model.dart';
 import 'package:flutter/material.dart';
 
 class ButtonLayerWidget extends StatefulWidget {

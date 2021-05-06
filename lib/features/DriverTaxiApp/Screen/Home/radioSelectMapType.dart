@@ -1,4 +1,4 @@
-import 'package:HTRuta/features/DriverTaxiApp/data/Model/mapTypeModel.dart';
+import 'package:HTRuta/models/map_type_model.dart';
 import 'package:flutter/material.dart';
 
 class MapTypeItem extends StatelessWidget {

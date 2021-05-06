@@ -1,6 +1,7 @@
 import 'package:HTRuta/core/utils/colors_util.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
+
 TextStyle textStyle = style();
 TextStyle textStyleWhite = style( color: Colors.white );
 TextStyle textBoldBlack = style(

@@ -15,7 +15,7 @@ ResultData _$ResultDataFromJson(Map<String, dynamic> json) {
           ?.toList(),
       routes: (json['routes'] as List)
           ?.map((e) =>
-              e == null ? null : Routes.fromJson(e as Map<String, dynamic>))
+              e == null ? null : RoutesDirectionModel.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 

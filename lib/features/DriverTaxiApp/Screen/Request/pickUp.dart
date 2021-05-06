@@ -3,6 +3,7 @@ import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/loading.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/models/direction_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/styles/style.dart';
@@ -10,7 +11,6 @@ import '../../Components/slidingUpPanel.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io' show Platform;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../../data/Model/direction_model.dart';
 import 'stepsPartView.dart';
 import 'imageSteps.dart';
 
@@ -34,7 +34,7 @@ class _PickUpState extends State<PickUp> {
   LatLng toLocation = LatLng(39.115153, -95.638949);
 
   String distance, duration;
-  List<Routes> routesData;
+  List<RoutesDirectionModel> routesData;
 
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
 
