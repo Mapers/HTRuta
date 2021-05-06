@@ -53,21 +53,13 @@ class GMapViewHelper {
     return marker;
   }
 
-  static Polyline createPolyline ({
-    @required String polylineIdVal,
-    @required final router,
-    @required LatLng formLocation,
-    @required LatLng toLocation,
-  }){
+  static List<LatLng> getListPoints(String router){
     List<LatLng> listPoints = <LatLng>[];
     List<dynamic> _points = <dynamic>[];
     List<dynamic> latLong = <dynamic>[];
     List<dynamic> lngLong = <dynamic>[];
-    final PolylineId polylineId = PolylineId(polylineIdVal);
 
-    LatLng _createLatLng(double lat, double lng) {
-      return LatLng(lat, lng);
-    }
+    LatLng _createLatLng(double lat, double lng) => LatLng(lat, lng);
 
     var _router = decode(router);
     for (int lat = 0; lat < _router.length; lat += 2) {
@@ -82,11 +74,22 @@ class GMapViewHelper {
     for (int i = 0; i < _points.length; i++) {
       listPoints.add(_createLatLng(_points[i][0], _points[i][1]));
     }
+    return listPoints;
+  }
+
+  static Polyline createPolyline ({
+    @required String polylineIdVal,
+    @required String router,
+    Color color
+  }){
+    color = color ?? Color(0xFF669df6);
+    List<LatLng> listPoints = getListPoints(router);
+    final PolylineId polylineId = PolylineId(polylineIdVal);
 
     final Polyline polyline = Polyline(
       polylineId: polylineId,
       consumeTapEvents: true,
-      color: Color(0xFF669df6),
+      color: color,
       width: 6,
       points: listPoints,
     );

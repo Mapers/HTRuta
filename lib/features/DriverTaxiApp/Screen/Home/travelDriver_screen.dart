@@ -178,9 +178,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
 
     polyLines[polylineId] = GMapViewHelper.createPolyline(
       polylineIdVal: polylineIdVal,
-      router: router,
-      formLocation: _fromLocation,
-      toLocation: _toLocation,
+      router: router
     );
     setState(() {});
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);

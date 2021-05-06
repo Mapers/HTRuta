@@ -57,4 +57,15 @@ class LocationUtil {
           (1 - c((to.longitude - from.longitude) * p))/2;
     return 12742 * asin(sqrt(a));
   }
+
+  /// In kilometers
+  static double calculateDistanceInListPoints(List<LatLng> list){
+    List<LatLng> _list = [...list];
+    double distance = 0;
+    do {
+      distance += calculateDistance(_list.first, _list[1]);
+      _list.removeAt(0);
+    } while (_list.length != 1);
+    return distance;
+  }
 }

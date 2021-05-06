@@ -177,8 +177,6 @@ class _DirectionsViewState extends State<DirectionsView> {
     polyLines[polylineId] = GMapViewHelper.createPolyline(
       polylineIdVal: polylineIdVal,
       router: router,
-      formLocation: _fromLocation,
-      toLocation: _toLocation,
     );
     setState(() {});
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);

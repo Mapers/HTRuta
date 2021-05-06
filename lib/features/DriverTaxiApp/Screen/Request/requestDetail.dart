@@ -76,8 +76,6 @@ class _RequestDetailState extends State<RequestDetail> {
     polyLines[polylineId] = GMapViewHelper.createPolyline(
       polylineIdVal: polylineIdVal,
       router: router,
-      formLocation: _fromLocation,
-      toLocation: _toLocation,
     );
     setState(() {});
   }

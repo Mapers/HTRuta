@@ -90,8 +90,6 @@ class _PickUpState extends State<PickUp> {
     polyLines[polylineId] = GMapViewHelper.createPolyline(
         polylineIdVal: polylineIdVal,
         router: router,
-        formLocation: fromLocation,
-        toLocation: toLocation,
     );
     setState(() {});
     _gMapViewHelper.cameraMove(fromLocation: fromLocation,toLocation: toLocation,mapController: _mapController);
