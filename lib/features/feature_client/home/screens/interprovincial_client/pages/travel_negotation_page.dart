@@ -35,6 +35,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   TextEditingController amountController = TextEditingController();
   ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
   String amount;
+  String passengerDocumentId;
   @override
   void initState() {
     amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
@@ -193,7 +194,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver ruta',
                     width: 100,
                     onPressed: () {
-                      acceptService(documentId, request);
+                      deleteRequestAndRedirectionalMap(documentId, request, null);
                     }
                   ),
                 ],
@@ -230,9 +231,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      final onRequestAccepted = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
-                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccepted.passenger.documentId);
-                      acceptService(documentId, request);
+                      final onRequestAccept = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
+                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccept.passenger.documentId);
+                      deleteRequestAndRedirectionalMap(documentId, request, onRequestAccept.passenger.documentId );
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
@@ -253,10 +254,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     return Container();
   }
 
-  void acceptService(String documentId, InterprovincialRequestEntity request) async {
+  void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request, String  passengerDocumentId ) async {
     LocationEntity currenActual = await LocationUtil.currentLocation();
-    InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
-    interprovincialDataFirestore.seeRoute(documentId: widget.availablesRoutesEntity.documentId, request: request);
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity, interprovincialRequest: request,)), (_) => false);
+    InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+    String passengerDocumentID =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, currenActual: currenActual, availablesRoutesEntity: widget.availablesRoutesEntity, interprovincialRequest: request,passengerDocumentId: passengerDocumentId ??passengerDocumentID,)), (_) => false);
   }
 }

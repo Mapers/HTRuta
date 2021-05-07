@@ -44,12 +44,15 @@ class InterprovincialClientDataFirebase {
     );
   }
   
-  Future<bool> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
+  Future<String> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
       String message = 'Solicitud rechazada';
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
-      dr.collection('requests').doc(request.documentId).delete();
+      DocumentReference dRequest = await dr.collection('requests').doc(request.documentId);
+      dRequest.delete();
       DocumentSnapshot  ds = await dr.get();
+      DocumentSnapshot  dsRequest = await dr.get();
+      print(dsRequest.data()['passenger_document_id'] );
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(notificationLaunch){
         pushMessage.sendPushMessage(
@@ -58,10 +61,11 @@ class InterprovincialClientDataFirebase {
           description: 'Revise las solicitudes'
         );
       }
-      return true;
+      return dsRequest.data()['passenger_document_id'];
     } catch (e) {
-      return false;
+      print(e.toString());
     }
+    return null;
   }
 
   Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}) {

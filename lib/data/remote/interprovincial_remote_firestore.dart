@@ -60,7 +60,7 @@ class InterprovincialDataFirestore{
       return null;
     }
   }
-
+  //!elimnar usa ves se aya probado
   Future<bool> seeRoute({@required String documentId, @required InterprovincialRequestEntity request}) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();
