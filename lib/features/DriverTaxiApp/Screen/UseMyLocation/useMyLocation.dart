@@ -1,7 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../../../app/styles/style.dart';
 
 class UseMyLocation extends StatefulWidget {
   @override
@@ -48,12 +48,12 @@ class _UseMyLocationState extends State<UseMyLocation> with SingleTickerProvider
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                 Flexible(
+                  Flexible(
                     flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                       Container(
+                        Container(
                           child: FadeTransition(
                               opacity: fadeAnimation,
                               child:

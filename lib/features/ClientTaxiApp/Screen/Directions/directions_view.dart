@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/direction_model.dart';
@@ -20,7 +23,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/loading.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/booking_detail_widget.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/app_router.dart';
 
@@ -28,13 +30,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../Networking/Apis.dart';
-import '../../data/Model/get_routes_request_model.dart';
-
 import 'widgets/select_service_widget.dart';
 
 class DirectionsView extends StatefulWidget {
-  final PlaceBloc placeBloc;
+  final ClientTaxiPlaceBloc placeBloc;
   DirectionsView({this.placeBloc});
 
   @override
@@ -60,7 +59,7 @@ class _DirectionsViewState extends State<DirectionsView> {
   bool isResult = false;
   LatLng positionDriver;
   bool isComplete = false;
-  var apis = Apis();
+  var apis = MapNetwork();
   List<RoutesDirectionModel> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();

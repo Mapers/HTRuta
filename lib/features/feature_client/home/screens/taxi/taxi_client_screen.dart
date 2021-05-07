@@ -28,7 +28,7 @@ import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class TaxiClientScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
-  final PlaceBloc placeBloc;
+  final ClientTaxiPlaceBloc placeBloc;
   TaxiClientScreen({this.placeBloc, this.parentScaffoldKey});
   @override
   _TaxiClientScreenState createState() => _TaxiClientScreenState();

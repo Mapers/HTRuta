@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
@@ -6,7 +7,6 @@ import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';

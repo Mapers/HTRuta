@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

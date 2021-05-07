@@ -29,7 +29,7 @@ class PickupApi{
     }
   }
 
-  Future<List<Request>> getRequest(String idChofer, String latitud, String longitud)async{
+  Future<List<RequestModel>> getRequest(String idChofer, String latitud, String longitud)async{
     final _prefs = UserPreferences();
     await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/obtener-viajes-solicitados';
@@ -171,7 +171,7 @@ class PickupApi{
     }
   }
 
-  Future<Request> solicitudesUsuarioChofer(String idSolicitud, String idChofer)async{
+  Future<RequestModel> solicitudesUsuarioChofer(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/solicitudes-usuario-chofer';
     try{
       final response = await http.post(url,body: {'idSolicitud': idSolicitud, 'idchofer' : idChofer});

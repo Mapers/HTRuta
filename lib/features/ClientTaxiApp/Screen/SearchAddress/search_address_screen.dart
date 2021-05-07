@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class SearchAddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var bloc = Provider.of<PlaceBloc>(context);
+    var bloc = Provider.of<ClientTaxiPlaceBloc>(context);
 
     return Scaffold(
       appBar: AppBar(

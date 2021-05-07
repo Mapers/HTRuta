@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
@@ -6,7 +7,6 @@ import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
@@ -71,7 +71,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   bool isWorking = false;
   bool isLoading = true;
 
-  List<Request> requestTaxi = [];
+  List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
   List<String> aceptados = [];
@@ -634,7 +634,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       )
     );
   }
-  void acceptTravel(Request request) async {
+  void acceptTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
@@ -671,7 +671,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       Dialogs.alert(context,title: 'Error', message: e.message);
     }
   }
-  void cancelTravel(Request request) async {
+  void cancelTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();

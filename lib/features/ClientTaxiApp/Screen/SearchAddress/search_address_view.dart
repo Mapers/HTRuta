@@ -8,7 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
 
 class SearchAddressView extends StatefulWidget {
-  final PlaceBloc placeBloc;
+  final ClientTaxiPlaceBloc placeBloc;
   SearchAddressView({this.placeBloc});
 
   @override
@@ -77,7 +77,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
     );
   }
 
-  Widget buildForm(PlaceBloc placeBloc){
+  Widget buildForm(ClientTaxiPlaceBloc placeBloc){
 
     return Container(
       padding: EdgeInsets.only(bottom: 20.0),

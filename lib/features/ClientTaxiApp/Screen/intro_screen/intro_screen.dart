@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../app_router.dart';
 
 class IntroScreen extends StatefulWidget {
   @override

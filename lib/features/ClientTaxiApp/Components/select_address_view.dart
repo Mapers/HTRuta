@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
@@ -6,7 +7,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
@@ -256,7 +256,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;
-                        pedidoProvider.request = Request(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
+                        pedidoProvider.request = RequestModel(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
                         pedidoProvider.precio = double.parse(precio);
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => DirectionScreen())

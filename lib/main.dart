@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RegistroProvider()),
-        ChangeNotifierProvider(create: (_) => PlaceBloc()),
+        ChangeNotifierProvider(create: (_) => ClientTaxiPlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
         ChangeNotifierProvider(create: (_) => AvailabilityProvider(),),

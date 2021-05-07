@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/config.dart';
 
-class PlaceBloc with ChangeNotifier {
+class ClientTaxiPlaceBloc with ChangeNotifier {
   StreamController<Place> locationController = StreamController<Place>.broadcast();
   Place locationSelect;
   Place formLocation;

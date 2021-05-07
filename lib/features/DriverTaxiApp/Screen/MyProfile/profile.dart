@@ -1,8 +1,8 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyProfile/myProfile.dart';
-import '../../../../app/styles/style.dart';
 import 'chart.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -84,7 +84,6 @@ class _ProfileDriverState extends State<ProfileDriver> {
                           ],
                         ),
                       ),
-
                       Container(
                         padding: EdgeInsets.only(top: 8),
                         child: Column(
@@ -122,8 +121,8 @@ class _ProfileDriverState extends State<ProfileDriver> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text('Usuario',style: textStyle,),
-                                  Text(data.names ?? '',style: textGrey,)
+                                  Text('Usuario', style: textStyle),
+                                  Text(data.names ?? '', style: textGrey,)
                                 ],
                               ),
                             ),

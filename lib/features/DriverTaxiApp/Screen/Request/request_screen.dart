@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
@@ -16,7 +17,6 @@ import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
@@ -33,7 +33,7 @@ class RequestDriverScreen extends StatefulWidget {
 
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final String screenName = 'REQUEST';
-  List<Request> requestTaxi = [];
+  List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
   final aceptar = '1';
@@ -46,7 +46,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   PushNotificationProvider pushProvider;
 
-  void navigateToDetail(Request requestItem) {
+  void navigateToDetail(RequestModel requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
   }
   @override
@@ -245,7 +245,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   shrinkWrap: true,
                   itemCount: requestTaxi.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Request request = requestTaxi[index];
+                    RequestModel request = requestTaxi[index];
                     TaxiModel taxiModel = TaxiModel(
                       accepteds: request.aceptados,
                       dni: request.vchDni,
