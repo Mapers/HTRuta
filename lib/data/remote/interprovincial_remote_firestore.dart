@@ -17,7 +17,7 @@ class InterprovincialDataFirestore{
   Future<OnRequestAcceptedEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
-      PassengerEntity passenger = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
+      PassengerEntity passenger = await serviceDataRemote.getPassengerById(documentId, request.documentId, request.passengerId, request.passengerFcmToken);
 
       DocumentReference drPassenger = await dr.collection('passengers').add(passenger.toFirestore);
 
@@ -49,8 +49,6 @@ class InterprovincialDataFirestore{
       await dr.update({
         'available_seats': newAvailableSeats
       });
-      print('remote');
-      print(drPassenger.id);
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
         passenger: passenger.copyWith(documentId: drPassenger.id)
