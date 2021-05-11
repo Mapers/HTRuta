@@ -10,12 +10,11 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  Future<String> addRequestClient({String documentId,InterprovincialRequestEntity request,bool update}) async{
+  Future<String> addRequestClient({String documentId, InterprovincialRequestEntity request, bool update}) async{
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequests = await dr.collection('requests').add(request.toFirestore);
       DocumentSnapshot ds = await dr.get();
-      print(dRequests.id);
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       pushMessage.sendPushMessage(
         token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
@@ -77,10 +76,6 @@ class InterprovincialClientDataFirebase {
     return ds.exists;
   }
   Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters}) async{
-    // print('mmmmmmmmmmmmmmmmmmmmm');
-    // print(documentId);
-    // print(passengerDocumentId);
-    // print('mmmmmmmmmmmmmmmmmmmmm');
     firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).update({
       'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
       'current_street_name': passengerPosition.streetName,
