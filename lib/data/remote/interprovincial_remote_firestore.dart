@@ -16,21 +16,22 @@ class InterprovincialDataFirestore{
 
   Future<OnRequestAcceptedEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
-      DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
+      DocumentReference refService = firestore.collection('interprovincial_in_service').doc(documentId);
       PassengerEntity passenger = await serviceDataRemote.getPassengerById(documentId, request.documentId, request.passengerId, request.passengerFcmToken);
+      passenger = passenger.copyWith(price: request.price);
 
-      DocumentReference drPassenger = await dr.collection('passengers').add(passenger.toFirestore);
+      DocumentReference drPassenger = await refService.collection('passengers').add(passenger.toFirestore);
 
       List<dynamic> result = await Future.wait([
-        dr.get(),
-        dr.collection('requests').doc(request.documentId).update({
+        refService.get(),
+        refService.collection('requests').doc(request.documentId).update({
           'passenger_document_id': drPassenger.id,
           'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
         }),
       ]);
 
-      DocumentSnapshot ds = result.first;
-      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
+      DocumentSnapshot snapshotService = result.first;
+      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
       if(origin == InterprovincialDataFirestoreOrigin.client){
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken,
@@ -46,12 +47,13 @@ class InterprovincialDataFirestore{
       }
 
       int newAvailableSeats = interprovincialLocationDriver.availableSeats - request.seats;
-      await dr.update({
+      await refService.update({
         'available_seats': newAvailableSeats
       });
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
-        passenger: passenger.copyWith(documentId: drPassenger.id)
+        passenger: passenger.copyWith(documentId: drPassenger.id),
+        price: request.price
       );
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
