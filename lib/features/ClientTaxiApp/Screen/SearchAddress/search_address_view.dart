@@ -172,7 +172,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       onChanged: (String value) async {
                         toLocation = value;
                         _timer?.cancel();
-                        _timer = Timer(Duration(milliseconds: 500), (){
+                        _timer = Timer(Duration(milliseconds: 1000), (){
                           placeBloc?.search(value);
                         });
                       },

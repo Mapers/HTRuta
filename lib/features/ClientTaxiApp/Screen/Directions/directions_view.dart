@@ -468,7 +468,8 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.idChofer);
+                                            await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            await pickUpApi.prepareTravel(pedidoProvider.idSolicitud);
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',

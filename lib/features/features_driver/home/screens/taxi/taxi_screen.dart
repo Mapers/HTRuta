@@ -104,14 +104,12 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         final _prefs = UserPreferences();
         _markers.clear();
         final MarkerId _markerMy = MarkerId('toLocation');
-        if(currentLocation != null){
-          _markers[_markerMy] = GMapViewHelper.createMaker(
-            markerIdVal: 'fromLocation',
-            icon: 'assets/image/marker/taxi_marker.png',
-            lat: currentLocation.latitude,
-            lng: currentLocation.longitude,
-          );
-        }
+        _markers[_markerMy] = GMapViewHelper.createMaker(
+          markerIdVal: 'fromLocation',
+          icon: 'assets/image/marker/taxi_marker.png',
+          lat: event.latitude,
+          lng: event.longitude,
+        );
         driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
     });

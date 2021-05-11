@@ -73,8 +73,10 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
         'id': e.id,
         'precio': e.mPrecio,
         'precioOferta': e.mPrecio
-      }).toList(); 
-      setState(() {});
+      }).toList();
+      if(mounted){
+        setState(() {});
+      } 
     });
     super.initState();
   }
@@ -199,8 +201,9 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       'precio': e.mPrecio,
       'precioOferta': e.mPrecio
     }).toList();
-    
-    setState(() {});  
+    if(mounted){
+      setState(() {});  
+    }
   }
   @override
   Widget build(BuildContext context) {
