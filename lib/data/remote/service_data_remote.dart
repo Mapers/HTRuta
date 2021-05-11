@@ -26,14 +26,7 @@ class ServiceDataRemote{
         'passenger_id': user.id,
       };
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
-<<<<<<< HEAD
-        data: {
-          'passenger_id' : user.id,
-          'user_id': _prefs.idChofer,
-        }
-=======
         data: data
->>>>>>> 3e418ff8b127ca82d0afb0fff03d663d3366ff9c
       );
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
@@ -46,9 +39,7 @@ class ServiceDataRemote{
       'service_id': serviceDocumentId,
       'passenger_id': passengerId,
     };
-    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
-      data: data
-    );
+    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow', data: data);
     return PassengerEntity.fromJsonServer(
       result.data,
       passengerDocumentId,
