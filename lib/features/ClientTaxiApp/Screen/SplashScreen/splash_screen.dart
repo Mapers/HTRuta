@@ -5,6 +5,7 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       // await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       // final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
+      print('..................');
+      print(data.email);
+      print('..................');
       if(data != null){
         if(data.email != null || data.email != ''){
           // availabilityProvider.available = _prefs.drivingState;
@@ -110,24 +114,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   //   }
   // }
   void _sendToPage() async{
-    ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
+    ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>(); 
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
-    if(serviceInCourse == null){
-      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
-      return;
-    }
     print('###################');
-    print(serviceInCourse.entityType);
+    print(serviceInCourse.entityType );
     print(serviceInCourse.passengerDocumentId);
     print(serviceInCourse.requestDocumentId);
     print(serviceInCourse.serviceDocumentId);
     print(serviceInCourse.serviceType );
     print('###################');
+    if(serviceInCourse == null){
+      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+      return;
+    }
 
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourse), (_) => false);
     }else if(serviceInCourse.entityType == TypeEntityEnum.passenger){
+      if(serviceInCourse.passengerDocumentId == null  ){
+      BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
+      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
+
+      }
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
     }
     // _showDialogQualification();

@@ -42,7 +42,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   StreamSubscription subscription;
   
   @override
-  void initState() { 
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),

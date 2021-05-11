@@ -10,9 +10,6 @@ class RouterDriveRemoteDataSoruce {
   final _prefs = UserPreferences();
   RouterDriveRemoteDataSoruce({@required this.requestHttp});
   Future<List<InterprovincialRouteEntity>> getListRouterDrives() async{
-    print('..................');
-    print('ccccc');
-    print('..................');
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
       data: {

@@ -125,7 +125,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                               passengerId: user.id,
                               cost: double.parse(amount),
                               seating: param.requiredSeats,
-                              requestDocumentId: requestDocumentId
+                              requestDocumentId: requestDocumentId,
+                              from: from,
+                              to: widget.availablesRoutesEntity.route.toLocation
                             );
                             BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
                             Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);

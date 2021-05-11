@@ -17,9 +17,6 @@ class InterprovincialClientDataFirebase {
       DocumentSnapshot ds = await dr.get();
       print(dRequests.id);
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
-      // print('###################');
-      // print(interprovincialLocationDriver. );
-      // print('###################');
       pushMessage.sendPushMessage(
         token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
         title: 'Ha recibido una nueva solicitud',

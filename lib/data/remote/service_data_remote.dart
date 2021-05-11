@@ -15,17 +15,17 @@ class ServiceDataRemote{
 
   /// Obtener cómo ha iniciado (cliente o conductor) su último servicio
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
+  /// 
   Future<ServiceInCourseEntity> getServiceInCourse() async{
       final user = await _session.get();
     try{
       await _prefs.initPrefs();
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: {
+          'passenger_id' : user.id,
           'user_id': _prefs.idChofer,
         }
       );
-        print( 'driver.id: ${_prefs.idChofer}');
-        print('user.id: ${user.id}');
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;
