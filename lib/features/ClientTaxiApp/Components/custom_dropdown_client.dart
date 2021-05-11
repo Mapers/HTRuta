@@ -45,7 +45,7 @@ class _CustomDropdownClientState extends State<CustomDropdownClient> {
         child: DropDown(
           itemHeight: height,
           onItemSelected: (TypeServiceEnum selectedValue){
-            BlocProvider.of<ClientServiceBloc>(context).add(ChangeDriverServiceEvent(type: selectedValue));
+            BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: selectedValue));
             print(selectedValue);
             setState(() {
               if (isDropdownOpened) {

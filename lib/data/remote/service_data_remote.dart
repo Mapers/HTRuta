@@ -39,7 +39,9 @@ class ServiceDataRemote{
       'service_id': serviceDocumentId,
       'passenger_id': passengerId,
     };
-    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow', data: data);
+    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
+      data: data
+    );
     return PassengerEntity.fromJsonServer(
       result.data,
       passengerDocumentId,

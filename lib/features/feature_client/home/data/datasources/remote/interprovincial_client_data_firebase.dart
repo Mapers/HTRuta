@@ -3,6 +3,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class InterprovincialClientDataFirebase {
@@ -88,4 +89,22 @@ class InterprovincialClientDataFirebase {
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }
+
+  Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
+    DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
+    DocumentSnapshot dss = await firestore.collection('interprovincial_in_service').doc(documentId).get();
+    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] , serviceId: dss.data()['servicio_id']);
+    return dataNecessaryRetrieve;
+  }
+}
+class DataNecessaryRetrieve extends Equatable {
+  final String negotiatedPrice;
+  final String serviceId;
+
+  DataNecessaryRetrieve({
+    @required this.negotiatedPrice,
+    @required this.serviceId,
+  });
+  @override
+  List<Object> get props => [];
 }
