@@ -95,8 +95,6 @@ class _DirectionsViewState extends State<DirectionsView> {
       //   });
       // }
     });
-    print(widget?.placeBloc?.formLocation);
-    print(widget?.placeBloc?.locationSelect);
     addMakers();
     getRouter();
     super.initState();
@@ -194,10 +192,8 @@ class _DirectionsViewState extends State<DirectionsView> {
     Timer.periodic(timeRequest, (Timer t) {
       LatLng positionDriverBefore = _listPosition[two-1];
       positionDriver = _listPosition[count++];
-      print(count);
 
       valueRotation = rm.calculateangle(positionDriverBefore.latitude, positionDriverBefore.longitude,positionDriver.latitude, positionDriver.longitude);
-      print(valueRotation);
       addMakersDriver(positionDriver);
       _mapController?.animateCamera(
         CameraUpdate?.newCameraPosition(
@@ -302,7 +298,6 @@ class _DirectionsViewState extends State<DirectionsView> {
   }
 
   void handSubmit(){
-    print('Enviar');
     setState(() {
       isLoading = true;
     });
@@ -561,7 +556,6 @@ class _DirectionsViewState extends State<DirectionsView> {
 
   Widget buildContent(BuildContext context){
     final screenSize = MediaQuery.of(context).size;
-    print(selectedService);
 
     return SlidingUpPanel(
       controller: panelController,

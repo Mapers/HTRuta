@@ -14,9 +14,7 @@ class ClientTaxiPlaceBloc with ChangeNotifier {
 
   Future<List<Place>> search(String query) async {
     String url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?key=${Config.googleMapsApiKey}&language=${Config.language}&region=${Config.region}&locationbias=circle:5000@${formLocation.lat},${formLocation.lng}&query='+Uri.encodeQueryComponent(query);//Uri.encodeQueryComponent(query)
-    print(url);
     Response response = await Dio().get(url);
-    print(Place.parseLocationList(response.data));
     listPlace = Place.parseLocationList(response.data);
     notifyListeners();
     return listPlace;

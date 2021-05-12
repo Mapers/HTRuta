@@ -215,7 +215,6 @@ class _TravelScreenState extends State<TravelScreen> {
         lat: position.latitude,
         lng: position.longitude,
       );
-      print(querySnapshot.data());
     });
   }
   /* Future<void> fechDriverLocation() async {

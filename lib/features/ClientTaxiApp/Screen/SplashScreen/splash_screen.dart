@@ -60,9 +60,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       // await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       // final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
-      print('..................');
-      print(data.email);
-      print('..................');
       if(data != null){
         if(data.email != null || data.email != ''){
           // availabilityProvider.available = _prefs.drivingState;

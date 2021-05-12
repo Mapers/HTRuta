@@ -24,7 +24,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -48,7 +47,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -66,7 +64,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -101,7 +98,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -113,7 +109,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -125,7 +120,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -137,7 +131,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -149,7 +142,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -164,7 +156,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -176,7 +167,6 @@ class PickupApi{
       final responseData = solicitudUsuarioResponseFromJson(response.body);
       return responseData.data.first;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -188,7 +178,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }

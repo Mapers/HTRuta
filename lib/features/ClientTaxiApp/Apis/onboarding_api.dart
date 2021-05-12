@@ -9,8 +9,6 @@ class OnBoardingApi{
     final url = '${Config.nuevaRutaApi}/obtener-pantallas';
     try{
       final response = await http.get(url);
-      print('response.body');
-      print(response.body);
       final responseData = onboardingFromJson(response.body);
       if(!responseData.success){
         return responseData;
@@ -18,9 +16,6 @@ class OnBoardingApi{
         return null;
       }
     }catch(error){
-      print('error.toString()');
-      print(error.toString());
-      print('------------');
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
