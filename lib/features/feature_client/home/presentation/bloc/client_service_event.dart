@@ -6,9 +6,9 @@ abstract class ClientServiceEvent extends EquatableClientTaxiApp{
   List<Object> get props => [];
 }
 
-class ChangeDriverServiceEvent extends ClientServiceEvent {
+class ChangeClientServiceEvent extends ClientServiceEvent {
   final TypeServiceEnum type;
-  ChangeDriverServiceEvent({@required this.type});
+  ChangeClientServiceEvent({@required this.type});
 
   @override
   List<Object> get props => [type];

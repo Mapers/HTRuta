@@ -7,6 +7,7 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_ro
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+
 class ServiceDataRemote{
   final RequestHttp requestHttp;
   final _prefs = UserPreferences();
@@ -15,28 +16,35 @@ class ServiceDataRemote{
 
   /// Obtener cómo ha iniciado (cliente o conductor) su último servicio
   /// Obtener el tipo de servicio (taxi, interprovincial, cargo)
+  /// 
   Future<ServiceInCourseEntity> getServiceInCourse() async{
-      final user = await _session.get();
     try{
+      final user = await _session.get();
       await _prefs.initPrefs();
+      dynamic data = {
+        'driver_id': _prefs.idChofer,
+        'passenger_id': user.id,
+      };
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
-        data: {
-          'user_id': _prefs.idChofer,
-        }
+        data: data
       );
-        print( 'driver.id: ${_prefs.idChofer}');
-        print('user.id: ${user.id}');
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;
     }
   }
 
-  Future<PassengerEntity> getPassengerById(String passengerId, String documentId, String fcmToken) async{
-    //! Passenger está mockeado :c
+  Future<PassengerEntity> getPassengerById(String serviceId, String passengerId, String fcmToken) async{
+    dynamic data = {
+      'service_id': serviceId,
+      'passenger_id': passengerId,
+    };
+    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/service/get-passenger-by-id',
+      data: data
+    );
     return PassengerEntity.fromJsonServer(
-      PassengerEntity.mock().toFirestore,
-      documentId,
+      result.data,
+      null,
       fcmToken
     );
   }
@@ -54,10 +62,11 @@ class ServiceDataRemote{
   }
 
   Future<bool> acceptRequest(String serviceId, String passengerId, String passengerDocumentId) async{
+    dynamic data = {
+      'service_id': serviceId, 'passenger_id': passengerId, 'passenger_document_id': passengerDocumentId
+    };
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/accept-request',
-      data: {
-        'service_id': serviceId, 'passenger_id': passengerId, 'passenger_document_id': passengerDocumentId
-      }
+      data: data
     );
     return result.success;
   }

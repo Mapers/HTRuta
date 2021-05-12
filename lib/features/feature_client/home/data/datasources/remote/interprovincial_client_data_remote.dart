@@ -58,6 +58,15 @@ class InterprovincialClientRemoteDataSoruce {
     );
   }
   Future<void> sendRequest({@required NegotiationEntity negotiationEntity }) async{
+    // print('..................');
+    //   print(negotiationEntity.serviceId);
+    //   print(negotiationEntity.seating);
+    //   print( negotiationEntity.cost);
+    //   print(negotiationEntity.passengerId);
+    //   print(negotiationEntity.requestDocumentId);
+    //   print( negotiationEntity.from.toMap);
+    //   print( negotiationEntity.to.toMap);
+    // print('..................');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
       data: {
@@ -66,10 +75,15 @@ class InterprovincialClientRemoteDataSoruce {
         'cost': negotiationEntity.cost ,
         'passenger_id': negotiationEntity.passengerId,
         'request_document_id':  negotiationEntity.requestDocumentId ,
+        'from':  negotiationEntity.from.toMap ,
+        'to':  negotiationEntity.to.toMap ,
       }
     );
+    print('###################');
     print(result.success);
     print(result.data);
+    print(result.error);
+    print('###################');
   }
   Future<void> quialificationRequest({ QualificationEntity qualification}) async{
     await requestHttp.post(

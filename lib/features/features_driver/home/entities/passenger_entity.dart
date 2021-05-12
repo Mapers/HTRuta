@@ -11,6 +11,7 @@ class PassengerEntity extends Equatable {
   final String urlImage;
   final String fcmToken;
   final int seats;
+  final int price;
   final LocationEntity currentLocation;
   final LocationEntity toLocation;
   final int distanceInMinutes;
@@ -25,6 +26,7 @@ class PassengerEntity extends Equatable {
     @required this.fcmToken,
     @required this.seats,
     @required this.urlImage,
+    @required this.price,
     @required this.distanceInMinutes,
     @required this.distanceInMeters,
   });
@@ -37,6 +39,7 @@ class PassengerEntity extends Equatable {
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      price: dataJson['price'],
       distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),
       distanceInMinutes: (dataJson['distance_in_minutes'] as num).toInt(),
       currentLocation: LocationEntity(
@@ -56,6 +59,7 @@ class PassengerEntity extends Equatable {
     );
   }
   factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
+    print(dataJson);
     return PassengerEntity(
       id: dataJson['id'],
       documentId: documentId,
@@ -63,6 +67,7 @@ class PassengerEntity extends Equatable {
       fcmToken: fcmToken,
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      price: dataJson['price'] ?? -1,
       distanceInMeters: 0,
       distanceInMinutes: 0,
       currentLocation: LocationEntity(
@@ -90,6 +95,7 @@ class PassengerEntity extends Equatable {
     'fcm_token': fcmToken,
     'distance_in_meters': distanceInMeters,
     'distance_in_minutes': distanceInMinutes,
+    'price': price,
     'current_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
     'current_district_name': toLocation.districtName,
     'current_province_name': toLocation.provinceName,
@@ -104,7 +110,7 @@ class PassengerEntity extends Equatable {
 
   String get destination => toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
 
-  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, String seats, String urlImage, String distanceInMinutes, String distanceInMeters}){
+  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters}){
     return PassengerEntity(
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
@@ -113,6 +119,7 @@ class PassengerEntity extends Equatable {
       toLocation: toLocation ?? this.toLocation,
       fcmToken: fcmToken ?? this.fcmToken,
       seats: seats ?? this.seats,
+      price: price ?? this.price,
       urlImage: urlImage ?? this.urlImage,
       distanceInMinutes: distanceInMinutes ?? this.distanceInMinutes,
       distanceInMeters: distanceInMeters ?? this.distanceInMeters,
@@ -125,6 +132,7 @@ class PassengerEntity extends Equatable {
       documentId: 'LGSDFbEzf4WIP5GvGgKm',
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       seats: 12,
+      price: 10,
       distanceInMeters: 2031,
       distanceInMinutes: 1200,
       currentLocation: LocationEntity(
@@ -149,5 +157,5 @@ class PassengerEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken];
+  List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken, price];
 }

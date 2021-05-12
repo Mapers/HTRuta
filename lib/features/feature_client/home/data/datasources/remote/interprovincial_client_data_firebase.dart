@@ -3,6 +3,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class InterprovincialClientDataFirebase {
@@ -10,16 +11,12 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  Future<String> addRequestClient({String documentId,InterprovincialRequestEntity request,bool update}) async{
+  Future<String> addRequestClient({String documentId, InterprovincialRequestEntity request, bool update}) async{
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequests = await dr.collection('requests').add(request.toFirestore);
       DocumentSnapshot ds = await dr.get();
-      print(dRequests.id);
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
-      // print('###################');
-      // print(interprovincialLocationDriver. );
-      // print('###################');
       pushMessage.sendPushMessage(
         token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
         title: 'Ha recibido una nueva solicitud',
@@ -44,12 +41,15 @@ class InterprovincialClientDataFirebase {
     );
   }
   
-  Future<bool> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
+  Future<String> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
       String message = 'Solicitud rechazada';
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
-      dr.collection('requests').doc(request.documentId).delete();
+      DocumentReference dRequest = await dr.collection('requests').doc(request.documentId);
+      dRequest.delete();
       DocumentSnapshot  ds = await dr.get();
+      DocumentSnapshot  dsRequest = await dr.get();
+      print(dsRequest.data()['passenger_document_id'] );
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(notificationLaunch){
         pushMessage.sendPushMessage(
@@ -58,10 +58,11 @@ class InterprovincialClientDataFirebase {
           description: 'Revise las solicitudes'
         );
       }
-      return true;
+      return dsRequest.data()['passenger_document_id'];
     } catch (e) {
-      return false;
+      print(e.toString());
     }
+    return null;
   }
 
   Stream<InterprovincialLocationDriverEntity> streamInterprovincialLocationDriver({@required String documentId}) {
@@ -76,10 +77,6 @@ class InterprovincialClientDataFirebase {
     return ds.exists;
   }
   Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters}) async{
-    // print('mmmmmmmmmmmmmmmmmmmmm');
-    // print(documentId);
-    // print(passengerDocumentId);
-    // print('mmmmmmmmmmmmmmmmmmmmm');
     firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).update({
       'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
       'current_street_name': passengerPosition.streetName,
@@ -92,4 +89,22 @@ class InterprovincialClientDataFirebase {
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }
+
+  Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
+    DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
+    DocumentSnapshot dss = await firestore.collection('interprovincial_in_service').doc(documentId).get();
+    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] , serviceId: dss.data()['servicio_id']);
+    return dataNecessaryRetrieve;
+  }
+}
+class DataNecessaryRetrieve extends Equatable {
+  final String negotiatedPrice;
+  final String serviceId;
+
+  DataNecessaryRetrieve({
+    @required this.negotiatedPrice,
+    @required this.serviceId,
+  });
+  @override
+  List<Object> get props => [];
 }
