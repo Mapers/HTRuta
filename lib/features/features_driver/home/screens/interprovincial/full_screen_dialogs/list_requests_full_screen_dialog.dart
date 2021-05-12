@@ -249,10 +249,13 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Aceptando solicitud...');
               final onAcceptedRequest = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver);
-              await serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId, onAcceptedRequest.passenger.documentId);
-              _loadingFullScreen.close();
-              if(onAcceptedRequest.availableSeats == null) return;
-              BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: onAcceptedRequest.availableSeats));
+              if(onAcceptedRequest != null){
+                await serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId, onAcceptedRequest.passenger.documentId);
+                if(onAcceptedRequest.availableSeats == null) return;
+                BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: onAcceptedRequest.availableSeats));
+              }else{
+                _loadingFullScreen.close();
+              }
             },
           )
         ],

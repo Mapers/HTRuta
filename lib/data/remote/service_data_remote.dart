@@ -34,17 +34,17 @@ class ServiceDataRemote{
     }
   }
 
-  Future<PassengerEntity> getPassengerById(String serviceDocumentId, String passengerId, String passengerDocumentId, String fcmToken) async{
+  Future<PassengerEntity> getPassengerById(String serviceId, String passengerId, String fcmToken) async{
     dynamic data = {
-      'service_id': serviceDocumentId,
+      'service_id': serviceId,
       'passenger_id': passengerId,
     };
-    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
+    final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/service/get-passenger-by-id',
       data: data
     );
     return PassengerEntity.fromJsonServer(
       result.data,
-      passengerDocumentId,
+      null,
       fcmToken
     );
   }
