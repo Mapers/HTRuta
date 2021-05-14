@@ -136,7 +136,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                       ],
                     );
                   }else{
-                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId,fcmTokenDriver: widget.availablesRoutesEntity.fcm_token);
+                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId);
                   }
                 }
                 return Container();
@@ -147,7 +147,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
     );
   }
-  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId, String fcmTokenDriver} ){
+  Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId} ){
     InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
@@ -259,6 +259,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request, String  passengerDocumentId ) async {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     String passengerDocumentID =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, availablesRoutesEntity: widget.availablesRoutesEntity, interprovincialRequest: request,passengerDocumentId: passengerDocumentId ??passengerDocumentID,)), (_) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, availablesRoutesEntity: widget.availablesRoutesEntity, price: request.price,passengerDocumentId: passengerDocumentId ??passengerDocumentID,)), (_) => false);
   }
 }

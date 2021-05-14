@@ -20,9 +20,9 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 class MapCoordenationDrivePage extends StatefulWidget {
   final String passengerDocumentId;
   final AvailableRouteEntity availablesRoutesEntity;
-  final InterprovincialRequestEntity interprovincialRequest;
+  final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.interprovincialRequest, this.passengerDocumentId}) : super(key: key);
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -126,7 +126,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           top: 400,
           right: 15,
           left: 15,
-          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,interprovincialRequest: widget.interprovincialRequest,)
+          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
         ),
       ],
     );
@@ -135,8 +135,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
 
 class CardAvailiblesRoutes extends StatelessWidget {
   final AvailableRouteEntity availablesRoutesEntity;
-  final InterprovincialRequestEntity interprovincialRequest;
-  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.interprovincialRequest}) : super(key: key);
+  final double price;
+  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.price}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -158,28 +158,28 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   )
                 ),
                 SizedBox(width: 10),
-                Text('S/.' + interprovincialRequest.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('S/.' + price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(4),
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  width: 90,
-                  decoration: BoxDecoration(
-                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(width: 10,),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.all(4),
+            //       margin: EdgeInsets.symmetric(vertical: 5),
+            //       width: 90,
+            //       decoration: BoxDecoration(
+            //         color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+            //         borderRadius: BorderRadius.circular(5),
+            //       ),
+            //       child: Text(
+            //         availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+            //         style: TextStyle(color: Colors.white, fontSize: 12),
+            //         textAlign: TextAlign.center,
+            //       ),
+            //     ),
+            //     SizedBox(width: 10,),
+            //   ],
+            // ),
             Row(
               children: [
                 Icon(Icons.person, color: Colors.black87),
