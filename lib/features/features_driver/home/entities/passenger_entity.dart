@@ -59,6 +59,7 @@ class PassengerEntity extends Equatable {
     );
   }
   factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
+    print(dataJson);
     return PassengerEntity(
       id: dataJson['id'],
       documentId: documentId,

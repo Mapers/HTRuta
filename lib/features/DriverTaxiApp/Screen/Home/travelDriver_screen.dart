@@ -21,6 +21,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/app_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,9 +30,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 
 import 'package:HTRuta/app/navigation/routes.dart' as enrutador;
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 
 class TravelDriverScreen extends StatefulWidget {
 
@@ -43,6 +48,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   List<LatLng> points = <LatLng>[];
   GoogleMapController _mapController;
+  DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MarkerId selectedMarker;
@@ -58,8 +64,11 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   bool isResult = false;
   LatLng positionDriver;
   bool isComplete = false;
+  bool travelInit = false;
+  bool travelFinish = false;
   var apis = MapNetwork();
   final pickupApi = PickupApi();
+  LatLng currentLocation;
   List<RoutesDirectionModel> routesData;
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();
@@ -76,6 +85,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   void initState() {
     addMakers();
     getRouter();
+    _initCurrentLocation();
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
       Map data = argumento['data'];
@@ -98,6 +108,24 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
         }
         Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
         // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
+      }
+    });
+    Geolocator.getPositionStream().listen((event) async{
+      if(currentLocation  == null) return;
+      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(diferencia > 10 && mounted){
+        final _prefs = UserPreferences();
+        final MarkerId _markerMy = MarkerId('from_address');
+        if(currentLocation != null){
+          markers[_markerMy] = GMapViewHelper.createMaker(
+            markerIdVal: 'fromLocation',
+            icon: 'assets/image/marker/taxi_marker.png',
+            lat: event.latitude,
+            lng: event.longitude,
+          );
+          currentLocation = LatLng(event.latitude, event.longitude);
+          driverFirestoreService.updateDriverPosition(event.latitude, event.longitude, _prefs.idChofer);
+        }
       }
     });
     // initPusher();
@@ -134,11 +162,15 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       onTap: () {
       },
     );
-
+    if(!mounted) return;
     setState(() {
       markers[markerIdFrom] = marker;
       markers[markerIdTo] = markerTo;
     });
+  }
+  Future<void> _initCurrentLocation() async {
+    LocationEntity locationEntity = await LocationUtil.currentLocation();
+    currentLocation = locationEntity.latLang;
   }
 
   ///Calculate and return the best router
@@ -180,6 +212,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
       polylineIdVal: polylineIdVal,
       router: router
     );
+    if(!mounted) return;
     setState(() {});
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
@@ -211,6 +244,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
         ),
       );
       if(count == _listPosition.length){
+        if(!mounted) return;
         setState(() {
           t.cancel();
           isComplete = true;
@@ -235,6 +269,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
         // _onMarkerTapped(markerId);
       },
     );
+    if(!mounted) return;
     setState(() {
       markers[markerDriver] = marker;
     });
@@ -348,7 +383,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
           Positioned(
                 bottom: 0,
                 child: Container(
-                    height: responsive.hp(26),
+                    // height: responsive.hp(26),
                     width: responsive.wp(94),
                     margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
                     padding: EdgeInsets.all(responsive.wp(4)),
@@ -396,7 +431,38 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
                               }
                             },
                           )
-                        )
+                        ),
+                        !travelInit ? MaterialButton(
+                          color: primaryColor,
+                          child: Text('Empezar viaje', style: TextStyle(color: Colors.white)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          ),
+                          onPressed: (){
+                            PushMessage pushMessage = getIt<PushMessage>();
+                            Map<String, String> data = {
+                              'travelInit' : '1'
+                            };
+                            pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
+                            travelInit = true;
+                            setState(() {});
+                          },
+                        ) : Container(),
+                        travelInit ? MaterialButton(
+                          color: primaryColor,
+                          child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          ),
+                          onPressed: (){
+                            PushMessage pushMessage = getIt<PushMessage>();
+                            Map<String, String> data = {
+                              'travelFinish' : '1'
+                            };
+                            pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
+                            Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                          },
+                        ) : Container()
                       ],
                     )
                 ),
@@ -477,7 +543,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
           SizedBox(
             child: GoogleMap(
               onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
+              myLocationEnabled: false,
               myLocationButtonEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),

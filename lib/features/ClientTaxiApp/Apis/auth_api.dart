@@ -37,11 +37,9 @@ class AuthApi{
         }
       }).catchError((onError){
         Dialogs.alert(context,title: 'Error',message: 'Ocurrio un error con el servidor, volver a intentar');
-        print(onError.toString());
       });
     }).catchError((onError){
       Dialogs.alert(context,title: 'Error',message: 'Ocurrio un error con el servidor, volver a intentar');
-        print(onError.toString());
     });
   }
 

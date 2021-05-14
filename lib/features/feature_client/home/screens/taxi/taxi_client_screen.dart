@@ -24,6 +24,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
+import 'package:provider/provider.dart';
+import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 
 
 class TaxiClientScreen extends StatefulWidget {
@@ -72,17 +75,19 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   @override
   void initState() {
     super.initState();
+    fetchDriverLocation();
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await checkPermission();
       await _initLastKnownLocation();
-      if(_lastKnownPosition != null){
+      /* if(_lastKnownPosition != null){
         _initCurrentLocation();
       }else{
         await _initCurrentLocation();
-      }
+      } */
       iconTaxi = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/taxi_marker.png');
       fetchLocation();
       loading = false;
+      if (!mounted) return;
       setState(() {});
     });
     showPersBottomSheetCallBack = _showBottomSheet;
@@ -118,6 +123,24 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       if(isEnabledLocation){
         _initCurrentLocation();
       }
+    });
+  }
+
+  Future<void> fetchDriverLocation() async {
+    Query reference = FirebaseFirestore.instance.collection('taxis_in_service').where('available', isEqualTo: true);
+    reference.snapshots().listen((querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        GeoPoint position = element['posicion'];
+        if(position == null) return;
+        final MarkerId markerIdDriver = MarkerId(element.id);
+        _markers[markerIdDriver] = GMapViewHelper.createMaker(
+          markerIdVal: element.id,
+          icon: checkPlatform ? 'assets/image/marker/car_top_96.png' : 'assets/image/marker/car_top_48.png',
+          lat: position.latitude,
+          lng: position.longitude,
+        );
+        print(element.data());
+      });
     });
   }
 
@@ -410,115 +433,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       _markerIcon = bitmap;
     });
   }
-  Widget streamMap(){
-    return StreamBuilder(
-      stream: driverFirestoreService.getDriversStream(),
-      builder:(BuildContext context, AsyncSnapshot snapshot){
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting: return emptyMap();
-          case ConnectionState.none: return emptyMap();
-          case ConnectionState.active: return createMap(parseMarkers(snapshot.data.docs));
-          case ConnectionState.done: return createMap(parseMarkers(snapshot.data.docs));
-        }
-        return CircularProgressIndicator();
-      }
-    );
-  }
-  List<Marker> parseMarkers(List<DocumentSnapshot> markersSnapshot){
-    List<Marker> markers = [];
-    if(markersSnapshot.isEmpty) return markers;
-    for(DocumentSnapshot markerSnap in markersSnapshot){
-      Map<dynamic, dynamic> info = markerSnap.data();
-      GeoPoint geoPoint = info['posicion'];
-      if(geoPoint != null){
-        markers.add(
-          iconTaxi == null ? 
-          
-          MapViewerUtil.generateMarker(
-            //! Debe ser la ubicación actual
-            latLng: LatLng(geoPoint.latitude, geoPoint.longitude),
-            nameMarkerId: 'PASSENGER_MARKER_${markerSnap.id}',
-          ) : MapViewerUtil.generateMarker(
-            //! Debe ser la ubicación actual
-            latLng: LatLng(geoPoint.latitude, geoPoint.longitude),
-            nameMarkerId: 'PASSENGER_MARKER_${markerSnap.id}',
-            icon: iconTaxi,
-          )
-        );
-      }
-      
-    }
-    return markers;
-  }
-  Widget createMap(List<Marker> markers){
-    return SizedBox(
-      child: GoogleMap(
-        circles: Set<Circle>.of(circles.values),
-        markers: Set<Marker>.of(markers),
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        compassEnabled: false,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(
-              currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
-              currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
-          zoom: 12.0,
-        ),
-        onCameraMove: (CameraPosition position) {
-          if(_markers.isNotEmpty) {
-            MarkerId markerId = MarkerId(_markerIdVal());
-            Marker marker = _markers[markerId];
-            Marker updatedMarker = marker?.copyWith(
-              positionParam: position?.target,
-            );
-            setState(() {
-              _markers[markerId] = updatedMarker;
-              _position = position;
-            });
-          }
-        },
-        onCameraIdle: () => getLocationName(
-            _position?.target?.latitude ?? currentLocation?.latitude,
-            _position?.target?.longitude ?? currentLocation?.longitude
-        ),
-      ),
-    );
-  }
-  Widget emptyMap(){
-    return SizedBox(
-      child: GoogleMap(
-        circles: Set<Circle>.of(circles.values),
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        compassEnabled: false,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(
-              currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
-              currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
-          zoom: 12.0,
-        ),
-        onCameraMove: (CameraPosition position) {
-          if(_markers.isNotEmpty) {
-            MarkerId markerId = MarkerId(_markerIdVal());
-            Marker marker = _markers[markerId];
-            Marker updatedMarker = marker?.copyWith(
-              positionParam: position?.target,
-            );
-            setState(() {
-              _markers[markerId] = updatedMarker;
-              _position = position;
-            });
-          }
-        },
-        onCameraIdle: () => getLocationName(
-            _position?.target?.latitude ?? currentLocation?.latitude,
-            _position?.target?.longitude ?? currentLocation?.longitude
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -535,7 +449,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
         body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            /* SizedBox(
+            SizedBox(
               //height: MediaQuery.of(context).size.height - 180,
               child: GoogleMap(
                 circles: Set<Circle>.of(circles.values),
@@ -568,8 +482,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                     _position?.target?.longitude ?? currentLocation?.longitude
                 ),
               ),
-            ), */
-            streamMap(),
+            ),
+            // streamMap(),
             // ChangeServiceClientWidget(),
             CustomDropdownClient(),
             Positioned(

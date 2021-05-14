@@ -19,10 +19,6 @@ class ServiceInCourseEntity extends Equatable{
   });
 
   factory ServiceInCourseEntity.fromJson(dynamic data){
-    print('###################');
-    print(data);
-    print(data['type_entity']);
-    print('###################');
     if(data == null) return null;
     if(data['service_document_id'] == null) return null;
     return ServiceInCourseEntity(

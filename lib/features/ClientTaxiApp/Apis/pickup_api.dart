@@ -24,7 +24,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -48,7 +47,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -66,7 +64,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -79,8 +76,7 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
-      throw ServerException(message: 'Ocurrió un error con el servidor');
+      return false;
     }
   }
 
@@ -91,19 +87,17 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
-      throw ServerException(message: 'Ocurrió un error con el servidor');
+      return false;
     }
   }
 
   Future<bool> acceptTravelFinish(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/actualizar-viaje';
     try{
-      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchoferUsuario': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -115,7 +109,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -127,7 +120,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -139,7 +131,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -151,7 +142,6 @@ class PickupApi{
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -166,7 +156,6 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -178,7 +167,17 @@ class PickupApi{
       final responseData = solicitudUsuarioResponseFromJson(response.body);
       return responseData.data.first;
     } catch(error){
-      print(error.toString());
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+
+  Future<bool> prepareTravel(String idSolicitud)async{
+    final url = '${Config.nuevaRutaApi}/actualizar-solicitud-viaje';
+    try{
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'iEstado': '3'} );
+      final responseData = requestDataFromJson(response.body);
+      return responseData.success;
+    } catch(error){
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }

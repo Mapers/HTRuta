@@ -100,19 +100,14 @@ class _HomeViewState extends State<HomeView> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    print('1');
     await Geolocator.isLocationServiceEnabled();
     currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    print('1.1');
     List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-    print('2');
     if (placemarks != null && placemarks.isNotEmpty) {
-    print('3');
       final Placemark pos = placemarks[0];
       setState(() {
         _placemark = pos.name + ', ' + pos.thoroughfare;
       });
-    print('5');
       widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
           formattedAddress: '',
@@ -120,11 +115,8 @@ class _HomeViewState extends State<HomeView> {
           lng: currentLocation?.longitude
       ));
     }
-    print('6');
     if(currentLocation != null){
-    print('7');
       moveCameraToMyLocation();
-    print('8');
     }
   }
 

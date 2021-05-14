@@ -17,21 +17,21 @@ class InterprovincialDataFirestore{
   Future<OnRequestAcceptedEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
       DocumentReference refService = firestore.collection('interprovincial_in_service').doc(documentId);
-      PassengerEntity passenger = await serviceDataRemote.getPassengerById(documentId, request.documentId, request.passengerId, request.passengerFcmToken);
+
+      DocumentSnapshot snapshotService = await refService.get();
+      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
+
+      PassengerEntity passenger = await serviceDataRemote.getPassengerById(interprovincialLocationDriver.serviceId, request.passengerId, request.passengerFcmToken);
       passenger = passenger.copyWith(price: request.price);
 
       DocumentReference drPassenger = await refService.collection('passengers').add(passenger.toFirestore);
+      passenger = passenger.copyWith(documentId: drPassenger.id);
 
-      List<dynamic> result = await Future.wait([
-        refService.get(),
-        refService.collection('requests').doc(request.documentId).update({
-          'passenger_document_id': drPassenger.id,
-          'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
-        }),
-      ]);
+      await refService.collection('requests').doc(request.documentId).update({
+        'passenger_document_id': passenger.documentId,
+        'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
+      });
 
-      DocumentSnapshot snapshotService = result.first;
-      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
       if(origin == InterprovincialDataFirestoreOrigin.client){
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken,
@@ -52,11 +52,11 @@ class InterprovincialDataFirestore{
       });
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
-        passenger: passenger.copyWith(documentId: drPassenger.id),
+        passenger: passenger,
         price: request.price
       );
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
+    } catch (e, _) {
+      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.', toastLength: Toast.LENGTH_SHORT);
       return null;
     }
   }

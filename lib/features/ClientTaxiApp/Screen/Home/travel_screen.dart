@@ -9,6 +9,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/map_type_model.dart';
+import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +27,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:HTRuta/models/direction_model.dart';
+import 'package:HTRuta/google_map_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TravelScreen extends StatefulWidget {
   @override
@@ -53,19 +58,25 @@ class _TravelScreenState extends State<TravelScreen> {
   PermissionStatus permission;
   bool isEnabledLocation = false;
 
+  int _polylineIdCounter = 1;
+  String distance, duration;
+  Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
+  var apis = MapNetwork();
+  final GMapViewHelper _gMapViewHelper = GMapViewHelper();
+  List<RoutesDirectionModel> routesData;
+
   final pickupApi = PickupApi();
   final referenceDatabase = FirebaseDatabase.instance.reference();
   PushNotificationProvider pushProvider;
+
 
   dynamic posicionChofer;
 
   @override
   void initState() {
     super.initState();
-    
-//    _initLastKnownLocation();
-//    _initCurrentLocation();
-    fetchLocation();
+    // _initLastKnownLocation();
+    // fetchLocation();
     fechDriverLocation();
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
@@ -73,6 +84,8 @@ class _TravelScreenState extends State<TravelScreen> {
       if(data == null) return;
       String newCancel = data['newCancel'] ?? '0';
       String idSolicitud = data['idSolicitud'] ?? '0';
+      String travelInit = data['travelInit'] ?? '0';
+      String travelFinish = data['travelFinish'] ?? '0';
       if (!mounted) return;
       if(newCancel == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
@@ -89,6 +102,25 @@ class _TravelScreenState extends State<TravelScreen> {
         }
         Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
       }
+      if(travelInit == '1'){
+        await getRouter();
+        addMakers();
+      }
+      if(travelFinish == '1'){
+        final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+        if(idSolicitud == pedidoProvider.request.idSolicitud){
+          /* Fluttertoast.showToast(
+            msg: 'El viaje ha concluido',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+          ); */
+        }
+        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+      }
     });
     // showPersBottomSheetCallBack = _showBottomSheet;
     sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
@@ -98,8 +130,94 @@ class _TravelScreenState extends State<TravelScreen> {
     sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
     sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
   }
+  Future<void> getRouter() async {
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    polyLines.clear();
+    var router;
+    LatLng _fromLocation = LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial));
+    LatLng _toLocation = LatLng(double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal));
+    bool routeFound = true;
+    await apis.getRoutes(
+      getRoutesRequest: GetRoutesRequestModel(
+        fromLocation: _fromLocation,
+        toLocation: _toLocation,
+        mode: 'DRIVING'
+      ),
+    ).then((data) {
+      if (data != null) {
+        if(data.result.routes.isEmpty){
+          routeFound = false;
+        }else{
+          router = data?.result?.routes[0]?.overviewPolyline?.points;
+          routesData = data?.result?.routes;
+        }
+      }
+    }).catchError((error) {
+      print('GetRoutesRequest > $error');
+    });
+    if(!routeFound) {
+      _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+      return;
+    }
+    distance = routesData[0]?.legs[0]?.distance?.text;
+    duration = routesData[0]?.legs[0]?.duration?.text;
 
+    polyLines[polylineId] = GMapViewHelper.createPolyline(
+      polylineIdVal: polylineIdVal,
+      router: router
+    );
+    setState(() {});
+    _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+  }
+  void addMakers(){
+    checkPlatform ? print('ios'): print('android');
+    final MarkerId markerIdFrom = MarkerId('from_address');
+    final MarkerId markerIdTo = MarkerId('to_address');
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+
+    final Marker marker = Marker(
+      markerId: markerIdFrom,
+      position: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),
+      infoWindow: InfoWindow(title: 'Recojo', snippet: pedidoProvider.request.vchNombreInicial),
+      // ignore: deprecated_member_use
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
+      onTap: () {
+      },
+    );
+
+    final Marker markerTo = Marker(
+      markerId: markerIdTo,
+      position: LatLng(double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal)),
+      infoWindow: InfoWindow(title: 'Dejar', snippet: pedidoProvider.request.vchNombreFinal),
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
+      onTap: () {
+      },
+    );
+
+    setState(() {
+      _markers[markerIdFrom] = marker;
+      _markers[markerIdTo] = markerTo;
+    });
+  }
   Future<void> fechDriverLocation() async {
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    DocumentReference reference = FirebaseFirestore.instance.collection('taxis_in_service').doc(pedidoProvider.requestDriver.iIdUsuario);
+    reference.snapshots().listen((querySnapshot) {
+      GeoPoint position = querySnapshot['posicion'];
+      if(position == null) return;
+      final MarkerId markerIdDriver = MarkerId(querySnapshot.id);
+      _markers[markerIdDriver] = GMapViewHelper.createMaker(
+        markerIdVal: querySnapshot.id,
+        icon: checkPlatform ? 'assets/image/marker/car_top_96.png' : 'assets/image/marker/car_top_48.png',
+        lat: position.latitude,
+        lng: position.longitude,
+      );
+    });
+  }
+  /* Future<void> fechDriverLocation() async {
     final provider = Provider.of<PedidoProvider>(context,listen: false);
     referenceDatabase.child('Coordenada').onValue.listen((event) {
       print('Data: ${event.snapshot.value}');
@@ -123,7 +241,7 @@ class _TravelScreenState extends State<TravelScreen> {
         }
       });
     });
-  }
+  } */
 
   ///Get last known location
   // ignore: unused_element
@@ -136,6 +254,14 @@ class _TravelScreenState extends State<TravelScreen> {
     }
     if (!mounted) {return;}
     _lastKnownPosition = position;
+    _mapController?.animateCamera(
+      CameraUpdate?.newCameraPosition(
+        CameraPosition(
+          target: LatLng(_lastKnownPosition?.latitude, _lastKnownPosition?.longitude),
+          zoom: 14.0,
+        ),
+      ),
+    );
   }
 
   Future<void> checkPermission() async {
@@ -204,7 +330,14 @@ class _TravelScreenState extends State<TravelScreen> {
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     MarkerId markerId = MarkerId(_markerIdVal());
-    LatLng position = LatLng(currentLocation != null ? currentLocation?.latitude : 0.0, currentLocation != null ? currentLocation?.longitude : 0.0);
+    LatLng position;
+    if(currentLocation == null){
+      Position lastKnowPosition = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
+      position = LatLng(lastKnowPosition.latitude, lastKnowPosition.longitude);
+    }else{
+      position = LatLng(currentLocation != null ? currentLocation?.latitude : 0.0, currentLocation != null ? currentLocation?.longitude : 0.0);
+    }
+    
     Marker marker = Marker(
       markerId: markerId,
       position: position,
@@ -254,7 +387,7 @@ class _TravelScreenState extends State<TravelScreen> {
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
                 mapToolbarEnabled: false,
-                
+                polylines: Set<Polyline>.of(polyLines.values),
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
                       currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
