@@ -142,9 +142,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
           DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
           InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
-        if( serviceInCourse.requestDocumentId == null ){
           AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
-            availableSeats: null,
+            availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
             route: interprovincialRouteInServiceEntity,
             documentId: serviceInCourse.serviceDocumentId,
             fcm_token: null,
@@ -153,6 +152,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             status: null,
             vehicleSeatLayout: null
           );
+        if( serviceInCourse.requestDocumentId == null ){
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MapCoordenationDrivePage(
             serviceInCourse.serviceDocumentId,
             availablesRoutesEntity: availableRouteEntity,
@@ -160,13 +160,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             passengerDocumentId:serviceInCourse.passengerDocumentId,
           )), (_) => false);
           }else{
-          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MapCoordenationDrivePage(
-          //   serviceInCourse.serviceDocumentId,
-          //   availablesRoutesEntity: availableRouteEntity,
-          //   price:  double.parse(dataNecessaryRetrieve.negotiatedPrice),
-          //   passengerDocumentId:serviceInCourse.passengerDocumentId,
-          // )), (_) => false);
-          //holis
+            Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);
           }
       }
     }
