@@ -115,7 +115,7 @@ class PassengerEntity extends Equatable {
   }
 
   String get destination {
-    if(destination == null) return 'No mapeado';
+    if(toLocation == null) return 'No mapeado';
     return toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
   }
 

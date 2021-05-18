@@ -251,6 +251,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               final onAcceptedRequest = await interprovincialDataFirestore.acceptRequest(documentId: widget.documentId, request: interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.driver);
               if(onAcceptedRequest != null){
                 await serviceDataRemote.acceptRequest(widget.serviceId, interprovincialRequest.passengerId, onAcceptedRequest.passenger.documentId);
+                _loadingFullScreen.close();
                 if(onAcceptedRequest.availableSeats == null) return;
                 BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: onAcceptedRequest.availableSeats));
               }else{
