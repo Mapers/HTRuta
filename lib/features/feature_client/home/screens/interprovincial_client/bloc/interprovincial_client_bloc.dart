@@ -72,6 +72,9 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
     }else if(event is RejecDataSolicitudInterprovincialClientEvent){
       await serviceDataRemote.rejectRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId);
     }else if(event is SendQualificationInterprovincialClientEvent){
+      print('..................');
+      print(event.qualificationEntity.toMap);
+      print('..................');
       await interprovincialClientRemote.quialificationRequest(qualification: event.qualificationEntity);
     }
   }

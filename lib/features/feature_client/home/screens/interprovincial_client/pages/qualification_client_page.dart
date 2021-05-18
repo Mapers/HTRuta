@@ -37,93 +37,109 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            Text('Gracias por haber viajado con nosotros  que ten un buen dia'),
-            Row(
-              children: [
-                Icon(Icons.person ),
-                SizedBox(width: 7,),
-                Container(
-                  width: 200,
-                  child: Text(widget.availablesRoutesEntity.route.nameDriver)
-                )
-              ],
-            ),
-            SizedBox(height: 10,),
-            Text( widget.availablesRoutesEntity.route.name ,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
-            RatingBar.builder(
-              initialRating: 0,
-              allowHalfRating: true,
-              // itemSize: 18,
-              itemCount: 5,
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
+      body: SafeArea(
+        
+        child: Form(
+          key: formKey,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric( horizontal: 20 ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Text('Gracias por su preferencia. Tenga un buen dia!',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold ),textAlign: TextAlign.center ,),
+                  ),
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person ),
+                      SizedBox(width: 7,),
+                      Container(
+                        width: 200,
+                        child: Text(widget.availablesRoutesEntity.route.nameDriver)
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Text( widget.availablesRoutesEntity.route.name ,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),),
+                  RatingBar.builder(
+                    initialRating: 0,
+                    allowHalfRating: true,
+                    // itemSize: 18,
+                    itemCount: 5,
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate:(val){
+                      numberStart = val;
+                    },
+                  ),
+                  PrincipalInput(
+                    hinText: 'Comentario',
+                    onSaved: (val) => commenctary = val,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround ,
+                    children: [
+                      PrincipalButton(
+                        color: Colors.red,
+                        width: 100,
+                        text: 'Omitir',
+                        onPressed: (){
+                          interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
+                          BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
+                          Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                        }
+                      ),
+                      PrincipalButton(
+                        width: 100,
+                        text: 'Enviar',
+                        onPressed: ()async{
+                          final user = await _session.get();
+                          formKey.currentState.save();
+                          QualificationEntity qualification = QualificationEntity(
+                            passenger_id: int.parse(user.id),
+                            service_id: int.parse(_prefs.service_id),
+                            qualifying_person: TypeEntityEnum.passenger ,
+                            comment: commenctary,
+                            starts: numberStart,
+                          );
+                          BlocProvider.of<InterprovincialClientBloc>(context).add(SendQualificationInterprovincialClientEvent(qualificationEntity: qualification ));
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Column(
+                                  children: [
+                                    Center(child: Text('¡ Gracias por su calificación !',style: TextStyle(fontSize: 20,color: Colors.grey ),textAlign: TextAlign.center ,)),
+                                    SizedBox(height: 10,),
+                                    PrincipalButton(
+                                      width: 200,
+                                      text: 'Aceptar',
+                                      onPressed: (){
+                                        interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
+                                        BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
+                                        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                                      }
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      )
+                    ],
+                  )
+                ],
               ),
-              onRatingUpdate:(val){
-                numberStart = val;
-              },
             ),
-            PrincipalInput(
-              hinText: 'Comentario',
-              onSaved: (val) => commenctary = val,
-            ),
-            Row(
-              children: [
-                PrincipalButton(
-                  color: Colors.red,
-                  width: 100,
-                  text: 'Omitir',
-                  onPressed: (){
-                    interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
-                    BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
-                    Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
-                  }
-                ),
-                PrincipalButton(
-                  width: 100,
-                  text: 'Enviar',
-                  onPressed: ()async{
-                    final user = await _session.get();
-                    formKey.currentState.save();
-                    QualificationEntity qualification = QualificationEntity(
-                      passenger_id: int.parse(user.id),
-                      service_id: int.parse(_prefs.service_id),
-                      qualifying_person: TypeEntityEnum.passenger ,
-                      comment: commenctary,
-                      starts: numberStart,
-                    );
-                    BlocProvider.of<InterprovincialClientBloc>(context).add(SendQualificationInterprovincialClientEvent(qualificationEntity: qualification ));
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Column(
-                            children: [
-                              Center(child: Text('¡ Gracias por su calificación !',style: TextStyle(fontSize: 20,color: Colors.grey ),textAlign: TextAlign.center ,)),
-                              SizedBox(height: 10,),
-                              PrincipalButton(
-                                width: 200,
-                                text: 'Aceptar',
-                                onPressed: (){
-                                  interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
-                                  BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
-                                  Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
-                                }
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                )
-              ],
-            )
-          ],
+          ),
         ),
       ),
     );

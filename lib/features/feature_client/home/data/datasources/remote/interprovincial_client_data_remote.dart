@@ -58,15 +58,6 @@ class InterprovincialClientRemoteDataSoruce {
     );
   }
   Future<void> sendRequest({@required NegotiationEntity negotiationEntity }) async{
-    print('..................');
-      print(negotiationEntity.serviceId);
-      print(negotiationEntity.seating);
-      print( negotiationEntity.cost);
-      print(negotiationEntity.passengerId);
-      print(negotiationEntity.requestDocumentId);
-      print( negotiationEntity.from.toMap);
-      print( negotiationEntity.to.toMap);
-    print('..................');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
       data: {
@@ -79,24 +70,26 @@ class InterprovincialClientRemoteDataSoruce {
         'to':  negotiationEntity.to.toMap ,
       }
     );
-    print('###################');
-    print(result.success);
-    print(result.data);
-    print(result.error);
-    print('###################');
   }
   Future<void> quialificationRequest({ QualificationEntity qualification}) async{
-    await requestHttp.post(
+    
+    print('###################');
+    print( qualification.toMap);
+    print( getTypeEntity( qualification.qualifying_person ));
+    print('###################');
+
+    final result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
       data: {
-        {
           'service_id': qualification.service_id ,
           'passenger_id': qualification.passenger_id ,
           'qualifying_person':  getTypeEntity( qualification.qualifying_person ),
           'stars': qualification.starts ,
           'comment': qualification.comment
-        }
       }
     );
+      print(result.data);
+      print(result.error );
+      print(result.success);
   }
 }
