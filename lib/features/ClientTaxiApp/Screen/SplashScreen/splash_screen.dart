@@ -9,7 +9,6 @@ import 'package:HTRuta/features/feature_client/home/data/datasources/remote/inte
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
