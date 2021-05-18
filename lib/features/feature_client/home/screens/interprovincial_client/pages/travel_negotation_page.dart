@@ -235,6 +235,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     onPressed: () async{
                       final onRequestAccept = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
                       await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccept.passenger.documentId);
+                      print('###################');
+                      print('2');
+                      print(onRequestAccept.passenger);
+                      print('###################');
                       deleteRequestAndRedirectionalMap(documentId, request, onRequestAccept.passenger.documentId );
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
@@ -259,6 +263,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request, String  passengerDocumentId ) async {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     String passengerDocumentID =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
+    print('###################');
+    print(passengerDocumentID);
+    print('###################');
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, availablesRoutesEntity: widget.availablesRoutesEntity, price: request.price,passengerDocumentId: passengerDocumentId ??passengerDocumentID,)), (_) => false);
   }
 }

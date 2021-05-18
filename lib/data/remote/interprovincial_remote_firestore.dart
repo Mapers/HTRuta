@@ -50,6 +50,10 @@ class InterprovincialDataFirestore{
       await refService.update({
         'available_seats': newAvailableSeats
       });
+      print('..................');
+      print('1');
+      print(passenger);
+      print('..................');
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
         passenger: passenger,

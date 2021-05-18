@@ -95,7 +95,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
     _markers[markerPassenger.markerId] = markerPassenger;
     DataInterprovincialClientState param = BlocProvider.of<InterprovincialClientBloc>(context).state;
+    print('###################');
     print(param.passengerDocumentId );
+    print('###################');
     double distanceInMeters = LocationUtil.calculateDistance(_passengerLocation.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: param.passengerDocumentId, distanceInMeters: distanceInMeters);
   }
