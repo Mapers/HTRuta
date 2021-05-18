@@ -33,9 +33,7 @@ class PassengerEntity extends Equatable {
     this.currentLocation
   });
 
-  factory PassengerEntity.fromQueryDocumentSnapshot(QueryDocumentSnapshot queryDocumentSnapshot){
-    if(!queryDocumentSnapshot.exists) return null;
-    Map<String, dynamic> dataJson = queryDocumentSnapshot.data();
+  factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
     LocationEntity _currentLocation;
     if(dataJson['current_location'] != null){
       _currentLocation = LocationEntity(
@@ -48,7 +46,7 @@ class PassengerEntity extends Equatable {
     }
     return PassengerEntity(
       id: dataJson['id'],
-      documentId: queryDocumentSnapshot.id,
+      documentId: dataJson['document_id'],
       fullNames: dataJson['full_names'],
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
@@ -66,6 +64,18 @@ class PassengerEntity extends Equatable {
       ),
       status: getPassengerStatusFromString(dataJson['status'])
     );
+  }
+
+  factory PassengerEntity.fromQueryDocumentSnapshot(QueryDocumentSnapshot queryDocumentSnapshot){
+    final data = queryDocumentSnapshot.data();
+    data['document_id'] = queryDocumentSnapshot.id;
+    return PassengerEntity.fromJsonFirestore(data);
+  }
+
+  factory PassengerEntity.fromDocumentSnapshot(DocumentSnapshot documentSnapshot){
+    final data = documentSnapshot.data();
+    data['document_id'] = documentSnapshot.id;
+    return PassengerEntity.fromJsonFirestore(data);
   }
 
   factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
@@ -91,7 +101,7 @@ class PassengerEntity extends Equatable {
           double.parse(toLocation['longitude'] as String)
         )
       ),
-      status: null
+      status: getPassengerStatusFromString(dataJson['status'])
     );
   }
 
