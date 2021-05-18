@@ -45,9 +45,9 @@ class InterprovincialClientDataFirebase {
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequest = await dr.collection('requests').doc(request.documentId);
-      dRequest.delete();
       DocumentSnapshot  ds = await dr.get();
-      DocumentSnapshot  dsRequest = await dr.get();
+      DocumentSnapshot  dsRequest = await dRequest.get();
+      dRequest.delete();
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(notificationLaunch){
         pushMessage.sendPushMessage(
@@ -56,6 +56,9 @@ class InterprovincialClientDataFirebase {
           description: 'Revise las solicitudes'
         );
       }
+      print('..................');
+      print(dsRequest.data()['passenger_document_id']);
+      print('..................');
       return dsRequest.data()['passenger_document_id'];
     } catch (e) {
       print(e.toString());

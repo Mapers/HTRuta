@@ -88,18 +88,19 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     super.initState();
   }
   void _updateMarkerCurrentPosition(LocationEntity _passengerLocation, LocationEntity _driverLocation) async{
+  
     Marker markerPassenger = MapViewerUtil.generateMarker(
       latLng: _passengerLocation.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon
     );
     _markers[markerPassenger.markerId] = markerPassenger;
-    DataInterprovincialClientState param = BlocProvider.of<InterprovincialClientBloc>(context).state;
     print('###################');
-    print(param.passengerDocumentId );
+    print(widget.passengerDocumentId );
     print('###################');
     double distanceInMeters = LocationUtil.calculateDistance(_passengerLocation.latLang, _driverLocation.latLang);
-    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: param.passengerDocumentId, distanceInMeters: distanceInMeters);
+    currenActual = _passengerLocation;
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
   }
 
   @override
