@@ -4,7 +4,6 @@ import 'dart:math' show cos, sqrt, asin;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
-import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
@@ -24,10 +23,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
-import 'package:provider/provider.dart';
 import 'package:HTRuta/google_map_helper.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
-
 
 class TaxiClientScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;

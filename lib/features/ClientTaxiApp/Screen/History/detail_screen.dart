@@ -245,7 +245,6 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                 // ),
                                 onRatingUpdate: (rating) {
                                   ratingScore = rating;
-                                  print(rating);
                                 },
                               ),
                               Container(

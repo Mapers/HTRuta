@@ -29,10 +29,6 @@ class _CustomDropdownClientState extends State<CustomDropdownClient> {
     Offset offset = renderBox.localToGlobal(Offset.zero);
     xPosition = offset.dx;
     yPosition = offset.dy;
-    print(height);
-    print(width);
-    print(xPosition);
-    print(yPosition);
   }
 
   OverlayEntry _createFloatingDropdown() {
@@ -45,7 +41,7 @@ class _CustomDropdownClientState extends State<CustomDropdownClient> {
         child: DropDown(
           itemHeight: height,
           onItemSelected: (TypeServiceEnum selectedValue){
-            BlocProvider.of<ClientServiceBloc>(context).add(ChangeDriverServiceEvent(type: selectedValue));
+            BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: selectedValue));
             print(selectedValue);
             setState(() {
               if (isDropdownOpened) {

@@ -5,6 +5,11 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -116,19 +121,40 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
-    print('###################');
-    print(serviceInCourse.entityType);
-    print(serviceInCourse.passengerDocumentId);
-    print(serviceInCourse.requestDocumentId);
-    print(serviceInCourse.serviceDocumentId);
-    print(serviceInCourse.serviceType );
-    print('###################');
 
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourse), (_) => false);
     }else if(serviceInCourse.entityType == TypeEntityEnum.passenger){
-      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
+      if(serviceInCourse.passengerDocumentId == null  ){
+        BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
+        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
+      }else{
+          InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+          ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
+          DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
+          InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
+          AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
+            availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
+            route: interprovincialRouteInServiceEntity,
+            documentId: serviceInCourse.serviceDocumentId,
+            fcm_token: null,
+            id: null,
+            routeStartDateTime: null,
+            status: null,
+            vehicleSeatLayout: null
+          );
+        if( serviceInCourse.requestDocumentId == null ){
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MapCoordenationDrivePage(
+            serviceInCourse.serviceDocumentId,
+            availablesRoutesEntity: availableRouteEntity,
+            price:  double.parse(dataNecessaryRetrieve.negotiatedPrice),
+            passengerDocumentId:serviceInCourse.passengerDocumentId,
+          )), (_) => false);
+          }else{
+            Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);
+          }
+      }
     }
     // _showDialogQualification();
   }

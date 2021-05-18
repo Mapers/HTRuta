@@ -12,7 +12,7 @@ class ClientServiceBloc extends Bloc<ClientServiceEvent, ClientServiceState> {
   Stream<ClientServiceState> mapEventToState(
     ClientServiceEvent event,
   ) async* {
-    if(event is ChangeDriverServiceEvent){
+    if(event is ChangeClientServiceEvent){
       DataClientServiceState current = state;
       yield current.copyWith(typeService: event.type);
     }

@@ -11,6 +11,7 @@ class PassengerEntity extends Equatable {
   final String urlImage;
   final String fcmToken;
   final int seats;
+  final double price;
   final LocationEntity currentLocation;
   final LocationEntity toLocation;
   final int distanceInMinutes;
@@ -20,16 +21,27 @@ class PassengerEntity extends Equatable {
     @required this.id,
     @required this.documentId,
     @required this.fullNames,
-    @required this.currentLocation,
     @required this.toLocation,
     @required this.fcmToken,
     @required this.seats,
     @required this.urlImage,
+    @required this.price,
     @required this.distanceInMinutes,
     @required this.distanceInMeters,
+    this.currentLocation
   });
 
   factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
+    LocationEntity _currentLocation;
+    if(dataJson['current_location'] != null){
+      _currentLocation = LocationEntity(
+        districtName: dataJson['current_district_name'],
+        provinceName: dataJson['current_province_name'],
+        regionName: dataJson['current_region_name'],
+        streetName: dataJson['current_street_name'],
+        latLang: LatLng(dataJson['current_location'].latitude, dataJson['current_location'].longitude)
+      );
+    }
     return PassengerEntity(
       id: dataJson['id'],
       documentId: dataJson['document_id'],
@@ -37,15 +49,10 @@ class PassengerEntity extends Equatable {
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
       seats: dataJson['seats'],
+      price: dataJson['price'],
       distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),
       distanceInMinutes: (dataJson['distance_in_minutes'] as num).toInt(),
-      currentLocation: LocationEntity(
-        districtName: dataJson['to_district_name'],
-        provinceName: dataJson['to_province_name'],
-        regionName: dataJson['to_region_name'],
-        streetName: dataJson['to_street_name'],
-        latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
-      ),
+      currentLocation: _currentLocation,
       toLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
@@ -56,55 +63,63 @@ class PassengerEntity extends Equatable {
     );
   }
   factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
+    dynamic toLocation = dataJson['to_location'];
     return PassengerEntity(
       id: dataJson['id'],
       documentId: documentId,
-      fullNames: dataJson['full_names'],
+      fullNames: dataJson['full_name'],
       fcmToken: fcmToken,
       urlImage: dataJson['url_image'],
-      seats: dataJson['seats'],
+      seats: int.parse(dataJson['seats'] as String),
+      price: dataJson['price'] ?? -1,
       distanceInMeters: 0,
       distanceInMinutes: 0,
-      currentLocation: LocationEntity(
-        districtName: dataJson['current_district_name'],
-        provinceName: dataJson['current_province_name'],
-        regionName: dataJson['current_region_name'],
-        streetName: dataJson['current_street_name'],
-        latLang: LatLng(dataJson['current_location'].latitude, dataJson['current_location'].longitude)
-      ),
+      currentLocation: null,
       toLocation: LocationEntity(
-        districtName: dataJson['to_district_name'],
-        provinceName: dataJson['to_province_name'],
-        regionName: dataJson['to_region_name'],
-        streetName: dataJson['to_street_name'],
-        latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
+        districtName: toLocation['district_name'],
+        provinceName: toLocation['province_name'],
+        regionName: toLocation['region_name'],
+        streetName: toLocation['street_name'],
+        latLang: LatLng(
+          double.parse(toLocation['latitude'] as String),
+          double.parse(toLocation['longitude'] as String)
+        )
       )
     );
   }
 
-  Map<String, dynamic> get toFirestore => {
-    'id': id,
-    'full_names': fullNames,
-    'url_image': urlImage,
-    'seats': seats,
-    'fcm_token': fcmToken,
-    'distance_in_meters': distanceInMeters,
-    'distance_in_minutes': distanceInMinutes,
-    'current_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
-    'current_district_name': toLocation.districtName,
-    'current_province_name': toLocation.provinceName,
-    'current_region_name': toLocation.regionName,
-    'current_street_name': toLocation.streetName,
-    'to_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
-    'to_district_name': toLocation.districtName,
-    'to_province_name': toLocation.provinceName,
-    'to_region_name': toLocation.regionName,
-    'to_street_name': toLocation.streetName,
-  };
+  Map<String, dynamic> get toFirestore {
+    Map<String, dynamic> struct = {
+      'id': id,
+      'full_names': fullNames,
+      'url_image': urlImage,
+      'seats': seats,
+      'fcm_token': fcmToken,
+      'distance_in_meters': distanceInMeters,
+      'distance_in_minutes': distanceInMinutes,
+      'price': price,
+      'to_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
+      'to_district_name': toLocation.districtName,
+      'to_province_name': toLocation.provinceName,
+      'to_region_name': toLocation.regionName,
+      'to_street_name': toLocation.streetName,
+    };
+    if(currentLocation != null){
+      struct['current_location'] = GeoPoint(currentLocation.latLang.latitude, currentLocation.latLang.longitude);
+      struct['current_district_name'] = currentLocation.districtName;
+      struct['current_province_name'] = currentLocation.provinceName;
+      struct['current_region_name'] = currentLocation.regionName;
+      struct['current_street_name'] = currentLocation.streetName;
+    }
+    return struct;
+  }
 
-  String get destination => toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
+  String get destination {
+    if(toLocation == null) return 'No mapeado';
+    return toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
+  }
 
-  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, String seats, String urlImage, String distanceInMinutes, String distanceInMeters}){
+  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters}){
     return PassengerEntity(
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
@@ -113,6 +128,7 @@ class PassengerEntity extends Equatable {
       toLocation: toLocation ?? this.toLocation,
       fcmToken: fcmToken ?? this.fcmToken,
       seats: seats ?? this.seats,
+      price: price ?? this.price,
       urlImage: urlImage ?? this.urlImage,
       distanceInMinutes: distanceInMinutes ?? this.distanceInMinutes,
       distanceInMeters: distanceInMeters ?? this.distanceInMeters,
@@ -125,6 +141,7 @@ class PassengerEntity extends Equatable {
       documentId: 'LGSDFbEzf4WIP5GvGgKm',
       fullNames: 'Luis Eduardo del Prado Rivadeneira',
       seats: 12,
+      price: 10,
       distanceInMeters: 2031,
       distanceInMinutes: 1200,
       currentLocation: LocationEntity(
@@ -149,5 +166,5 @@ class PassengerEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken];
+  List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken, price];
 }

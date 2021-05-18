@@ -16,21 +16,22 @@ class InterprovincialDataFirestore{
 
   Future<OnRequestAcceptedEntity> acceptRequest({@required String documentId, @required InterprovincialRequestEntity request, @required InterprovincialDataFirestoreOrigin origin}) async{
     try {
-      DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
-      PassengerEntity passenger = await serviceDataRemote.getPassengerById(request.passengerId, request.documentId, request.passengerFcmToken);
+      DocumentReference refService = firestore.collection('interprovincial_in_service').doc(documentId);
 
-      DocumentReference drPassenger = await dr.collection('passengers').add(passenger.toFirestore);
+      DocumentSnapshot snapshotService = await refService.get();
+      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
 
-      List<dynamic> result = await Future.wait([
-        dr.get(),
-        dr.collection('requests').doc(request.documentId).update({
-          'passenger_document_id': drPassenger.id,
-          'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
-        }),
-      ]);
+      PassengerEntity passenger = await serviceDataRemote.getPassengerById(interprovincialLocationDriver.serviceId, request.passengerId, request.passengerFcmToken);
+      passenger = passenger.copyWith(price: request.price);
 
-      DocumentSnapshot ds = result.first;
-      InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
+      DocumentReference drPassenger = await refService.collection('passengers').add(passenger.toFirestore);
+      passenger = passenger.copyWith(documentId: drPassenger.id);
+
+      await refService.collection('requests').doc(request.documentId).update({
+        'passenger_document_id': passenger.documentId,
+        'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.accepted),
+      });
+
       if(origin == InterprovincialDataFirestoreOrigin.client){
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken,
@@ -46,21 +47,24 @@ class InterprovincialDataFirestore{
       }
 
       int newAvailableSeats = interprovincialLocationDriver.availableSeats - request.seats;
-      await dr.update({
+      await refService.update({
         'available_seats': newAvailableSeats
       });
-      print('remote');
-      print(drPassenger.id);
+      print('..................');
+      print('1');
+      print(passenger);
+      print('..................');
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
-        passenger: passenger.copyWith(documentId: drPassenger.id)
+        passenger: passenger,
+        price: request.price
       );
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.',toastLength: Toast.LENGTH_SHORT);
+    } catch (_) {
+      Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.', toastLength: Toast.LENGTH_SHORT);
       return null;
     }
   }
-
+  //!elimnar usa ves se aya probado
   Future<bool> seeRoute({@required String documentId, @required InterprovincialRequestEntity request}) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();

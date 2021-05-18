@@ -5,12 +5,10 @@ import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +16,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
+  final String passengerDocumentId;
   final AvailableRouteEntity availablesRoutesEntity;
-  final LocationEntity currenActual;
-  final InterprovincialRequestEntity interprovincialRequest;
+  final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.currenActual, @required this.availablesRoutesEntity,@required this.interprovincialRequest}) : super(key: key);
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -41,7 +39,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   StreamSubscription subscription;
   
   @override
-  void initState() { 
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
@@ -97,7 +95,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
     _markers[markerPassenger.markerId] = markerPassenger;
     DataInterprovincialClientState param = BlocProvider.of<InterprovincialClientBloc>(context).state;
+    print('###################');
     print(param.passengerDocumentId );
+    print('###################');
     double distanceInMeters = LocationUtil.calculateDistance(_passengerLocation.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: param.passengerDocumentId, distanceInMeters: distanceInMeters);
   }
@@ -126,7 +126,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           top: 400,
           right: 15,
           left: 15,
-          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,interprovincialRequest: widget.interprovincialRequest,)
+          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
         ),
       ],
     );
@@ -135,8 +135,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
 
 class CardAvailiblesRoutes extends StatelessWidget {
   final AvailableRouteEntity availablesRoutesEntity;
-  final InterprovincialRequestEntity interprovincialRequest;
-  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.interprovincialRequest}) : super(key: key);
+  final double price;
+  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.price}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -158,28 +158,28 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   )
                 ),
                 SizedBox(width: 10),
-                Text('S/.' + interprovincialRequest.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('S/.' + price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(4),
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  width: 90,
-                  decoration: BoxDecoration(
-                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(width: 10,),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.all(4),
+            //       margin: EdgeInsets.symmetric(vertical: 5),
+            //       width: 90,
+            //       decoration: BoxDecoration(
+            //         color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+            //         borderRadius: BorderRadius.circular(5),
+            //       ),
+            //       child: Text(
+            //         availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+            //         style: TextStyle(color: Colors.white, fontSize: 12),
+            //         textAlign: TextAlign.center,
+            //       ),
+            //     ),
+            //     SizedBox(width: 10,),
+            //   ],
+            // ),
             Row(
               children: [
                 Icon(Icons.person, color: Colors.black87),

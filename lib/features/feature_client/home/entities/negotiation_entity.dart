@@ -1,3 +1,4 @@
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -7,6 +8,8 @@ class NegotiationEntity extends Equatable{
   final double cost;
   final String passengerId;
   final String requestDocumentId;
+  final LocationEntity from;
+  final LocationEntity to;
 
   NegotiationEntity( {
     @required this.serviceId,
@@ -14,6 +17,8 @@ class NegotiationEntity extends Equatable{
     this.cost,
     @required this.passengerId ,
     @required this.requestDocumentId,
+    this.from,
+    this.to
   });
 
   Map<String, dynamic> get toMap => {
@@ -22,8 +27,10 @@ class NegotiationEntity extends Equatable{
     'cost': cost,
     'passenger_id': passengerId,
     'request_document_id': requestDocumentId,
+    'from': from,
+    'to': to,
   };
 
   @override
-  List<Object> get props => [serviceId, seating, cost, passengerId, ];
+  List<Object> get props => [serviceId, seating, cost, passengerId,from, to ];
 }

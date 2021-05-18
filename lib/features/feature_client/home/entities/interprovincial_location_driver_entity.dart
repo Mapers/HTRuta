@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 class InterprovincialLocationDriverEntity extends Equatable{
   final String fcmToken;
   final String status;
+  final String serviceId;
   final int availableSeats;
   final LocationEntity location;
 
@@ -15,6 +16,7 @@ class InterprovincialLocationDriverEntity extends Equatable{
     @required this.status,
     @required this.availableSeats,
     @required this.location,
+    @required this.serviceId,
   });
 
   factory InterprovincialLocationDriverEntity.fromJson(Map<String, dynamic> dataJson){
@@ -22,6 +24,7 @@ class InterprovincialLocationDriverEntity extends Equatable{
     return InterprovincialLocationDriverEntity(
       availableSeats: dataJson['available_seats'],
       fcmToken: dataJson['fcm_token'],
+      serviceId: dataJson['service_id'],
       location: LocationEntity(
         districtName: dataJson['district_name'],
         provinceName: dataJson['province_name'],
@@ -34,5 +37,5 @@ class InterprovincialLocationDriverEntity extends Equatable{
   }
 
   @override
-  List<Object> get props => [ fcmToken, status, availableSeats, location ];
+  List<Object> get props => [ fcmToken, status, availableSeats, location, serviceId ];
 }
