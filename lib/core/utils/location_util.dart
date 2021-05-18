@@ -48,8 +48,7 @@ class LocationUtil {
 
   void disposeListener() => subscription?.cancel();
 
-  /// In kilometers
-  static double calculateDistance(LatLng from, LatLng to){
+  static double calculateDistanceInKilometers(LatLng from, LatLng to){
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 - c((to.latitude - from.latitude) * p)/2 +
@@ -58,13 +57,17 @@ class LocationUtil {
     return 12742 * asin(sqrt(a));
   }
 
+  static double calculateDistanceInMeters(LatLng from, LatLng to){
+    return calculateDistanceInKilometers(from, to) * 1000;
+  }
+
   /// In kilometers
   static double calculateDistanceInListPoints(List<LatLng> list){
     List<LatLng> _list = [...list];
     double distance = 0;
     if(list.isEmpty || list.length == 1) return 0;
     do {
-      distance += calculateDistance(_list.first, _list[1]);
+      distance += calculateDistanceInKilometers(_list.first, _list[1]);
       _list.removeAt(0);
     } while (_list.length != 1);
     return distance;

@@ -98,7 +98,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     print('###################');
     print(widget.passengerDocumentId );
     print('###################');
-    double distanceInMeters = LocationUtil.calculateDistance(_passengerLocation.latLang, _driverLocation.latLang);
+    double distanceInMeters = LocationUtil.calculateDistanceInMeters(_passengerLocation.latLang, _driverLocation.latLang);
     currenActual = _passengerLocation;
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
   }
