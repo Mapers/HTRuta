@@ -7,6 +7,7 @@ import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/comment_user_dialog.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
@@ -89,7 +90,7 @@ class _TravelScreenState extends State<TravelScreen> {
       if (!mounted) return;
       if(newCancel == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-        if(idSolicitud == pedidoProvider.request.idSolicitud){
+        if(idSolicitud == pedidoProvider.idSolicitud){
           Fluttertoast.showToast(
             msg: 'Se canceló una solicitud de viaje',
             toastLength: Toast.LENGTH_LONG,
@@ -108,7 +109,12 @@ class _TravelScreenState extends State<TravelScreen> {
       }
       if(travelFinish == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-        if(idSolicitud == pedidoProvider.request.idSolicitud){
+        if(idSolicitud == pedidoProvider.idSolicitud){
+          await showDialog(
+            context: context,
+            barrierDismissible: false,
+            child: CommentUserDialog()
+          );
           /* Fluttertoast.showToast(
             msg: 'El viaje ha concluido',
             toastLength: Toast.LENGTH_LONG,
@@ -118,8 +124,8 @@ class _TravelScreenState extends State<TravelScreen> {
             textColor: Colors.white,
             fontSize: 16.0
           ); */
+          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
         }
-        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
       }
     });
     // showPersBottomSheetCallBack = _showBottomSheet;

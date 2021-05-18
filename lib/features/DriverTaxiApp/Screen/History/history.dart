@@ -126,7 +126,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Text('Trabajo',style: heading18,),
+                                  Text('Viajes',style: heading18,),
                                   Text('20',style: headingWhite,)
                                 ],
                               )

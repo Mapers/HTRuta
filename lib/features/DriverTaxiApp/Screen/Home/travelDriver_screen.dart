@@ -457,7 +457,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
                           onPressed: (){
                             PushMessage pushMessage = getIt<PushMessage>();
                             Map<String, String> data = {
-                              'travelFinish' : '1'
+                              'travelFinish' : '1',
+                              'idSolicitud': pedidoProvider.request.idSolicitud
                             };
                             pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
                             Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);

@@ -151,6 +151,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
+      if(!mounted) return;
       setState(() {
         _placemark = pos.name + ', ' + pos.thoroughfare;
       });
@@ -206,6 +207,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
+    if(!mounted) return;
     setState(() {
       _markers[markerId] = marker;
     });
