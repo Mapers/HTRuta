@@ -69,6 +69,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       interprovincialClientDataLocal.saveDocumentIdOnServiceInterprovincial(widget.documentId);
 
       _locationUtil.initListener(listen: (_locationPassenger){
+        currenActual = _locationPassenger;
         subscription ??= interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
           Marker markerDrive = MapViewerUtil.generateMarker(
             latLng: interprovincialLocationDriver.location.latLang,
@@ -79,7 +80,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             }
           );
           _markers[markerDrive.markerId] = markerDrive;
-          _updateMarkerCurrentPosition(_locationPassenger, interprovincialLocationDriver.location);
+          _updateMarkerCurrentPosition(interprovincialLocationDriver.location);
           setState(() {});
         });
       });
@@ -87,10 +88,10 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     });
     super.initState();
   }
-  void _updateMarkerCurrentPosition(LocationEntity _passengerLocation, LocationEntity _driverLocation) async{
+  void _updateMarkerCurrentPosition(LocationEntity _driverLocation) async{
   
     Marker markerPassenger = MapViewerUtil.generateMarker(
-      latLng: _passengerLocation.latLang,
+      latLng: currenActual.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon
     );
@@ -98,8 +99,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     print('###################');
     print(widget.passengerDocumentId );
     print('###################');
-    double distanceInMeters = LocationUtil.calculateDistanceInMeters(_passengerLocation.latLang, _driverLocation.latLang);
-    currenActual = _passengerLocation;
+    double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
   }
 

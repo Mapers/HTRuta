@@ -57,9 +57,7 @@ class LocationUtil {
     return 12742 * asin(sqrt(a));
   }
 
-  static double calculateDistanceInMeters(LatLng from, LatLng to){
-    return calculateDistanceInKilometers(from, to) * 1000;
-  }
+  static double calculateDistanceInMeters(LatLng from, LatLng to) => calculateDistanceInKilometers(from, to) * 1000;
 
   /// In kilometers
   static double calculateDistanceInListPoints(List<LatLng> list){
