@@ -91,7 +91,7 @@ class PassengerEntity extends Equatable {
           double.parse(toLocation['longitude'] as String)
         )
       ),
-      status: getPassengerStatusFromString(dataJson['status'])
+      status: null
     );
   }
 

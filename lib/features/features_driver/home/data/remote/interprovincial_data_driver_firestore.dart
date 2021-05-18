@@ -115,7 +115,7 @@ class InterprovincialDataDriverFirestore{
 
   Stream<List<PassengerEntity>> getStreamActivePassengers({@required String documentId}){
     return firestore.collection('interprovincial_in_service').doc(documentId)
-    .collection('passengers').snapshots()
+    .collection('passengers').where('status', isEqualTo: getPassengerStatusFromEnum(PassengerStatus.actived)).snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
       querySnapshot.docs.map<PassengerEntity>((doc) => PassengerEntity.fromQueryDocumentSnapshot(doc)).toList()
     );

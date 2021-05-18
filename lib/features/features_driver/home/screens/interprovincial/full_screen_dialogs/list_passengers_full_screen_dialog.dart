@@ -1,7 +1,6 @@
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/core/utils/extensions/double_extension.dart';
-import 'package:HTRuta/core/utils/extensions/int_extension.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
