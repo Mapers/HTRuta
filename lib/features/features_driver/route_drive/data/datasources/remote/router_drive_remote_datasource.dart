@@ -16,7 +16,7 @@ class RouterDriveRemoteDataSoruce {
         'user_id': _prefs.idChofer,
       }
     );
-
+    
     if(result.success) return InterprovincialRouteEntity.fromListJson(result.data);
 
     return [];
@@ -27,13 +27,16 @@ class RouterDriveRemoteDataSoruce {
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/create',
       data: {
-        'user_id': _prefs.idChofer,
+        'user_id': null,
         'name':interprovincialRoute.name,
         'from': interprovincialRoute.from.toMap,
         'to': interprovincialRoute.to.toMap,
         'cost': interprovincialRoute.cost,
       }
     );
+    print( result.data );
+    print( result.error );
+    print( result.success);
     if(!result.success){
       print('mensaje de error');
     }
@@ -51,8 +54,6 @@ class RouterDriveRemoteDataSoruce {
         'cost': interprovincialRoute.cost,
       }
     );
-    print(result.success);
-    print(result.error);
   }
   Future<void> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
     await _prefs.initPrefs();
@@ -63,8 +64,6 @@ class RouterDriveRemoteDataSoruce {
         'id': interprovincialRoute.id,
       }
     );
-    print(result.success);
-    print(result.error);
   }
 
 }

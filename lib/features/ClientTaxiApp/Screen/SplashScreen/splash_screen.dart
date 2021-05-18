@@ -115,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   //   }
   // }
   void _sendToPage() async{
-    ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>(); 
+    ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
     if(serviceInCourse == null){
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
