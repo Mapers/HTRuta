@@ -38,7 +38,6 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        
         child: Form(
           key: formKey,
           child: Center(
@@ -103,14 +102,14 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
                           formKey.currentState.save();
                           QualificationEntity qualification = QualificationEntity(
                             passenger_id: int.parse(user.id),
-                            service_id: int.parse(_prefs.service_id),
+                            service_id: int.parse(widget.availablesRoutesEntity.id),
                             qualifying_person: TypeEntityEnum.passenger ,
                             comment: commenctary,
                             starts: numberStart,
                           );
                           BlocProvider.of<InterprovincialClientBloc>(context).add(SendQualificationInterprovincialClientEvent(qualificationEntity: qualification ));
                           showDialog(
-                            barrierDismissible: false,
+                            // barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return AlertDialog(
@@ -121,10 +120,15 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
                                     PrincipalButton(
                                       width: 200,
                                       text: 'Aceptar',
-                                      onPressed: (){
-                                        interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
-                                        BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
-                                        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                                      onPressed: ()async{
+                                        bool deletePaggenger = await interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
+                                        print('###################');
+                                        print(deletePaggenger);
+                                        print('###################');
+                                        if(deletePaggenger){
+                                          BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
+                                          Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                                        }
                                       }
                                     ),
                                   ],
