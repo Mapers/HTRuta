@@ -117,11 +117,7 @@ class InterprovincialDataDriverFirestore{
     return firestore.collection('interprovincial_in_service').doc(documentId)
     .collection('passengers').snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
-      querySnapshot.docs.map<PassengerEntity>((doc){
-        final data = doc.data();
-        data['document_id'] = doc.id;
-        return PassengerEntity.fromJsonFirestore(data);
-      }).toList()
+      querySnapshot.docs.map<PassengerEntity>((doc) => PassengerEntity.fromQueryDocumentSnapshot(doc)).toList()
     );
   }
 

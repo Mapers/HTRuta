@@ -85,7 +85,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
               child: Column(
                 children: [
                   Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
-                  Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
+                  // Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
                 ],
               ),
             ),
