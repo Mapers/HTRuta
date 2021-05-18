@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
@@ -98,12 +99,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
     bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
     if(passengerStatus){
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Hola compa'),
-        ),
-      );
+      Navigator.of(context).pushAndRemoveUntil(Routes.toQualificationClientPage(  documentId:widget.documentId ,passengerId:widget.passengerDocumentId ,availablesRoutesEntity: widget.availablesRoutesEntity ) , (_) => false);
     }
   }
 
