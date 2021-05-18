@@ -47,8 +47,8 @@ class PassengerEntity extends Equatable {
       );
     }
     return PassengerEntity(
-      id: queryDocumentSnapshot.id,
-      documentId: dataJson['document_id'],
+      id: dataJson['id'],
+      documentId: queryDocumentSnapshot.id,
       fullNames: dataJson['full_names'],
       fcmToken: dataJson['fcm_token'],
       urlImage: dataJson['url_image'],
