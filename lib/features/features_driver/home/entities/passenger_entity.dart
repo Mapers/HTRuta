@@ -196,7 +196,7 @@ enum PassengerStatus {
 String getPassengerStatusFromEnum(PassengerStatus status){
   switch (status) {
     case PassengerStatus.actived:
-    return 'ACTIDED';
+    return 'ACTIVED';
     case PassengerStatus.deleted:
     return 'DELETED';
   }
@@ -205,7 +205,7 @@ String getPassengerStatusFromEnum(PassengerStatus status){
 
 PassengerStatus getPassengerStatusFromString(String status){
   switch (status) {
-    case 'ACTIDED':
+    case 'ACTIVED':
     return PassengerStatus.actived;
     case 'DELETED':
     return PassengerStatus.deleted;
