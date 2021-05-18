@@ -21,7 +21,6 @@ class PassengerEntity extends Equatable {
     @required this.id,
     @required this.documentId,
     @required this.fullNames,
-    @required this.currentLocation,
     @required this.toLocation,
     @required this.fcmToken,
     @required this.seats,
@@ -29,9 +28,20 @@ class PassengerEntity extends Equatable {
     @required this.price,
     @required this.distanceInMinutes,
     @required this.distanceInMeters,
+    this.currentLocation
   });
 
   factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
+    LocationEntity _currentLocation;
+    if(dataJson['current_location'] != null){
+      _currentLocation = LocationEntity(
+        districtName: dataJson['current_district_name'],
+        provinceName: dataJson['current_province_name'],
+        regionName: dataJson['current_region_name'],
+        streetName: dataJson['current_street_name'],
+        latLang: LatLng(dataJson['current_location'].latitude, dataJson['current_location'].longitude)
+      );
+    }
     return PassengerEntity(
       id: dataJson['id'],
       documentId: dataJson['document_id'],
@@ -42,13 +52,7 @@ class PassengerEntity extends Equatable {
       price: dataJson['price'],
       distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),
       distanceInMinutes: (dataJson['distance_in_minutes'] as num).toInt(),
-      currentLocation: LocationEntity(
-        districtName: dataJson['to_district_name'],
-        provinceName: dataJson['to_province_name'],
-        regionName: dataJson['to_region_name'],
-        streetName: dataJson['to_street_name'],
-        latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
-      ),
+      currentLocation: _currentLocation,
       toLocation: LocationEntity(
         districtName: dataJson['to_district_name'],
         provinceName: dataJson['to_province_name'],
