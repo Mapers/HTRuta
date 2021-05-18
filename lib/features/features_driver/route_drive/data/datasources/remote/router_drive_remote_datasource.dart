@@ -34,27 +34,10 @@ class RouterDriveRemoteDataSoruce {
     };
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/create',
-<<<<<<< HEAD
-      data: {
-        'user_id': null,
-        'name':interprovincialRoute.name,
-        'from': interprovincialRoute.from.toMap,
-        'to': interprovincialRoute.to.toMap,
-        'cost': interprovincialRoute.cost,
-      }
-    );
-    print( result.data );
-    print( result.error );
-    print( result.success);
-    if(!result.success){
-      print('mensaje de error');
-    }
-=======
       data: data
     );
     if(result.success) return;
     Fluttertoast.showToast(msg: 'Error: ${result.error}', toastLength: Toast.LENGTH_SHORT);
->>>>>>> b8d54a6b13a0635a543f0073647b53ffb4447717
   }
 
   Future<void> editListRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
@@ -70,11 +53,8 @@ class RouterDriveRemoteDataSoruce {
         'cost': interprovincialRoute.cost,
       }
     );
-<<<<<<< HEAD
-=======
     if(result.success) return;
     Fluttertoast.showToast(msg: 'Error: ${result.error}', toastLength: Toast.LENGTH_SHORT);
->>>>>>> b8d54a6b13a0635a543f0073647b53ffb4447717
   }
 
   Future<void> deleteRouterDrives({InterprovincialRouteEntity interprovincialRoute} ) async{
@@ -86,10 +66,7 @@ class RouterDriveRemoteDataSoruce {
         'id': interprovincialRoute.id,
       }
     );
-<<<<<<< HEAD
-=======
     if(result.success) return;
     Fluttertoast.showToast(msg: 'Error: ${result.error}', toastLength: Toast.LENGTH_SHORT);
->>>>>>> b8d54a6b13a0635a543f0073647b53ffb4447717
   }
 }
