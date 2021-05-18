@@ -43,18 +43,16 @@ class InterprovincialClientDataFirebase {
   
   Future<String> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
-      String message = 'Solicitud rechazada';
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequest = await dr.collection('requests').doc(request.documentId);
       dRequest.delete();
       DocumentSnapshot  ds = await dr.get();
       DocumentSnapshot  dsRequest = await dr.get();
-      print(dsRequest.data()['passenger_document_id'] );
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(notificationLaunch){
         pushMessage.sendPushMessage(
           token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
-          title: message,
+          title: 'Solicitud rechazada',
           description: 'Revise las solicitudes'
         );
       }

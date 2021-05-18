@@ -75,8 +75,8 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(passenger.currentLocation.streetName, style: TextStyle(fontSize: 13)),
-                  Text(passenger.currentLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                  Text(passenger.currentLocation?.streetName ?? 'Sin mapear', style: TextStyle(fontSize: 13)),
+                  Text(passenger.currentLocation?.addressAdministrative ?? 'Esperando información...', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
                 ],
               ),
             ),
