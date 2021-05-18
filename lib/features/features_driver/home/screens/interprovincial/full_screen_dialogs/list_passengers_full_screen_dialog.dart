@@ -172,7 +172,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     InterprovincialDriverDataRemote interprovincialDriverDataRemote = getIt<InterprovincialDriverDataRemote>();
     _loadingFullScreen.show(context, label: 'Liberando asientos...');
     int newAvailableSeats = await interprovincialDataFirestore.releaseSeatsFromPasenger(documentId: widget.documentId, passenger: passenger);
-    interprovincialDriverDataRemote.releaseSeats(serviceId: widget.serviceId);
+    interprovincialDriverDataRemote.releaseSeats(serviceId: widget.serviceId, seats: passenger.seats);
     _loadingFullScreen.close();
     if(newAvailableSeats == null){
       return;
