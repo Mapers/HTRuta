@@ -16,7 +16,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
     InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
     return Positioned(
       right: 10,
-      top: 200,
+      top: 220,
       child: Column(
         children: [
           StreamBuilder<List<PassengerEntity>>(

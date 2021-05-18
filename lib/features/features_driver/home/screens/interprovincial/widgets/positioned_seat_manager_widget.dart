@@ -31,7 +31,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                   child: OutlineButton.icon(
                     icon: Icon(Icons.exposure_minus_1),
                     label: Expanded(
-                      child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                      child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 11)),
                     ),
                     onPressed: (){
                       BlocProvider.of<InterprovincialDriverBloc>(context).add(MinusOneAvailableSeatInterprovincialDriverEvent());
@@ -66,7 +66,7 @@ class PositionedSeatManagerWidget extends StatelessWidget {
                   child: OutlineButton.icon(
                     icon: Icon(Icons.exposure_plus_1),
                     label: Expanded(
-                      child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                      child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 11)),
                     ),
                     onPressed: (){
                       //! Se requiere tener el maximo de total de asientos

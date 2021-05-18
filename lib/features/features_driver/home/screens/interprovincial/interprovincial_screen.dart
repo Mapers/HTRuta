@@ -9,7 +9,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/wid
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/routes_interprovincial_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:HTRuta/injection_container.dart' as ij;
+import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown_driver.dart';
 
 class InterprovincialScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ij.getIt<InterprovincialDriverLocationBloc>(),
+      create: (_) => getIt<InterprovincialDriverLocationBloc>(),
       child: Stack(
         alignment: Alignment.center,
         children: [

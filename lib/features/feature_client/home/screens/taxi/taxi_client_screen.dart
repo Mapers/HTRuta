@@ -25,7 +25,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/google_map_helper.dart';
 
-
 class TaxiClientScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
   final ClientTaxiPlaceBloc placeBloc;

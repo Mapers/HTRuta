@@ -258,7 +258,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
 
   void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request, String  passengerDocumentId ) async {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-    String passengerDocumentID =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
+    String passengerDocumentID =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(widget.availablesRoutesEntity.documentId, availablesRoutesEntity: widget.availablesRoutesEntity, price: request.price,passengerDocumentId: passengerDocumentId ??passengerDocumentID,)), (_) => false);
   }
 }

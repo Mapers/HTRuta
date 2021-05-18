@@ -29,10 +29,6 @@ class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
     Offset offset = renderBox.localToGlobal(Offset.zero);
     xPosition = offset.dx;
     yPosition = offset.dy;
-    print(height);
-    print(width);
-    print(xPosition);
-    print(yPosition);
   }
 
   OverlayEntry _createFloatingDropdown() {
@@ -41,12 +37,10 @@ class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
         left: xPosition,
         width: width,
         top: yPosition + height,
-        // height: 4 * height + 40,
         child: DropDown(
           itemHeight: height,
           onItemSelected: (TypeServiceEnum selectedValue){
             BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: selectedValue));
-            print(selectedValue);
             setState(() {
               if (isDropdownOpened) {
                 floatingDropdown.remove();
@@ -103,7 +97,7 @@ class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
                 children: <Widget>[
                   Text(
                     getTextByTypeServiceEnum(data.typeService),
-                    style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+                    style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w400),
                   ),
                   Spacer(),
                   Icon(

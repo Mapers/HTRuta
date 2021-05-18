@@ -55,7 +55,7 @@ class InterprovincialDataFirestore{
         passenger: passenger,
         price: request.price
       );
-    } catch (e, _) {
+    } catch (_) {
       Fluttertoast.showToast(msg: 'No se pudo aceptar la solicitud.', toastLength: Toast.LENGTH_SHORT);
       return null;
     }
