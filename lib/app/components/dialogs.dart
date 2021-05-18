@@ -73,6 +73,43 @@ class Dialogs{
       btnOkOnPress: onConfirm,
     )..show();
   }
+  static void success(BuildContext context, {title = '', message= '', VoidCallback onCancel, VoidCallback onConfirm, String textoConfirmar='Ok', String textoCancelar = 'Cancelar'}){
+    /* showDialog(
+      context: context,
+      builder: (context){
+        return CupertinoAlertDialog(
+          title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0)),
+          content: Text(message, style: TextStyle(fontWeight: FontWeight.w300, fontSize: 15.0)),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: onConfirm,
+              child: Text('Ok'),
+            ),
+            CupertinoDialogAction(
+              onPressed: onCancel,
+              child: Text('Cancel',style: TextStyle(color: Colors.redAccent),),
+            ),
+          ],
+        );
+      }
+    ); */
+    AwesomeDialog(
+      context: context,
+      borderSide: BorderSide(color: Colors.green, width: 2),
+      width: MediaQuery.of(context).size.width * 0.8,
+      dialogType: DialogType.SUCCES,
+      buttonsBorderRadius: BorderRadius.all(Radius.circular(2)),
+      headerAnimationLoop: true,
+      animType: AnimType.BOTTOMSLIDE,
+      title: title,
+      desc: message,
+      btnOkText: 'Ok',
+      btnCancelText: 'Cancel',
+      showCloseIcon: true,
+      btnCancelOnPress: onCancel,
+      btnOkOnPress: onConfirm,
+    )..show();
+  }
 
   static void openLoadingDialog(BuildContext context) {
     final responsive = Responsive(context);

@@ -1,4 +1,8 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
@@ -14,18 +18,9 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
 
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
-  bool efectivo = false;
+  List<PaymentMethod> paymentMethodsLoaded;
 
-  bool plin = false;
-
-  bool yape = false;
-
-  bool pos = false;
-
-  bool agora = false;
-
-  bool bitcoin = false;
-
+  final pickupApi = PickupApi();
   @override
   Widget build(BuildContext context) {
     return SideMenu(
@@ -46,154 +41,99 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
             },
           ),
         ),
-        body: ListView(
-          children: [
-            Container(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/money.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: efectivo,
-                onChanged: (bool newValue){
-                  efectivo = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('Efectivo')
-            ),
-            Divider(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/plin.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: plin,
-                onChanged: (bool newValue){
-                  plin = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('Plin')
-            ),
-            Divider(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/yape.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: yape,
-                onChanged: (bool newValue){
-                  yape = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('Yape')
-            ),
-            Divider(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/credit-card.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: pos,
-                onChanged: (bool newValue){
-                  pos = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('POS')
-            ),
-            Divider(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/bitcoin.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: bitcoin,
-                onChanged: (bool newValue){
-                  bitcoin = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('Bitcoin')
-            ),
-            Divider(height: 50),
-            ListTile(
-              leading: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/agora.png')
-                  )
-                ),
-              ),
-              trailing: Checkbox(
-                value: agora,
-                onChanged: (bool newValue){
-                  agora = newValue;
-                  setState(() {});
-                },
-              ),
-              title: Text('Agora')
-            ),
-            Divider(height: 50),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.6,
-              child: MaterialButton(
-                onPressed: (){},
-                elevation: 0.2,
-                minWidth: MediaQuery.of(context).size.width * 0.6,
-                color: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)
-                ),
-                child: Text('Guardar', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Divider(height: 50),
-          ],
-        )
+        body: paymentMethodsLoaded == null ? FutureBuilder(
+          future: pickupApi.getDriverPaymentMethod('27'),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasError) return Container();
+            switch(snapshot.connectionState){
+              case ConnectionState.waiting: return Container();
+              case ConnectionState.none: return Container();
+              case ConnectionState.active: {
+                paymentMethodsLoaded = snapshot.data;
+                return createFutureContent(snapshot.data);
+              }
+              case ConnectionState.done: {
+                paymentMethodsLoaded = snapshot.data;
+                return createFutureContent(snapshot.data);
+              }
+            }
+            return Container();
+          }
+        ) : createFutureContent(paymentMethodsLoaded)
       ),
+    );
+  }
+  Widget createFutureContent(List<PaymentMethod> paymentMethods){
+    if(paymentMethods.isEmpty) return Container();
+    List<Widget> elements = [];
+    for(PaymentMethod paymentMethod in paymentMethods){
+      elements.addAll([
+        Container(height: 50),
+        ListTile(
+          leading: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: NetworkImage(paymentMethod.rRuta)
+              )
+            ),
+          ),
+          trailing: Checkbox(
+            value: paymentMethod.selected == 'true',
+            onChanged: (bool newValue){
+              paymentMethod.selected = newValue.toString();
+              setState(() {});
+            },
+          ),
+          title: Text(paymentMethod.nNombre)
+        ),
+      ]);
+    }
+    elements.addAll([
+      Divider(height: 50),
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
+        height: 50,
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: MaterialButton(
+          onPressed: () async {
+            List<int> paymentMethodsSelected = [];
+            for(PaymentMethod paymentMethod in paymentMethodsLoaded){
+              if(paymentMethod.selected == 'true'){
+                paymentMethodsSelected.add(int.parse(paymentMethod.iId));
+              }
+            }
+            if(paymentMethodsSelected.isEmpty){
+              Dialogs.alert(context, title: 'Atención', message: 'Seleccione al menos un método de pago');
+              return;
+            }
+            SaveDriverPmBody body = SaveDriverPmBody(
+              choferId: 27,
+              arrFormaPagoIds: paymentMethodsSelected
+            );
+            bool success = await pickupApi.saveDriverPaymentMethods(body);
+            if(!success){
+              Dialogs.alert(context, title: 'Ha ocurrido un error', message: 'Inténtelo más tarde');
+            }else{
+              Dialogs.success(context, title: 'Correcto', message: 'Sus métodos han sido guardados');
+            }
+          },
+          elevation: 0.2,
+          minWidth: MediaQuery.of(context).size.width * 0.6,
+          color: primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50)
+          ),
+          child: Text('Guardar', style: TextStyle(color: Colors.white)),
+        ),
+      ),
+      Divider(height: 50),
+    ]);
+
+    return ListView(
+      children: elements,
     );
   }
 }

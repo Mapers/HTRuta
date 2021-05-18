@@ -7,7 +7,9 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_response.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -179,6 +181,37 @@ class PickupApi{
       return responseData.success;
     } catch(error){
       throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<List<PaymentMethod>> getDriverPaymentMethod(String idChofer)async{
+    final url = '${Config.nuevaRutaApi}/chofer/metodo-pago/informacion?choferId=$idChofer';
+    try{
+      final response = await http.get(url);
+      final responseData = driverPaymentMethodFromJson(response.body);
+      if(responseData.success){
+        return responseData.data;
+      }else{
+        throw Exception();
+      }
+    } catch(error){
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<bool> saveDriverPaymentMethods(SaveDriverPmBody body)async{
+    final url = '${Config.nuevaRutaApi}/chofer/metodo-pago/actualizar';
+    try{
+      final response = await http.post(
+        url, 
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body : saveDriverPmBodyToJson(body)
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        return false;
+      }
+    } catch(error){
+      return false;
     }
   }
 }
