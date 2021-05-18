@@ -31,7 +31,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
         title: Text('Pasajeros'),
       ),
       body: StreamBuilder<List<PassengerEntity>>(
-        stream: interprovincialDataFirestore.getStreamPassengers(documentId: widget.documentId),
+        stream: interprovincialDataFirestore.getStreamActivePassengers(documentId: widget.documentId),
         builder: (ctx, asyncSnapshot){
           if(asyncSnapshot.connectionState == ConnectionState.active){
             List<PassengerEntity> passengers = asyncSnapshot.data;
@@ -173,7 +173,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
     InterprovincialDriverDataRemote interprovincialDriverDataRemote = getIt<InterprovincialDriverDataRemote>();
     _loadingFullScreen.show(context, label: 'Liberando asientos...');
     int newAvailableSeats = await interprovincialDataFirestore.releaseSeatsFromPasenger(documentId: widget.documentId, passenger: passenger);
-    interprovincialDriverDataRemote.releaseSeats(passengerId: passenger.id, serviceId: widget.serviceId);
+    interprovincialDriverDataRemote.releaseSeats(serviceId: widget.serviceId);
     _loadingFullScreen.close();
     if(newAvailableSeats == null){
       return;

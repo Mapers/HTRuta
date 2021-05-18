@@ -42,7 +42,7 @@ class LocationUtil {
           regionName: pos.administrativeArea
         );
       }
-      listen(locationEntity);
+      listen(locationEntity.formatNames);
     });
   }
 

@@ -78,7 +78,7 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
         provinceName: placemark.subAdministrativeArea ,
         districtName: placemark.locality ,
         streetName: placemark.thoroughfare
-      );
+      ).formatNames;
       Marker marker = MapViewerUtil.generateMarker(
         latLng: to.latLang ,
         nameMarkerId: 'DESTINATIPN_POSITION_MARKER',

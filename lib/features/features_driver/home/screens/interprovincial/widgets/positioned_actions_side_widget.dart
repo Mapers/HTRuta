@@ -20,7 +20,7 @@ class PositionedActionsSideWidget extends StatelessWidget {
       child: Column(
         children: [
           StreamBuilder<List<PassengerEntity>>(
-            stream: interprovincialDataFirestore.getStreamPassengers(documentId: documentId),
+            stream: interprovincialDataFirestore.getStreamActivePassengers(documentId: documentId),
             builder: (ctx, asyncSnapshot){
               if(asyncSnapshot.connectionState == ConnectionState.active){
                 int length = asyncSnapshot.data.length;

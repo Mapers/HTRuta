@@ -113,7 +113,7 @@ class InterprovincialDataDriverFirestore{
     }
   }
 
-  Stream<List<PassengerEntity>> getStreamPassengers({@required String documentId}){
+  Stream<List<PassengerEntity>> getStreamActivePassengers({@required String documentId}){
     return firestore.collection('interprovincial_in_service').doc(documentId)
     .collection('passengers').snapshots()
     .map<List<PassengerEntity>>((querySnapshot) =>
@@ -145,7 +145,9 @@ class InterprovincialDataDriverFirestore{
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       List<dynamic> result = await Future.wait([
         dr.get(),
-        dr.collection('passengers').doc(passenger.documentId).delete()
+        dr.collection('passengers').doc(passenger.documentId).update({
+          'status': getPassengerStatusFromEnum(PassengerStatus.deleted)
+        })
       ]);
       DocumentSnapshot ds = result.first;
       int newAvailableSeats = ds.data()['available_seats'] + passenger.seats;
