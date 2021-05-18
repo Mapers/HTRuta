@@ -56,9 +56,6 @@ class InterprovincialClientDataFirebase {
           description: 'Revise las solicitudes'
         );
       }
-      print('..................');
-      print(dsRequest.data()['passenger_document_id']);
-      print('..................');
       return dsRequest.data()['passenger_document_id'];
     } catch (e) {
       print(e.toString());
@@ -89,6 +86,12 @@ class InterprovincialClientDataFirebase {
     );
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
+  }
+
+  Future<bool> seePassengerStatus({@required String documentId, @required String passengerDocumentId}) async{
+    DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
+   
+    return false;
   }
 
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{

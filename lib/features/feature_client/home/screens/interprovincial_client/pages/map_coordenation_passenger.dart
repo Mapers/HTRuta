@@ -94,11 +94,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       icon: currentPinLocationIcon
     );
     _markers[markerPassenger.markerId] = markerPassenger;
-    print('###################');
-    print(widget.passengerDocumentId );
-    print('###################');
     double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
+    
   }
 
   @override

@@ -121,6 +121,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
+    print('###################');
+    print( serviceInCourse.entityType );
+    print( serviceInCourse.passengerDocumentId );
+    print( serviceInCourse.requestDocumentId );
+    print( serviceInCourse.serviceType );
+    print( serviceInCourse.serviceDocumentId );
+    print('###################');
 
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
@@ -165,36 +172,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Stack(
         fit: StackFit.expand,
         children: [
-          /* Transform.scale(
-            scale: MediaQuery.of(context).size.aspectRatio /
-              _controller.value.aspectRatio,
-            child: Center(
-              child: Container(
-              child: _controller.value.initialized
-                ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: VideoPlayer(_controller)
-                  ),
-                )
-                : AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: Container(
-                    child: Image.asset(
-                      'assets/first_frame.jpg',
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                    )
-                    ),
-                  )
-              ),
-            ),
-          ), */
           SizedBox.expand(
             child: FittedBox(
               fit: BoxFit.cover,

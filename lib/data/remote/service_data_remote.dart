@@ -20,6 +20,10 @@ class ServiceDataRemote{
     try{
       final user = await _session.get();
       await _prefs.initPrefs();
+      print('..................');
+      print( _prefs.idChofer );
+      print( user.id );
+      print('..................');
       dynamic data = {
         'driver_id': _prefs.idChofer,
         'passenger_id': user.id,
