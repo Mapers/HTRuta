@@ -96,7 +96,15 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     _markers[markerPassenger.markerId] = markerPassenger;
     double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
-    
+    bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
+    if(passengerStatus){
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Hola compa'),
+        ),
+      );
+    }
   }
 
   @override

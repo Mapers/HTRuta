@@ -2,6 +2,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,11 @@ class InterprovincialClientDataFirebase {
 
   Future<bool> seePassengerStatus({@required String documentId, @required String passengerDocumentId}) async{
     DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
-   
+    PassengerEntity passengerEntity = PassengerEntity.fromDocumentSnapshot( dsp);
+
+    if( passengerEntity.status ==  PassengerStatus.deleted){
+      return true;
+    }
     return false;
   }
 
