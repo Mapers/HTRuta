@@ -22,7 +22,7 @@ class InterprovincialDataFirestore{
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
 
       PassengerEntity passenger = await serviceDataRemote.getPassengerById(interprovincialLocationDriver.serviceId, request.passengerId, request.passengerFcmToken);
-      passenger = passenger.copyWith(price: request.price);
+      passenger = passenger.copyWith(price: request.price, status: PassengerStatus.actived, seats: request.seats);
 
       DocumentReference drPassenger = await refService.collection('passengers').add(passenger.toFirestore);
       passenger = passenger.copyWith(documentId: drPassenger.id);
@@ -50,10 +50,6 @@ class InterprovincialDataFirestore{
       await refService.update({
         'available_seats': newAvailableSeats
       });
-      print('..................');
-      print('1');
-      print(passenger);
-      print('..................');
       return OnRequestAcceptedEntity(
         availableSeats: newAvailableSeats,
         passenger: passenger,
@@ -64,10 +60,10 @@ class InterprovincialDataFirestore{
       return null;
     }
   }
-  //!elimnar usa ves se aya probado
-  Future<bool> seeRoute({@required String documentId, @required InterprovincialRequestEntity request}) async{
+
+  Future<bool> deletePassenger({@required String documentId, @required String passengerId}) async{
     try {
-      await firestore.collection('interprovincial_in_service').doc(documentId).collection('requests').doc(request.documentId).delete();
+      await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerId).delete();
       return true;
     } catch (e) {
       Fluttertoast.showToast(msg: 'No se pudo realizar esta acción.',toastLength: Toast.LENGTH_SHORT);

@@ -69,7 +69,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
         polylines[polyline.polylineId] = polyline;
         if(subscriptionPassengers == null){
           InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
-          subscriptionPassengers = interprovincialDataFirestore.getStreamPassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
+          subscriptionPassengers = interprovincialDataFirestore.getStreamActivePassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
             for (var passenger in passengers) {
               if(passenger.currentLocation != null){
                 Marker markerPassenger = MapViewerUtil.generateMarker(

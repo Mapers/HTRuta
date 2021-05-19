@@ -8,6 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/availability_provider.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
@@ -106,6 +107,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<InterprovincialClientBloc>(create: (_) => ij.getIt<InterprovincialClientBloc>()),
           BlocProvider<InterprovincialClientLocationBloc>(create: (_) => ij.getIt<InterprovincialClientLocationBloc>()),
           BlocProvider<AvailablesRoutesBloc>(create: (_) => ij.getIt<AvailablesRoutesBloc>()),
+          BlocProvider<CommentsDriveBloc>(create: (_) => ij.getIt<CommentsDriveBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',

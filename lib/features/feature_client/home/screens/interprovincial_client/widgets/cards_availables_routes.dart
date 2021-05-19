@@ -85,152 +85,152 @@ class CardAvailiblesRoutes extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.only(bottom: 20),
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                      child: Text(
-                    availablesRoutesEntity.route.name,
-                    style: textStyleHeading18Black,
-                  )),
-                  SizedBox(width: 10),
-                  Text(
-                    'S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2),
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
+    return BlocProvider<CommentsDriveBloc>(
+      create: (_) => ij.getIt<CommentsDriveBloc>(),
+      child: Card(
+        elevation: 5,
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.only(bottom: 20),
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Text(
+                      availablesRoutesEntity.route.name,
+                      style: textStyleHeading18Black,
+                    )),
+                    SizedBox(width: 10),
+                    Text(
+                      'S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2),
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold
+                      )
                     )
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(4),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: availablesRoutesEntity.status !=InterprovincialStatus.onWhereabouts
-                      ? Colors.green
-                      : Colors.amber,
-                      borderRadius: BorderRadius.circular(5),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: 90,
+                      decoration: BoxDecoration(
+                        color: availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
+                        ? Colors.green
+                        : Colors.amber,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
+                        ? 'En paradero'
+                        : 'En ruta',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    child: Text(
-                      availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts
-                      ? 'En paradero'
-                      : 'En ruta',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                      textAlign: TextAlign.center,
+                    SizedBox(
+                      width: 10,
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RatingBar.builder(
-                    initialRating: availablesRoutesEntity.route.starts,
-                    allowHalfRating: true,
-                    itemSize: 18,
-                    itemCount: 5,
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
+                    RatingBar.builder(
+                      initialRating: availablesRoutesEntity.route.starts,
+                      allowHalfRating: true,
+                      itemSize: 18,
+                      itemCount: 5,
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: null,
                     ),
-                    onRatingUpdate: null,
-                  ),
-                  Spacer(),
-                  InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return BlocProvider<CommentsDriveBloc>(
-                              create: (_) => ij.getIt<CommentsDriveBloc>(),
-                              child: ComentsWirdgets(availablesRoutesEntity: availablesRoutesEntity,),
-                            );
-                          }
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('ver comen...'),
-                      )),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.person, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(availablesRoutesEntity.route.nameDriver,
-                        style: TextStyle(color: Colors.black87, fontSize: 14)),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.location_on, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                        availablesRoutesEntity.route.fromLocation.streetName,
-                        style: TextStyle(color: Colors.black87, fontSize: 14)),
-                  ),
-                ],
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Icon(Icons.directions_bus_rounded, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      availablesRoutesEntity.route.toLocation.streetName,
+                    Spacer(),
+                    InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ComentsWirdgets(availablesRoutesEntity: availablesRoutesEntity,);
+                            }
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('ver comen...'),
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.person, color: Colors.black87),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Text(availablesRoutesEntity.route.nameDriver,
+                          style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.location_on, color: Colors.black87),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                          availablesRoutesEntity.route.fromLocation.streetName,
+                          style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Icon(Icons.directions_bus_rounded, color: Colors.black87),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        availablesRoutesEntity.route.toLocation.streetName,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
+                    SizedBox(width: 8),
+                    Text(availablesRoutesEntity.availableSeats.toString(),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    )
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Icon(Icons.access_time, color: Colors.black87),
+                    SizedBox(width: 5),
+                    Text(
+                      availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
                       style: TextStyle(color: Colors.black87, fontSize: 14)
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
-                  SizedBox(width: 8),
-                  Text(availablesRoutesEntity.availableSeats.toString(),
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                    )
-                  )
-                ],
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Icon(Icons.access_time, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Text(
-                    availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
-                    style: TextStyle(color: Colors.black87, fontSize: 14)
-                  ),
-                  SizedBox(width: 20),
-                  Icon(Icons.calendar_today, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Text(
-                    availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
-                    style: TextStyle(color: Colors.black87, fontSize: 14)
-                  ),
-                ],
-              ),
-            ],
+                    SizedBox(width: 20),
+                    Icon(Icons.calendar_today, color: Colors.black87),
+                    SizedBox(width: 5),
+                    Text(
+                      availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
+                      style: TextStyle(color: Colors.black87, fontSize: 14)
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

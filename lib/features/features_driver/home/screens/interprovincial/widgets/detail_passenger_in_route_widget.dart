@@ -20,7 +20,7 @@ class DatailPassengerInRouteWidget extends StatelessWidget {
         }
         PassengerEntity passenger = data.passengerSelected;
         LatLng passengerLatLang = passenger.toLocation.latLang;
-        double distance = LocationUtil.calculateDistance(passengerLatLang, data.location.latLang);
+        double distance = LocationUtil.calculateDistanceInKilometers(passengerLatLang, data.location.latLang);
         return Container(
           width: 300,
           child: Card(

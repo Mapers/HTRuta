@@ -53,11 +53,12 @@ class InterprovincialDriverDataRemote {
     throw ServerException(message: result.error);
   }
 
-  Future<bool> releaseSeats({@required String serviceId, @required String passengerId}) async{
+  Future<bool> releaseSeats({@required String serviceId, @required int seats}) async{
     ResponseHttp result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/release-seats',
-      data: { 'service_id': serviceId }
+      data: { 'service_id': serviceId, 'seats': seats}
     );
     if(result.success) return result.success;
+    print('>> result.error: ${result.error}');
 
     throw ServerException(message: result.error);
   }

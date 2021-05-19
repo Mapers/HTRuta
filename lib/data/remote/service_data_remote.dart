@@ -27,9 +27,6 @@ class ServiceDataRemote{
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: data
       );
-      print(result.error);
-      print(result.data);
-      print(result.success);
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;

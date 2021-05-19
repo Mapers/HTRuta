@@ -155,9 +155,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           );
           _markers[markerFrom.markerId] = markerFrom;
         }else{
-          print('..................');
-          print('entreeeeee');
-          print('..................');
           cleanFrom();
           fromController.clear();
           appearMesage();
