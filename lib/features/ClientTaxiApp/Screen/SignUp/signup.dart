@@ -503,7 +503,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           label:  Text('Registrarse', style: headingWhite,),
                                                           onPressed: () 
                                                           {
-                                                            // print('llege');
                                                             // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeClientPage()));
                                                           }
                                                         ),

@@ -1,6 +1,5 @@
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
-import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 

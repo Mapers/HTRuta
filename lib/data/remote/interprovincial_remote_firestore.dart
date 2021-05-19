@@ -62,10 +62,6 @@ class InterprovincialDataFirestore{
   }
 
   Future<bool> deletePassenger({@required String documentId, @required String passengerId}) async{
-    print('###################');
-    print(documentId);
-    print(passengerId);
-    print('###################');
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerId).delete();
       return true;

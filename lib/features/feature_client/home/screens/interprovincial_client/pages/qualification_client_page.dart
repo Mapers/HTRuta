@@ -122,9 +122,6 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
                                       text: 'Aceptar',
                                       onPressed: ()async{
                                         bool deletePaggenger = await interprovincialDataFirestore.deletePassenger(documentId: widget.documentId, passengerId: widget.passengerId );
-                                        print('###################');
-                                        print(deletePaggenger);
-                                        print('###################');
                                         if(deletePaggenger){
                                           BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
                                           Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);

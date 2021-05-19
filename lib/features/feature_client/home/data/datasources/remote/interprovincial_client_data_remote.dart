@@ -72,12 +72,8 @@ class InterprovincialClientRemoteDataSoruce {
     );
   }
   Future<void> quialificationRequest({ QualificationEntity qualification}) async{
-    
-    print('###################');
-    print( qualification.toMap);
-    print( getTypeEntity( qualification.qualifying_person ));
-    print('###################');
 
+    //! implementar manejador de errores
     final result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
       data: {
@@ -88,8 +84,5 @@ class InterprovincialClientRemoteDataSoruce {
           'comment': qualification.comment
       }
     );
-      print(result.data);
-      print(result.error );
-      print(result.success);
   }
 }

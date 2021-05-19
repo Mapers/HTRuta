@@ -39,14 +39,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   
   @override
   void initState() {
-    // currenActual =LocationEntity(
-    //   latLang: LatLng(0, 0),
-    //   districtName: '',
-    //   provinceName: '',
-    //   regionName: '',
-    //   streetName: '',
-    //   zoom: 12
-    // );
+    //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
+    currenActual = LocationEntity.initialWithLocation(latitude: 0, longitude: 0);
 
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
