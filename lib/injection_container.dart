@@ -2,7 +2,6 @@ import 'package:HTRuta/core/http/request.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
@@ -101,11 +100,6 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<AvailablesRoutesBloc>(
     () => AvailablesRoutesBloc(getIt())
-  );
-  getIt.registerLazySingleton<InterprovincialClientDataLocal>(
-    () => InterprovincialClientDataLocal(
-      sharedPreferences: getIt()
-    )
   );
   //? General
   getIt.registerLazySingleton<ServiceDataRemote>(
