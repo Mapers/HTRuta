@@ -40,25 +40,12 @@ class InterprovincialClientRemoteDataSoruce {
         'service_id': availablesRoutesEntity.id
       }
     );
-    print(result.data);
     List<CommentsDriverEntity> commentsDriver =  CommentsDriverEntity.fromListJson(result.data);
     return commentsDriver;
   }
 
-  Future<void> sendCommentPassenger({@required AvailableRouteEntity availablesRoutesEntity}) async{
-    await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
-      data: {
-        'service_id': 2,
-        'passenger_id': 1042,
-        'qualifying_person': 'PASSENGER',
-        'stars': 4.5,
-        'comment':null
-      }
-    );
-  }
   Future<void> sendRequest({@required NegotiationEntity negotiationEntity }) async{
-    ResponseHttp result = await requestHttp.post(
+    await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
       data: {
         'service_id': negotiationEntity.serviceId,
@@ -71,15 +58,13 @@ class InterprovincialClientRemoteDataSoruce {
       }
     );
   }
-  Future<void> quialificationRequest({ QualificationEntity qualification}) async{
-
-    //! implementar manejador de errores
-    final result = await requestHttp.post(
+  Future<void> qualificationRequest({@required QualificationEntity qualification}) async{
+    await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
       data: {
-          'service_id': qualification.service_id ,
-          'passenger_id': qualification.passenger_id ,
-          'qualifying_person':  getTypeEntity( qualification.qualifying_person ),
+          'service_id': qualification.serviceId,
+          'passenger_id': qualification.passengerId ,
+          'qualifying_person': getTypeEntity(qualification.qualifying_person),
           'stars': qualification.starts ,
           'comment': qualification.comment
       }

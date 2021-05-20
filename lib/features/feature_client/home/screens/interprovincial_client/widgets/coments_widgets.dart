@@ -16,7 +16,6 @@ class _ComentsWirdgetsState extends State<ComentsWirdgets> {
 
   @override
   void initState() {
-    //! Ver por que solo una ves entra al bloc
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<CommentsDriveBloc>(context).add(GetCommentsDriveEvent(availablesRoutesEntity: widget.availablesRoutesEntity ));
     });

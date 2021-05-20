@@ -191,7 +191,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
       print(e.toString());
     }
   }
-  //! metodos estaticos
+
   void drawRoute()async{
     if(_markers.length == 2){
       openLoadingDialog(context);

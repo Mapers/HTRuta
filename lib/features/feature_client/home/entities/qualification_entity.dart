@@ -3,27 +3,27 @@ import 'package:meta/meta.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
 
 class QualificationEntity extends Equatable{
-  final int service_id;
+  final String serviceId;
   final String comment;
   final TypeEntityEnum qualifying_person;
   final double starts;
-  final int passenger_id;
+  final String passengerId;
 
   QualificationEntity( {
-    @required this.service_id,
+    @required this.serviceId,
     this.comment,
     this.qualifying_person,
     this.starts,
-    @required this.passenger_id,
+    @required this.passengerId,
   });
 
   Map<String, dynamic> get toMap => {
-    'service_id': service_id,
+    'service_id': serviceId,
     'seating': comment,
     'cost': starts,
-    'passenger_id': passenger_id,
+    'passenger_id': passengerId,
   };
 
   @override
-  List<Object> get props => [service_id, starts, comment, qualifying_person, passenger_id ];
+  List<Object> get props => [serviceId, starts, comment, qualifying_person, passengerId ];
 }

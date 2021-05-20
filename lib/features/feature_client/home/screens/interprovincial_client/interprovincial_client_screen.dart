@@ -4,8 +4,6 @@ import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
@@ -31,8 +29,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   bool drawCircle = false;
   double initialCircularRadio;
   int initialSeat;
-  Session _session = Session();
-  final _prefs = UserPreferences();
 
   @override
   void initState() {

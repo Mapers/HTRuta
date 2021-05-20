@@ -1,6 +1,9 @@
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/core/utils/extensions/double_extension.dart';
+import 'package:HTRuta/enums/type_entity_enum.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_remote.dart';
+import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
@@ -154,14 +157,16 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
           title: 'Califica al pasajero',
           nameUserQuelify: passenger.fullNames,
           routeTraveled: passenger.destination,
-          onAccepted: (start,commentary)async{
-            //!la calificacion tiene que ir a el back-end
-            print(start);
-            print(commentary);
+          onAccepted: (start, commentary) async{
+            await getIt<InterprovincialClientRemoteDataSoruce>().qualificationRequest(qualification: QualificationEntity(
+              passengerId: passenger.id,
+              comment: commentary,
+              starts: start,
+              serviceId: widget.serviceId,
+              qualifying_person: TypeEntityEnum.driver
+            ));
           },
-          onSkip: (){
-            //!la calificacion tiene que ir a el back-end
-          },
+          onSkip: (){},
         );
       }
     );

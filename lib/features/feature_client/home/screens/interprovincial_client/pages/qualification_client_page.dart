@@ -5,8 +5,6 @@ import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/qualification_entity.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
@@ -32,7 +30,6 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
   String commenctary;
   double numberStart = 0;
   Session _session = Session();
-  final _prefs = UserPreferences();
   InterprovincialDataFirestore interprovincialDataFirestore =  getIt<InterprovincialDataFirestore>();
   @override
   Widget build(BuildContext context) {
@@ -101,8 +98,8 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
                           final user = await _session.get();
                           formKey.currentState.save();
                           QualificationEntity qualification = QualificationEntity(
-                            passenger_id: int.parse(user.id),
-                            service_id: int.parse(widget.availablesRoutesEntity.id),
+                            passengerId: user.id,
+                            serviceId: widget.availablesRoutesEntity.id,
                             qualifying_person: TypeEntityEnum.passenger ,
                             comment: commenctary,
                             starts: numberStart,
