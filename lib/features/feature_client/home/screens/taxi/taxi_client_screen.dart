@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 import 'dart:io' show Platform;
 import 'dart:math' show cos, sqrt, asin;
+import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +72,28 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   double distance = 0;
   BitmapDescriptor iconTaxi;
   List<DocumentSnapshot> markersSnapshotList;
+  Uint8List userPhoto;
+  final pickupApi = PickupApi();
+  
   @override
   void initState() {
     super.initState();
     fetchDriverLocation();
+    saveUserPhoto();
+    Geolocator.getPositionStream().listen((event) async{
+      if(currentLocation == null) return;
+      // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(mounted && userPhoto != null){
+        _markers.clear();
+        final MarkerId _markerMy = MarkerId('user_position');
+        _markers[_markerMy] = GMapViewHelper.createMakerNetwork(
+          markerIdVal: 'user_position',
+          icon: userPhoto,
+          lat: event.latitude,
+          lng: event.longitude,
+        );
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await checkPermission();
       await _initLastKnownLocation();
@@ -86,13 +108,13 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       if (!mounted) return;
       setState(() {});
     });
-    showPersBottomSheetCallBack = _showBottomSheet;
+    /* showPersBottomSheetCallBack = _showBottomSheet;
     sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
     sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
     sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
     sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
     sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
+    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')); */
   }
 
   ///Get last known location
@@ -105,6 +127,35 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     }
     if (!mounted) return;
     _lastKnownPosition = position;
+  }
+  Future<void> saveUserPhoto() async {
+    userPhoto = await pickupApi.getUserPhoto();
+    ui.Image userImage = await loadImage(userPhoto);
+    userPhoto = await getBytesFromCanvas(userImage, 100, 100);
+    if(userPhoto != null){
+      print('Se cargó la foto de usuario');
+    }
+  }
+  Future<ui.Image> loadImage(Uint8List img) async {
+    final Completer<ui.Image> completer = Completer();
+    ui.decodeImageFromList(img, (ui.Image img) {
+      return completer.complete(img);
+    });
+    return completer.future;
+  }
+  Future<Uint8List> getBytesFromCanvas(ui.Image image, int width, int height) async {
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+
+    Path path = Path()
+      ..addOval(Rect.fromLTWH(0, 0,
+          image.width.toDouble(), image.height.toDouble()));
+
+    canvas.clipPath(path);
+    canvas.drawImage(image, Offset(0, 0), Paint());
+    final img = await pictureRecorder.endRecording().toImage(width, height);
+    final data = await img.toByteData(format: ui.ImageByteFormat.png);
+    return data.buffer.asUint8List();
   }
 
   Future<void> checkPermission() async {
@@ -193,6 +244,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   }
 
   void _onMapCreated(GoogleMapController controller) async {
+    _mapController = controller;
+    changeMapType(3, 'assets/style/dark_mode.json');
     MarkerId markerId = MarkerId(_markerIdVal());
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
@@ -207,9 +260,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     setState(() {
       _markers[markerId] = marker;
     });
-    _mapController = controller;
+    
     Future.delayed(Duration(milliseconds: 200), () async {
-      _mapController = controller;
       controller?.animateCamera(
         CameraUpdate?.newCameraPosition(
           CameraPosition(
@@ -249,7 +301,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     }
   }
 
-  void _showBottomSheet() async {
+  /* void _showBottomSheet() async {
     setState(() {
       showPersBottomSheetCallBack = null;
     });
@@ -304,12 +356,12 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
         )
       );
     });
-  }
+  } */
 
-  void _closeModalBottomSheet() {
+  /* void _closeModalBottomSheet() {
     _controller?.close();
     _controller = null;
-  }
+  } */
 
   Widget getListOptionDistance() {
     final List<Widget> choiceChips = listDistance.map<Widget>((value) {
@@ -453,7 +505,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                 circles: Set<Circle>.of(circles.values),
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
-                myLocationEnabled: true,
+                myLocationEnabled: false,
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
                 initialCameraPosition: CameraPosition(
@@ -462,7 +514,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                       currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
                   zoom: 12.0,
                 ),
-                onCameraMove: (CameraPosition position) {
+                /* onCameraMove: (CameraPosition position) {
                   if(_markers.isNotEmpty) {
                     MarkerId markerId = MarkerId(_markerIdVal());
                     Marker marker = _markers[markerId];
@@ -474,7 +526,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                       _position = position;
                     });
                   }
-                },
+                }, */
                 onCameraIdle: () => getLocationName(
                     _position?.target?.latitude ?? currentLocation?.latitude,
                     _position?.target?.longitude ?? currentLocation?.longitude
@@ -493,7 +545,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   getListOptionDistance(),
                   Container(height: 10),
                   Container(
-                      height: 230,
+                      height: 290,
                       child: SelectAddress(
                         fromAddress: widget?.placeBloc?.formLocation,
                         toAddress: widget?.placeBloc?.locationSelect,
@@ -528,7 +580,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   ),
                 )
             ),
-            Positioned(
+            ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+            /* Positioned(
                 top: 60,
                 right: 10,
                 child: GestureDetector(
@@ -545,7 +598,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                     child: Icon(Icons.layers,color: blackColor,)
                   ),
                 )
-            ),
+            ), */
             Positioned(
               top: 50,
               left: 10,

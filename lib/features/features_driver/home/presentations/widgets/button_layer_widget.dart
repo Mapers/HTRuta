@@ -16,9 +16,9 @@ class ButtonLayerWidget extends StatefulWidget {
 class _ButtonLayerWidgetState extends State<ButtonLayerWidget> {
   PersistentBottomSheetController persistentBottomSheetController;
   List<MapTypeModel> sampleData = [
-    MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'),
+    MapTypeModel(1,false, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'),
     MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'),
-    MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'),
+    MapTypeModel(3,true, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'),
     MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'),
     MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'),
     MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')

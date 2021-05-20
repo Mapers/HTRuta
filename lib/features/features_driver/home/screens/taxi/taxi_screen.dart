@@ -325,6 +325,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
+    changeMapType(3, 'assets/style/dark_mode.json');
     final MarkerId _markerMy = MarkerId('toLocation');
     if(currentLocation != null){
       _markers[_markerMy] = GMapViewHelper.createMaker(

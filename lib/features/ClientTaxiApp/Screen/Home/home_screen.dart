@@ -4,11 +4,14 @@ import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreens extends StatelessWidget {
+  final GlobalKey<ScaffoldState> parentScaffoldKey;
+  HomeScreens({this.parentScaffoldKey});
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<ClientTaxiPlaceBloc>(context);
     return TaxiClientScreen(
       placeBloc: bloc,
+      parentScaffoldKey: parentScaffoldKey,
     );
   }
 }

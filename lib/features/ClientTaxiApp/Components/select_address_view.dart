@@ -4,7 +4,9 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/register_travel_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
@@ -38,49 +40,7 @@ class _SelectAddressState extends State<SelectAddress> {
   String comentarios = '';
   FocusNode precioFocus = FocusNode();
   final pickUpApi = PickupApi();
-//   List<Map<String, dynamic>> listAddress = [
-//     {'id': 1, 'title': 'Trujillo'},
-//     {'id': 2, 'title': 'La Esperanza'},
-//     {'id': 3,'title': 'Porvenir'},
-//     {'id': 4,'title': 'Alto Trujillo'},
-//   ];
-
-//   Widget getOption() {
-//     return ListView.builder(
-//       shrinkWrap: true,
-//       scrollDirection: Axis.horizontal,
-//       itemCount: listAddress.length,
-//       itemBuilder: (BuildContext context,int index){
-//         return Padding(
-//           padding: const EdgeInsets.all(3.0),
-//           child: ChoiceChip(
-//             key: ValueKey<String>(listAddress[index]['id'].toString()),
-//             labelStyle: TextStyle(
-//                 color: whiteColor
-//             ),
-//             backgroundColor: whiteColor,
-//             selectedColor: primaryColor,
-//             elevation: 1.0,
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(20.0),
-//             ),
-//             selected: selectedAddress == listAddress[index]['id'].toString(),
-//             label: Text(listAddress[index]['title'],
-//               style: TextStyle(
-//                 color: selectedAddress == listAddress[index]['id'].toString() ? whiteColor : blackColor
-//               ),
-//             ),
-//             onSelected: (bool check) {
-//               widget?.onTap();
-// //              setState(() {
-// //                selectedAddress = check ? listAddress[index]['id'].toString() : '';
-// //              });
-//             })
-//         );
-//       },
-//     );
-//   }
-
+  List<int> paymentMethodsSelected = [];
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -171,6 +131,40 @@ class _SelectAddressState extends State<SelectAddress> {
                 )
               ],
             ),
+            Container(
+              padding: EdgeInsets.only(right: 20, left: 60),
+              child: Divider(color: Colors.grey,)
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 60.0),
+                      child: Text('Método de pago', 
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0),
+                      child: PaymentSelector(
+                        onSelected: (List<int> selectedPaymentMethods){
+                          paymentMethodsSelected = selectedPaymentMethods;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.only(right: 20, left: 60),
+              child: Divider(color: Colors.grey,)
+            ),
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -245,7 +239,23 @@ class _SelectAddressState extends State<SelectAddress> {
                       Dialogs.openLoadingDialog(context);
                       final _prefs = UserPreferences();
                       String token = _prefs.tokenPush;
-                      final viaje = await pickUpApi.registerTravel(dataUsuario.id, widget.fromAddress.lat.toString(), widget.toAddress.lat.toString(),  widget.fromAddress.lng.toString(),widget.toAddress.lng.toString(),precio, '1',widget.fromAddress.name,widget.toAddress.name, comentarios, token, widget.unidad, widget.distancia);
+                      RegisterTravelBody body = RegisterTravelBody(
+                        idTokenCliente: token,
+                        idusuario: int.parse(dataUsuario.id),
+                        vchLatinicial:  widget.fromAddress.lat,
+                        vchLatfinal: widget.toAddress.lat,
+                        vchLonginicial:  widget.fromAddress.lng,
+                        vchLongfinal: widget.toAddress.lng,
+                        mPrecio: int.parse(precio),
+                        iTipoViaje: 1,
+                        vchNombreInicial: widget.fromAddress.name,
+                        vchNombreFinal: widget.toAddress.name,
+                        comentario: comentarios,
+                        unidad: widget.unidad,
+                        distancia: widget.distancia,
+                        arrFormaPagoIds: paymentMethodsSelected
+                      ); 
+                      final viaje = await pickUpApi.registerTravelClient(body);
                       PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
                         'newRequest' : '1'

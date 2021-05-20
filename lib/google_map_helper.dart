@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:HTRuta/features/ClientTaxiApp/Components/decodePolyline.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -48,6 +50,26 @@ class GMapViewHelper {
         // ignore: deprecated_member_use
         icon: BitmapDescriptor.fromAsset(icon),
         onTap: onTap
+    );
+
+    return marker;
+  }
+
+  static Marker createMakerNetwork ({
+    @required String markerIdVal,
+    @required Uint8List icon,
+    @required double lat,
+    @required double lng, GestureTapCallback onTap,}){
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(lat, lng),
+      infoWindow: InfoWindow(
+        title: 'Jr. Lucia Carbajal 276'
+      ),
+      icon: BitmapDescriptor.fromBytes(icon),
+      onTap: onTap
     );
 
     return marker;

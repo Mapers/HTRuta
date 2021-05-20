@@ -31,7 +31,7 @@ class _HomeClientPageState extends State<HomeClientPage> {
               DataClientServiceState data = state;
               switch (data.typeService) {
                 case TypeServiceEnum.taxi:
-                  return HomeScreens();
+                  return HomeScreens(parentScaffoldKey: _scaffoldKey);
                 case TypeServiceEnum.interprovincial:
                   return InterprovincialClientScreen();
                 default:

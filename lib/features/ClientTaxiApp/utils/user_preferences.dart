@@ -57,4 +57,10 @@ class UserPreferences{
   set setDrivingState(bool value) {
     _prefs.setBool('drivingState', value);
   }
+
+  List<String> get getClientPaymentMethods => _prefs.getStringList('clientPayments') ?? [];
+  
+  set setClientPaymentMethods(List<String> values) {
+    _prefs.setStringList('clientPayments', values);
+  }
 }
