@@ -40,18 +40,14 @@ class PushNotificationProvider{
     _firebaseMessaging.configure(
       onMessage: (info) async {
         print('============= On Message ==========');
-        print('${info['notification']['title']}');
         print(info);
 
-        print('al display');
         _displayNotification(info, backgroundMessageHandler);
-        print('enviar sink');
         _mensajesStreamController.sink.add(info);
       },
       onLaunch: (info) async {
         print('============= On Launch ==========');
         print(info);
-        print('${info['notification']['title']}');
         _displayNotification(info, backgroundMessageHandler);
         _mensajesStreamController.sink.add(info);
       },
@@ -76,7 +72,6 @@ class PushNotificationProvider{
   }
 
   Future<String> onSelect(String data) async {
-    print('onSelectNotification $data');
     return '';
   }
 

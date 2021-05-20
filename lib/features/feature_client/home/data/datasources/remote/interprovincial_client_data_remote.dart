@@ -33,41 +33,18 @@ class InterprovincialClientRemoteDataSoruce {
   }
 
   Future<List<CommentsDriverEntity>> getCommentsRoutes({@required AvailableRouteEntity availablesRoutesEntity}) async{
-    print('sigo mi caminodsdsd');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/passenger/get-comments',
       data: {
         'service_id': availablesRoutesEntity.id
       }
     );
-    print(result.data);
     List<CommentsDriverEntity> commentsDriver =  CommentsDriverEntity.fromListJson(result.data);
     return commentsDriver;
   }
 
-  Future<void> sendCommentPassenger({@required AvailableRouteEntity availablesRoutesEntity}) async{
-    await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
-      data: {
-        'service_id': 2,
-        'passenger_id': 1042,
-        'qualifying_person': 'PASSENGER',
-        'stars': 4.5,
-        'comment':null
-      }
-    );
-  }
   Future<void> sendRequest({@required NegotiationEntity negotiationEntity }) async{
-    print('..................');
-      print(negotiationEntity.serviceId);
-      print(negotiationEntity.seating);
-      print( negotiationEntity.cost);
-      print(negotiationEntity.passengerId);
-      print(negotiationEntity.requestDocumentId);
-      print( negotiationEntity.from.toMap);
-      print( negotiationEntity.to.toMap);
-    print('..................');
-    ResponseHttp result = await requestHttp.post(
+    await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/send-request',
       data: {
         'service_id': negotiationEntity.serviceId,
@@ -79,23 +56,16 @@ class InterprovincialClientRemoteDataSoruce {
         'to':  negotiationEntity.to.toMap ,
       }
     );
-    print('###################');
-    print(result.success);
-    print(result.data);
-    print(result.error);
-    print('###################');
   }
-  Future<void> quialificationRequest({ QualificationEntity qualification}) async{
+  Future<void> qualificationRequest({@required QualificationEntity qualification}) async{
     await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/service/send-qualification',
       data: {
-        {
-          'service_id': qualification.service_id ,
-          'passenger_id': qualification.passenger_id ,
-          'qualifying_person':  getTypeEntity( qualification.qualifying_person ),
+          'service_id': qualification.serviceId,
+          'passenger_id': qualification.passengerId ,
+          'qualifying_person': getTypeEntity(qualification.qualifying_person),
           'stars': qualification.starts ,
           'comment': qualification.comment
-        }
       }
     );
   }

@@ -87,33 +87,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
   }
 
-  // void _showDialogQualification() async{
-  //   InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
-  //   String documentId = interprovincialClientDataLocal.getDocumentIdOnServiceInterprovincialToQualification;
-  //   if(documentId == null){
-  //     return;
-  //   }
-  //   InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-  //   bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
-  //   if(!onService){
-  //     //! Considerar traer del backend los datos el driver
-  //     showDialog(
-  //       context: context,
-  //       child: QualificationWidget(
-  //         title: 'Califica el servicio',
-  //         nameUserQuelify: '',
-  //         routeTraveled: '',
-  //         onAccepted: (stars, comments){
-  //           //! Enviar calificacion al server
-  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-  //         },
-  //         onSkip: (){
-  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-  //         },
-  //       )
-  //     );
-  //   }
-  // }
   void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
@@ -165,36 +138,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Stack(
         fit: StackFit.expand,
         children: [
-          /* Transform.scale(
-            scale: MediaQuery.of(context).size.aspectRatio /
-              _controller.value.aspectRatio,
-            child: Center(
-              child: Container(
-              child: _controller.value.initialized
-                ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: VideoPlayer(_controller)
-                  ),
-                )
-                : AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // aspectRatio: MediaQuery.of(context).size.aspectRatio,
-                  child: Container(
-                    child: Image.asset(
-                      'assets/first_frame.jpg',
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                    )
-                    ),
-                  )
-              ),
-            ),
-          ), */
           SizedBox.expand(
             child: FittedBox(
               fit: BoxFit.cover,

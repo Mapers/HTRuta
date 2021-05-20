@@ -16,6 +16,7 @@ class PassengerEntity extends Equatable {
   final LocationEntity toLocation;
   final int distanceInMinutes;
   final double distanceInMeters;
+  final PassengerStatus status;
 
   PassengerEntity({
     @required this.id,
@@ -28,6 +29,7 @@ class PassengerEntity extends Equatable {
     @required this.price,
     @required this.distanceInMinutes,
     @required this.distanceInMeters,
+    @required this.status,
     this.currentLocation
   });
 
@@ -59,9 +61,23 @@ class PassengerEntity extends Equatable {
         regionName: dataJson['to_region_name'],
         streetName: dataJson['to_street_name'],
         latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
-      )
+      ),
+      status: getPassengerStatusFromString(dataJson['status'])
     );
   }
+
+  factory PassengerEntity.fromQueryDocumentSnapshot(QueryDocumentSnapshot queryDocumentSnapshot){
+    final data = queryDocumentSnapshot.data();
+    data['document_id'] = queryDocumentSnapshot.id;
+    return PassengerEntity.fromJsonFirestore(data);
+  }
+
+  factory PassengerEntity.fromDocumentSnapshot(DocumentSnapshot documentSnapshot){
+    final data = documentSnapshot.data();
+    data['document_id'] = documentSnapshot.id;
+    return PassengerEntity.fromJsonFirestore(data);
+  }
+
   factory PassengerEntity.fromJsonServer(Map<String, dynamic> dataJson, String documentId, String fcmToken){
     dynamic toLocation = dataJson['to_location'];
     return PassengerEntity(
@@ -84,7 +100,8 @@ class PassengerEntity extends Equatable {
           double.parse(toLocation['latitude'] as String),
           double.parse(toLocation['longitude'] as String)
         )
-      )
+      ),
+      status: getPassengerStatusFromString(dataJson['status'])
     );
   }
 
@@ -103,6 +120,7 @@ class PassengerEntity extends Equatable {
       'to_province_name': toLocation.provinceName,
       'to_region_name': toLocation.regionName,
       'to_street_name': toLocation.streetName,
+      'status': getPassengerStatusFromEnum(status)
     };
     if(currentLocation != null){
       struct['current_location'] = GeoPoint(currentLocation.latLang.latitude, currentLocation.latLang.longitude);
@@ -119,7 +137,7 @@ class PassengerEntity extends Equatable {
     return toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
   }
 
-  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters}){
+  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters, PassengerStatus status}){
     return PassengerEntity(
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
@@ -132,6 +150,7 @@ class PassengerEntity extends Equatable {
       urlImage: urlImage ?? this.urlImage,
       distanceInMinutes: distanceInMinutes ?? this.distanceInMinutes,
       distanceInMeters: distanceInMeters ?? this.distanceInMeters,
+      status: status ?? this.status
     );
   }
 
@@ -161,10 +180,35 @@ class PassengerEntity extends Equatable {
         zoom: 12
       ),
       urlImage: 'https://source.unsplash.com/1600x900/?portrait',
-      fcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
+      fcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL',
+      status: PassengerStatus.actived
     );
   }
 
   @override
   List<Object> get props => [id, documentId, fullNames, currentLocation, toLocation, distanceInMeters, distanceInMinutes, urlImage, seats, fcmToken, price];
+}
+
+enum PassengerStatus {
+  actived, deleted
+}
+
+String getPassengerStatusFromEnum(PassengerStatus status){
+  switch (status) {
+    case PassengerStatus.actived:
+    return 'ACTIVED';
+    case PassengerStatus.deleted:
+    return 'DELETED';
+  }
+  return '-';
+}
+
+PassengerStatus getPassengerStatusFromString(String status){
+  switch (status) {
+    case 'ACTIVED':
+    return PassengerStatus.actived;
+    case 'DELETED':
+    return PassengerStatus.deleted;
+  }
+  return null;
 }

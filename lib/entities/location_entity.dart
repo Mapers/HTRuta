@@ -43,7 +43,7 @@ class LocationEntity extends Equatable {
       regionName: dataJson['region_name'],
       streetName: dataJson['street_name'],
       zoom: 6.36
-    );
+    ).formatNames;
   }
 
   factory LocationEntity.initialWithLocation({@required double latitude, @required double longitude}){
@@ -67,6 +67,11 @@ class LocationEntity extends Equatable {
       regionName: regionName ?? this.regionName,
     );
   }
+
+  LocationEntity get formatNames => copyWith(
+    provinceName: provinceName?.replaceAll('Provincia de ', ''),
+    regionName: provinceName?.replaceAll('Gobierno Regional de ', '')
+  );
 
   Map<String, dynamic> get toMap => {
     'district_name': districtName,

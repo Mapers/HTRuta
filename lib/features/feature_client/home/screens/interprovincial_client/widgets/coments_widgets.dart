@@ -16,8 +16,6 @@ class _ComentsWirdgetsState extends State<ComentsWirdgets> {
 
   @override
   void initState() {
-    print('dsafasfasf');
-    //! Ver por que solo una ves entra al bloc
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<CommentsDriveBloc>(context).add(GetCommentsDriveEvent(availablesRoutesEntity: widget.availablesRoutesEntity ));
     });
@@ -45,8 +43,6 @@ class _ComentsWirdgetsState extends State<ComentsWirdgets> {
                 );
               }
               return ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
               itemCount: param.commentsDriver.length,
               itemBuilder: (BuildContext context, int index) {
                 return Estructure(
@@ -70,18 +66,14 @@ class Estructure extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Text(commentsDriver.passenger_name,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-            Spacer(),
-            Text('21/02/2020',style: TextStyle(fontSize: 15,color: Colors.grey )),
-          ],
-        ),
+        Text(commentsDriver.passenger_name,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text( commentsDriver.comment ,style: TextStyle(fontSize: 15),),
         ),
+        Text(commentsDriver.registered_at.day.toString() +'/'+ commentsDriver.registered_at.month.toString()+ '/' + commentsDriver.registered_at.year.toString(), style: TextStyle(fontSize: 15,color: Colors.grey )),
       ],
     );
   }

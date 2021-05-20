@@ -155,9 +155,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           );
           _markers[markerFrom.markerId] = markerFrom;
         }else{
-          print('..................');
-          print('entreeeeee');
-          print('..................');
           cleanFrom();
           fromController.clear();
           appearMesage();
@@ -190,11 +187,9 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         }
       }
       drawRoute();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) { }
   }
-  //! metodos estaticos
+
   void drawRoute()async{
     if(_markers.length == 2){
       openLoadingDialog(context);

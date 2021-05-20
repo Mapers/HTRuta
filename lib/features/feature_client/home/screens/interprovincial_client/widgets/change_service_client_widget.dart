@@ -26,7 +26,6 @@ class ChangeServiceClientWidget extends StatelessWidget {
                   value: item
                 )).toList(),
                 onChanged: (newItem){
-                  print(newItem);
                   BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: newItem));
                 },
               ),

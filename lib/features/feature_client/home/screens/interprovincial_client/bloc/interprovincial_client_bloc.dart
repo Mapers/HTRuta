@@ -63,8 +63,6 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
       DataInterprovincialClientState currentState = state;
       final onAcceptRequest = await interprovincialDataFirestore.acceptRequest(documentId: event.serviceDocumentId, request: event.interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client);
       await serviceDataRemote.acceptRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId, onAcceptRequest.passenger.documentId);
-      print('bloccc');
-      print(onAcceptRequest.passenger.documentId);
       yield currentState.copyWith(
         passengerDocumentId: onAcceptRequest.passenger.documentId
       );
@@ -72,7 +70,7 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
     }else if(event is RejecDataSolicitudInterprovincialClientEvent){
       await serviceDataRemote.rejectRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId);
     }else if(event is SendQualificationInterprovincialClientEvent){
-      await interprovincialClientRemote.quialificationRequest(qualification: event.qualificationEntity);
+      await interprovincialClientRemote.qualificationRequest(qualification: event.qualificationEntity);
     }
   }
 }

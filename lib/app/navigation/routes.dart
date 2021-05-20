@@ -3,6 +3,7 @@ import 'package:HTRuta/features/feature_client/home/entities/available_route_eni
 import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/availables_routes_page.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/qualification_client_page.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/travel_negotation_page.dart';
 import 'package:HTRuta/features/feature_client/pick_seat/presentation/pick_seat_page.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/home_driver_page.dart';
@@ -20,4 +21,5 @@ class Routes {
   static Route toTravelNegotationPage({@required AvailableRouteEntity availablesRoutesEntity}) => MaterialPageRoute(builder: (context)=> TravelNegotationPage(availablesRoutesEntity: availablesRoutesEntity,));
   static Route toListPassengersFullScreenDialog(String documentId, String serviceId) => MaterialPageRoute(builder: (context)=> ListPassengersFullScreenDialog(documentId: documentId, serviceId: serviceId), fullscreenDialog: true);
   static Route toListInterprovincialRequestFullScreenDialog(String documentId, String serviceId) => MaterialPageRoute(builder: (context)=> ListRequestsFullScreenDialog(documentId: documentId, serviceId: serviceId), fullscreenDialog: true);
+  static Route toQualificationClientPage({@required String documentId, @required String passengerId, @required AvailableRouteEntity availablesRoutesEntity}) => MaterialPageRoute(builder: (context)=> QualificationClientPage(availablesRoutesEntity: availablesRoutesEntity,documentId: documentId,passengerId: passengerId, ));
 }

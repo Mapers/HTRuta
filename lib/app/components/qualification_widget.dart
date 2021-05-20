@@ -33,7 +33,7 @@ class _QualificationWidgetState extends State<QualificationWidget> {
                 Row(
                   children: [
                     Icon(Icons.person ),
-                    SizedBox(width: 7,),
+                    SizedBox(width: 7, height: 5),
                     Container(
                       width: 200,
                       child: Text(widget.nameUserQuelify)

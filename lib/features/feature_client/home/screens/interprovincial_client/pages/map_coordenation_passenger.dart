@@ -1,17 +1,15 @@
 import 'dart:async';
 
+import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 
@@ -40,6 +38,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   
   @override
   void initState() {
+    //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
+    currenActual = LocationEntity.initialWithLocation(latitude: 0, longitude: 0);
+
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
@@ -65,21 +66,19 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       );
       _markers[markerTo.markerId] = markerTo;
 
-      InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
-      interprovincialClientDataLocal.saveDocumentIdOnServiceInterprovincial(widget.documentId);
-
       _locationUtil.initListener(listen: (_locationPassenger){
+        currenActual = _locationPassenger;
         subscription ??= interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
           Marker markerDrive = MapViewerUtil.generateMarker(
             latLng: interprovincialLocationDriver.location.latLang,
             nameMarkerId: 'DRIVE_POSITION_MARKER',
             icon: result[2],
             onTap: (){
-              print('Data del conductor');
+              //! Ver info del conductor
             }
           );
           _markers[markerDrive.markerId] = markerDrive;
-          _updateMarkerCurrentPosition(_locationPassenger, interprovincialLocationDriver.location);
+          _updateMarkerCurrentPosition(interprovincialLocationDriver.location);
           setState(() {});
         });
       });
@@ -87,19 +86,20 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     });
     super.initState();
   }
-  void _updateMarkerCurrentPosition(LocationEntity _passengerLocation, LocationEntity _driverLocation) async{
+  void _updateMarkerCurrentPosition(LocationEntity _driverLocation) async{
+  
     Marker markerPassenger = MapViewerUtil.generateMarker(
-      latLng: _passengerLocation.latLang,
+      latLng: currenActual.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: currentPinLocationIcon
     );
     _markers[markerPassenger.markerId] = markerPassenger;
-    DataInterprovincialClientState param = BlocProvider.of<InterprovincialClientBloc>(context).state;
-    print('###################');
-    print(param.passengerDocumentId );
-    print('###################');
-    double distanceInMeters = LocationUtil.calculateDistance(_passengerLocation.latLang, _driverLocation.latLang);
-    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: param.passengerDocumentId, distanceInMeters: distanceInMeters);
+    double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
+    bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
+    if(passengerStatus){
+      Navigator.of(context).pushAndRemoveUntil(Routes.toQualificationClientPage(  documentId:widget.documentId ,passengerId:widget.passengerDocumentId ,availablesRoutesEntity: widget.availablesRoutesEntity ) , (_) => false);
+    }
   }
 
   @override

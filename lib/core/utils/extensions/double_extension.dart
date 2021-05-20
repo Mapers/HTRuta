@@ -1,8 +1,8 @@
 extension DoubleExtension on double {
-  /// Number in meters
+  /// From meters value
   String toDistanceString({bool space = true}) {
     String strSpace = space ? ' ' : '';
-    if(this > 1000) return '${toStringAsFixed(1)}${strSpace}Km';
+    if(this > 1000) return '${(this/1000).toStringAsFixed(2)}${strSpace}Km';
     return '${toStringAsFixed(0)}${strSpace}m';
   }
 }

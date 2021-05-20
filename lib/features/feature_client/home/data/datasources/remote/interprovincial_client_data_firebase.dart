@@ -2,6 +2,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/interprovincial_location_driver_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,7 @@ class InterprovincialClientDataFirebase {
         description: 'Revise las solicitudes'
       );
       return dRequests.id;
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) {}
     return null;
   }
 
@@ -45,9 +44,9 @@ class InterprovincialClientDataFirebase {
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequest = await dr.collection('requests').doc(request.documentId);
-      dRequest.delete();
       DocumentSnapshot  ds = await dr.get();
-      DocumentSnapshot  dsRequest = await dr.get();
+      DocumentSnapshot  dsRequest = await dRequest.get();
+      dRequest.delete();
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       if(notificationLaunch){
         pushMessage.sendPushMessage(
@@ -57,9 +56,7 @@ class InterprovincialClientDataFirebase {
         );
       }
       return dsRequest.data()['passenger_document_id'];
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) {}
     return null;
   }
 
@@ -86,6 +83,16 @@ class InterprovincialClientDataFirebase {
     );
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
+  }
+
+  Future<bool> seePassengerStatus({@required String documentId, @required String passengerDocumentId}) async{
+    DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
+    PassengerEntity passengerEntity = PassengerEntity.fromDocumentSnapshot( dsp);
+
+    if( passengerEntity.status ==  PassengerStatus.deleted){
+      return true;
+    }
+    return false;
   }
 
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
