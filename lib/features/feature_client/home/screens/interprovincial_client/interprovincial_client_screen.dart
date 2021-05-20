@@ -179,7 +179,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
               child: Text('Buscando...',style: TextStyle(color: Colors.white, fontSize: 20,decoration: TextDecoration.none),)
             ),
           );
-          print(toLocation.districtName );
           BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat));
           await Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();

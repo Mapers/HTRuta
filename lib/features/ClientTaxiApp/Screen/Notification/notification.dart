@@ -154,21 +154,20 @@ class _NotificationScreensState extends State<NotificationScreens> {
                           ],
                           child: Container(
                               decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: greyColor2, width: 1))),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: greyColor2, width: 1))),
                               child: GestureDetector(
-                                  onTap: () {
-                                    print('$index');
-                                    navigateToDetail(index.toString());
-                                  },
-                                  child: ItemNotification(
-                                    title: listNotification[index]
-                                    ['title'],
-                                    subTitle: listNotification[index]
-                                    ['subTitle'],
-                                    icon: listNotification[index]['icon'],
-                                  )))),
+                                onTap: () {
+                                  navigateToDetail(index.toString());
+                                },
+                                child: ItemNotification(
+                                  title: listNotification[index]
+                                  ['title'],
+                                  subTitle: listNotification[index]
+                                  ['subTitle'],
+                                  icon: listNotification[index]['icon'],
+                                )))),
                     );
                   }),
             )

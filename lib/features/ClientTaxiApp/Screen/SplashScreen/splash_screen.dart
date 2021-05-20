@@ -87,33 +87,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
   }
 
-  // void _showDialogQualification() async{
-  //   InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
-  //   String documentId = interprovincialClientDataLocal.getDocumentIdOnServiceInterprovincialToQualification;
-  //   if(documentId == null){
-  //     return;
-  //   }
-  //   InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-  //   bool onService = await interprovincialClientDataFirebase.checkIfInterprovincialLocationDriverEntityOnService(documentId: documentId);
-  //   if(!onService){
-  //     //! Considerar traer del backend los datos el driver
-  //     showDialog(
-  //       context: context,
-  //       child: QualificationWidget(
-  //         title: 'Califica el servicio',
-  //         nameUserQuelify: '',
-  //         routeTraveled: '',
-  //         onAccepted: (stars, comments){
-  //           //! Enviar calificacion al server
-  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-  //         },
-  //         onSkip: (){
-  //           interprovincialClientDataLocal.deleteDocumentIdOnServiceInterprovincialToQualification;
-  //         },
-  //       )
-  //     );
-  //   }
-  // }
   void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
@@ -121,13 +94,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
-    print('###################');
-    print( serviceInCourse.entityType );
-    print( serviceInCourse.passengerDocumentId );
-    print( serviceInCourse.requestDocumentId );
-    print( serviceInCourse.serviceType );
-    print( serviceInCourse.serviceDocumentId );
-    print('###################');
 
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));

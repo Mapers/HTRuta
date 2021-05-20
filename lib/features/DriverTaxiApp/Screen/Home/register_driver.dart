@@ -262,7 +262,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
       await _cropImage(index);
       setState(() {});
-       Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
     }catch(error){
       print(error.toString());

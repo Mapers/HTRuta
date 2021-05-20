@@ -37,12 +37,10 @@ class _CustomDropdownClientState extends State<CustomDropdownClient> {
         left: xPosition,
         width: width,
         top: yPosition + height,
-        // height: 4 * height + 40,
         child: DropDown(
           itemHeight: height,
           onItemSelected: (TypeServiceEnum selectedValue){
             BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: selectedValue));
-            print(selectedValue);
             setState(() {
               if (isDropdownOpened) {
                 floatingDropdown.remove();

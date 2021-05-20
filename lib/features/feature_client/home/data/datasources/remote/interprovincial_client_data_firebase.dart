@@ -24,9 +24,7 @@ class InterprovincialClientDataFirebase {
         description: 'Revise las solicitudes'
       );
       return dRequests.id;
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) {}
     return null;
   }
 
@@ -58,9 +56,7 @@ class InterprovincialClientDataFirebase {
         );
       }
       return dsRequest.data()['passenger_document_id'];
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) {}
     return null;
   }
 

@@ -6,7 +6,6 @@ import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/local/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -68,9 +67,6 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
       );
       _markers[markerTo.markerId] = markerTo;
 
-      InterprovincialClientDataLocal interprovincialClientDataLocal = getIt<InterprovincialClientDataLocal>();
-      interprovincialClientDataLocal.saveDocumentIdOnServiceInterprovincial(widget.documentId);
-
       _locationUtil.initListener(listen: (_locationPassenger){
         currenActual = _locationPassenger;
         subscription ??= interprovincialClientDataFirebase.streamInterprovincialLocationDriver(documentId: widget.documentId).listen((interprovincialLocationDriver){
@@ -79,7 +75,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             nameMarkerId: 'DRIVE_POSITION_MARKER',
             icon: result[2],
             onTap: (){
-              print('Data del conductor');
+              //! Ver info del conductor
             }
           );
           _markers[markerDrive.markerId] = markerDrive;
