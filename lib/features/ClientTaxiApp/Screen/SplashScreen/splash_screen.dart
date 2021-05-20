@@ -94,13 +94,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
-    print('###################');
-    print( serviceInCourse.entityType );
-    print( serviceInCourse.passengerDocumentId );
-    print( serviceInCourse.requestDocumentId );
-    print( serviceInCourse.serviceType );
-    print( serviceInCourse.serviceDocumentId );
-    print('###################');
 
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));

@@ -19,7 +19,6 @@ class CommentsDriveBloc extends Bloc<CommentsDriveEvent, CommentsDriveState> {
     CommentsDriveEvent event,
   ) async* {
     if(event is GetCommentsDriveEvent){
-      print('holis');
       List<CommentsDriverEntity> commentsDriver =  await interprovincialClientRemoteDataSoruce.getCommentsRoutes(availablesRoutesEntity: event.availablesRoutesEntity );
       yield DataCommentsDriveState.initial().copyWith(commentsDriver: commentsDriver);
     }

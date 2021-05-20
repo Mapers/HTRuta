@@ -135,7 +135,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
           lat: position.latitude,
           lng: position.longitude,
         );
-        print(element.data());
       });
     });
   }
@@ -181,7 +180,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
         widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
           formattedAddress: '',

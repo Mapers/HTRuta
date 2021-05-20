@@ -37,8 +37,6 @@ class RouteDriveBloc extends Bloc<RouteDriveEvent, RouteDriveState> {
         List<InterprovincialRouteEntity> interprovincialRoutes = await routeDriveRepository.getRouterDrives();
         yield RouteDriveInitial(routerDrives: interprovincialRoutes);
       }
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) {}
   }
 }

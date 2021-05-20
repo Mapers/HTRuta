@@ -33,7 +33,6 @@ class InterprovincialClientRemoteDataSoruce {
   }
 
   Future<List<CommentsDriverEntity>> getCommentsRoutes({@required AvailableRouteEntity availablesRoutesEntity}) async{
-    print('sigo mi caminodsdsd');
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/passenger/get-comments',
       data: {

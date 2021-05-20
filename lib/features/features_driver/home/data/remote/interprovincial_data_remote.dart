@@ -58,7 +58,6 @@ class InterprovincialDriverDataRemote {
       data: { 'service_id': serviceId, 'seats': seats}
     );
     if(result.success) return result.success;
-    print('>> result.error: ${result.error}');
 
     throw ServerException(message: result.error);
   }

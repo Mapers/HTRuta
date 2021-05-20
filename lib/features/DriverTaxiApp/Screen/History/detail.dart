@@ -256,7 +256,6 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             glowColor: Colors.white,
                             onRatingUpdate: (rating) {
                               ratingScore = rating;
-                              print(rating);
                             },
                           ),
                           Container(

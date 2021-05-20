@@ -74,7 +74,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             nameMarkerId: 'DRIVE_POSITION_MARKER',
             icon: result[2],
             onTap: (){
-              print('Data del conductor');
+              //! Ver info del conductor
             }
           );
           _markers[markerDrive.markerId] = markerDrive;

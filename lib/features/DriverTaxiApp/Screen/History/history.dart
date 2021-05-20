@@ -26,16 +26,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
-  /* @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async  {
-        final _prefs = UserPreferences();
-        final data = await pickupApi.getHistoricalRequest("1046");
-        print(data);
-    });
-  } */
 
   @override
   Widget build(BuildContext context) {

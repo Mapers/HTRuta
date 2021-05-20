@@ -187,9 +187,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         }
       }
       drawRoute();
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (_) { }
   }
 
   void drawRoute()async{
