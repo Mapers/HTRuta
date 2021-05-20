@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
@@ -194,7 +195,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver ruta',
                     width: 100,
                     onPressed: () {
-                      deleteRequestAndRedirectionalMap(documentId, request, null);
+
+                      deleteRequestAndRedirectionalMap(documentId, request);
                     }
                   ),
                 ],
@@ -215,15 +217,16 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     width: 100,
                     color:Colors.red,
                     onPressed: ()async{
-                      Navigator.of(context).pop();
-                      await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId);
                       final user = await _session.get();
+                      await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: true);
+                      BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
                       NegotiationEntity negotiation = NegotiationEntity(
                         serviceId: widget.availablesRoutesEntity.id,
                         passengerId: user.id,
                         requestDocumentId: null
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity:  negotiation));
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
                     },
                   ),
                   SizedBox(width: 30,),
@@ -231,9 +234,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Aceptar',
                     width: 100,
                     onPressed: () async{
-                      final onRequestAccept = await interprovincialDataFirestore.acceptRequest(documentId: documentId, request: request, origin: InterprovincialDataFirestoreOrigin.client);
-                      await serviceDataRemote.acceptRequest(widget.availablesRoutesEntity.id, request.passengerId, onRequestAccept.passenger.documentId);
-                      deleteRequestAndRedirectionalMap(documentId, request, onRequestAccept.passenger.documentId );
                       final user = await _session.get();
                       _prefs.service_id = widget.availablesRoutesEntity.id.toString();
                       NegotiationEntity negotiation = NegotiationEntity(
@@ -254,14 +254,18 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     return Container();
   }
 
-  void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request, String entrypassengerDocumentId ) async {
+  void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request ) async {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+    openLoadingDialog(context);
     String passengerDocumentId =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
+    LocationEntity currentlocation =  await LocationUtil.currentLocation();
+    Navigator.of(context).pop();
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(
       widget.availablesRoutesEntity.documentId,
       availablesRoutesEntity: widget.availablesRoutesEntity,
       price: request.price,
-      passengerDocumentId: passengerDocumentId ?? entrypassengerDocumentId
+      passengerDocumentId: passengerDocumentId,
+      currentLocation: currentlocation,
     )), (_) => false);
   }
 }

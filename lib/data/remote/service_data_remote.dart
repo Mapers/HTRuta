@@ -20,6 +20,9 @@ class ServiceDataRemote{
     try{
       final user = await _session.get();
       await _prefs.initPrefs();
+      print('.............');
+      print(_prefs.idChofer);
+      print(user.id);
       dynamic data = {
         'driver_id': _prefs.idChofer,
         'passenger_id': user.id,
@@ -27,6 +30,10 @@ class ServiceDataRemote{
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: data
       );
+      print(result.success);
+      print(result.data);
+      print(result.error);
+      print('.............');
       return ServiceInCourseEntity.fromJson(result.data);
     } catch(_){
       return null;
