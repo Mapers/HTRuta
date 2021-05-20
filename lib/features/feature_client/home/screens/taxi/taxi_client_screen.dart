@@ -79,7 +79,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   void initState() {
     super.initState();
     fetchDriverLocation();
-    saveUserPhoto();
+    // saveUserPhoto();
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
       // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
@@ -128,7 +128,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     if (!mounted) return;
     _lastKnownPosition = position;
   }
-  Future<void> saveUserPhoto() async {
+  /* Future<void> saveUserPhoto() async {
     userPhoto = await pickupApi.getUserPhoto();
     ui.Image userImage = await loadImage(userPhoto);
     userPhoto = await getBytesFromCanvas(userImage, 100, 100);
@@ -156,7 +156,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     final img = await pictureRecorder.endRecording().toImage(width, height);
     final data = await img.toByteData(format: ui.ImageByteFormat.png);
     return data.buffer.asUint8List();
-  }
+  } */
 
   Future<void> checkPermission() async {
     isEnabledLocation = await Permission.location.serviceStatus.isEnabled;
@@ -503,7 +503,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                 circles: Set<Circle>.of(circles.values),
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
-                myLocationEnabled: false,
+                myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
                 initialCameraPosition: CameraPosition(

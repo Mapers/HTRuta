@@ -1,6 +1,5 @@
 import 'package:HTRuta/features/ClientTaxiApp/Model/payment_methods_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 
@@ -33,34 +32,35 @@ class _PaymentSelectorState extends State<PaymentSelector> {
             paymentMethods = getListaPaymentMethods(snapshot.data);
             savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
             List<String> paymentsLocally = _prefs.getClientPaymentMethods;
-            print(paymentsLocally);
+            print('Payment methods: ' + paymentsLocally.toString());
             for(int i = 0; i < paymentMethods.length; i++){
-              if(paymentsLocally.contains(paymentMethods[i])){
+              if(paymentsLocally.contains(paymentMethods[i].iId)){
                 savedPaymentMethods[i] = true;
               }
             }
             selectedPaymentMethod = paymentMethods.first;
-            return buildContent(paymentMethods);
+            return buildContent(paymentMethods, savedPaymentMethods);
           }
           case ConnectionState.done:{
             paymentMethods = getListaPaymentMethods(snapshot.data);
             savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
             List<String> paymentsLocally = _prefs.getClientPaymentMethods;
+            print('Payment methods: ' + paymentsLocally.toString());
             for(int i = 0; i < paymentMethods.length; i++){
-              if(paymentsLocally.contains(paymentMethods[i])){
+              if(paymentsLocally.contains(paymentMethods[i].iId)){
                 savedPaymentMethods[i] = true;
               }
             }
             selectedPaymentMethod = paymentMethods.first;
-            return buildContent(paymentMethods);
+            return buildContent(paymentMethods, savedPaymentMethods);
           }
         }
         return Container();
       }
-    ) : buildContent(paymentMethods);
+    ) : buildContent(paymentMethods, savedPaymentMethods);
   }
 
-  Widget buildContent(List<PaymentMethodClient> data){
+  Widget buildContent(List<PaymentMethodClient> data, List<bool> savedPaymentMethods){
     return Row(
       children: [
         Column(
