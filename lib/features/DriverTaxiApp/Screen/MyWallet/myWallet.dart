@@ -38,6 +38,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
       child: Scaffold(
       appBar: AppBar(
         title: Text('Billetera',style: TextStyle(color: blackColor),),
+        centerTitle: true,
         backgroundColor: whiteColor,
         elevation: 0.0,
         iconTheme: IconThemeData(color: blackColor),

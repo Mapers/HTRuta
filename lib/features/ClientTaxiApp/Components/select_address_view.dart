@@ -208,8 +208,18 @@ class _SelectAddressState extends State<SelectAddress> {
               child: FlatButton(
                 onPressed: ()async{
                   try{
-                    if(widget.toAddress == null) return;
-                    if(widget.toAddress.name.isEmpty) return;
+                    if(widget.toAddress == null){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione una posición de inicio');
+                      return;
+                    }
+                    if(widget.toAddress.name.isEmpty){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione una posición de fin');
+                      return;
+                    }
+                    if(paymentMethodsSelected.isEmpty){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione al menos un método de pago');
+                      return;
+                    }
                     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
                     
                     if(precio.isNotEmpty){

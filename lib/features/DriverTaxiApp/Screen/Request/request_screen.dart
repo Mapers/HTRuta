@@ -221,12 +221,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             'Solicitudes',
             style: TextStyle(color: blackColor),
           ),
-          elevation: 2,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
           iconTheme: IconThemeData(color: blackColor),
-          bottom: TabBar(tabs: [
-            Tab(child: Text('TAXI', style: TextStyle(color: Colors.white,fontSize: 11),),),
-            Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: Colors.white,fontSize: 10),)),
-            Tab(child: Text('CARGA', style: TextStyle(color: Colors.white,fontSize: 11),))
+          bottom: TabBar(
+            indicatorColor: primaryColor,
+            tabs: [
+            Tab(child: Text('TAXI', style: TextStyle(color: primaryColor,fontSize: 11),),),
+            Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: primaryColor,fontSize: 10),)),
+            Tab(child: Text('CARGA', style: TextStyle(color: primaryColor,fontSize: 11),))
           ]),
           leading: IconButton(
             icon: Icon(Icons.menu),

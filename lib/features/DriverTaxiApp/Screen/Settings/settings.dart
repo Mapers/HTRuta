@@ -34,6 +34,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: whiteColor,
+          centerTitle: true,
           title: Text('Configuraciones',style: TextStyle(color: blackColor)),
           leading: IconButton(
             icon: Icon(Icons.menu),

@@ -82,7 +82,8 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
         appBar: AppBar(
           title: Text('Notificacion',style: TextStyle(color: blackColor),),
           backgroundColor: whiteColor,
-          elevation: 2.0,
+          centerTitle: true,
+          elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {

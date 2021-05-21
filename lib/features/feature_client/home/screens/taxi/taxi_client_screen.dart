@@ -501,6 +501,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               //height: MediaQuery.of(context).size.height - 180,
               child: GoogleMap(
                 circles: Set<Circle>.of(circles.values),
+                zoomControlsEnabled: false,
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
@@ -561,7 +562,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               ),
             ),
             Positioned(
-                bottom: responsive.hp(36),
+                bottom: 380,
                 right: 20,
                 child: GestureDetector(
                   onTap: (){
@@ -578,7 +579,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   ),
                 )
             ),
-            ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+            // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
             /* Positioned(
                 top: 60,
                 right: 10,

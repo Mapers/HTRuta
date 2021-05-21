@@ -137,6 +137,24 @@ class MenuScreens extends StatelessWidget {
                               },
                             ), */
                             getItemMenu(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamed(AppRoute.notificationScreen);
+                              },
+                              isSelected: activeScreenName.compareTo('NOTIFICATIONS') == 0,
+                              icon: FontAwesomeIcons.bell,
+                              text: 'Notificaciones'
+                            ),
+                            getItemMenu(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamed(AppRoute.settingsScreen);
+                              },
+                              isSelected: activeScreenName.compareTo('SETTINGS') == 0,
+                              icon: FontAwesomeIcons.cogs,
+                              text: 'Configuraciones'
+                            ),
+                            getItemMenu(
                               icon: FontAwesomeIcons.fileAlt,
                               text: 'Términos y Condiciones',
                               isSelected: activeScreenName.compareTo('TERMS') == 0,

@@ -30,6 +30,10 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
       menu: MenuDriverScreens(activeScreenName: screenName),
       child: Scaffold(
         appBar: AppBar(
+          title: Text('Mis métodos de pago',style: TextStyle(color: blackColor)),
+          centerTitle: true,
+          backgroundColor: whiteColor,
+          elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: (){
