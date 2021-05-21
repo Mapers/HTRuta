@@ -11,7 +11,9 @@ class GetAvailablesRoutesEvent extends AvailablesRoutesEvent {
   final LocationEntity from;
   final double radio;
   final int seating;
-  const GetAvailablesRoutesEvent({@required this.to, @required this.from, @required this.radio, @required this.seating});
+  final List<int> paymentMethods;
+
+  const GetAvailablesRoutesEvent({@required this.to, @required this.from, @required this.radio, @required this.seating, @required this.paymentMethods});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [to, from, radio, seating, paymentMethods];
 }

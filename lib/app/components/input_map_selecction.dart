@@ -48,7 +48,7 @@ class InputMapSelecction extends StatelessWidget {
                   color: Colors.grey,
                   offset: Offset(1, 5),
                   blurRadius: 10,
-                  spreadRadius: 3
+                  spreadRadius: 1
                 )
               ],
             ),

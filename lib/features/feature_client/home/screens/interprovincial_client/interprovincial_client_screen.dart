@@ -4,6 +4,7 @@ import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
@@ -11,6 +12,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final bool rejected;
@@ -29,6 +31,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   bool drawCircle = false;
   double initialCircularRadio;
   int initialSeat;
+  List<int> paymentMethodsSelected = [];
 
   @override
   void initState() {
@@ -49,13 +52,13 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         changeStateCircle();
         DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
         initialSeat = param.requiredSeats;
-        destinationInpit( param.distictTo);
-        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats ));
+        destinationInput( param.distictTo);
+        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: paymentMethodsSelected));
         Navigator.of(context).push(Routes.toAvailableRoutesPage());
       }
     });
   }
-  void destinationInpit(LocationEntity to){
+  void destinationInput(LocationEntity to){
     toController.text = to.streetName;
     toLocation = to;
     setState(() {});
@@ -76,7 +79,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         alignment: Alignment.bottomCenter,
         children: [
           MapInterprovincialClientWidget(
-            destinationInpit: destinationInpit,
+            destinationInpit: destinationInput,
             drawCircle: drawCircle,
             radiusCircle: initialCircularRadio,
             getFrom: getfrom,
@@ -103,7 +106,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                       Positioned(
                         left: 15,
                         top: 180,
-                        child: Row(
+                        child: Wrap(
                           children: [
                             Card(
                               elevation: 5,
@@ -150,6 +153,23 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                                   },
                                 ),
                               ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        left: 15,
+                        top: 250,
+                        child: Row(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
+                              child: PaymentSelector(
+                                onSelected: (_methods){
+                                  paymentMethodsSelected = _methods;
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -167,19 +187,35 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   }
   Positioned SaveButtonWidget(BuildContext context) {
     return Positioned(
-      top: 500,
+      bottom: 10,
       right: 15,
       left: 15,
       child: PrincipalButton(
         text: 'Buscar interprovincial',
-        onPressed: ()async{
+        onPressed: () async{
+          if(toLocation == null){
+            Fluttertoast.showToast(
+              msg: 'Seleccione su destino',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+            );
+            return;
+          }
+          if(paymentMethodsSelected.isEmpty){
+            Fluttertoast.showToast(
+              msg: 'Seleccione al menos un método de pago que disponga',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+            );
+            return;
+          }
           showDialog(
             context: context,
             child: Center(
               child: Text('Buscando...',style: TextStyle(color: Colors.white, fontSize: 20,decoration: TextDecoration.none),)
             ),
           );
-          BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat));
+          BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat, paymentMethods: paymentMethodsSelected));
           await Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();
           Navigator.of(context).push(Routes.toAvailableRoutesPage());

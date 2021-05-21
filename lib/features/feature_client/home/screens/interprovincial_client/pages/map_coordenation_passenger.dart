@@ -14,11 +14,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
+  final LocationEntity currentLocation;
   final String passengerDocumentId;
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId}) : super(key: key);
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -39,7 +40,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   @override
   void initState() {
     //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
-    currenActual = LocationEntity.initialWithLocation(latitude: 0, longitude: 0);
+    currenActual = widget.currentLocation;
 
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
@@ -49,6 +50,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_marker_32.png'),
       ]);
       openLoadingDialog(context);
+      _mapViewerUtil.changeToDarkMode;
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', widget.availablesRoutesEntity.route.fromLocation, widget.availablesRoutesEntity.route.toLocation);
       Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
