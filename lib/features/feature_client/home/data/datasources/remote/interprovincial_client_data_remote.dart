@@ -17,14 +17,15 @@ class InterprovincialClientRemoteDataSoruce {
   InterprovincialClientRemoteDataSoruce({@required this.firestore, @required this.requestHttp });
   List<ClientInterporvincialRoutesEntity> routes =[];
 
-  Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating}) async{
+  Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating, @required final List<int> paymentMethods}) async{
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
       data: {
         'radio': radio,
         'seating': seating,
         'position_user': from.toMap,
-        'to': to.toMap
+        'to': to.toMap,
+        'payment_methods': paymentMethods
       }
     );
 

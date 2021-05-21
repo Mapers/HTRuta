@@ -46,6 +46,7 @@ class _MapInterprovincialClientWidgetState extends State<MapInterprovincialClien
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
       toPinLocationIcon = result[3];
+      _mapViewerUtil.changeToDarkMode;
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang, zoom: 16);
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));

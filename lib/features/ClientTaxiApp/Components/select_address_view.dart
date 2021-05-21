@@ -135,10 +135,13 @@ class _SelectAddressState extends State<SelectAddress> {
               padding: EdgeInsets.only(right: 20, left: 60),
               child: Divider(color: Colors.grey,)
             ),
-            PaymentSelector(
-              onSelected: (List<int> selectedPaymentMethods){
-                paymentMethodsSelected = selectedPaymentMethods;
-              },
+            Padding(
+              padding: EdgeInsets.only(left: 45),
+              child: PaymentSelector(
+                onSelected: (List<int> selectedPaymentMethods){
+                  paymentMethodsSelected = selectedPaymentMethods;
+                },
+              ),
             ),
             Container(
               padding: EdgeInsets.only(right: 20, left: 60),

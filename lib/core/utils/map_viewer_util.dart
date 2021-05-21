@@ -1,6 +1,7 @@
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -38,6 +39,18 @@ class MapViewerUtil {
       ),
     );
   }
+
+  void get changeToDarkMode => changeMapType(3, 'assets/style/dark_mode.json');
+
+  void changeMapType(int id, String fileName){
+    if (fileName == null) {
+      googleMapController.setMapStyle(null);
+    } else {
+      _getFileData(fileName)?.then((mapStyle) => googleMapController.setMapStyle(mapStyle));
+    }
+  }
+
+  Future<String> _getFileData(String path) async => await rootBundle.loadString(path);
 
   Circle circular(LatLng currentLocation,{bool visible = false,double  radiusCircle = 4000}){
     Circle circles =

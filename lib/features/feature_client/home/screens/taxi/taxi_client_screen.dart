@@ -8,7 +8,6 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/select_map_type.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/models/map_type_model.dart';
@@ -55,7 +54,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData =  <MapTypeModel>[];
-  PersistentBottomSheetController _controller;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500},{'id': 2, 'title': '1 km', 'unidad': 'km', 'distancia': 1},{'id':3,'title': '3 km', 'unidad': 'km', 'distancia': 3},{'id':4,'title': '5 km', 'unidad': 'km', 'distancia': 5}, {'id':5,'title': '15 km', 'unidad': 'km', 'distancia': 15}];
   Map<String, dynamic> distanceOptionSelected = {'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500};

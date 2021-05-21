@@ -48,6 +48,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
       toPinLocationIcon = result[3];
+      _mapViewerUtil.changeToDarkMode;
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang);
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
@@ -84,6 +85,11 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
           });
         }
         // Lanzar listener de pasajeros
+      }else if(_data.status == InterprovincialStatus.notEstablished){
+        if(polylines.isNotEmpty){
+          polylines = {};
+          _markers = {};
+        }
       }
       if(mounted){
         BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(UpdateDriverLocationInterprovincialDriverLocationEvent(driverLocation: _location, status: _data.status));

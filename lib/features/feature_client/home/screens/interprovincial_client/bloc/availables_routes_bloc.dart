@@ -20,7 +20,7 @@ class AvailablesRoutesBloc extends Bloc<AvailablesRoutesEvent, AvailablesRoutesS
   ) async* {
     if(event is GetAvailablesRoutesEvent){
       yield LoadingAvailablesRoutes();
-      List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes(from: event.from ,to: event.to,radio: event.radio,seating: event.seating);
+      List<AvailableRouteEntity> availablesRoutes = await interprovincialClientRemote.getAvailablesRoutes(from: event.from ,to: event.to,radio: event.radio,seating: event.seating, paymentMethods: event.paymentMethods);
 
       yield DataAvailablesRoutes(availablesRoutes: availablesRoutes,distictfrom: event.from ,distictTo: event.to, requiredSeats: event.seating, radio: event.radio);
     }
