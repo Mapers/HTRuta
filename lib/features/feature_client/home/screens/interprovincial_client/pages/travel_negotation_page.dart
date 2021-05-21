@@ -3,7 +3,6 @@ import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
@@ -147,7 +146,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     );
   }
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId} ){
-    InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
         return Center(

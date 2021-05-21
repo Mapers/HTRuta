@@ -104,7 +104,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
       }else{
           InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-          ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
           DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
           InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
           AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
@@ -124,12 +123,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             price:  double.parse(dataNecessaryRetrieve.negotiatedPrice),
             passengerDocumentId:serviceInCourse.passengerDocumentId,
           )), (_) => false);
-          }else{
-            Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);
-          }
+        }else{
+          Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);
+        }
       }
     }
-    // _showDialogQualification();
   }
 
   @override
