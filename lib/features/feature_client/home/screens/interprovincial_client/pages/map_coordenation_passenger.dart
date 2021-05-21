@@ -14,11 +14,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
+  final LocationEntity currentLocation;
   final String passengerDocumentId;
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId}) : super(key: key);
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -39,7 +40,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   @override
   void initState() {
     //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
-    currenActual = LocationEntity.initialWithLocation(latitude: 0, longitude: 0);
+    currenActual = widget.currentLocation;
 
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
