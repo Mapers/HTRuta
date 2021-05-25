@@ -463,18 +463,23 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
                                             await pickUpApi.prepareTravel(pedidoProvider.idSolicitud);
+                                            String idViaje = await pickUpApi.acceptDriverRequest(pedidoProvider.idSolicitud, actualRequest.idChofer);
+                                            if(idViaje == null){
+                                              Dialogs.alert(context, title: 'Error', message: 'No se pudo aceptar la solicitud');
+                                              return;
+                                            }
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',
-                                              'idSolicitud': pedidoProvider.idSolicitud
+                                              'idSolicitud': pedidoProvider.idSolicitud,
                                             };
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Confirmación', description: 'El usuario aceptó su oferta', data: data);
                                             setState(() {
                                               isLoading = false;
                                             });
                                             pedidoProvider.requestDriver = actualRequest;
+                                            pedidoProvider.idViaje = idViaje;
                                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
                                           } on ServerException catch(error){
                                             Navigator.pop(context);

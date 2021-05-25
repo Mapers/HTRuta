@@ -1,3 +1,6 @@
+import 'package:HTRuta/app/components/dialogs.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -14,9 +17,9 @@ class CommentUserDialog extends StatefulWidget {
 
 class _CommentUserDialogState extends State<CommentUserDialog> {
   double stars = 3;
-
   String commentary = '';
-
+  final pickupApi = PickupApi();
+  
   @override
   Widget build(BuildContext context) {
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
@@ -28,8 +31,8 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
           IconButton(
             icon: Icon(Icons.close),
             color: primaryColor,
-            onPressed: (){
-
+            onPressed: () async {
+              print(pedidoProvider.idViaje);
             },
           )
         ],
@@ -88,11 +91,19 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text('Guardar', style: TextStyle(color: Colors.white)),
-                  onPressed: (){
-                    print(pedidoProvider.idSolicitud);
-                    final _prefs = UserPreferences();
-                    String id = _prefs.idChofer;
-                    print(id);
+                  onPressed: () async {
+                    SaveQualificationBody body = SaveQualificationBody(
+                      viajeId: int.parse(pedidoProvider.idViaje),
+                      stars: stars,
+                      comment: commentary
+                    );
+                    bool success = await pickupApi.sendUserQualification(body);
+                    if(!success){
+                      Dialogs.alert(context,title: 'Lo sentimos', message: 'No se pudo guardar su calificación');
+                      return;
+                    }else{
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ),

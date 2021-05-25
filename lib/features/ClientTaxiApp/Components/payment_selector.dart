@@ -24,7 +24,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
   @override
   Widget build(BuildContext context) {
     widthDropdown = MediaQuery.of(context).size.width * 0.6;
-    return FutureBuilder(
+    return paymentMethods == null ? FutureBuilder(
       future: pickUpApi.getPaymentMethods(),
       builder: (BuildContext context, AsyncSnapshot snapshot){
         if(snapshot.hasError) return Container();
@@ -38,7 +38,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
         }
         return Container();
       }
-    ) ;
+    ) : buildContent(paymentMethods, savedPaymentMethods);
   }
 
   Widget proccessDataToWidget(dynamic data){
@@ -46,7 +46,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
     savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
     List<String> paymentsLocally = _prefs.getClientPaymentMethods;
     for(int i = 0; i < paymentMethods.length; i++){
-      if(paymentsLocally.contains(paymentMethods[i])){
+      if(paymentsLocally.contains(paymentMethods[i].iId)){
         savedPaymentMethods[i] = true;
       }
     }

@@ -42,7 +42,8 @@ class UserEntity {
     this.vchCelular,
     this.vchCorreo,
     this.vchPassword,
-    this.iIdUsuario
+    this.iIdUsuario,
+    this.iIdChofer
   });
 
   int bAdministrador;
@@ -55,6 +56,7 @@ class UserEntity {
   String vchCorreo;
   String vchPassword;
   int iIdUsuario;
+  int iIdChofer;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
     bAdministrador: json['bAdministrador'],
@@ -66,7 +68,8 @@ class UserEntity {
     vchCelular: json['vchCelular'],
     vchCorreo: json['vchCorreo'],
     vchPassword: json['vchPassword'],
-    iIdUsuario: json['iIdUsuario']
+    iIdUsuario: json['iIdUsuario'],
+    iIdChofer: json['iIdChofer'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +82,7 @@ class UserEntity {
     'vchCelular': vchCelular,
     'vchCorreo': vchCorreo,
     'vchPassword': vchPassword,
-    'iIdUsuario' : iIdUsuario
+    'iIdUsuario' : iIdUsuario,
+    'iIdChofer' : iIdChofer,
   };
 }

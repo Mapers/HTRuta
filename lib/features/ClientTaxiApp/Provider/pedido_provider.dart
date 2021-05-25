@@ -9,6 +9,7 @@ class PedidoProvider extends ChangeNotifier{
   int _contador = 0;
   double _precio;
   DriverRequest _requestDriver;
+  String _idViaje;
 
   String get idSolicitud => _idSolicitud;
 
@@ -22,6 +23,12 @@ class PedidoProvider extends ChangeNotifier{
   set request(RequestModel data){
     _request = data;
     notifyListeners();
+  }
+
+  String get idViaje => _idViaje;
+
+  set idViaje(String idViaje){
+    _idViaje = idViaje;
   }
 
   DriverRequest get requestDriver => _requestDriver;

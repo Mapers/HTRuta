@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
@@ -19,6 +20,7 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   List<PaymentMethod> paymentMethodsLoaded;
+  final _prefs = UserPreferences();
 
   final pickupApi = PickupApi();
   @override
@@ -46,7 +48,7 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
           ),
         ),
         body: paymentMethodsLoaded == null ? FutureBuilder(
-          future: pickupApi.getDriverPaymentMethod('27'),
+          future: pickupApi.getDriverPaymentMethod(_prefs.idChoferReal),
           builder: (BuildContext context, AsyncSnapshot snapshot){
             if(snapshot.hasError) return Container();
             switch(snapshot.connectionState){
@@ -114,7 +116,7 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
               return;
             }
             SaveDriverPmBody body = SaveDriverPmBody(
-              choferId: 27,
+              choferId: int.parse(_prefs.idChoferReal),
               arrFormaPagoIds: paymentMethodsSelected
             );
             bool success = await pickupApi.saveDriverPaymentMethods(body);

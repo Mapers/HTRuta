@@ -9,6 +9,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/register_travel_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/travel_accepted_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
@@ -121,6 +123,16 @@ class PickupApi{
       final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchoferUsuario': idChofer} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
+    } catch(error){
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<String> acceptDriverRequest(String idSolicitud, String idChofer)async{
+    final url = '${Config.nuevaRutaApi}/actualizar-viaje';
+    try{
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchoferUsuario': idChofer} );
+      final responseData = travelAcceptedResponseFromJson(response.body);
+      return responseData.data.iIdViaje;
     } catch(error){
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
@@ -265,6 +277,25 @@ class PickupApi{
     } catch(error){
       print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<bool> sendUserQualification(SaveQualificationBody body)async{
+    final url = '${Config.nuevaRutaApi}/usuario/calificar';
+    try{
+      final response = await http.post(
+        url,
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body: saveQualificationBodyToJson(body)
+      );
+      print(response.body);
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        return false;
+      }
+    } catch(error){
+      print(error);
+      return false;
     }
   }
 }

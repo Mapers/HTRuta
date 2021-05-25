@@ -4,6 +4,7 @@ import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
@@ -84,7 +85,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             radiusCircle: initialCircularRadio,
             getFrom: getfrom,
           ),
-          ChangeServiceClientWidget(),
+          // ChangeServiceClientWidget(),
+          CustomDropdownClient(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
               if(state is DataInterprovincialClientState){

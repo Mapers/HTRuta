@@ -94,7 +94,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
     LocationEntity locationEntity = await LocationUtil.currentLocation();
-    final data = await pickupApi.getRequest('27', locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
+    final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       print(_prefs.idChofer);
       if(data != null){
         requestTaxi.clear();

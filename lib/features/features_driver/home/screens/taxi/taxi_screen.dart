@@ -149,7 +149,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Future<void> getSolicitudes() async {
       final _prefs = UserPreferences();
       LocationEntity locationEntity = await LocationUtil.currentLocation();
-      final data = await pickupApi.getRequest(_prefs.idChofer, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
+      final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       if(data != null){
         requestTaxi.clear();
         aceptados.clear();
