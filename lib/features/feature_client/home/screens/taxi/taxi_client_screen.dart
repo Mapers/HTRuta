@@ -36,7 +36,7 @@ class TaxiClientScreen extends StatefulWidget {
   _TaxiClientScreenState createState() => _TaxiClientScreenState();
 }
 
-class _TaxiClientScreenState extends State<TaxiClientScreen> {
+class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBindingObserver{
   final String screenName = 'HOME';
   var _scaffoldKey =  GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -74,8 +74,21 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   final pickupApi = PickupApi();
   
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      changeMapType(3, 'assets/style/dark_mode.json');
+    }
+  }
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
     // saveUserPhoto();
     Geolocator.getPositionStream().listen((event) async{

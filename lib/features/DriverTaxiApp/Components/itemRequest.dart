@@ -116,7 +116,7 @@ class ItemRequest extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text(price ?? '',style: textBoldBlack,),
+                        Text('${double.parse(price).toStringAsFixed(2)}',style: textBoldBlack,),
                         Text(distance ?? '',style: textGrey,),
                       ],
                     ),

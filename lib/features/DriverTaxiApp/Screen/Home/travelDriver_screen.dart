@@ -44,7 +44,7 @@ class TravelDriverScreen extends StatefulWidget {
   _TravelDriverScreenState createState() => _TravelDriverScreenState();
 }
 
-class _TravelDriverScreenState extends State<TravelDriverScreen> {
+class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBindingObserver {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   List<LatLng> points = <LatLng>[];
   GoogleMapController _mapController;
@@ -80,9 +80,21 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
   }
-
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapController.setMapStyle('[]');
+    }
+  }
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     addMakers();
     getRouter();
     _initCurrentLocation();
@@ -130,11 +142,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
     });
     // initPusher();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void addMakers(){
@@ -493,7 +500,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> {
                                 'newCancel' : '1',
                                 'idSolicitud': pedidoProvider.request.idSolicitud
                               };
-                              pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                              pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Cancelación', description: 'El chofer ha cancelado el viaje', data: data);
                               Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
                               // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
                             }else{

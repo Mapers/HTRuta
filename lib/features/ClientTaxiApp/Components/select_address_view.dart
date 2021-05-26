@@ -246,7 +246,7 @@ class _SelectAddressState extends State<SelectAddress> {
                         comentario: comentarios,
                         unidad: widget.unidad,
                         distancia: widget.distancia,
-                        arrFormaPagoIds: paymentMethodsSelected
+                        arrFormaPagoIds: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()
                       ); 
                       final viaje = await pickUpApi.registerTravelClient(body);
                       PushMessage pushMessage = getIt<PushMessage>();

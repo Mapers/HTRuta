@@ -141,7 +141,7 @@ class PickupApi{
   Future<bool> cancelTravelUser(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/rechazar-viaje';
     try{
-      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': idChofer} );
+      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchofer': '27'} );
       final responseData = requestDataFromJson(response.body);
       return responseData.success;
     } catch(error){

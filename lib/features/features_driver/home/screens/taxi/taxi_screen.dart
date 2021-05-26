@@ -43,7 +43,7 @@ class TaxiDriverServiceScreen extends StatefulWidget {
   _TaxiDriverServiceScreenState createState() => _TaxiDriverServiceScreenState();
 }
 
-class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin {
+class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   GoogleMapController _mapController;
@@ -78,10 +78,23 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   List<String> rechazados = [];
   PushNotificationProvider pushProvider;
   final _prefs = UserPreferences();
-
+  
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      changeMapType(3, 'assets/style/dark_mode.json');
+    }
+  }
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     isWorking = _prefs.drivingState;
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
