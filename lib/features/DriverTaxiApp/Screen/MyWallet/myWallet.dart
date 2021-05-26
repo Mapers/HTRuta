@@ -15,9 +15,9 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 //IconData icon, String title, String date, String balance
   List<Map<String, dynamic>> listService = [
-    {'id': '0','icon' : Icons.local_taxi, 'title' : 'Recarga Taxi','date' : '22-05-2020','balance' : 'S/.+10'},
-    {'id': '1','icon' : Icons.local_taxi, 'title' : 'Recarga Interprovincial','date' : '19-05-2019','balance' : 'S/.+5'},
-    {'id': '2','icon' : Icons.local_taxi, 'title' : 'Recarga Carga ','date' : '19-05-2019','balance' : 'S/. +15'},
+    {'id': '0','icon' : Icons.local_taxi, 'title' : 'Recarga Taxi','date' : '22-05-2020','balance' : '+2 viajes'},
+    {'id': '1','icon' : Icons.local_taxi, 'title' : 'Recarga Interprovincial','date' : '19-05-2019','balance' : '+5 viajes'},
+    {'id': '2','icon' : Icons.local_taxi, 'title' : 'Recarga Carga ','date' : '19-05-2019','balance' : '+2 viajes'},
   ];
 
   @override
@@ -81,8 +81,8 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
                 padding: EdgeInsets.only(top: 50.0,bottom: 30.0),
                 child: Column(
                   children: <Widget>[
-                    Text('Balance',style: textStyle,),
-                    Text('S/. 150.00',style: heading35Primary,),
+                    Text('Viajes disponibles',style: textStyle,),
+                    Text('10',style: heading35Primary,),
                   ],
                 ),
               ),

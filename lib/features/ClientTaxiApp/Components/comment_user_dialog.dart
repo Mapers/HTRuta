@@ -2,7 +2,6 @@ import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/app/colors.dart';

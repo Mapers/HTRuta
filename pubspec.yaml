@@ -43,7 +43,7 @@ dependencies:
   flutter_calendar_carousel: ^1.4.10
   flutter_tindercard: ^0.1.8
   flutter_html: ^0.11.0
-  lite_rolling_switch: ^0.1.1
+  flutter_switch: ^0.2.2
 
   flutter_secure_storage: ^3.3.5
   equatable: ^1.2.6

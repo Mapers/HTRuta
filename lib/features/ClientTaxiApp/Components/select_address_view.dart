@@ -41,6 +41,7 @@ class _SelectAddressState extends State<SelectAddress> {
   FocusNode precioFocus = FocusNode();
   final pickUpApi = PickupApi();
   List<int> paymentMethodsSelected = [];
+  final _prefs = UserPreferences();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -219,7 +220,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione una posición de fin');
                       return;
                     }
-                    if(paymentMethodsSelected.isEmpty){
+                    if(_prefs.getClientPaymentMethods.isEmpty){
                       Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione al menos un método de pago');
                       return;
                     }
@@ -229,7 +230,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       final _session = Session();
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
-                      final _prefs = UserPreferences();
+                      
                       String token = _prefs.tokenPush;
                       RegisterTravelBody body = RegisterTravelBody(
                         idTokenCliente: token,
