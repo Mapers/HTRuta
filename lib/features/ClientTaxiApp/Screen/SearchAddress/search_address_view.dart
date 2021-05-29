@@ -180,7 +180,6 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                         setState(() {
                           inputTo = true;
                           inputFrom = false;
-                          // print(inputTo);
                         });
                       },
                     ),

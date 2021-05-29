@@ -138,7 +138,6 @@ class _HomeViewState extends State<HomeView> {
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
         widget?.placeBloc?.getCurrentLocation(Place(
           name: _placemark,
           formattedAddress: '',

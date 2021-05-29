@@ -141,7 +141,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     ui.Image userImage = await loadImage(userPhoto);
     userPhoto = await getBytesFromCanvas(userImage, 100, 100);
     if(userPhoto != null){
-      print('Se cargó la foto de usuario');
     }
   }
   Future<ui.Image> loadImage(Uint8List img) async {

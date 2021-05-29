@@ -63,9 +63,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                             hasError = false;
                           });
                         },
-                        onDone: (text){
-                          print('DONE $text');
-                        },
+                        onDone: (text){},
                         wrapAlignment: WrapAlignment.start,
                         pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
                         pinTextStyle: heading35Black,
@@ -84,7 +82,6 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         icon:Text(''),
                         label:Text('Verificar ahora', style: headingWhite,),
                         onPressed: (){
-                          print('hello world');
                           Navigator.of(context).pushReplacementNamed(AppRoute.introScreen);
                         },
                       ),
@@ -94,7 +91,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                           InkWell(
+                            InkWell(
                               onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
                               child:Text('No recibí un código',
                                 style: TextStyle(

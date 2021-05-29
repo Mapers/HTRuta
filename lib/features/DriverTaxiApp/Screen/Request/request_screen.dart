@@ -96,7 +96,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     final _prefs = UserPreferences();
     LocationEntity locationEntity = await LocationUtil.currentLocation();
     final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
-      print(_prefs.idChofer);
       if(data != null){
         requestTaxi.clear();
         aceptados.clear();
@@ -295,7 +294,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        print('$index');
                         navigateToDetail(requestTaxi[index]);
                       },
                       child: cardInterprovincial(InterprovincialModel.empty())
@@ -313,7 +311,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        print('$index');
                         navigateToDetail(requestTaxi[index]);
                       },
                       child: historyItemCarga()

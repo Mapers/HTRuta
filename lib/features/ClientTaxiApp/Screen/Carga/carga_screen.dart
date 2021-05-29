@@ -152,7 +152,6 @@ class _CargaPageState extends State<CargaPage> {
               index: index,
               child: GestureDetector(
                 onTap: () {
-                  print('$index');
                   // navigateToDetail(index.toString());
                 },
                 child: rideHistory()

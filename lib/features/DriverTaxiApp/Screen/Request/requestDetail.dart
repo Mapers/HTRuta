@@ -67,7 +67,6 @@ class _RequestDetailState extends State<RequestDetail> {
         routesData = data?.result?.routes;
       }
     }).catchError((error) {
-      print('GetRoutesRequest > $error');
     });
 
     distance = routesData[0]?.legs[0]?.distance?.text;
@@ -80,7 +79,6 @@ class _RequestDetailState extends State<RequestDetail> {
     setState(() {});
   }
   void addMakers(){
-    checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
 

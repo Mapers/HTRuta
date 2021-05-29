@@ -172,9 +172,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
           routesData = data?.result?.routes;
         }
       }
-    }).catchError((error) {
-      print('GetRoutesRequest > $error');
-    });
+    }).catchError((_) {});
     if(!routeFound) {
       _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
       return;
@@ -190,7 +188,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
   void addMakers(){
-    checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -238,7 +235,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   /* Future<void> fechDriverLocation() async {
     final provider = Provider.of<PedidoProvider>(context,listen: false);
     referenceDatabase.child('Coordenada').onValue.listen((event) {
-      print('Data: ${event.snapshot.value}');
       var dataFirebase = Map<String,dynamic>.from(event.snapshot.value);
       dataFirebase.forEach((key, value) {
         if(key == '${provider.requestDriver.iIdUsuario}'){
@@ -334,7 +330,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       if (placemarks != null && placemarks.isNotEmpty) {
         final Placemark pos = placemarks[0];
           _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
         // widget?.placeBloc?.getCurrentLocation(Place(
         //   name: _placemark,
         //   formattedAddress: '',

@@ -73,7 +73,6 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       setState(() {});
       Navigator.of(context).pop();
     }catch(error){
-      print(error.toString());
     }
   }
 
@@ -82,13 +81,11 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
-      print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
       Navigator.of(context).pop();
     } catch (e) {
-      print(e.toString());
     }
   }
 
@@ -107,7 +104,6 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
     );
     if (croppedFile != null) {
       imagenes[index] = croppedFile;
-      print('${imagenes[index]}');
       setState(() {
         recortado = true;
       });
@@ -222,7 +218,6 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
                             // }
                           }catch(error){
                             Navigator.pop(context);
-                            print('Error ${error.toString()}');
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                           }
                           

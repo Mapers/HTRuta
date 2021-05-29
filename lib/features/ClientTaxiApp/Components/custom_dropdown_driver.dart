@@ -42,7 +42,6 @@ class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
           itemHeight: height,
           onItemSelected: (TypeServiceEnum selectedValue){
             BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: selectedValue));
-            print(selectedValue);
             setState(() {
               if (isDropdownOpened) {
                 floatingDropdown.remove();

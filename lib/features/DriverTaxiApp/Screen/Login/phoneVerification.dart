@@ -68,7 +68,6 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                           });
                         },
                         onDone: (text){
-                          print('Listo $text');
                         },
                         wrapAlignment: WrapAlignment.start,
                         pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,

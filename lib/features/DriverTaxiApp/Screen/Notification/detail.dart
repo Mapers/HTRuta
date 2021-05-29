@@ -17,7 +17,6 @@ class _NotificationDetailState extends State<NotificationDetail> {
   @override
   void initState() {
     super.initState();
-    print(widget.id);
   }
 
   AlertDialog dialogInfo(){

@@ -114,13 +114,11 @@ abstract class WebApiClient {
       return SuccessMessage();
       //return onResponse(data: response.data);
     } on DioError catch (error) {
-      print('DioError: $error');
       return onError(
         status: error.response.statusCode,
         errorMessage: error.message,
       );
     } catch (error) {
-      print('Error: $error');
       return onError(
         status: 500,
         errorMessage: error.toString(),

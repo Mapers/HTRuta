@@ -96,7 +96,6 @@ class PickupApi{
   Future<bool> actionTravel(String idChofer,String idsolicitud, double vchLatInicial, double vchLatFinal, double vchLongInicial, double vchLongFinal,String mPropina,double mPrecio,String iTipoViaje,String vchOrigenReferencia, String vchDestinoReferencia,String vchObservacion,String vchNombreInicial, String vchNombreFinal,String iEstado, String token)async{
     //idsolicitud(esta lo obtenies de la ruta donde se lista),vchLatInicial,vchLatFinal,vchLongInicial,vchLongFinal,mPrecio(este puede ser el precio q propone el chofer),mPropina,iTipoViaje,dFecReg,vchOrigenReferencia,vchDestinoReferencia,vchObservacion
     final url = '${Config.nuevaRutaApi}/registro-viaje-chofer';
-    print({'idchofer':idChofer,'IdTokenChofer': token,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial.toString(), 'vchLatfinal': vchLatFinal.toString(), 'vchLonginicial': vchLongInicial.toString(), 'vchLongfinal': vchLongFinal.toString(), 'mPropina': '', 'mPrecio': mPrecio.toString(),'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
     try{
       final response = await http.post(url,body: {'idchofer':idChofer,'IdTokenChofer': token,'idsolicitud' : idsolicitud, 'vchLatinicial': vchLatInicial.toString(), 'vchLatfinal': vchLatFinal.toString(), 'vchLonginicial': vchLongInicial.toString(), 'vchLongfinal': vchLongFinal.toString(), 'mPropina': '', 'mPrecio': mPrecio.toString(),'iTipoViaje': iTipoViaje,'vchOrigenReferencia':vchOrigenReferencia,'vchDestinoReferencia':vchDestinoReferencia, 'vchObservacion': vchObservacion, 'vchNombreInicial': vchNombreInicial, 'vchNombreFinal':vchNombreFinal,'iEstado': iEstado});
       final responseData = requestDataFromJson(response.body);
@@ -274,8 +273,7 @@ class PickupApi{
       }else{
         throw Exception();
       }
-    } catch(error){
-      print(error.toString());
+    } catch(_){
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
@@ -287,14 +285,12 @@ class PickupApi{
         headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
         body: saveQualificationBodyToJson(body)
       );
-      print(response.body);
       if(response.statusCode == 200){
         return true;
       }else{
         return false;
       }
-    } catch(error){
-      print(error);
+    } catch(_){
       return false;
     }
   }

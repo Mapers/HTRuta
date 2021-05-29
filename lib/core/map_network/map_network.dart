@@ -16,8 +16,7 @@ class MapNetwork {
     try {
       Response response = await Dio().get('$domain?$query');
       return response.data;
-    } catch (e) {
-      print(e);
+    } catch (_) {
     }
   }
 
