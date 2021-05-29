@@ -87,11 +87,9 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                   todayButtonColor: primaryColor,
                   onDayPressed: (DateTime date, List<dynamic> events) {
                     setState(() => selectedDate = date);
-                    print(selectedDate);
                   },
                   onCalendarChanged: (DateTime date) {
                     setState(() => selectedMonth = DateFormat.yMMM().format(date));
-                    print(selectedMonth);
                   },
                 ),
               ),
@@ -193,7 +191,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                                 onTap: () {
-                                  print('$index');
                                   navigateToDetail(index.toString());
                                 },
                                 child: historyItem2()
@@ -206,7 +203,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                                 onTap: () {
-                                  print('$index');
                                   navigateToDetail(index.toString());
                                 },
                                 child: historyItem3()
@@ -231,7 +227,6 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
             onTap: () {
-              print('$index');
               navigateToDetail(index.toString());
             },
             child: historyItem(history.data[index])

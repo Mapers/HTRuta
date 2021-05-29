@@ -23,7 +23,6 @@ class DriverFirestoreService{
         'available': avaliability,
       }).catchError((onError) => print(onError));
     }catch(e){
-      print(e);
     }
     return ref.id;
   }
@@ -34,7 +33,6 @@ class DriverFirestoreService{
         'posicion': GeoPoint(latitud, longitud),
       }).catchError((onError) => print(onError));
     }catch(e){
-      print(e);
     }
     return ref.id;
   }

@@ -175,7 +175,6 @@ class _ReviewTripScreenState extends State<ReviewTripScreen> {
           ),
           onRatingUpdate: (rating) {
             ratingScore = rating;
-            print(rating);
           },
         ),
         SizedBox(height: 10),

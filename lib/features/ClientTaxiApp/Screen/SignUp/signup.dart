@@ -66,7 +66,6 @@ class _SignupScreenState extends State<SignupScreen> {
           nombreDispositivo = info.name;
           imei = info.identifierForVendor;
         }
-        print('Marca: $marca, NombreD = $nombreDispositivo, IMEI = $imei');
         final _prefs = UserPreferences();
         await _prefs.initPrefs();
         final token = await _prefs.tokenPush;

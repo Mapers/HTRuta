@@ -382,7 +382,6 @@ class _EditProfileState extends State<EditProfile> {
                                                 onChanged: (String newValue) {
                                                   setState(() {
                                                     selectedGender = newValue;
-                                                    print(selectedGender);
                                                   });
                                                 },
                                                 items: listGender.map((value) {

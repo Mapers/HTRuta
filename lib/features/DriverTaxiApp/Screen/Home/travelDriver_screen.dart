@@ -145,7 +145,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   }
 
   void addMakers(){
-    checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -206,7 +205,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
         }
       }
     }).catchError((error) {
-      print('GetRoutesRequest > $error');
     });
     if(!routeFound) {
       _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
@@ -237,10 +235,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     Timer.periodic(timeRequest, (Timer t) {
       LatLng positionDriverBefore = _listPosition[two-1];
       positionDriver = _listPosition[count++];
-      print(count);
 
       valueRotation = rm.calculateangle(positionDriverBefore.latitude, positionDriverBefore.longitude,positionDriver.latitude, positionDriver.longitude);
-      print(valueRotation);
       addMakersDriver(positionDriver);
       _mapController?.animateCamera(
         CameraUpdate?.newCameraPosition(
@@ -347,7 +343,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   // }
 
   // handSubmit(){
-  //   print('Enviar');
   //   setState(() {
   //     isLoading = true;
   //   });
@@ -535,7 +530,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   Widget buildContent(BuildContext context){
     final screenSize = MediaQuery.of(context).size;
     final pedidoProvider = Provider.of<PedidoProvider>(context);
-    print(selectedService);
 
     return SlidingUpPanel(
       controller: panelController,

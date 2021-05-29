@@ -104,7 +104,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       // if(data != null){
       //   requestTaxi.addAll(data);
       //   setState(() {
-      //     print(requestTaxi[0].toString());
       //   });
       // }
     });
@@ -121,7 +120,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   }
 
   void addMakers(){
-    checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
 
@@ -172,9 +170,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
         router = data?.result?.routes[0]?.overviewPolyline?.points;
         routesData = data?.result?.routes;
       }
-    }).catchError((error) {
-      print('GetRoutesRequest > $error');
-    });
+    }).catchError((_) {});
 
     distance = routesData[0]?.legs[0]?.distance?.text;
     duration = routesData[0]?.legs[0]?.duration?.text;

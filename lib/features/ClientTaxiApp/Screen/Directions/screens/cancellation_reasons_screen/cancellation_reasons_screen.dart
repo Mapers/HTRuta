@@ -63,7 +63,7 @@ class _CancellationReasonsScreenState extends State<CancellationReasonsScreen> {
                   'El precio no es razonable',
                   'El sitio de recogo es incorrecto',
                 ],
-                onSelected: (String selected) => print(selected)
+                onSelected: (String selected) {}
             ),
           ],
         ),

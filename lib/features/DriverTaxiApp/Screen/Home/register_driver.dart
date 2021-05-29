@@ -187,7 +187,6 @@ class _OctavaPaginaState extends State<OctavaPagina> {
 
                           }catch(error){
                             Navigator.pop(context);
-                            print('Error ${error.toString()}');
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                           }
 
@@ -265,7 +264,6 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       Navigator.of(context).pop();
 
     }catch(error){
-      print(error.toString());
     }
   }
 
@@ -273,7 +271,6 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
     try {
       var picture = await picker.getImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
-      print('${imagenes[index]}');
       await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
@@ -296,7 +293,6 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
     );
     if (croppedFile != null) {
       imagenes[index] = croppedFile;
-      print('${imagenes[index]}');
       setState(() {
         recortado = true;
       });
@@ -422,7 +418,6 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
                             }
                           }catch(error){
                             Navigator.pop(context);
-                            print('Error ${error.toString()}');
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                           }
 
@@ -590,7 +585,6 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       //                         Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar fotos');
       //                       }
       //                     }catch(error){
-      //                       print('Error ${error.toString()}');
       //                       Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
       //                     }
 
@@ -661,7 +655,6 @@ class _SextaPaginaState extends State<SextaPagina> {
       setState(() {});
       Navigator.of(context).pop();
     }catch(error){
-      print(error.toString());
     }
   }
 
@@ -792,7 +785,6 @@ class _SextaPaginaState extends State<SextaPagina> {
                     Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
                   }
                 }catch(error){
-                  print('Error ${error.toString()}');
                   Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                 }
 
@@ -874,7 +866,6 @@ class _QuintaPaginaState extends State<QuintaPagina> {
       await _cropImage();
       setState(() {});
     }catch(error){
-      print(error.toString());
     }
   }
 
@@ -1112,7 +1103,6 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                               Dialogs.alert(context, title: 'Error', message: 'Debe seleccionar una foto de perfil');
                             }
                           }catch(error){
-                            print('Error ${error.toString()}');
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
                           }
 

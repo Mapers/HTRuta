@@ -12,12 +12,8 @@ class TablaApi{
       return http.post(url,body: {'id' : 1} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 
   Future<List<Datum>> getSexo(BuildContext context) async{
@@ -27,12 +23,8 @@ class TablaApi{
       return http.post(url,body: {'id' : '2'} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 
   Future<List<Datum>> getTipoUsuario(BuildContext context) async{
@@ -42,12 +34,8 @@ class TablaApi{
       return http.post(url,body: {'id' : '3'} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 
   
@@ -59,12 +47,8 @@ class TablaApi{
       return http.post(url,body: {'id' : '4'} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 
   Future<List<Datum>> getEstadoDocumentacion(BuildContext context) async{
@@ -74,12 +58,8 @@ class TablaApi{
       return http.post(url,body: {'id' : '5'} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 
   Future<List<Datum>> getTipoDocumentacion(BuildContext context) async{
@@ -89,11 +69,7 @@ class TablaApi{
       return http.post(url,body: {'id' : '6'} ).then((response){
         final empresaResponse = tablaCodigoFromJson(response.body);
         return empresaResponse.data;
-      }).catchError((onError){
-        print(onError.toString());
-      });
-    }).catchError((onError){
-        print(onError.toString());
-    });
+      }).catchError((_){});
+    }).catchError((_){});
   }
 }

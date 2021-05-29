@@ -49,15 +49,12 @@ class _SelectAddressState extends State<SelectAddress> {
     }
     setState(() {
       _currentPosition = position;
-      print(_currentPosition.longitude);
-      print(_currentPosition.latitude);
     });
     List<Placemark> placemarks = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
       setState(() {
         _placemark = pos.name + ', ' + pos.thoroughfare;
-        print(_placemark);
         currentLocationName = _placemark;
       });
     }
@@ -106,8 +103,6 @@ class _SelectAddressState extends State<SelectAddress> {
   }
 
   void submitLocation(){
-    print(_position);
-    print(newLocationName);
   }
 
 

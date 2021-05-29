@@ -31,7 +31,6 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
             icon: Icon(Icons.close),
             color: primaryColor,
             onPressed: () async {
-              print(pedidoProvider.idViaje);
             },
           )
         ],
