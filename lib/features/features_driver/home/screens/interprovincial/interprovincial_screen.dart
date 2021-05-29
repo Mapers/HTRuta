@@ -40,7 +40,6 @@ class _InterprovincialScreenState extends State<InterprovincialScreen> {
         alignment: Alignment.center,
         children: [
           MapInterprovincialDriverWidget(),
-          // ChangeServiceDriverWidget(),
           CustomDropdownDriver(),
           BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
             builder: (context, state) {

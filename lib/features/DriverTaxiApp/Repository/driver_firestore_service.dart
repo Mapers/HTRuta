@@ -22,8 +22,7 @@ class DriverFirestoreService{
       await ref.update({
         'available': avaliability,
       }).catchError((onError) => print(onError));
-    }catch(e){
-    }
+    }catch(_){}
     return ref.id;
   }
   Future<String> updateDriverPosition(double latitud, double longitud, String path) async {
@@ -32,8 +31,7 @@ class DriverFirestoreService{
       await ref.update({
         'posicion': GeoPoint(latitud, longitud),
       }).catchError((onError) => print(onError));
-    }catch(e){
-    }
+    }catch(_){}
     return ref.id;
   }
   Future<List<String>> getDrivers() async {

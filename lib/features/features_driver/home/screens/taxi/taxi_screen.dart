@@ -401,7 +401,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Widget build(BuildContext context) {
     List<Widget> bodyContent = [
       _buildMapLayer(),
-      // ChangeServiceDriverWidget(),
       CustomDropdownDriver(),
       Positioned(
         top: 110,
