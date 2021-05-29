@@ -59,6 +59,7 @@ class AuthApi{
           final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();
+          _prefs.idChoferReal = responseUsuario.data[1].iIdChofer.toString();
         }
       }
       return true;

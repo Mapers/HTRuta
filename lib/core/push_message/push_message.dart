@@ -31,7 +31,7 @@ class PushMessage {
 
   String _constructFCMPayload(String token, String title, String description, Map<String, String> data) {
     return jsonEncode({
-      'priority': 'high',
+      'priority': 'normal',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'display_notification': 'true',
@@ -64,7 +64,7 @@ class PushMessage {
   }
   String _constructFCMPayloadBroad(List<String> tokens, String title, String description, Map<String, String> data) {
     return jsonEncode({
-      'priority': 'high',
+      'priority': 'normal',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'display_notification': 'true',

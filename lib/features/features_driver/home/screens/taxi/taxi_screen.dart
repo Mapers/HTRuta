@@ -21,6 +21,7 @@ import 'package:HTRuta/features/features_driver/home/presentations/widgets/butto
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +30,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,7 @@ class TaxiDriverServiceScreen extends StatefulWidget {
   _TaxiDriverServiceScreenState createState() => _TaxiDriverServiceScreenState();
 }
 
-class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin {
+class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   GoogleMapController _mapController;
@@ -68,7 +68,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   PermissionStatus permission;
 
   final registroConductorApi = RegistroConductorApi();
-  bool isWorking = false;
+  bool isWorking = true;
   bool isLoading = true;
 
   List<RequestModel> requestTaxi = [];
@@ -77,10 +77,25 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   List<String> aceptados = [];
   List<String> rechazados = [];
   PushNotificationProvider pushProvider;
+  final _prefs = UserPreferences();
   
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      changeMapType(3, 'assets/style/dark_mode.json');
+    }
+  }
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    isWorking = _prefs.drivingState;
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
       Map data = argumento['data'];
@@ -149,7 +164,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Future<void> getSolicitudes() async {
       final _prefs = UserPreferences();
       LocationEntity locationEntity = await LocationUtil.currentLocation();
-      final data = await pickupApi.getRequest(_prefs.idChofer, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
+      final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       if(data != null){
         requestTaxi.clear();
         aceptados.clear();
@@ -391,14 +406,27 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       CustomDropdownDriver(),
       Positioned(
         top: 110,
-        child: LiteRollingSwitch(
-          textOn: 'Disponible',
-          textOff: 'Ocupado',
-          colorOn: primaryColor,
-          colorOff: Colors.redAccent[700],
-          iconOn: FontAwesomeIcons.digitalOcean,
-          iconOff: FontAwesomeIcons.powerOff,
-          onChanged: (bool state) async{
+        child: FlutterSwitch(
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: 55.0,
+          valueFontSize: 18.0,
+          toggleSize: 45.0,
+          value: isWorking,
+          borderRadius: 30.0,
+          inactiveText: 'Ocupado',
+          activeText: 'Disponible',
+          activeTextFontWeight: FontWeight.normal,
+          inactiveTextFontWeight: FontWeight.normal,
+          activeColor: primaryColor,
+          activeIcon: Icon(FontAwesomeIcons.digitalOcean),
+          inactiveIcon: Icon(FontAwesomeIcons.powerOff),
+          inactiveColor: Colors.red,
+          padding: 8.0,
+          showOnOff: true,
+          onToggle:  (state) async {
+            setState(() {
+              isWorking = !isWorking;
+            });
             if(state){
               Dialogs.openLoadingDialog(context);
               final session = Session();
@@ -455,8 +483,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               isWorking = state;
             }
           },
-          value: isWorking,
-        )
+        ),
       ),
       Positioned(
         bottom: isShowDefault == false ? 330 : 250,

@@ -37,7 +37,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   List<Map> requestPast = [];
   final pickupApi = PickupApi();
   final aceptar = '1';
-  final rechazar = '2';
+  final rechazar = '4';
   var aceptados = <String>[];
   var rechazados = <String>[];
   String choferId = '';
@@ -45,6 +45,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   String lastUserToken;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   PushNotificationProvider pushProvider;
+  List<String> acceptedTravels = [];
 
   void navigateToDetail(RequestModel requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
@@ -94,7 +95,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
     LocationEntity locationEntity = await LocationUtil.currentLocation();
-    final data = await pickupApi.getRequest(_prefs.idChofer, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
+    final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
       print(_prefs.idChofer);
       if(data != null){
         requestTaxi.clear();
@@ -221,12 +222,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             'Solicitudes',
             style: TextStyle(color: blackColor),
           ),
-          elevation: 2,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
           iconTheme: IconThemeData(color: blackColor),
-          bottom: TabBar(tabs: [
-            Tab(child: Text('TAXI', style: TextStyle(color: Colors.white,fontSize: 11),),),
-            Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: Colors.white,fontSize: 10),)),
-            Tab(child: Text('CARGA', style: TextStyle(color: Colors.white,fontSize: 11),))
+          bottom: TabBar(
+            indicatorColor: primaryColor,
+            tabs: [
+            Tab(child: Text('TAXI', style: TextStyle(color: primaryColor,fontSize: 11),),),
+            Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: primaryColor,fontSize: 10),)),
+            Tab(child: Text('CARGA', style: TextStyle(color: primaryColor,fontSize: 11),))
           ]),
           leading: IconButton(
             icon: Icon(Icons.menu),
@@ -501,7 +506,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     },
                     child: Text('-0.5', style: TextStyle(color:Colors.grey)),
                   ),
-                  Text('S/${requestActual['precioOferta']}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
+                  Text('S/${double.parse(requestActual['precioOferta']).toStringAsFixed(2)}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
                   OutlineButton(
                     padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
                     borderSide: BorderSide(color: primaryColor, width: 2.0),
@@ -553,6 +558,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                         aceptar,
                         _prefs.tokenPush
                       );
+                      acceptedTravels.add(taxi.id);
                       PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
                         'newOffer' : '1'
@@ -606,6 +612,14 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               rechazar,
                               _prefs.tokenPush
                             );
+                            if(acceptedTravels.contains(taxi.id)){
+                              PushMessage pushMessage = getIt<PushMessage>();
+                              Map<String, String> data = {
+                                'newOffer' : '1'
+                              };
+                              lastUserToken = taxi.token;
+                              pushMessage.sendPushMessage(token: taxi.token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);
+                            }
                             await loadRequests();
                             analizeChanges();
                             Navigator.pop(context);
@@ -657,6 +671,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                               aceptar,
                               _prefs.tokenPush
                             );
+                            acceptedTravels.add(taxi.id);
                             PushMessage pushMessage = getIt<PushMessage>();
                             Map<String, String> data = {
                               'newOffer' : '1'

@@ -110,6 +110,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
             style: TextStyle(color: blackColor),
           ),
           backgroundColor: whiteColor,
+          centerTitle: true,
           elevation: 0.0,
           iconTheme: IconThemeData(color: blackColor),
           actions: <Widget>[

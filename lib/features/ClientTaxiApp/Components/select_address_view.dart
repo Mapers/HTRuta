@@ -41,6 +41,7 @@ class _SelectAddressState extends State<SelectAddress> {
   FocusNode precioFocus = FocusNode();
   final pickUpApi = PickupApi();
   List<int> paymentMethodsSelected = [];
+  final _prefs = UserPreferences();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -211,15 +212,25 @@ class _SelectAddressState extends State<SelectAddress> {
               child: FlatButton(
                 onPressed: ()async{
                   try{
-                    if(widget.toAddress == null) return;
-                    if(widget.toAddress.name.isEmpty) return;
+                    if(widget.toAddress == null){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione una posición de inicio');
+                      return;
+                    }
+                    if(widget.toAddress.name.isEmpty){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione una posición de fin');
+                      return;
+                    }
+                    if(_prefs.getClientPaymentMethods.isEmpty){
+                      Dialogs.alert(context,title: 'Advertencia', message: 'Seleccione al menos un método de pago');
+                      return;
+                    }
                     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
                     
                     if(precio.isNotEmpty){
                       final _session = Session();
                       final dataUsuario = await _session.get();
                       Dialogs.openLoadingDialog(context);
-                      final _prefs = UserPreferences();
+                      
                       String token = _prefs.tokenPush;
                       RegisterTravelBody body = RegisterTravelBody(
                         idTokenCliente: token,
@@ -235,7 +246,7 @@ class _SelectAddressState extends State<SelectAddress> {
                         comentario: comentarios,
                         unidad: widget.unidad,
                         distancia: widget.distancia,
-                        arrFormaPagoIds: paymentMethodsSelected
+                        arrFormaPagoIds: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()
                       ); 
                       final viaje = await pickUpApi.registerTravelClient(body);
                       PushMessage pushMessage = getIt<PushMessage>();

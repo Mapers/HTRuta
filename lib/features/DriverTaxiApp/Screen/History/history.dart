@@ -45,8 +45,9 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
             'Historial',
             style: TextStyle(color: blackColor),
           ),
+          centerTitle: true,
           backgroundColor: whiteColor,
-          elevation: 2.0,
+          elevation: 0.0,
           iconTheme: IconThemeData(color: blackColor),
           leading: IconButton(
             icon: Icon(Icons.menu),

@@ -40,7 +40,7 @@ class DirectionsView extends StatefulWidget {
   _DirectionsViewState createState() => _DirectionsViewState();
 }
 
-class _DirectionsViewState extends State<DirectionsView> {
+class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObserver {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   List<LatLng> points = <LatLng>[];
   GoogleMapController _mapController;
@@ -74,6 +74,18 @@ class _DirectionsViewState extends State<DirectionsView> {
     _mapController = controller;
   }
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapController.setMapStyle('[]');
+    }
+  }
+  @override
   void initState() {
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
@@ -85,6 +97,7 @@ class _DirectionsViewState extends State<DirectionsView> {
         await loadOffers();
       }
     });
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       // final providerData = Provider.of<PedidoProvider>(context,listen: false);
       // final data = await pickUpApi.getRequestDriver(providerData.idSolicitud);
@@ -105,11 +118,6 @@ class _DirectionsViewState extends State<DirectionsView> {
     requestTaxi.clear();
     requestTaxi.addAll(data);//TODO: Arreglar
     setState(() {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void addMakers(){
@@ -431,7 +439,7 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
-                                              'newConfirm' : '1'
+                                              'newRequest' : '1',
                                             };
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Negación', description: 'El usuario rechazó su oferta', data: data);
                                             setState(() {
@@ -463,18 +471,23 @@ class _DirectionsViewState extends State<DirectionsView> {
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await pickUpApi.acceptTravelFinish(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
                                             await pickUpApi.prepareTravel(pedidoProvider.idSolicitud);
+                                            String idViaje = await pickUpApi.acceptDriverRequest(pedidoProvider.idSolicitud, actualRequest.idChofer);
+                                            if(idViaje == null){
+                                              Dialogs.alert(context, title: 'Error', message: 'No se pudo aceptar la solicitud');
+                                              return;
+                                            }
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',
-                                              'idSolicitud': pedidoProvider.idSolicitud
+                                              'idSolicitud': pedidoProvider.idSolicitud,
                                             };
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Confirmación', description: 'El usuario aceptó su oferta', data: data);
                                             setState(() {
                                               isLoading = false;
                                             });
                                             pedidoProvider.requestDriver = actualRequest;
+                                            pedidoProvider.idViaje = idViaje;
                                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
                                           } on ServerException catch(error){
                                             Navigator.pop(context);

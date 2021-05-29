@@ -29,8 +29,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
       type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Historia de viajes',style: TextStyle(color: Colors.white,fontSize: 16.0,)),
+          title: Text('Historia de viajes',style: TextStyle(fontSize: 16.0)),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.white,
           bottom: TabBar(
+            labelColor: primaryColor,
+            indicatorColor: primaryColor,
             tabs: [
               Tab(text: 'Servicio taxi',),
               Tab(text: 'Interprovincial',)

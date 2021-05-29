@@ -23,8 +23,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 2.0,
+        elevation: 0.0,
         backgroundColor: whiteColor,
+        centerTitle: true,
         title: Text('Configuraciones',style: TextStyle(color: blackColor),),
       ),
       drawer:MenuScreens(activeScreenName: screenName),
@@ -37,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: InkWellCustom(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: Container(
-                color: greyColor2,
+                color: Colors.grey[300],
                 child: Column(
                   children: <Widget>[
                     GestureDetector(

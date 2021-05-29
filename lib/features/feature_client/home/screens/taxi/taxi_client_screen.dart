@@ -36,7 +36,7 @@ class TaxiClientScreen extends StatefulWidget {
   _TaxiClientScreenState createState() => _TaxiClientScreenState();
 }
 
-class _TaxiClientScreenState extends State<TaxiClientScreen> {
+class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBindingObserver{
   final String screenName = 'HOME';
   var _scaffoldKey =  GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -74,10 +74,23 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
   final pickupApi = PickupApi();
   
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      changeMapType(3, 'assets/style/dark_mode.json');
+    }
+  }
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
-    saveUserPhoto();
+    // saveUserPhoto();
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
       // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
@@ -126,7 +139,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     if (!mounted) return;
     _lastKnownPosition = position;
   }
-  Future<void> saveUserPhoto() async {
+  /* Future<void> saveUserPhoto() async {
     userPhoto = await pickupApi.getUserPhoto();
     ui.Image userImage = await loadImage(userPhoto);
     userPhoto = await getBytesFromCanvas(userImage, 100, 100);
@@ -154,7 +167,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
     final img = await pictureRecorder.endRecording().toImage(width, height);
     final data = await img.toByteData(format: ui.ImageByteFormat.png);
     return data.buffer.asUint8List();
-  }
+  } */
 
   Future<void> checkPermission() async {
     isEnabledLocation = await Permission.location.serviceStatus.isEnabled;
@@ -499,9 +512,10 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               //height: MediaQuery.of(context).size.height - 180,
               child: GoogleMap(
                 circles: Set<Circle>.of(circles.values),
+                zoomControlsEnabled: false,
                 markers: Set<Marker>.of(_markers.values),
                 onMapCreated: _onMapCreated,
-                myLocationEnabled: false,
+                myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
                 initialCameraPosition: CameraPosition(
@@ -559,7 +573,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
               ),
             ),
             Positioned(
-                bottom: responsive.hp(36),
+                bottom: 380,
                 right: 20,
                 child: GestureDetector(
                   onTap: (){
@@ -576,7 +590,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> {
                   ),
                 )
             ),
-            ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+            // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
             /* Positioned(
                 top: 60,
                 right: 10,

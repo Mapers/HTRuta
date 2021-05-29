@@ -37,7 +37,7 @@ class TravelScreen extends StatefulWidget {
   _TravelScreenState createState() => _TravelScreenState();
 }
 
-class _TravelScreenState extends State<TravelScreen> {
+class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver {
   final String screenName = 'HOME';
   var _scaffoldKey =GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -72,10 +72,22 @@ class _TravelScreenState extends State<TravelScreen> {
 
 
   dynamic posicionChofer;
-
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapController.setMapStyle('[]');
+    }
+  }
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // _initLastKnownLocation();
     // fetchLocation();
     fechDriverLocation();
