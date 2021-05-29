@@ -201,14 +201,14 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             );
             return;
           }
-          if(paymentMethodsSelected.isEmpty){
-            Fluttertoast.showToast(
-              msg: 'Seleccione al menos un método de pago que disponga',
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-            );
-            return;
-          }
+          // if(paymentMethodsSelected.isEmpty){
+          //   Fluttertoast.showToast(
+          //     msg: 'Seleccione al menos un método de pago que disponga',
+          //     toastLength: Toast.LENGTH_LONG,
+          //     gravity: ToastGravity.BOTTOM,
+          //   );
+          //   return;
+          // }
           showDialog(
             context: context,
             child: Center(
