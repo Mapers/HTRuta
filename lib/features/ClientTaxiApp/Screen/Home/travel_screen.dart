@@ -46,7 +46,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   int _markerIdCounter = 0;
   GoogleMapController _mapController;
   BitmapDescriptor markerIcon;
-  String _placemark = '';
   GoogleMapController mapController;
   CameraPosition _position;
   bool checkPlatform = Platform.isIOS;
@@ -235,6 +234,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   /* Future<void> fechDriverLocation() async {
     final provider = Provider.of<PedidoProvider>(context,listen: false);
     referenceDatabase.child('Coordenada').onValue.listen((event) {
+      print('Data: ${event.snapshot.value}');
       var dataFirebase = Map<String,dynamic>.from(event.snapshot.value);
       dataFirebase.forEach((key, value) {
         if(key == '${provider.requestDriver.iIdUsuario}'){
@@ -296,12 +296,9 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
 
       List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
       if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
         setState(() {
-          _placemark = pos.name + ', ' + pos.thoroughfare;
         });
         // widget?.placeBloc?.getCurrentLocation(Place(
-        //     name: _placemark,
         //     formattedAddress: '',
         //     lat: currentLocation?.latitude,
         //     lng: currentLocation?.longitude
@@ -328,10 +325,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     if(lat != null && lng != null) {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-          _placemark = pos.name + ', ' + pos.thoroughfare;
         // widget?.placeBloc?.getCurrentLocation(Place(
-        //   name: _placemark,
         //   formattedAddress: '',
         //   lat: lat,
         //   lng: lng

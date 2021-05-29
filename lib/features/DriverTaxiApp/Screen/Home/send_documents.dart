@@ -72,8 +72,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       await _cropImage(index);
       setState(() {});
       Navigator.of(context).pop();
-    }catch(error){
-    }
+    }catch(_){}
   }
 
   Future _openGallery(int index) async {
@@ -85,8 +84,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
       Navigator.of(context).pop();
-    } catch (e) {
-    }
+    } catch (_) {}
   }
 
   bool recortado = false;

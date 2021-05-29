@@ -263,8 +263,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       setState(() {});
       Navigator.of(context).pop();
 
-    }catch(error){
-    }
+    }catch(_){}
   }
 
   Future _openGallery(int index) async {
@@ -654,8 +653,7 @@ class _SextaPaginaState extends State<SextaPagina> {
       await _cropImage();
       setState(() {});
       Navigator.of(context).pop();
-    }catch(error){
-    }
+    }catch(_){}
   }
 
   void _openGallery() async {
@@ -865,8 +863,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
       imageFile = File(image.path);
       await _cropImage();
       setState(() {});
-    }catch(error){
-    }
+    }catch(_){}
   }
 
   Future _openGallery() async {
