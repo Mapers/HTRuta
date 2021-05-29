@@ -11,6 +11,8 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/blo
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:HTRuta/app/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ListPassengersFullScreenDialog extends StatefulWidget {
   final String serviceId;
@@ -64,7 +66,25 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
             SizedBox(width: 5),
             Expanded(
               child: Text(passenger.fullNames),
-            )
+            ),
+            Card(
+            clipBehavior: Clip.antiAlias,
+            color: green1,
+            child: InkWell(
+              onTap: ()async{
+                await launch('tel:+51970578887');
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(Icons.call, color: Colors.white,size: 15,),
+                    Text(' Llamar al conductor', style: TextStyle( color: Colors.white, fontSize: 12), ),
+                  ],
+                ),
+              ),
+            ),
+          )
           ],
         ),
         SizedBox(height: 5),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
@@ -12,6 +13,7 @@ import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
   final LocationEntity currentLocation;
@@ -39,9 +41,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   
   @override
   void initState() {
-    //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
     currenActual = widget.currentLocation;
-
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
@@ -110,6 +110,10 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     subscription?.cancel();
     super.dispose();
   }
+  
+  Future<void> makePhoneCall(String url) async {
+      await launch(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,15 +131,24 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
         Positioned(
           bottom: 180,
           right: 15,
-          left: 15,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Card(
-                color: Colors.amber,
-                child: Text('llamar'),
-              )
-            ],
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            color: green1,
+            child: InkWell(
+              onTap: ()async{
+                await launch('tel:+51970578887');
+                // makePhoneCall('970578887');
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(Icons.call, color: Colors.white,),
+                    Text('Llamar al conductor', style: TextStyle( color: Colors.white), ),
+                  ],
+                ),
+              ),
+            ),
           )
         ),
         Positioned(

@@ -108,9 +108,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
           DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
           InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
-          print('###################');
-          print(interprovincialRouteInServiceEntity.toMap);
-          print('###################');
           AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
             availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
             route: interprovincialRouteInServiceEntity,
