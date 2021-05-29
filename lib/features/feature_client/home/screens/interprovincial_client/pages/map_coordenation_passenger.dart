@@ -125,7 +125,21 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           )
         ),
         Positioned(
-          top: 400,
+          bottom: 180,
+          right: 15,
+          left: 15,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Card(
+                color: Colors.amber,
+                child: Text('llamar'),
+              )
+            ],
+          )
+        ),
+        Positioned(
+          bottom: 10,
           right: 15,
           left: 15,
           child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
@@ -187,7 +201,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Icon(Icons.person, color: Colors.black87),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.nameDriver , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(availablesRoutesEntity.route.nameDriver ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
               ],
             ),

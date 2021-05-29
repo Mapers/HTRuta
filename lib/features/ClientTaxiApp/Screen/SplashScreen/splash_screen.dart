@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
@@ -106,22 +108,27 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
           DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
           InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
+          print('###################');
+          print(interprovincialRouteInServiceEntity.toMap);
+          print('###################');
           AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
             availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
             route: interprovincialRouteInServiceEntity,
             documentId: serviceInCourse.serviceDocumentId,
             fcm_token: null,
             id: null,
-            routeStartDateTime: null,
+            routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
             status: null,
             vehicleSeatLayout: null
           );
-        if( serviceInCourse.requestDocumentId == null ){
+        if( serviceInCourse.passengerDocumentId != null ){
+          LocationEntity currentlocation =  await LocationUtil.currentLocation();
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MapCoordenationDrivePage(
             serviceInCourse.serviceDocumentId,
             availablesRoutesEntity: availableRouteEntity,
-            price:  double.parse(dataNecessaryRetrieve.negotiatedPrice),
+            price: dataNecessaryRetrieve.negotiatedPrice,
             passengerDocumentId:serviceInCourse.passengerDocumentId,
+            currentLocation: currentlocation,
           )), (_) => false);
         }else{
           Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);

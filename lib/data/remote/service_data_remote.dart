@@ -54,6 +54,9 @@ class ServiceDataRemote{
         'service_id': serviceId
       }
     );
+    print('###################');
+    print(result.data );
+    print('###################');
     if(result.success){
       return InterprovincialRouteInServiceEntity.fromJson(result.data);
     }
