@@ -623,6 +623,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   acceptTravel(requestTaxi[index]);
                 }
                 
+                /*
                 setState(() {
                   if(index == listRequest.length-1){
                     setState(() {
