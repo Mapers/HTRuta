@@ -98,11 +98,7 @@ class InterprovincialClientDataFirebase {
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
     DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
     DocumentSnapshot dss = await firestore.collection('interprovincial_in_service').doc(documentId).get();
-<<<<<<< HEAD
     DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] ?? '0', serviceId: dss.data()['service_id']);
-=======
-    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] ?? '0', serviceId: dss.data()['servicio_id']);
->>>>>>> 5b06b117f923a6d583a70b2b4882227753de9d6c
     return dataNecessaryRetrieve;
   }
 }
