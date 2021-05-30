@@ -129,6 +129,57 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           )
         ),
         Positioned(
+          top: 90,
+          right: 15,
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            color: green1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(150),
+            ),
+            child: InkWell(
+              onTap: ()async{
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                      content:Container(
+                        width: 150,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill, image: NetworkImage('https://e.rpp-noticias.io/normal/2020/04/23/082208_932018.jpg')
+                          ),
+                        ),
+                      ),
+                    )
+                );
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover, image: NetworkImage('https://e.rpp-noticias.io/normal/2020/04/23/082208_932018.jpg')
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            )
+          ),
+        ),
+        Positioned(
+          top: 25,
+          right: 15,
+          left: 15,
+          child: Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text('Recuerda acercarte a tu ruta, tambien puede llamar al conductor'),
+            ),
+          )
+        ),
+        Positioned(
           bottom: 180,
           right: 15,
           child: Card(
@@ -137,7 +188,6 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             child: InkWell(
               onTap: ()async{
                 await launch('tel:+51970578887');
-                // makePhoneCall('970578887');
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
