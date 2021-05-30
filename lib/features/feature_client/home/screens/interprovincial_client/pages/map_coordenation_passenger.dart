@@ -270,7 +270,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.location_on, color: Colors.black87),
+                Icon(Icons.trip_origin, color: Colors.amber),
                 SizedBox(width: 5),
                 Expanded(
                   child: Text(availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
@@ -280,7 +280,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
             SizedBox(height: 5),
             Row(
               children: [
-                Icon(Icons.directions_bus_rounded, color: Colors.black87),
+                Icon(Icons.location_on, color: Colors.red),
                 SizedBox(width: 5),
                 Expanded(
                   child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
