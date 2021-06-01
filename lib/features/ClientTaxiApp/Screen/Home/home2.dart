@@ -254,7 +254,6 @@ class _HomeScreen2State extends State<HomeScreen2> {
       if(distance*1000 < _radius){
         _addMarker(dataMarKer[i]['id'], dataMarKer[i]['lat'], dataMarKer[i]['lng']);
       } else {
-        print(dataMarKer[i]['id']);
         _remove(dataMarKer[i]['id']);
       }
     }

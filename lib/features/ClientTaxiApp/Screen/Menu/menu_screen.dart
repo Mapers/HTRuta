@@ -34,7 +34,7 @@ class MenuScreens extends StatelessWidget {
                   final data = snapshot.data;
                   return UserAccountsDrawerHeader(
                     margin: EdgeInsets.all(0.0),
-                    accountName: Text(data.names,style: headingWhite,),
+                    accountName: Text(data.names, style: headingWhite,),
                     accountEmail: Text('100 puntos - miembro Gold'),
                     currentAccountPicture: CircleAvatar(
                       radius: 30,

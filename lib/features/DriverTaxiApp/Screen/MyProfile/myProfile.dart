@@ -345,7 +345,6 @@ class _MyProfileState extends State<MyProfile> {
                                               onChanged: (String newValue) {
                                                 setState(() {
                                                   selectedGender = newValue;
-                                                  print(selectedGender);
                                                 });
                                               },
                                               items: listGender.map((value) {

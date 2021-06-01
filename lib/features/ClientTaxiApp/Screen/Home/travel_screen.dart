@@ -46,7 +46,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   int _markerIdCounter = 0;
   GoogleMapController _mapController;
   BitmapDescriptor markerIcon;
-  String _placemark = '';
   GoogleMapController mapController;
   CameraPosition _position;
   bool checkPlatform = Platform.isIOS;
@@ -172,9 +171,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
           routesData = data?.result?.routes;
         }
       }
-    }).catchError((error) {
-      print('GetRoutesRequest > $error');
-    });
+    }).catchError((_) {});
     if(!routeFound) {
       _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
       return;
@@ -190,7 +187,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
   void addMakers(){
-    checkPlatform ? print('ios'): print('android');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -300,12 +296,9 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
 
       List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
       if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
         setState(() {
-          _placemark = pos.name + ', ' + pos.thoroughfare;
         });
         // widget?.placeBloc?.getCurrentLocation(Place(
-        //     name: _placemark,
         //     formattedAddress: '',
         //     lat: currentLocation?.latitude,
         //     lng: currentLocation?.longitude
@@ -332,11 +325,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     if(lat != null && lng != null) {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-          print(_placemark);
         // widget?.placeBloc?.getCurrentLocation(Place(
-        //   name: _placemark,
         //   formattedAddress: '',
         //   lat: lat,
         //   lng: lng

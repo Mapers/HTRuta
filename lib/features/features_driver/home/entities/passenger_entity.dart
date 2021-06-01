@@ -49,7 +49,7 @@ class PassengerEntity extends Equatable {
       documentId: dataJson['document_id'],
       fullNames: dataJson['full_names'],
       fcmToken: dataJson['fcm_token'],
-      urlImage: dataJson['url_image'],
+      urlImage: dataJson['url_image'] ?? 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500&h=500',
       seats: dataJson['seats'],
       price: dataJson['price'],
       distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),

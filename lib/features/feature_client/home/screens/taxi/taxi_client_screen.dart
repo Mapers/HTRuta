@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 import 'dart:io' show Platform;
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:typed_data';
@@ -9,7 +8,6 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/select_address_view.dar
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -144,7 +141,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     ui.Image userImage = await loadImage(userPhoto);
     userPhoto = await getBytesFromCanvas(userImage, 100, 100);
     if(userPhoto != null){
-      print('Se cargó la foto de usuario');
     }
   }
   Future<ui.Image> loadImage(Uint8List img) async {
@@ -496,7 +492,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   @override
   Widget build(BuildContext context) {
     _createMarkerImageFromAsset(context);
-    final responsive = Responsive(context);
     return SideMenu(
       key: _sideMenuKey,
       background: primaryColor,

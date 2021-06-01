@@ -1,4 +1,11 @@
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/config.dart';
+import 'package:HTRuta/core/utils/colors_util.dart';
+import 'package:HTRuta/core/utils/file_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -100,7 +107,8 @@ class MapViewerUtil {
     return marker;
   }
 
-  Future<Polyline> generatePolyline(String namePolylineId, LocationEntity from, LocationEntity to, {MaterialColor color = Colors.blue}) async{
+  Future<Polyline> generatePolyline(String namePolylineId, LocationEntity from, LocationEntity to, { MaterialColor color }) async{
+    color ??= MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor));
     PolylinePoints polylinePoints = PolylinePoints();
     PointLatLng fromPoint = PointLatLng(from.latLang.latitude, from.latLang.longitude);
     PointLatLng toPoint = PointLatLng(to.latLang.latitude, to.latLang.longitude);
@@ -118,5 +126,86 @@ class MapViewerUtil {
       return polyline;
     }
     return null;
+  }
+
+
+  /// Reference: https://stackoverflow.com/questions/56597739/how-to-customize-google-maps-marker-icon-in-flutter
+  static Future<BitmapDescriptor> getMarkerIcon(String imagePath, { Size size }) async {
+    size ??= Size(120, 120);
+
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+
+    final Radius radius = Radius.circular(size.width / 2);
+
+    final Paint shadowPaint = Paint()..color = primaryColor.withAlpha(100);
+    final double shadowWidth = 15.0;
+
+    final Paint borderPaint = Paint()..color = Colors.white;
+    final double borderWidth = 3.0;
+
+    final double imageOffset = shadowWidth + borderWidth;
+
+    // Add shadow circle
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(
+            0.0,
+            0.0,
+            size.width,
+            size.height
+        ),
+        topLeft: radius,
+        topRight: radius,
+        bottomLeft: radius,
+        bottomRight: radius,
+      ),
+      shadowPaint);
+
+    // Add border circle
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        Rect.fromLTWH(
+          shadowWidth,
+          shadowWidth,
+          size.width - (shadowWidth * 2),
+          size.height - (shadowWidth * 2)
+        ),
+        topLeft: radius,
+        topRight: radius,
+        bottomLeft: radius,
+        bottomRight: radius,
+      ),
+      borderPaint
+    );
+
+    // Oval for the image
+    Rect oval = Rect.fromLTWH(
+      imageOffset,
+      imageOffset,
+      size.width - (imageOffset * 2),
+      size.height - (imageOffset * 2)
+    );
+
+    // Add path for oval image
+    canvas.clipPath(Path()..addOval(oval));
+
+    FileUtil fileUtil = FileUtil();
+
+    // Add image
+    ui.Image image = await fileUtil.getImageFromPath(imagePath, size); // Alternatively use your own method to get the image
+    paintImage(canvas: canvas, image: image, rect: oval, fit: BoxFit.fitWidth);
+
+    // Convert canvas to image
+    final ui.Image markerAsImage = await pictureRecorder.endRecording().toImage(
+      size.width.toInt(),
+      size.height.toInt()
+    );
+
+    // Convert image to bytes
+    final ByteData byteData = await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List uint8List = byteData.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(uint8List);
   }
 }

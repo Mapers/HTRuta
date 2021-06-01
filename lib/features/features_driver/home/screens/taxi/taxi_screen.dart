@@ -367,7 +367,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   }
 
   void changeMapType(int id, String fileName){
-    print(fileName);
     if (fileName == null) {
       setState(() {
         nightMode = false;
@@ -402,7 +401,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Widget build(BuildContext context) {
     List<Widget> bodyContent = [
       _buildMapLayer(),
-      // ChangeServiceDriverWidget(),
       CustomDropdownDriver(),
       Positioned(
         top: 110,
@@ -542,7 +540,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     double.parse(requestTaxi[index].vchLongFinal),
                   ),
                   onAccept: () async {
-                    print('Aceptar');
                     try{
                       final _prefs = UserPreferences();
                       await _prefs.initPrefs();
@@ -625,9 +622,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   acceptTravel(requestTaxi[index]);
                 }
                 
-                /* print(orientation.index);
-                print('index $index');
-                print('aaa ${listRequest.length}');
+                /*
                 setState(() {
                   if(index == listRequest.length-1){
                     setState(() {

@@ -14,9 +14,7 @@ class RegistroConductorApi{
 
   Future<List<DataMarca>> obtenerMarca() async{
     final url = '${Config.apiHost}/api_getMarcas.php';
-    print(url);
     final response = await http.post(url);
-    print(response.body);
     final responseUsuario = marcaCarroFromJson(response.body);
     if(responseUsuario.success){
       return responseUsuario.data;
@@ -26,7 +24,6 @@ class RegistroConductorApi{
 
   Future<List<DataModelo>> obtenerModelo(String id) async{
     final url = '${Config.apiHost}/api_getModelos.php?id=$id';
-    print(url);
     final response = await http.post(url,body: {'id' : id});
     final responseUsuario = modeloCarroFromJson(response.body);
     if(responseUsuario.success){
@@ -38,11 +35,9 @@ class RegistroConductorApi{
   Future<DataEstadoChofer> obtenerEstadoChofer(String dni) async{
     try{
       final url = '${Config.apiHost}/api_getestadochofer.php';
-      print(url);
       final response = await http.post(url,body: {'dni' : dni});
       final responseUsuario = estadoChoferFromJson(response.body);
       if(responseUsuario.success){
-        print(responseUsuario.data[0].iEstado);
         return responseUsuario.data[0];
       }else{
         return null;
@@ -57,14 +52,12 @@ class RegistroConductorApi{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final url = '${Config.apiHost}/api_getDocumentosRechazados.php';
-      print(url);
       final response = await http.post(url,body: {'id' : _prefs.idChofer});
       final responseUsuario = documentoRechazadoFromJson(response.body);
       if(responseUsuario.success){
         final _prefs = UserPreferences();
         await _prefs.initPrefs();
         _prefs.idChofer = responseUsuario.data[0].iIdUsuario.toString();
-        print(responseUsuario.data[0].iEstado);
         return responseUsuario.data;
       }else{
         return null;
@@ -83,18 +76,14 @@ class RegistroConductorApi{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final DocumentoRechazadoResponse data = DocumentoRechazadoResponse(documentos: documentos);
-      print('${json.encode(data.documentos)}');
-      print('${_prefs.idChofer}');
       imageUpload.fields['idusuario'] = _prefs.idChofer;
       imageUpload.fields['documentos'] = json.encode(data.documentos);
 
       final streamedResponse = await imageUpload.send();
       final response = await http.Response.fromStream(streamedResponse);
       
-      print(streamedResponse.toString());
 
       final responseUsuario = estadoChoferFromJson(response.body);
-      print(response.body);
 
       if(responseUsuario.success){
         return true;
@@ -102,7 +91,6 @@ class RegistroConductorApi{
         return false;
       }
     }catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor ${error.toString()}');
     }
   }
@@ -110,12 +98,6 @@ class RegistroConductorApi{
   Future<bool> registrarChofer(String dni, String nombre, String apellidoP, String apellidoM, String fecNac, String sexo, String direccion, String referencia, String telefono, String celular, String correo, String password, String tipoDispositivo, String marca,String vchNombreD, String imei, String tokenD, String placa, String modelo, String pasajeros, String anio, String nuevo, String docDni,String docFotoRostro, String docFotoAuto, String docAntecedentes, String docLicencia) async{
     try{
       // final url = '${Config.nuevaRutaApi}/registro-chofer';
-      // print(url);
-      // print(docDni);
-      // print(docFotoRostro);
-      // print(docFotoAuto);
-      // print(docAntecedentes);
-      // print(docLicencia);
       // final response = await http.post(url,body: {'Dni' : dni,'Nombre' : nombre,'ApellidoP' : apellidoP,'ApellidoM' : apellidoM,'FecNac' : fecNac,'Sexo' : sexo,'Dirección' : direccion,'Referencia' : referencia,'Telefono' : telefono,'Celular' : celular,'Correo' : correo,'Password' : password,'iTipoDispositivo' : tipoDispositivo,'iMarca' : marca,'vchNombreD' : vchNombreD,'Imei' : imei,'TokenD' : tokenD,'placa' : placa,'modelo' : modelo,'pasajeros' : pasajeros,'año' : anio,'nuevo' : nuevo,'docDNI' : docDni,'docFotoRostro' : docFotoRostro,'docFotoAuto' : docFotoAuto,'docAntecedentes' : docAntecedentes,'docLicencia' : docLicencia}); 
       // final responseUsuario = estadoChoferFromJson(response.body);
 
@@ -164,9 +146,7 @@ class RegistroConductorApi{
 
       final streamedResponse = await imageUpload.send();
       final response = await http.Response.fromStream(streamedResponse);
-      print(streamedResponse.toString());
       final responseUsuario = estadoChoferFromJson(response.body);
-      print(response.body);
 
       if(responseUsuario.success){
         return true;
@@ -174,7 +154,6 @@ class RegistroConductorApi{
         return false;
       }
     }catch(error){
-      print(error.toString());
       throw ServerException(message: 'Ocurrió un error con el servidor ${error.toString()}');
     }
   }

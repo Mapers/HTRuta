@@ -133,7 +133,6 @@ class _NotificationDriverScreensState extends State<NotificationDriverScreens> {
                           ),
                           child: GestureDetector(
                               onTap: (){
-                                print('$index');
                                 navigateToDetail(index.toString());
                               },
                               child: ItemNotification(

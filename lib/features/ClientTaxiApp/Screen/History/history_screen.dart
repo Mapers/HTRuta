@@ -96,7 +96,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           index: index,
                           child: GestureDetector(
                               onTap: () {
-                                print('$index');
                                 navigateToDetail(index.toString());
                               },
                               child: rideHistory()
@@ -125,7 +124,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           index: index,
                           child: GestureDetector(
                               onTap: () {
-                                print('$index');
                                 navigateToDetail(index.toString());
                               },
                               child: interprovincialHistory()

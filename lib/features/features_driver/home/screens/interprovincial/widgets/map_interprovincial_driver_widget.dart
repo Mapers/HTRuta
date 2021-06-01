@@ -38,7 +38,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   void initState() { 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      dynamic result = await Future.wait([
+      List<dynamic> result = await Future.wait([
         LocationUtil.currentLocation(),
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png'),
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/gps_point_24.png'),
@@ -70,13 +70,13 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
         polylines[polyline.polylineId] = polyline;
         if(subscriptionPassengers == null){
           InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
-          subscriptionPassengers = interprovincialDataFirestore.getStreamActivePassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers){
+          subscriptionPassengers = interprovincialDataFirestore.getStreamActivePassengers(documentId: _data.documentId).listen((List<PassengerEntity> passengers) async {
             for (var passenger in passengers) {
               if(passenger.currentLocation != null){
                 Marker markerPassenger = MapViewerUtil.generateMarker(
                   latLng: passenger.currentLocation.latLang,
                   nameMarkerId: 'PASSENGER_MARKER_${passenger.documentId}',
-                  icon: fromPinLocationIcon,
+                  icon: await MapViewerUtil.getMarkerIcon(passenger.urlImage),
                   onTap: () => BlocProvider.of<InterprovincialDriverLocationBloc>(context).add(SetPassengerSelectedInterprovincialDriverLocationEvent(passenger: passenger))
                 );
                 _markers[markerPassenger.markerId] = markerPassenger;
