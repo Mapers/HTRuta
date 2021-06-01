@@ -2,8 +2,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:provider/provider.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/amount_provider.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 
 

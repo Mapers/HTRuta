@@ -9,8 +9,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/my_wallet_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/izi_pay_webview.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/amount_provider.dart';
-import 'package:provider/provider.dart';
 
 class MyWalletDriver extends StatefulWidget {
   @override
