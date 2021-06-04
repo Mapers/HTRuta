@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             fcm_token: null,
             id: null,
             routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
-            status: null,
+            status: interprovincialRouteInServiceEntity.status,
             vehicleSeatLayout: null
           );
         if( serviceInCourse.passengerDocumentId != null ){

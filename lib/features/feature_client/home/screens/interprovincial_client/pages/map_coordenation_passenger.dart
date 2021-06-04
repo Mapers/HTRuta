@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
   final LocationEntity currentLocation;
@@ -181,7 +182,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           )
         ),
         Positioned(
-          bottom: 180,
+          bottom: 210,
           right: 15,
           child: Card(
             clipBehavior: Clip.antiAlias,
@@ -241,25 +242,25 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Text('S/.' + price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
-            // Row(
-            //   children: [
-            //     Container(
-            //       padding: EdgeInsets.all(4),
-            //       margin: EdgeInsets.symmetric(vertical: 5),
-            //       width: 90,
-            //       decoration: BoxDecoration(
-            //         color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
-            //         borderRadius: BorderRadius.circular(5),
-            //       ),
-            //       child: Text(
-            //         availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
-            //         style: TextStyle(color: Colors.white, fontSize: 12),
-            //         textAlign: TextAlign.center,
-            //       ),
-            //     ),
-            //     SizedBox(width: 10,),
-            //   ],
-            // ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(width: 10,),
+              ],
+            ),
             Row(
               children: [
                 Icon(Icons.person, color: Colors.black87),

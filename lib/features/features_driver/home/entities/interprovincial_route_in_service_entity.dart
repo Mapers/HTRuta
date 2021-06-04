@@ -3,6 +3,7 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/inte
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 
 class InterprovincialRouteInServiceEntity extends Equatable {
   final String id;
@@ -16,6 +17,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   final double cost;
   final double starts;
   final DateTime dateStart;
+  final InterprovincialStatus status;
 
   InterprovincialRouteInServiceEntity({
     @required this.id,
@@ -29,6 +31,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     this.driverCellphone,
     this.driverImage,
     this.dateStart,
+    this.status
   });
 
   Map<String, dynamic> get toMap => {
@@ -114,6 +117,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
       fromLocation: LocationEntity.fromJson(dataJson['from']),
       toLocation: LocationEntity.fromJson(dataJson['to']),
       dateStart:DateTime.parse(dataJson['date_start']) ,
+      status: toInterprovincialStatusFromString(dataJson['status']),
       starts: starts,
     );
   }
