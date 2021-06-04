@@ -119,14 +119,14 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.of(context).pushNamed(AppRoute.historyScreen);
                               },
                             ),
-                            getItemMenu(
+                            /* getItemMenu(
                               icon: Icons.settings,
                               text: 'Configuracion',
                               isSelected: activeScreenName.compareTo('CONFIG') == 0,
                               onTap: () {
                                 
                               },
-                            ),
+                            ), */
                             /* getItemMenu(
                               icon: FontAwesomeIcons.truck,
                               text: 'Carga',

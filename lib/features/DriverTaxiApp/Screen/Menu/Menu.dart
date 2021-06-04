@@ -81,12 +81,13 @@ class MenuDriverScreens extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: (){
-                                Navigator.of(context).pop();
+                                /* Navigator.of(context).pop();
                                 Navigator.of(context).push( MaterialPageRoute<Null>(
                                   builder: (BuildContext context) {
                                     return MyProfile();
                                   },
-                                  fullscreenDialog: true));
+                                  fullscreenDialog: true)); */
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyProfile()));
                               },
                               child: Container(
                                 padding: EdgeInsets.only(left: 10.0),

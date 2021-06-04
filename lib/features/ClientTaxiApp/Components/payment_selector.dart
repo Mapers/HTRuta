@@ -29,8 +29,8 @@ class _PaymentSelectorState extends State<PaymentSelector> {
       builder: (BuildContext context, AsyncSnapshot snapshot){
         if(snapshot.hasError) return Container();
         switch(snapshot.connectionState){
-          case ConnectionState.waiting: return Container();
-          case ConnectionState.none: return Container();
+          case ConnectionState.waiting: return Container(height: 40);
+          case ConnectionState.none: return Container(height: 40);
           case ConnectionState.active: 
             return proccessDataToWidget(snapshot.data);
           case ConnectionState.done:
@@ -147,9 +147,20 @@ class _PaymentSelectorState extends State<PaymentSelector> {
                                 return Checkbox(
                                   value: savedPaymentMethods[index],
                                   onChanged: (bool newValue){
-                                    savedPaymentMethods[index] = newValue; 
+                                    savedPaymentMethods[index] = newValue;
+                                    List<int> selectedPaymentMethods = [];
+                                    for(int i = 0; i < data.length; i++){
+                                      if(savedPaymentMethods[i]){
+                                        selectedPaymentMethods.add(
+                                          int.parse(data[i].iId)
+                                        );
+                                      }
+                                    }
+                                    List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
+                                    _prefs.setClientPaymentMethods = methodsToSave;
                                     stateSetter(() {
                                     });
+                                    setState(() {});
                                   },
                                 );
                               }

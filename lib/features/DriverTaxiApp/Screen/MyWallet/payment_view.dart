@@ -60,9 +60,8 @@ class PaymentView extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.2 - 2,
                       height: MediaQuery.of(context).size.width * 0.2 - 2,
                       decoration: BoxDecoration(
-                        border: amountSelected == '5' ? Border.all(color: Colors.grey) : Border.all(width: 0),
                         shape: BoxShape.circle,
-                        color: amountSelected == '5' ? primaryColor : Colors.white
+                        color: amountSelected == '5' ? primaryColor : primaryColor.withOpacity(0.2)
                       ),
                       child: Center(
                         child: Text('S/ 5'),
@@ -77,9 +76,9 @@ class PaymentView extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.2 - 2,
                       height: MediaQuery.of(context).size.width * 0.2 - 2,
                       decoration: BoxDecoration(
-                        border: amountSelected == '10' ? Border.all(color: Colors.grey) : Border.all(width: 0),
+                        // border: amountSelected == '10' ? Border.all(color: Colors.grey) : Border.all(width: 0),
                         shape: BoxShape.circle,
-                        color: amountSelected == '10' ? primaryColor : Colors.white
+                        color: amountSelected == '10' ? primaryColor : primaryColor.withOpacity(0.2)
                       ),
                       child: Center(
                         child: Text('S/ 10'),
@@ -94,9 +93,9 @@ class PaymentView extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.2 - 2,
                       height: MediaQuery.of(context).size.width * 0.2 - 2,
                       decoration: BoxDecoration(
-                        border: amountSelected == '15' ? Border.all(color: Colors.grey) : Border.all(width: 0),
+                        // border: amountSelected == '15' ? Border.all(color: Colors.grey) : Border.all(width: 0),
                         shape: BoxShape.circle,
-                        color: amountSelected == '15' ? primaryColor : Colors.white
+                        color: amountSelected == '15' ? primaryColor : primaryColor.withOpacity(0.2)
                       ),
                       child: Center(
                         child: Text('S/ 15'),
@@ -111,9 +110,9 @@ class PaymentView extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.2 - 2,
                       height: MediaQuery.of(context).size.width * 0.2 - 2,
                       decoration: BoxDecoration(
-                        border: amountSelected == '20' ? Border.all(color: Colors.grey) : Border.all(width: 0),
+                        // border: amountSelected == '20' ? Border.all(color: Colors.grey) : Border.all(width: 0),
                         shape: BoxShape.circle,
-                        color: amountSelected == '20' ? primaryColor : Colors.white
+                        color: amountSelected == '20' ? primaryColor : primaryColor.withOpacity(0.2)
                       ),
                       child: Center(
                         child: Text('S/ 20'),

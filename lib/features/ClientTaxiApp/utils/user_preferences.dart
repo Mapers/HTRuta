@@ -45,6 +45,12 @@ class UserPreferences{
     _prefs.setString('idChofer', value);
   }
 
+  String get idUsuario => _prefs.getString('idUsuario') ?? '';
+
+  set idUsuario(String value) {
+    _prefs.setString('idUsuario', value);
+  }
+
   String get idChoferReal => _prefs.getString('idChoferReal') ?? '';
 
   set idChoferReal(String value) {
@@ -62,6 +68,36 @@ class UserPreferences{
 
   set setDrivingState(bool value) {
     _prefs.setBool('drivingState', value);
+  }
+
+  String get taxiRequestInCourse => _prefs.getString('taxiRequestInCourse') ?? '';
+
+  set taxiRequestInCourse(String taxiRequestInCourse) {
+    _prefs.setString('taxiRequestInCourse', taxiRequestInCourse);
+  }
+
+  bool get isDriverInService => _prefs.getBool('isDriverInService') ?? false;
+
+  set isDriverInService(bool value) {
+    _prefs.setBool('isDriverInService', value);
+  }
+
+  bool get isClientInTaxi => _prefs.getBool('isClientInTaxi') ?? false;
+
+  set isClientInTaxi(bool value) {
+    _prefs.setBool('isClientInTaxi', value);
+  }
+
+  String get clientTaxiRequest => _prefs.getString('clientTaxiRequest') ?? '';
+
+  set clientTaxiRequest(String clientTaxiRequest) {
+    _prefs.setString('clientTaxiRequest', clientTaxiRequest);
+  }
+
+  String get clientTaxiDriverRequest => _prefs.getString('clientTaxiDriverRequest') ?? '';
+
+  set clientTaxiDriverRequest(String clientTaxiDriverRequest) {
+    _prefs.setString('clientTaxiDriverRequest', clientTaxiDriverRequest);
   }
 
   List<String> get getClientPaymentMethods => _prefs.getStringList('clientPayments') ?? [];

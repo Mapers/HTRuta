@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -13,6 +16,10 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   final String screenName = 'HISTORY';
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  final _prefs = UserPreferences();
+  final pickupApi = PickupApi();
+  List<HistoryItem> historyItemsLoaded;
+
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
@@ -53,28 +60,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
         drawer: MenuScreens(activeScreenName: screenName),
-        // body: NestedScrollView(
-        //   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        //     return <Widget>[
-        //       SliverAppBar(
-        //         expandedHeight: 80.0,
-        //         floating: false,
-        //         pinned: true,
-        //         flexibleSpace: FlexibleSpaceBar(
-        //           centerTitle: true,
-        //           title: Text('Historial',
-        //             style: TextStyle(
-        //               color: Colors.black,
-        //               fontSize: 16.0,
-        //             )
-        //           ),
-        //           background: Container(
-        //             color: whiteColor,
-        //           ),
-        //         ),
-        //       ),
-        //     ];
-        //   },
           body: TabBarView(
             children:[
               NotificationListener<OverscrollIndicatorNotification>(
@@ -84,25 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: ListView.separated(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                    separatorBuilder:(_,int i){
-                      return Divider();
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationListView(
-                          index: index,
-                          child: GestureDetector(
-                              onTap: () {
-                                navigateToDetail(index.toString());
-                              },
-                              child: rideHistory()
-                          )
-                      );
-                    }
-                ),
+                child: createFutureList()
               ),
             ),
             NotificationListener<OverscrollIndicatorNotification>(
@@ -121,13 +88,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return AnimationListView(
-                          index: index,
-                          child: GestureDetector(
-                              onTap: () {
-                                navigateToDetail(index.toString());
-                              },
-                              child: interprovincialHistory()
-                          )
+                        index: index,
+                        child: GestureDetector(
+                          onTap: () {
+                            navigateToDetail(index.toString());
+                          },
+                          child: interprovincialHistory()
+                        )
                       );
                     }
                 ),
@@ -139,8 +106,51 @@ class _HistoryScreenState extends State<HistoryScreen> {
       )
     );
   }
+  Widget createFutureList(){
+    return historyItemsLoaded == null ? FutureBuilder(
+      future: pickupApi.getHistoricalClient(_prefs.idUsuario),
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        if(snapshot.hasError) return Container();
+        switch(snapshot.connectionState){
+          case ConnectionState.waiting: return Container();
+          case ConnectionState.none: return Container();
+          case ConnectionState.active: {
+            historyItemsLoaded = snapshot.data;
+            return rideHistoryList(historyItemsLoaded);
+          }
+          case ConnectionState.done: {
+            historyItemsLoaded = snapshot.data;
+            return rideHistoryList(historyItemsLoaded);
+          }
+        }
+        return Container();
+      }
+    ) : rideHistoryList(historyItemsLoaded);
+  }
 
-  Widget rideHistory(){
+  Widget rideHistoryList(List<HistoryItem> historyItems){
+    return ListView.separated(
+      itemCount: historyItems.length,
+      shrinkWrap: true,
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      separatorBuilder:(_,int i){
+        return Divider();
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return AnimationListView(
+          index: index,
+          child: GestureDetector(
+            onTap: () {
+              navigateToDetail(index.toString());
+            },
+            child: rideHistory(historyItems[index])
+          )
+        );
+      }
+    );
+  }
+
+  Widget rideHistory(HistoryItem item){
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(15.0),
@@ -156,7 +166,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('8 Junio 2019, 18:39',
+                Text(item.fechaRegistro.toString().substring(0, 10),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
@@ -187,7 +197,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text('10:24',
+                          Text(item.fechaRegistro.toString().substring(11, 16),
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
@@ -225,14 +235,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Av. Los incas 567, Trujillo , Perú',
+                        Text(item.origen,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 15,
                           ),
                         ),
-                        Text('Av. Pumacahua 678, El Porvenir, Perú',
+                        Text(item.destino,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -275,6 +285,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
                 Text('Realizado'.toUpperCase(),
                   style: TextStyle(
+                    
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 13.0

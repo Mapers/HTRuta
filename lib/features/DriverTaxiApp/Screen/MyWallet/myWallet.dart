@@ -122,7 +122,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
                 itemBuilder: (BuildContext context, int index){
                   return Container(
                     margin: EdgeInsets.only(left: 20.0,right: 20.0,bottom: 10.0),
-                    child: historyCard(Icons.local_taxi, 'Recarga', '', data.historial[index].mMontoRecarga.toString())
+                    child: historyCard(Icons.local_taxi, 'Recarga', data.historial[index].date.substring(0, 10), data.historial[index].mMontoRecarga.toString())
                   );
                 }
               ),
@@ -170,143 +170,6 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
       ],
     );
   }
-  /* Widget paymentView(){
-    return ChangeNotifierProvider(
-      create: (context) => AmountProvider(),
-      child: Container(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Builder(
-                builder: (context) {
-                  final amount = Provider.of<AmountProvider>(context).amount;
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              size: 36,
-                            ),
-                            onPressed: (){
-                              pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-                            },
-                          )
-                        ],
-                      ),
-                      Container(
-                        height: 30,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          prefixIcon: Icon(Icons.monetization_on, color: yellowClear, size: 20.0),
-                          contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                          hintText: 'Monto de recarga',
-                          hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
-                        ),
-                        onChanged: (String value){
-                          Provider.of<AmountProvider>(context, listen: false).amount = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                Provider.of<AmountProvider>(context, listen: false).amount = '5';
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.2 - 2,
-                                height: MediaQuery.of(context).size.width * 0.2 - 2,
-                                decoration: BoxDecoration(
-                                  border: amount == '5' ? Border.all(color: Colors.grey) : Border.all(width: 0),
-                                  shape: BoxShape.circle,
-                                  color: amount == '5' ? primaryColor : Colors.white
-                                ),
-                                child: Center(
-                                  child: Text('S/ 5'),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: (){
-                                Provider.of<AmountProvider>(context, listen: false).amount = '10';
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.2 - 2,
-                                height: MediaQuery.of(context).size.width * 0.2 - 2,
-                                decoration: BoxDecoration(
-                                  border: amount == '10' ? Border.all(color: Colors.grey) : Border.all(width: 0),
-                                  shape: BoxShape.circle,
-                                  color: amount == '10' ? primaryColor : Colors.white
-                                ),
-                                child: Center(
-                                  child: Text('S/ 10'),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: (){
-                                Provider.of<AmountProvider>(context, listen: false).amount = '15';
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.2 - 2,
-                                height: MediaQuery.of(context).size.width * 0.2 - 2,
-                                decoration: BoxDecoration(
-                                  border: amount == '15' ? Border.all(color: Colors.grey) : Border.all(width: 0),
-                                  shape: BoxShape.circle,
-                                  color: amount == '15' ? primaryColor : Colors.white
-                                ),
-                                child: Center(
-                                  child: Text('S/ 15'),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: (){
-                                Provider.of<AmountProvider>(context, listen: false).amount = '20';
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.2 - 2,
-                                height: MediaQuery.of(context).size.width * 0.2 - 2,
-                                decoration: BoxDecoration(
-                                  border: amount == '20' ? Border.all(color: Colors.grey) : Border.all(width: 0),
-                                  shape: BoxShape.circle,
-                                  color: amount == '20' ? primaryColor : Colors.white
-                                ),
-                                child: Center(
-                                  child: Text('S/ 20'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              ),
-              IzipayWebView(
-                pageController,
-                (bool success){
-                  loadedData = null;
-                  setState(() {});
-                }
-              )
-            ]
-          ),
-        ),
-      ),
-    );
-  } */
   Widget historyCard(IconData icon, String title, String date, String balance) {
     return Container(
       padding: EdgeInsets.only(
@@ -340,13 +203,13 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(title, style: textBoldBlack,)
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text(title, style: textBoldBlack,)
                 ),
-                /* Container(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(date, style: textGrey,)
-                ), */
+                Container(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text(date, style: textGrey)
+                ),
               ],
             ),
           ),

@@ -13,6 +13,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final bool rejected;
@@ -31,7 +32,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   bool drawCircle = false;
   double initialCircularRadio;
   int initialSeat;
-  List<int> paymentMethodsSelected = [];
+  final _prefs = UserPreferences();
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
         initialSeat = param.requiredSeats;
         destinationInput( param.distictTo);
-        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: paymentMethodsSelected));
+        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
         Navigator.of(context).push(Routes.toAvailableRoutesPage());
       }
     });
@@ -166,11 +167,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                             Card(
                               elevation: 5,
                               color: Colors.white,
-                              child: PaymentSelector(
-                                onSelected: (_methods){
-                                  paymentMethodsSelected = _methods;
-                                },
-                              ),
+                              child: PaymentSelector(),
                             ),
                           ],
                         ),
@@ -202,7 +199,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             );
             return;
           }
-          if(paymentMethodsSelected.isEmpty){
+          if(_prefs.getClientPaymentMethods.isEmpty){
             Fluttertoast.showToast(
               msg: 'Seleccione al menos un método de pago que disponga',
               toastLength: Toast.LENGTH_LONG,
@@ -216,7 +213,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
               child: Text('Buscando...',style: TextStyle(color: Colors.white, fontSize: 20,decoration: TextDecoration.none),)
             ),
           );
-          BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat, paymentMethods: paymentMethodsSelected));
+          BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat, paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
           await Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();
           Navigator.of(context).push(Routes.toAvailableRoutesPage());

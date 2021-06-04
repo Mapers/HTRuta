@@ -4,6 +4,9 @@ PickUpDriverRequest pickUpDriverRequestFromJson(String str) => PickUpDriverReque
 
 String pickUpDriverRequestToJson(PickUpDriverRequest data) => json.encode(data.toJson());
 
+DriverRequest requestDriverItemFromJson(String str) => DriverRequest.fromJson(json.decode(str));
+
+String requestDriverItemToJson(DriverRequest data) => json.encode(data.toJson());
 class PickUpDriverRequest {
   PickUpDriverRequest({
       this.message,

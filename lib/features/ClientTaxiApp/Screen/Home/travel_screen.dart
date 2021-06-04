@@ -8,6 +8,7 @@ import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/comment_user_dialog.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
@@ -68,7 +69,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   final pickupApi = PickupApi();
   final referenceDatabase = FirebaseDatabase.instance.reference();
   PushNotificationProvider pushProvider;
-
+  final _prefs = UserPreferences();
 
   dynamic posicionChofer;
   @override
@@ -101,7 +102,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       if (!mounted) return;
       if(newCancel == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-        if(idSolicitud == pedidoProvider.idSolicitud){
+        if(idSolicitud == pedidoProvider.request.id){
           Fluttertoast.showToast(
             msg: 'Se canceló una solicitud de viaje',
             toastLength: Toast.LENGTH_LONG,
@@ -112,6 +113,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             fontSize: 16.0
           );
         }
+        _prefs.isClientInTaxi = false;
         Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
       }
       if(travelInit == '1'){
@@ -120,7 +122,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       }
       if(travelFinish == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
-        if(idSolicitud == pedidoProvider.idSolicitud){
+        if(idSolicitud == pedidoProvider.request.id){
           await showDialog(
             context: context,
             barrierDismissible: false,
@@ -506,13 +508,14 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                       FlatButton(onPressed: () async {
                         try{
                           Dialogs.openLoadingDialog(context);
-                          bool respuesta = await pickupApi.cancelTravel(pedidoProvider.idSolicitud);
+                          bool respuesta = await pickupApi.cancelTravel(pedidoProvider.request.id);
                           if(respuesta){
                             PushMessage pushMessage = getIt<PushMessage>();
                             Map<String, String> data = {
                               'newCancel' : '1',
-                              'idSolicitud': pedidoProvider.idSolicitud
+                              'idSolicitud': pedidoProvider.request.id
                             };
+                            _prefs.isClientInTaxi = false;
                             pushMessage.sendPushMessage(token: pedidoProvider.requestDriver.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
                             Navigator.pop(context);
                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);

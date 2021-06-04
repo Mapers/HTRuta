@@ -57,15 +57,18 @@ class Historial {
         this.iIdChoferBilleteraPago,
         this.iIdChofer,
         this.mMontoRecarga,
+        this.date
     });
 
     int iIdChoferBilleteraPago;
     String iIdChofer;
     double mMontoRecarga;
+    String date;
 
     factory Historial.fromJson(Map<String, dynamic> json) => Historial(
         iIdChoferBilleteraPago: json['iIdChoferBilleteraPago'],
         iIdChofer: json['iIdChofer'],
+        date: json['dFechaRegistro'],
         mMontoRecarga: json['mMontoRecarga'].toDouble(),
     );
 
@@ -73,5 +76,6 @@ class Historial {
         'iIdChoferBilleteraPago': iIdChoferBilleteraPago,
         'iIdChofer': iIdChofer,
         'mMontoRecarga': mMontoRecarga,
+        'date': date,
     };
 }
