@@ -92,7 +92,7 @@ class MapViewerUtil {
     );
   }
 
-  static Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap}) {
+  static Marker generateMarker({@required LatLng latLng, @required String nameMarkerId, BitmapDescriptor icon, Function onTap, String title}) {
     MarkerId markerId = MarkerId(nameMarkerId);
     Marker marker = Marker(
       markerId: markerId,
@@ -100,9 +100,9 @@ class MapViewerUtil {
       draggable: false,
       icon: icon,
       onTap: onTap,
-      infoWindow: InfoWindow(
+      infoWindow: title != null ? InfoWindow(
         title: nameMarkerId
-      )
+      ) : InfoWindow.noText
     );
     return marker;
   }
