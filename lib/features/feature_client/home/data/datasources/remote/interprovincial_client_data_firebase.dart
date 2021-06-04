@@ -71,8 +71,9 @@ class InterprovincialClientDataFirebase {
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }
-  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters}) async{
+  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters, @required String passengerPhone}) async{
     firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).update({
+      'passenger_phone': passengerPhone,
       'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
       'current_street_name': passengerPosition.streetName,
       'current_district_name': passengerPosition.districtName,

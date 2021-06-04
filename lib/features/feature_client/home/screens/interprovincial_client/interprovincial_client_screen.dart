@@ -132,6 +132,24 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                             Card(
                               elevation: 5,
                               color: Colors.white,
+                              child: PaymentSelector(
+                                onSelected: (_methods){
+                                  paymentMethodsSelected = _methods;
+                                },
+                              ),
+                            ),
+                            
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        left: 15,
+                        top: 235,
+                        child: Row(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Select<int>(
@@ -155,23 +173,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                                 ),
                               ),
                             )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        left: 15,
-                        top: 250,
-                        child: Row(
-                          children: [
-                            Card(
-                              elevation: 5,
-                              color: Colors.white,
-                              child: PaymentSelector(
-                                onSelected: (_methods){
-                                  paymentMethodsSelected = _methods;
-                                },
-                              ),
-                            ),
                           ],
                         ),
                       ),

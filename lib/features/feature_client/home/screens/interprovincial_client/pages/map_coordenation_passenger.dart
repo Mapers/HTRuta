@@ -21,7 +21,8 @@ class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation}) : super(key: key);
+  final String passengerPhone;
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation, this.passengerPhone}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -97,7 +98,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
     _markers[markerPassenger.markerId] = markerPassenger;
     double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
-    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters, passengerPhone: widget.passengerPhone);
     bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
     if(passengerStatus){
       Navigator.of(context).pushAndRemoveUntil(Routes.toQualificationClientPage(  documentId:widget.documentId ,passengerId:widget.passengerDocumentId ,availablesRoutesEntity: widget.availablesRoutesEntity ) , (_) => false);
@@ -147,7 +148,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
                         height: 250,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            fit: BoxFit.fill, image: NetworkImage('https://e.rpp-noticias.io/normal/2020/04/23/082208_932018.jpg')
+                            fit: BoxFit.fill, image: NetworkImage(widget.availablesRoutesEntity.route.driverImage)
                           ),
                         ),
                       ),
@@ -159,7 +160,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
                 height: 50,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage('https://e.rpp-noticias.io/normal/2020/04/23/082208_932018.jpg')
+                    fit: BoxFit.cover, image: NetworkImage(widget.availablesRoutesEntity.route.driverImage)
                   ),
                   shape: BoxShape.circle,
                 ),
@@ -187,7 +188,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             color: green1,
             child: InkWell(
               onTap: ()async{
-                await launch('tel:+51970578887');
+                await launch('tel:+51'+widget.availablesRoutesEntity.route.driverCellphone );
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -264,7 +265,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Icon(Icons.person, color: Colors.black87),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.nameDriver ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(availablesRoutesEntity.route.driverName ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
               ],
             ),
@@ -294,7 +295,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 SizedBox(width: 5),
                 Text(availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 SizedBox(width: 20),
-                Icon(Icons.calendar_today, color: Colors.black87),
+                Icon(Icons.calendar_today, color: Colors.blueAccent),
                 SizedBox(width: 5),
                 Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
               ],

@@ -55,7 +55,7 @@ class ServiceDataRemote{
       }
     );
     if(result.success){
-      return InterprovincialRouteInServiceEntity.fromJson(result.data);
+      return InterprovincialRouteInServiceEntity.fromJsonRecovery(result.data);
     }
     return null;
   }

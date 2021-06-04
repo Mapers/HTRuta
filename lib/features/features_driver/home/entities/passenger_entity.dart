@@ -11,6 +11,7 @@ class PassengerEntity extends Equatable {
   final String urlImage;
   final String fcmToken;
   final int seats;
+  final String cellPhone;
   final double price;
   final LocationEntity currentLocation;
   final LocationEntity toLocation;
@@ -30,6 +31,7 @@ class PassengerEntity extends Equatable {
     @required this.distanceInMinutes,
     @required this.distanceInMeters,
     @required this.status,
+    @required this.cellPhone,
     this.currentLocation
   });
 
@@ -52,6 +54,7 @@ class PassengerEntity extends Equatable {
       urlImage: dataJson['url_image'] ?? 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500&h=500',
       seats: dataJson['seats'],
       price: dataJson['price'],
+      cellPhone: dataJson['passenger_phone'],
       distanceInMeters: (dataJson['distance_in_meters'] as num).toDouble(),
       distanceInMinutes: (dataJson['distance_in_minutes'] as num).toInt(),
       currentLocation: _currentLocation,
@@ -88,6 +91,7 @@ class PassengerEntity extends Equatable {
       urlImage: dataJson['url_image'],
       seats: int.parse(dataJson['seats'] as String),
       price: dataJson['price'] ?? -1,
+      cellPhone: dataJson['passenger_phone'],
       distanceInMeters: 0,
       distanceInMinutes: 0,
       currentLocation: null,
@@ -115,6 +119,7 @@ class PassengerEntity extends Equatable {
       'distance_in_meters': distanceInMeters,
       'distance_in_minutes': distanceInMinutes,
       'price': price,
+      'passenger_phone': cellPhone,
       'to_location': GeoPoint(toLocation.latLang.latitude, toLocation.latLang.longitude),
       'to_district_name': toLocation.districtName,
       'to_province_name': toLocation.provinceName,

@@ -7,7 +7,10 @@ import 'package:meta/meta.dart';
 class InterprovincialRouteInServiceEntity extends Equatable {
   final String id;
   final String name;
-  final String nameDriver;
+  final String driverPhone;
+  final String driverCellphone;
+  final String driverImage;
+  final String driverName;
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
   final double cost;
@@ -17,18 +20,24 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   InterprovincialRouteInServiceEntity({
     @required this.id,
     @required this.name,
-    @required this.nameDriver,
+    @required this.driverName,
     @required this.cost,
     @required this.fromLocation,
     @required this.toLocation,
     @required this.starts,
-    @required this.dateStart,
+    this.driverPhone,
+    this.driverCellphone,
+    this.driverImage,
+    this.dateStart,
   });
 
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
-    'name_driver': nameDriver,
+    'driver_phone':  driverPhone,
+    'driver_cellphone': driverCellphone,
+    'driver_image': driverImage,
+    'name_driver': driverName,
     'from': fromLocation.toMap,
     'to': toLocation.toMap,
     'cost': cost,
@@ -40,7 +49,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     return InterprovincialRouteInServiceEntity(
       id: '1',
       name: 'Huacho - Chancay - Lima',
-      nameDriver: 'Pepe lopez Peres' ,
+      driverName: 'Pepe lopez Peres' ,
       cost: 50,
       fromLocation: LocationEntity(
         latLang: LatLng(-11.109722, -77.596091),
@@ -66,7 +75,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     return InterprovincialRouteInServiceEntity(
       id: id,
       name: interprovincialRoute.name,
-      nameDriver: driverName,
+      driverName: driverName,
       cost: interprovincialRoute.cost,
       fromLocation: interprovincialRoute.from,
       toLocation: interprovincialRoute.to,
@@ -81,7 +90,26 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     return InterprovincialRouteInServiceEntity(
       id: dataJson['id'],
       name: dataJson['name'],
-      nameDriver: dataJson['name_driver'],
+      driverPhone: dataJson['driver_phone'],
+      driverCellphone: dataJson['driver_cellphone'],
+      driverImage: dataJson['driver_image'],
+      driverName: dataJson['driver_name'],
+      cost: double.parse(dataJson['cost']),
+      fromLocation: LocationEntity.fromJson(dataJson['from']),
+      toLocation: LocationEntity.fromJson(dataJson['to']),
+      starts: starts,
+    );
+  }
+  factory InterprovincialRouteInServiceEntity.fromJsonRecovery(Map<String, dynamic> dataJson){
+    double starts;
+    dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
+    return InterprovincialRouteInServiceEntity(
+      id: dataJson['id'],
+      name: dataJson['name'],
+      driverPhone: dataJson['driver_phone'],
+      driverCellphone: dataJson['driver_cellphone'],
+      driverImage: dataJson['driver_image'],
+      driverName: dataJson['driver_name'],
       cost: double.parse(dataJson['cost']),
       fromLocation: LocationEntity.fromJson(dataJson['from']),
       toLocation: LocationEntity.fromJson(dataJson['to']),
@@ -89,11 +117,12 @@ class InterprovincialRouteInServiceEntity extends Equatable {
       starts: starts,
     );
   }
+
   factory InterprovincialRouteInServiceEntity.onlyLocation(LocationEntity toLocation){
     return InterprovincialRouteInServiceEntity(
       id: null,
       name: null,
-      nameDriver: null,
+      driverName: null,
       cost: null,
       fromLocation: null,
       toLocation: toLocation,
@@ -103,5 +132,5 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, starts];
+  List<Object> get props => [id, name, driverName, driverPhone, driverCellphone, driverImage, cost, fromLocation, toLocation, starts];
 }

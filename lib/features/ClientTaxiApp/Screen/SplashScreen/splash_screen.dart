@@ -92,6 +92,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
+    final data = await _session.get();
     if(serviceInCourse == null){
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
@@ -126,6 +127,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             price: dataNecessaryRetrieve.negotiatedPrice,
             passengerDocumentId:serviceInCourse.passengerDocumentId,
             currentLocation: currentlocation,
+            passengerPhone: data.cellphone,
           )), (_) => false);
         }else{
           Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);

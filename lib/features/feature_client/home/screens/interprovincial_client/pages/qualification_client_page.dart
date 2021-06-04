@@ -55,7 +55,7 @@ class _QualificationClientPageState extends State<QualificationClientPage> {
                       SizedBox(width: 7,),
                       Container(
                         width: 200,
-                        child: Text(widget.availablesRoutesEntity.route.nameDriver)
+                        child: Text(widget.availablesRoutesEntity.route.driverName)
                       )
                     ],
                   ),
