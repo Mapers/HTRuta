@@ -6,6 +6,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/inputDropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -21,6 +22,8 @@ class _MyProfileState extends State<MyProfile> {
   String selectedGender;
   String lastSelectedValue;
   DateTime date = DateTime.now();
+  final session = Session();
+  DriverSession driverSession;
   var _image;
 
   Future getImageLibrary() async {
@@ -118,320 +121,339 @@ class _MyProfileState extends State<MyProfile> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: whiteColor,
+        centerTitle: true,
         title: Text(
-          'My profile',
+          'Mi perfil',
           style: TextStyle(color: blackColor),
         ),
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
-          child: InkWellCustom(
-              onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
-              child: Form(
-                key: formKey,
-                child: Container(
-                  color: Color(0xffeeeeee),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        color: whiteColor,
-                        padding: EdgeInsets.all(10.0),
-                        margin: EdgeInsets.only(bottom: 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Material(
-                              elevation: 5.0,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child:ClipRRect(
-                                  borderRadius:BorderRadius.circular(100.0),
-                                  child:_image == null
-                                      ? GestureDetector(
-                                      onTap: (){selectCamera();},
-                                      child:Container(
-                                          height: 80.0,
-                                          width: 80.0,
-                                          color: primaryColor,
-                                          child:Image.asset('assets/image/icon/avatar.png',fit: BoxFit.cover, height: 80.0,width: 80.0,)
-                                      )
-                                  ):GestureDetector(
-                                      onTap: () {selectCamera();},
-                                      child:Container(
-                                        height: 80.0,
-                                        width: 80.0,
-                                        child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
-                                      )
-                                  )
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                              padding: EdgeInsets.only(left: 20.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  TextField(
-                                    style: textStyle,
-                                    decoration: InputDecoration(
-                                        fillColor: whiteColor,
-                                        labelStyle: textStyle,
-                                        hintStyle: TextStyle(color: Colors.white),
-                                        counterStyle: textStyle,
-                                        hintText: 'First Name',
-                                        border: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.white))),
-                                    controller: TextEditingController.fromValue(
-                                      TextEditingValue(
-                                        text: 'First Name',
-                                        selection:TextSelection.collapsed(
-                                            offset: 11),
-                                      ),
-                                    ),
-                                    onChanged: (String _firstName) {
-
-                                    },
-                                  ),
-                                  TextField(
-                                    style: textStyle,
-                                    decoration: InputDecoration(
-                                        fillColor: whiteColor,
-                                        labelStyle: textStyle,
-                                        hintStyle: TextStyle(color: Colors.white),
-                                        counterStyle: textStyle,
-                                        hintText: 'Last Name',
-                                        border: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.white))),
-                                    controller: TextEditingController.fromValue(
-                                      TextEditingValue(
-                                        text: 'Last Name',
-                                        selection:TextSelection.collapsed(
-                                          offset: 11
-                                        ),
-                                      ),
-                                    ),
-                                    onChanged: (String _lastName) {
-
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ))
-                          ],
-                        ),
-                      ),
-                      Container(
-                        color: whiteColor,
-                        padding: EdgeInsets.all(10.0),
-                        margin: EdgeInsets.only(top: 10.0),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: Text(
-                                        'Phone Number',
-                                        style: textStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: TextField(
-                                      style: textStyle,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: InputDecoration(
-                                          fillColor: whiteColor,
-                                          labelStyle: textStyle,
-                                          hintStyle: TextStyle(color: Colors.white),
-                                          counterStyle: textStyle,
-                                          border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.white))
-                                      ),
-                                      controller:TextEditingController.fromValue(
-                                       TextEditingValue(
-                                          text: '03584565656',
-                                          selection:TextSelection.collapsed(
-                                              offset: 11),
-                                        ),
-                                      ),
-                                      onChanged: (String _phone) {
-
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: Text(
-                                        'Email',
-                                        style: textStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: TextField(
-                                      keyboardType: TextInputType.emailAddress,
-                                      style: textStyle,
-                                      decoration: InputDecoration(
-                                          fillColor: whiteColor,
-                                          labelStyle: textStyle,
-                                          hintStyle:
-                                          TextStyle(color: Colors.white),
-                                          counterStyle: textStyle,
-                                          border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.white))
-                                      ),
-                                      controller:TextEditingController.fromValue(
-                                       TextEditingValue(
-                                          text: 'abc@example.com',
-                                          selection:TextSelection.collapsed(
-                                              offset: 11),
-                                        ),
-                                      ),
-                                      onChanged: (String _email) {
-
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: Text(
-                                        'Gender',
-                                        style: textStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child:DropdownButtonHideUnderline(
-                                        child: Container(
-                                         // padding: EdgeInsets.only(bottom: 12.0),
-                                          child:InputDecorator(
-                                            decoration: const InputDecoration(
-                                            ),
-                                            isEmpty: selectedGender == null,
-                                            child:DropdownButton<String>(
-                                              hint:Text('Gender',style: textStyle,),
-                                              value: selectedGender,
-                                              isDense: true,
-                                              onChanged: (String newValue) {
-                                                setState(() {
-                                                  selectedGender = newValue;
-                                                });
-                                              },
-                                              items: listGender.map((value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value['id'],
-                                                  child:Text(value['name'],style: textStyle,),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        )
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: Text(
-                                        'Birthday',
-                                        style: textStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child:  GestureDetector(
-                                        onTap: () {
-                                          showCupertinoModalPopup<void>(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return _buildBottomPicker(
-                                                CupertinoDatePicker(
-                                                  mode: CupertinoDatePickerMode.date,
-                                                  initialDateTime: date,
-                                                  onDateTimeChanged: (DateTime newDateTime) {
-                                                    setState(() {
-                                                      date = newDateTime;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child:InputDropdown(
-                                          valueText: DateFormat.yMMMMd().format(date),
-                                          valueStyle: TextStyle(color: blackColor),
-                                        )
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child:ButtonTheme(
-                                height: 45.0,
-                                minWidth: MediaQuery.of(context).size.width-50,
-                                child: RaisedButton.icon(
-                                  shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0)),
-                                  elevation: 0.0,
-                                  color: primaryColor,
-                                  icon:Text(''),
-                                  label:Text('SAVE', style: headingBlack,),
-                                  onPressed: (){
-                                    submit();
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-          ),
+          child: driverSession == null ? FutureBuilder(
+            future: session.getDriverData() ,
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              if(snapshot.hasError) return Container();
+              switch(snapshot.connectionState){
+                case ConnectionState.waiting: return Container();
+                case ConnectionState.none: return Container();
+                case ConnectionState.active: {
+                  driverSession = snapshot.data;
+                  return createContent(driverSession);
+                }
+                case ConnectionState.done: {
+                  driverSession = snapshot.data;
+                  return createContent(driverSession);
+                }
+              }
+              return Container();
+            }
+          ): createContent(driverSession) 
         ),
       ),
     );
+  }
+  Widget createContent(DriverSession sesion){
+    return InkWellCustom(
+      onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
+      child: Form(
+        key: formKey,
+        child: Container(
+          color: Color(0xffeeeeee),
+          child: Column(
+            children: <Widget>[
+              Container(
+                color: whiteColor,
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(bottom: 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    /* Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(50.0),
+                      child:ClipRRect(
+                          borderRadius:BorderRadius.circular(100.0),
+                          child:_image == null
+                              ? GestureDetector(
+                              onTap: (){selectCamera();},
+                              child:Container(
+                                  height: 80.0,
+                                  width: 80.0,
+                                  color: primaryColor,
+                                  child:Image.asset('assets/image/icon/avatar.png',fit: BoxFit.cover, height: 80.0,width: 80.0,)
+                              )
+                          ):GestureDetector(
+                              onTap: () {selectCamera();},
+                              child:Container(
+                                height: 80.0,
+                                width: 80.0,
+                                child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
+                              )
+                          )
+                      ),
+                    ), */
+                    Expanded(
+                      child: Container(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          TextFormField(
+                            initialValue: sesion.name,
+                            style: textStyle,
+                            decoration: InputDecoration(
+                                fillColor: whiteColor,
+                                labelStyle: textStyle,
+                                hintStyle: TextStyle(color: Colors.white),
+                                counterStyle: textStyle,
+                                hintText: 'First Name',
+                                border: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.white))),
+                            /* controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                text: 'First Name',
+                                selection:TextSelection.collapsed(
+                                    offset: 11),
+                              ),
+                            ), */
+                            onChanged: (String _firstName) {
+
+                            },
+                          ),
+                          TextFormField(
+                            style: textStyle,
+                            initialValue: sesion.pName + ' ' + sesion.mName,
+                            decoration: InputDecoration(
+                                fillColor: whiteColor,
+                                labelStyle: textStyle,
+                                hintStyle: TextStyle(color: Colors.white),
+                                counterStyle: textStyle,
+                                hintText: 'Last Name',
+                                border: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.white))),
+                            /* controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                text: 'Last Name',
+                                selection:TextSelection.collapsed(
+                                  offset: 11
+                                ),
+                              ),
+                            ), */
+                            onChanged: (String _lastName) {
+
+                            },
+                          ),
+                        ],
+                      ),
+                    ))
+                  ],
+                ),
+              ),
+              Container(
+                color: whiteColor,
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(top: 10.0),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                'Phone Number',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: TextFormField(
+                              initialValue: sesion.phone,
+                              style: textStyle,
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                  fillColor: whiteColor,
+                                  labelStyle: textStyle,
+                                  hintStyle: TextStyle(color: Colors.white),
+                                  counterStyle: textStyle,
+                                  border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white))
+                              ),
+                              /* controller:TextEditingController.fromValue(
+                                TextEditingValue(
+                                  text: '03584565656',
+                                  selection:TextSelection.collapsed(
+                                      offset: 11),
+                                ),
+                              ), */
+                              onChanged: (String _phone) {
+
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                'Email',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: TextFormField(
+                              initialValue: sesion.email,
+                              keyboardType: TextInputType.emailAddress,
+                              style: textStyle,
+                              decoration: InputDecoration(
+                                  fillColor: whiteColor,
+                                  labelStyle: textStyle,
+                                  hintStyle:
+                                  TextStyle(color: Colors.white),
+                                  counterStyle: textStyle,
+                                  border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white))
+                              ),
+                              onChanged: (String _email) {
+
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                'Gender',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child:DropdownButtonHideUnderline(
+                                child: Container(
+                                  // padding: EdgeInsets.only(bottom: 12.0),
+                                  child:InputDecorator(
+                                    decoration: const InputDecoration(
+                                    ),
+                                    isEmpty: selectedGender == null,
+                                    child:DropdownButton<String>(
+                                      hint:Text('Gender',style: textStyle,),
+                                      value: selectedGender,
+                                      isDense: true,
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          selectedGender = newValue;
+                                        });
+                                      },
+                                      items: listGender.map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['id'],
+                                          child:Text(value['name'],style: textStyle,),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                )
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                'Birthday',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child:  GestureDetector(
+                              onTap: () {
+                                showCupertinoModalPopup<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return _buildBottomPicker(
+                                      CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.date,
+                                        initialDateTime: date,
+                                        onDateTimeChanged: (DateTime newDateTime) {
+                                          setState(() {
+                                            date = newDateTime;
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: InputDropdown(
+                                valueText: DateFormat.yMMMMd().format(date),
+                                valueStyle: TextStyle(color: blackColor),
+                              )
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child:ButtonTheme(
+                        height: 45.0,
+                        minWidth: MediaQuery.of(context).size.width-50,
+                        child: RaisedButton.icon(
+                          shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(10.0)),
+                          elevation: 0.0,
+                          color: primaryColor,
+                          icon:Text(''),
+                          label:Text('Guardar', style: headingBlack,),
+                          onPressed: (){
+                            submit();
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+  );
   }
 }

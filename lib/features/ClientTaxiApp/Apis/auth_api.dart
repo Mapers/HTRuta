@@ -49,13 +49,16 @@ class AuthApi{
     final token = await _prefs.tokenPush;
     final url = '${Config.apiHost}/api_getLoginUsuario.php?email=$email&clave=$password&tipo=1&token=$token';
     final response = await http.post(url,body: {'email' : email, 'clave' : password, 'tipo' : '1', 'token' : token});
+    print(response.body);
     final responseUsuario = userModelFromJson(response.body);
     if(responseUsuario.success){
       final usuario = responseUsuario.data[0];
       final session = Session();
+      _prefs.idUsuario = usuario.iIdUsuario.toString();
       await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword);
       if(responseUsuario.data.length > 1){
         if(responseUsuario.data[1] != null){
+          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni);
           final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();

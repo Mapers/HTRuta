@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final historicalModel = historicalModelFromJson(jsonString);
+//     final historicalDetailResponse = historicalDetailResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-HistoricalModel historicalModelFromJson(String str) => HistoricalModel.fromJson(json.decode(str));
+HistoricalDetailResponse historicalDetailResponseFromJson(String str) => HistoricalDetailResponse.fromJson(json.decode(str));
 
-String historicalModelToJson(HistoricalModel data) => json.encode(data.toJson());
+String historicalDetailResponseToJson(HistoricalDetailResponse data) => json.encode(data.toJson());
 
-class HistoricalModel {
-    HistoricalModel({
+class HistoricalDetailResponse {
+    HistoricalDetailResponse({
         this.message,
         this.success,
         this.data,
@@ -17,12 +17,12 @@ class HistoricalModel {
 
     String message;
     bool success;
-    List<HistoryItem> data;
+    List<HistoryDetailItem> data;
 
-    factory HistoricalModel.fromJson(Map<String, dynamic> json) => HistoricalModel(
+    factory HistoricalDetailResponse.fromJson(Map<String, dynamic> json) => HistoricalDetailResponse(
         message: json['message'],
         success: json['success'],
-        data: List<HistoryItem>.from(json['data'].map((x) => HistoryItem.fromJson(x))),
+        data: List<HistoryDetailItem>.from(json['data'].map((x) => HistoryDetailItem.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -32,8 +32,8 @@ class HistoricalModel {
     };
 }
 
-class HistoryItem {
-    HistoryItem({
+class HistoryDetailItem {
+    HistoryDetailItem({
         this.iIdViaje,
         this.fechaRegistro,
         this.precio,
@@ -43,7 +43,12 @@ class HistoryItem {
         this.tipoViaje,
         this.origen,
         this.destino,
+        this.observacion,
         this.distanciaMeters,
+        this.calificacionComentario,
+        this.calificacionEstrellas,
+        this.calificacionFechaRegistro,
+        this.tipoPago,
     });
 
     String iIdViaje;
@@ -55,9 +60,14 @@ class HistoryItem {
     String tipoViaje;
     String origen;
     String destino;
+    dynamic observacion;
     String distanciaMeters;
+    dynamic calificacionComentario;
+    dynamic calificacionEstrellas;
+    dynamic calificacionFechaRegistro;
+    dynamic tipoPago;
 
-    factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
+    factory HistoryDetailItem.fromJson(Map<String, dynamic> json) => HistoryDetailItem(
         iIdViaje: json['iIdViaje'],
         fechaRegistro: DateTime.parse(json['fecha_registro']),
         precio: json['precio'],
@@ -67,7 +77,12 @@ class HistoryItem {
         tipoViaje: json['tipo_viaje'],
         origen: json['origen'],
         destino: json['destino'],
+        observacion: json['observacion'] ?? '',
         distanciaMeters: json['distancia_meters'],
+        calificacionComentario: json['calificacion_comentario'],
+        calificacionEstrellas: json['calificacion_estrellas'],
+        calificacionFechaRegistro: json['calificacion_fechaRegistro'],
+        tipoPago: json['tipo_pago'],
     );
 
     Map<String, dynamic> toJson() => {
@@ -80,6 +95,11 @@ class HistoryItem {
         'tipo_viaje': tipoViaje,
         'origen': origen,
         'destino': destino,
+        'observacion': observacion,
         'distancia_meters': distanciaMeters,
+        'calificacion_comentario': calificacionComentario,
+        'calificacion_estrellas': calificacionEstrellas,
+        'calificacion_fechaRegistro': calificacionFechaRegistro,
+        'tipo_pago': tipoPago,
     };
 }

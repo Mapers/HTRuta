@@ -3,6 +3,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 
 class ItemRequest extends StatelessWidget {
   @required final String avatar;
@@ -14,6 +15,7 @@ class ItemRequest extends StatelessWidget {
   @required final String addTo;
   @required final VoidCallback onAccept;
   @required final VoidCallback onRefuse;
+  final Function(String) onPriceUpdate;
   final LatLng locationForm;
   final LatLng locationTo;
 
@@ -28,6 +30,7 @@ class ItemRequest extends StatelessWidget {
     this.addTo,
     this.onAccept,
     this.onRefuse,
+    this.onPriceUpdate,
     this.locationForm,
     this.locationTo
 
@@ -35,6 +38,7 @@ class ItemRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     return Card(
       margin: EdgeInsets.all(10.0),
       elevation: 10.0,
@@ -173,13 +177,64 @@ class ItemRequest extends StatelessWidget {
                 ),
               ),
             ), */
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  OutlineButton(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                    borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    shape:RoundedRectangleBorder(
+                      borderRadius:
+                        BorderRadius.circular(10.0),
+                    ),
+                    onPressed: (){
+                      double newPrice = double.parse(price);
+                      newPrice-=0.5;
+                      return onPriceUpdate(newPrice.toStringAsFixed(2));
+                    },
+                    child: Text('-0.5', style: TextStyle(color:Colors.grey)),
+                  ),
+                  Text('S/${double.parse(price).toStringAsFixed(2)}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
+                  OutlineButton(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                    borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    shape:RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    onPressed: (){
+                      double newPrice = double.parse(price);
+                      newPrice+=0.5;
+                      return onPriceUpdate(newPrice.toStringAsFixed(2));
+                    },
+                    child: Text('+0.5',style: TextStyle(color: primaryColor),),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10.0,bottom: 10.0),
+              child: ButtonTheme(
+                minWidth: MediaQuery.of(context).size.width - 50.0,
+                height: MediaQuery.of(context).size.width * 0.1,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  elevation: 0.0,
+                  color: Colors.blue.withOpacity(0.8),
+                  child: Text('Modificar precio',style: headingWhite,
+                  ),
+                  onPressed: onAccept
+                ),
+              ),
+            ),
             Row(
               children: <Widget>[
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: ButtonTheme(
-                      height: 45,
+                      height: MediaQuery.of(context).size.width * 0.1,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         elevation: 0,
@@ -195,7 +250,7 @@ class ItemRequest extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(10),
                     child: ButtonTheme(
-                      height: 45,
+                      height: MediaQuery.of(context).size.width * 0.1,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         elevation: 0,

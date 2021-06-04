@@ -108,7 +108,7 @@ class _RequestDetailState extends State<RequestDetail> {
       markers[markerIdTo] = markerTo;
     });
   }
-  void acceptTravel(RequestModel request) async {
+  /* void acceptTravel(RequestModel request) async {
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
@@ -145,7 +145,7 @@ class _RequestDetailState extends State<RequestDetail> {
       Navigator.pop(context);
       Dialogs.alert(context,title: 'Error', message: e.message);
     }
-  }
+  } */
   @override
   void initState() {
     super.initState();
@@ -177,7 +177,7 @@ class _RequestDetailState extends State<RequestDetail> {
             child: Text('Aceptar solicitud'.toUpperCase(),style: headingWhite,
             ),
             onPressed: (){
-              acceptTravel(widget.requestItem);
+              Navigator.pop(context, widget.requestItem.mPrecio);
             }
           ),
         ),
@@ -364,7 +364,7 @@ class _RequestDetailState extends State<RequestDetail> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: ()async{
-                          Dialogs.openLoadingDialog(context);
+                          /* Dialogs.openLoadingDialog(context);
                           final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
@@ -382,7 +382,9 @@ class _RequestDetailState extends State<RequestDetail> {
                             _prefs.tokenPush
                           );
                           Navigator.pop(context);
-                          Navigator.pop(context);
+                          Navigator.pop(context); */
+                          widget.requestItem.mPrecio = '${double.parse(widget.requestItem.mPrecio) + 0.5}';
+                          setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 0.5}', style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2)),),
                         color: primaryColor,
@@ -390,7 +392,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       ),
                       FlatButton(
                         onPressed: ()async{
-                          Dialogs.openLoadingDialog(context);
+                          /* Dialogs.openLoadingDialog(context);
                           final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
@@ -408,7 +410,9 @@ class _RequestDetailState extends State<RequestDetail> {
                             _prefs.tokenPush
                           );
                           Navigator.pop(context);
-                          Navigator.pop(context);
+                          Navigator.pop(context); */
+                          widget.requestItem.mPrecio = '${double.parse(widget.requestItem.mPrecio) + 1.0}';
+                          setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 1.0}',style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2))),
                         color: primaryColor,
@@ -416,7 +420,7 @@ class _RequestDetailState extends State<RequestDetail> {
                       ),
                       FlatButton(
                         onPressed: ()async{
-                          Dialogs.openLoadingDialog(context);
+                          /* Dialogs.openLoadingDialog(context);
                           final _prefs = UserPreferences();
                           await _prefs.initPrefs();
                           await requestApi.actionTravel(_prefs.idChofer,widget.requestItem.id,
@@ -434,7 +438,9 @@ class _RequestDetailState extends State<RequestDetail> {
                             _prefs.tokenPush
                           );
                           Navigator.pop(context);
-                          Navigator.pop(context);
+                          Navigator.pop(context); */
+                          widget.requestItem.mPrecio = '${double.parse(widget.requestItem.mPrecio) + 1.5}';
+                          setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 1.5}',style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2))),
                         color: primaryColor,

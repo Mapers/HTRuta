@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 List<RequestModel> requestFromJson(String str) => List<RequestModel>.from(json.decode(str).map((x) => RequestModel.fromJson(x)));
+RequestModel requestItemFromJson(String str) => RequestModel.fromJson(json.decode(str));
 
 String requestToJson(List<RequestModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String requestItemToJson(RequestModel data) => json.encode(data.toJson());
 
 class RequestModel {
   RequestModel({

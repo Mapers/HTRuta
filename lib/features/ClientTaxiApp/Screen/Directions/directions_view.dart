@@ -10,6 +10,8 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/direction_model.dart';
@@ -25,12 +27,14 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/booking_
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/app_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'widgets/select_service_widget.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 
 class DirectionsView extends StatefulWidget {
   final ClientTaxiPlaceBloc placeBloc;
@@ -64,7 +68,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   PanelController panelController =PanelController();
   String selectedService;
-
+  final _prefs = UserPreferences();
   final pickUpApi = PickupApi();
   List<DriverRequest> requestTaxi = [];
   PushNotificationProvider pushProvider;
@@ -113,10 +117,14 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   }
   Future<void> loadOffers() async {
     final data = await pickUpApi.getRequestDriver(pedidoProvider.idSolicitud);
-    if(data == null) return;
-    requestTaxi.clear();
-    requestTaxi.addAll(data);//TODO: Arreglar
-    setState(() {});
+    if(data == null){
+      requestTaxi.clear();
+      setState(() {});
+    }else{
+      requestTaxi.clear();
+      requestTaxi.addAll(data);
+      setState(() {});
+    }
   }
 
   void addMakers(){
@@ -441,6 +449,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                             setState(() {
                                               isLoading = false;
                                             });
+                                            loadOffers();
                                           } on ServerException catch(error){
                                             Navigator.pop(context);
                                             Dialogs.alert(context, title: 'Error', message: '${error.message}');
@@ -483,6 +492,9 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               isLoading = false;
                                             });
                                             pedidoProvider.requestDriver = actualRequest;
+                                            _prefs.clientTaxiRequest = requestItemToJson(pedidoProvider.request);
+                                            _prefs.clientTaxiDriverRequest = requestDriverItemToJson(pedidoProvider.requestDriver);
+                                            _prefs.isClientInTaxi = true;
                                             pedidoProvider.idViaje = idViaje;
                                             Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
                                           } on ServerException catch(error){
@@ -534,7 +546,9 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                             DriverFirestoreService driverFirestoreService = DriverFirestoreService();
                             List<String> tokens = await driverFirestoreService.getDrivers();
                             pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
-                            Navigator.of(context).pushReplacementNamed(AppRoute.homeScreen);
+                            Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                            // BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
+                            // Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
                           }else{
                             Navigator.pop(context);
                             Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');

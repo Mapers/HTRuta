@@ -5,8 +5,13 @@ import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +27,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/google_map_helper.dart';
 
@@ -69,6 +75,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   List<DocumentSnapshot> markersSnapshotList;
   Uint8List userPhoto;
   final pickupApi = PickupApi();
+  final _prefs = UserPreferences();
   
   @override
   void dispose() {
@@ -115,6 +122,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       loading = false;
       if (!mounted) return;
       setState(() {});
+      verifyTaxiInService();
     });
     /* showPersBottomSheetCallBack = _showBottomSheet;
     sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
@@ -123,6 +131,19 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
     sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
     sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')); */
+  }
+
+  void verifyTaxiInService(){
+    bool inService = _prefs.isClientInTaxi;
+    if(inService){
+      RequestModel data = requestItemFromJson(_prefs.clientTaxiRequest);
+      DriverRequest dataDriver = requestDriverItemFromJson(_prefs.clientTaxiDriverRequest);
+      final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+      // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+      pedidoProvider.request = data;
+      pedidoProvider.requestDriver = dataDriver;
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelScreen, (route) => true);
+    }
   }
 
   ///Get last known location
@@ -547,10 +568,30 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               right: 20.0,
               child: Column(
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          fetchLocation();
+                        },
+                        child: Container(
+                          height: 40.0,
+                          width: 40.0,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                          ),
+                          child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(height: 10),
                   getListOptionDistance(),
                   Container(height: 10),
                   Container(
-                      height: 290,
+                      height: MediaQuery.of(context).size.height * 0.4,
                       child: SelectAddress(
                         fromAddress: widget?.placeBloc?.formLocation,
                         toAddress: widget?.placeBloc?.locationSelect,
@@ -567,7 +608,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                 ],
               ),
             ),
-            Positioned(
+            /* Positioned(
                 bottom: 380,
                 right: 20,
                 child: GestureDetector(
@@ -584,7 +625,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                     child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
                   ),
                 )
-            ),
+            ), */
             // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
             /* Positioned(
                 top: 60,

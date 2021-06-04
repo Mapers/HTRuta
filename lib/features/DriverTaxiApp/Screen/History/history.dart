@@ -9,6 +9,7 @@ import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'detail.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 
 class HistoryDriverScreen extends StatefulWidget {
   @override
@@ -17,10 +18,12 @@ class HistoryDriverScreen extends StatefulWidget {
 
 class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   final String screenName = 'HISTORY';
-  DateTime selectedDate;
+  DateTime selectedDate = DateTime.now();
   List<dynamic> event = [];
   String selectedMonth = '';
   final pickupApi = PickupApi();
+  final _prefs = UserPreferences();
+  List<HistoryItem> historyItemsLoaded;
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   
   void navigateToDetail(String id) {
@@ -67,6 +70,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: CalendarCarousel(
+                  locale: 'es',
                   weekendTextStyle: TextStyle(
                     color: Colors.red,
                   ),
@@ -86,6 +90,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                   todayBorderColor: primaryColor,
                   todayButtonColor: primaryColor,
                   onDayPressed: (DateTime date, List<dynamic> events) {
+                    print(date);
+                    historyItemsLoaded = null;
                     setState(() => selectedDate = date);
                   },
                   onCalendarChanged: (DateTime date) {
@@ -93,66 +99,25 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                   },
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(20.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.deepPurple,
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        width: screenSize.width*0.4,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.content_paste,size: 30.0,),
-                            SizedBox(width: 10,),
-                            Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text('Viajes',style: heading18,),
-                                  Text('20',style: headingWhite,)
-                                ],
-                              )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10.0,),
-                    Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.deepPurple,
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        width: screenSize.width*0.4,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.attach_money,size: 30.0,),
-                            SizedBox(width: 10,),
-                            Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text('Ganancia',style: heading18,),
-                                    Text('20',style: headingWhite,)
-                                  ],
-                                )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              historyItemsLoaded == null ? FutureBuilder(
+                future: pickupApi.getHistoricalRequest(_prefs.idChoferReal, selectedDate.toString().substring(0,10)),
+                builder: (context, snapshot) {
+                  if(snapshot.hasError) return Center(child: Text('No hay data'));
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting: return gainResumeEmpty(screenSize);
+                    case ConnectionState.none: return gainResumeEmpty(screenSize);
+                    case ConnectionState.active: {
+                      historyItemsLoaded = snapshot.data;
+                      return gainResume(screenSize, snapshot.data);
+                    }
+                    case ConnectionState.done: {
+                      historyItemsLoaded = snapshot.data;
+                      return gainResume(screenSize, snapshot.data);
+                    }
+                  }
+                  return Center(child: CircularProgressIndicator());
+                }
+              ) : gainResume(screenSize, historyItemsLoaded),
               Container(
                 color: primaryColor,
                 child: TabBar(
@@ -168,23 +133,25 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                 child: Scrollbar(
                   child: TabBarView(
                     children: [
-                      FutureBuilder(
-                        future: pickupApi.getHistoricalRequest('1048'),
+                      historyItemsLoaded == null ? FutureBuilder(
+                        future: pickupApi.getHistoricalRequest(_prefs.idChoferReal, selectedDate.toString().substring(0,10)),
                         builder: (context, snapshot) {
-                          if(snapshot.hasError) return Center(child: CircularProgressIndicator());
+                          if(snapshot.hasError) return Center(child: Text('No hay data'));
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
                             case ConnectionState.none: return Center(child: CircularProgressIndicator());
                             case ConnectionState.active: {
-                              return historyTaxisList(snapshot.data);
+                              historyItemsLoaded =  snapshot.data;
+                              return historyTaxisList(historyItemsLoaded);
                             }
                             case ConnectionState.done: {
-                              return historyTaxisList(snapshot.data);
+                              historyItemsLoaded =  snapshot.data;
+                              return historyTaxisList(historyItemsLoaded);
                             }
                           }
                           return Center(child: CircularProgressIndicator());
                         }
-                      ),
+                      ) : historyTaxisList(historyItemsLoaded),
                       ListView.builder(
                         shrinkWrap: true,
                           itemCount: 5,
@@ -220,16 +187,148 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
     )
     );
   }
-  Widget historyTaxisList(HistoricalModel history){
+  Widget gainResumeEmpty(Size screenSize){
+    return Container(
+      margin: EdgeInsets.all(20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.deepPurple,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: screenSize.width*0.4,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.content_paste,size: 30.0,),
+                  SizedBox(width: 10,),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Viajes',style: heading18,),
+                        Text('',style: headingWhite,)
+                      ],
+                    )
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 10.0,),
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.deepPurple,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: screenSize.width*0.4,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.attach_money,size: 30.0,),
+                  SizedBox(width: 10,),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Ganancia',style: heading18,),
+                        Text('',style: headingWhite,)
+                      ],
+                    )
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget gainResume(Size screenSize, List<HistoryItem> historyItems){
+    double gain = 0;
+    if(historyItems.isNotEmpty){
+      for(HistoryItem item in historyItems){
+        if(item.precio != null  && item.comision != null){
+          gain += double.parse(item.precio)- double.parse(item.comision);
+        }
+      }
+    }
+    return Container(
+      margin: EdgeInsets.all(20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.deepPurple,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: screenSize.width*0.4,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.content_paste,size: 30.0,),
+                  SizedBox(width: 10,),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Viajes',style: heading18,),
+                        Text(historyItems.length.toString(),style: headingWhite,)
+                      ],
+                    )
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 10.0,),
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.deepPurple,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: screenSize.width*0.4,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.attach_money,size: 30.0,),
+                  SizedBox(width: 10,),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Ganancia',style: heading18,),
+                        Text(gain.toStringAsFixed(1),style: headingWhite,)
+                      ],
+                    )
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget historyTaxisList(List<HistoryItem> historyItems){
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: history.data.length,
+      itemCount: historyItems.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
             onTap: () {
-              navigateToDetail(index.toString());
+              navigateToDetail(historyItems[index].iIdViaje);
             },
-            child: historyItem(history.data[index])
+            child: historyItem(historyItems[index])
         );
       }
     );
@@ -274,10 +373,10 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(item.vchNombres,style: textBoldBlack,),
-                          Text(item.dFecReg, style: textGrey,),
+                          // Text(item.,style: textBoldBlack,),
+                          Text(item.fechaRegistro.toString().substring(0, 10), style: textGrey,),
                           // Text('08 Ene 2019 12:00 PM', style: textGrey,),
-                          Container(
+                          /* Container(
                             child: Row(
                               children: <Widget>[
                                 Container(
@@ -303,7 +402,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                                 ),
                               ],
                             ),
-                          ),
+                          ), */
                         ],
                       ),
                     ),
@@ -312,9 +411,9 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text(item.mPrecio,style: textBoldBlack,),
+                          // Text(item.mPrecio,style: textBoldBlack,),
                           // Text('S/.250.0',style: textBoldBlack,),
-                          Text('2.2 Km',style: textGrey,),
+                          Text('${(double.parse(item.distanciaMeters)/1000).toStringAsFixed(1)} km',style: textGrey,),
                         ],
                       ),
                     ),
@@ -331,8 +430,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Recoger'.toUpperCase(),style: textGreyBold,),
-                          Text(item.vchNombreInicial,style: textStyle,),
-
+                          Text(item.origen,style: textStyle,),
                         ],
                       ),
                     ),
@@ -342,7 +440,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Llegada'.toUpperCase(),style: textGreyBold,),
-                          Text(item.vchNombreFinal,style: textStyle,),
+                          Text(item.destino,style: textStyle,),
 
                         ],
                       ),

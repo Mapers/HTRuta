@@ -87,6 +87,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     String id = _prefs.idChofer;
     await driverFirestoreService.updateDriverAvalability(false, id);
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
+    _prefs.taxiRequestInCourse = requestItemToJson(data);
+    _prefs.isDriverInService = true;
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
     // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
     pedidoProvider.request = data;

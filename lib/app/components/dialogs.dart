@@ -2,6 +2,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:HTRuta/app/colors.dart';
 
 class Dialogs{
   static void alert(BuildContext context, {title = '', message= '', VoidCallback onConfirm  }){
@@ -58,7 +59,7 @@ class Dialogs{
     ); */
     AwesomeDialog(
       context: context,
-      borderSide: BorderSide(color: Colors.green, width: 2),
+      borderSide: BorderSide(color: primaryColor, width: 2),
       width: MediaQuery.of(context).size.width * 0.8,
       dialogType: DialogType.INFO,
       buttonsBorderRadius: BorderRadius.all(Radius.circular(2)),
@@ -95,7 +96,7 @@ class Dialogs{
     ); */
     AwesomeDialog(
       context: context,
-      borderSide: BorderSide(color: Colors.green, width: 2),
+      borderSide: BorderSide(color: primaryColor, width: 2),
       width: MediaQuery.of(context).size.width * 0.8,
       dialogType: DialogType.SUCCES,
       buttonsBorderRadius: BorderRadius.all(Radius.circular(2)),

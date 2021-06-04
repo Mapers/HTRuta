@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app_router.dart';
@@ -61,6 +63,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   Position _lastKnownPosition;
   bool isEnabledLocation = false;
   DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+  List<String> acceptedTravels = [];
 
   final aceptar = '1';
   final rechazar = '2';
@@ -78,7 +81,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   List<String> rechazados = [];
   PushNotificationProvider pushProvider;
   final _prefs = UserPreferences();
-  
+  String lastUserToken;
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -147,16 +151,24 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         'precio': e.mPrecio 
       }).toList();
       setState(() {});
+      verifyTaxiInService();
     });
   }
-  /* void readDrivingState(){
-    final _prefs = UserPreferences();
-    isWorking = _prefs.drivingState;
-    setState(() {});
-  } */
+  void verifyTaxiInService(){
+    bool inService = _prefs.isDriverInService;
+    if(inService){
+      RequestModel data = requestItemFromJson(_prefs.taxiRequestInCourse);
+      final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+      // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
+      pedidoProvider.request = data;
+      Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
+    }
+  }
   Future<void> travelConfirmation(String idSolicitud) async {
     final _prefs = UserPreferences();
     final data = await pickupApi.solicitudesUsuarioChofer(idSolicitud, _prefs.idChofer);
+    _prefs.taxiRequestInCourse = requestItemToJson(data);
+    _prefs.isDriverInService = true;
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
     pedidoProvider.request = data;
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
@@ -499,27 +511,58 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           ),
         )
       ),
-      ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+      // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
       Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
         Container(
-          height: 330,
+          height: MediaQuery.of(context).size.width,
           child: TinderSwapCard(
               orientation: AmassOrientation.TOP,
               totalNum: requestTaxi.length,
               stackNum: 3,
               maxWidth: MediaQuery.of(context).size.width,
               minWidth: MediaQuery.of(context).size.width * 0.9,
-              maxHeight: MediaQuery.of(context).size.width * 0.9,
+              maxHeight: MediaQuery.of(context).size.width * 1.4,
               minHeight: MediaQuery.of(context).size.width * 0.85,
               cardBuilder: (context, index) => InkWell(
                 onTap: () async {
-                  bool accepted = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
-                  if(accepted != null){
-                    if(accepted){
-                      await getSolicitudes();
-                      analizeChanges();
+                  String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                  if(newPrice != null){
+                    try{
+                      final _prefs = UserPreferences();
+                      await _prefs.initPrefs();
+                      Dialogs.openLoadingDialog(context);
+                      final dato = await pickupApi.actionTravel(
+                        _prefs.idChofer,
+                        requestTaxi[index].id,
+                        double.parse(requestTaxi[index].vchLatInicial),
+                        double.parse(requestTaxi[index].vchLatFinal),
+                        double.parse(requestTaxi[index].vchLongInicial),
+                        double.parse(requestTaxi[index].vchLongFinal),
+                        '',
+                        double.parse(newPrice),
+                        requestTaxi[index].iTipoViaje,
+                        '', '', '',
+                        requestTaxi[index].vchNombreInicial,
+                        requestTaxi[index].vchNombreFinal,
+                        aceptar,
+                        _prefs.tokenPush
+                      );
+                      PushMessage pushMessage = getIt<PushMessage>();
+                      Map<String, String> data = {
+                        'newOffer' : '1'
+                      };
+                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+                      Navigator.pop(context);
+                      if(dato){
+                        //Esperar solicitud
+                      }else{
+                        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                      }
+                    }on ServerException catch(e){
+                      Navigator.pop(context);
+                      Dialogs.alert(context,title: 'Error', message: e.message);
                     }
                   }
                 },
@@ -539,6 +582,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     double.parse(requestTaxi[index].vchLatFinal),
                     double.parse(requestTaxi[index].vchLongFinal),
                   ),
+                  onPriceUpdate: (String newPrice){
+                    requestTaxi[index].mPrecio = newPrice;
+                    setState(() {});
+                  },
                   onAccept: () async {
                     try{
                       final _prefs = UserPreferences();
@@ -560,6 +607,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                         aceptar,
                         _prefs.tokenPush
                       );
+                      acceptedTravels.add(requestTaxi[index].id);
+                      lastUserToken = requestTaxi[index].token;
                       PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
                         'newOffer' : '1'
@@ -597,6 +646,14 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       rechazar,
                       _prefs.tokenPush
                     );
+                    if(acceptedTravels.contains(requestTaxi[index].id)){
+                      PushMessage pushMessage = getIt<PushMessage>();
+                      Map<String, String> data = {
+                        'newOffer' : '1'
+                      };
+                      lastUserToken = requestTaxi[index].token;
+                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);
+                    }
                     await getSolicitudes();
                     analizeChanges();
                     Navigator.pop(context);

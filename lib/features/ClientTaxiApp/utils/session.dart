@@ -23,10 +23,30 @@ class Session{
     await storage.write(key: key, value: jsonEncode(data.toMap));
   }
 
+  void setDriverData(String name, String pName, String mName, String phone, String email, String dni) async{
+    final data = DriverSession(
+      name: name,
+      pName: pName,
+      mName: mName,
+      phone: phone,
+      email: email,
+      dni: dni,
+    );
+    await storage.write(key: 'DRIVER', value: jsonEncode(data.toMap));
+  }
+
   Future<UserSession> get() async{
     final result = await storage.read(key: key);
     if(result != null){
       return UserSession.fromMap(jsonDecode(result));
+    }
+    return null;
+  }
+
+  Future<DriverSession> getDriverData() async{
+    final result = await storage.read(key: 'DRIVER');
+    if(result != null){
+      return DriverSession.fromMap(jsonDecode(result));
     }
     return null;
   }
@@ -81,4 +101,43 @@ class UserSession extends Equatable{
 
   @override
   List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password];
+}
+
+class DriverSession extends Equatable{
+  final String name;
+  final String pName;
+  final String mName;
+  final String phone;
+  final String email;
+  final String dni;
+
+  DriverSession({
+    @required this.name,
+    @required this.pName,
+    @required this.mName,
+    @required this.phone,
+    @required this.email,
+    @required this.dni,
+  });
+
+  Map<String, String> get toMap => {
+    'name': name,
+    'pName': pName,
+    'mName': mName,
+    'phone': phone,
+    'email': email,
+    'dni': dni,
+  };
+
+  factory DriverSession.fromMap(dynamic json) => DriverSession(
+    name: json['name'],
+    pName: json['pName'],
+    mName: json['mName'],
+    phone: json['phone'],
+    email: json['email'],
+    dni: json['dnir']
+  );
+
+  @override
+  List<Object> get props => [name, pName, mName, phone, email, dni];
 }

@@ -1,6 +1,6 @@
 
 import 'dart:typed_data';
-
+import 'dart:convert';
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
@@ -16,6 +16,8 @@ import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_res
 import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/my_wallet_response.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/historical_detail_response.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -89,7 +91,7 @@ class PickupApi{
         return null;
       }
     } catch(error){
-      throw ServerException(message: 'Ocurrió un error con el servidor');
+      return null;
     }
   }
 
@@ -180,15 +182,29 @@ class PickupApi{
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }
-  Future<HistoricalModel> getHistoricalRequest(String idUser)async{
-    final url = '${Config.nuevaRutaApi}/historial-solicitudes-chofer';
+  Future<List<HistoryItem>> getHistoricalRequest(String idUser, String date)async{
+    final url = '${Config.nuevaRutaApi}/viaje/listado?id=$idUser&date=$date';
     try{
-      final response = await http.post(url,body : {'idUsuario': idUser});
+      final response = await http.get(url);
       final responseData = historicalModelFromJson(response.body);
-      if(responseData.success){
-        return responseData;
+      if(response.statusCode == 200){
+        return responseData.data;
       }else{
-        return null;
+        return [];
+      }
+    } catch(error){
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<List<HistoryItem>> getHistoricalClient(String idUser)async{
+    final url = '${Config.nuevaRutaApi}/viaje/listado?id=$idUser';
+    try{
+      final response = await http.get(url);
+      final responseData = historicalModelFromJson(response.body);
+      if(response.statusCode == 200){
+        return responseData.data;
+      }else{
+        return [];
       }
     } catch(error){
       throw ServerException(message: 'Ocurrió un error con el servidor');
@@ -292,6 +308,78 @@ class PickupApi{
       }
     } catch(_){
       return false;
+    }
+  }
+  Future<WalletData> getDriverPaymentsHistory(String choferId) async {
+    try{
+      final response = await http.get(
+        Uri.parse('${Config.nuevaRutaApi}/pago/historial?choferId=$choferId'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+      );
+      if(response.statusCode == 200){
+        final responseData = myWalletResponseFromJson(response.body);
+        return responseData.data;
+      }else{
+        throw Exception();
+      }
+    }catch(e){
+      print(e);
+      throw Exception();
+    }
+  }
+  Future<bool> chargeWallet(String choferId, double monto) async {
+    try{
+      final response = await http.post(
+        Uri.parse('${Config.nuevaRutaApi}/pago/realizar-pago'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body: json.encode({'choferId': choferId, 'monto': monto})
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        return false;
+      }
+    }catch(e){
+      print(e);
+      return false;
+    }
+  }
+  Future<WalletData> getUserTravelHistory(String userId) async {
+    try{
+      final response = await http.get(
+        Uri.parse('${Config.nuevaRutaApi}/viaje/listado?id=$userId'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+      );
+      if(response.statusCode == 200){
+        final responseData = myWalletResponseFromJson(response.body);
+        return responseData.data;
+      }else{
+        throw Exception();
+      }
+    }catch(e){
+      print(e);
+      throw Exception();
+    }
+  }
+  Future<HistoryDetailItem> getHistoryDriverDetail(String viajeId ) async {
+    try{
+      final response = await http.get(
+        Uri.parse('${Config.nuevaRutaApi}/viaje/detalle?viajeId=$viajeId'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+      );
+      if(response.statusCode == 200){
+        final responseData = historicalDetailResponseFromJson(response.body);
+        if(responseData.data.isNotEmpty){
+          return responseData.data.first;
+        }else{
+          throw Exception();
+        }
+      }else{
+        throw Exception();
+      }
+    }catch(e){
+      print(e);
+      throw Exception();
     }
   }
 }
