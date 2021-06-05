@@ -28,7 +28,8 @@ class ServiceDataRemote{
         data: data
       );
       return ServiceInCourseEntity.fromJson(result.data);
-    } catch(_){
+    } catch(e){
+      print(e);
       return null;
     }
   }
