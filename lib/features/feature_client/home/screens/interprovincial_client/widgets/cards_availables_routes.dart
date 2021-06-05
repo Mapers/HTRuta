@@ -172,7 +172,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                     Icon(Icons.person, color: Colors.black87),
                     SizedBox(width: 5),
                     Expanded(
-                      child: Text(availablesRoutesEntity.route.nameDriver,
+                      child: Text(availablesRoutesEntity.route.driverName,
                           style: TextStyle(color: Colors.black87, fontSize: 14)),
                     ),
                   ],

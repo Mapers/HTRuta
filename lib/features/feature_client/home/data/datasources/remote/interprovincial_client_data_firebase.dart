@@ -71,8 +71,9 @@ class InterprovincialClientDataFirebase {
     DocumentSnapshot ds = await firestore.collection('interprovincial_in_service').doc(documentId).get();
     return ds.exists;
   }
-  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters}) async{
+  Future<bool> updateCurrentPosition({@required String documentId,@required LocationEntity passengerPosition, @required String passengerDocumentId, @required double distanceInMeters, @required String passengerPhone}) async{
     firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).update({
+      'passenger_phone': passengerPhone,
       'current_location': GeoPoint(passengerPosition.latLang.latitude, passengerPosition.latLang.longitude),
       'current_street_name': passengerPosition.streetName,
       'current_district_name': passengerPosition.districtName,
@@ -98,12 +99,12 @@ class InterprovincialClientDataFirebase {
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
     DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
     DocumentSnapshot dss = await firestore.collection('interprovincial_in_service').doc(documentId).get();
-    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] ?? '0', serviceId: dss.data()['servicio_id']);
+    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'] ?? '0', serviceId: dss.data()['service_id']);
     return dataNecessaryRetrieve;
   }
 }
 class DataNecessaryRetrieve extends Equatable {
-  final String negotiatedPrice;
+  final double negotiatedPrice;
   final String serviceId;
 
   DataNecessaryRetrieve({

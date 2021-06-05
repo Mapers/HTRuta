@@ -3,41 +3,56 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/inte
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 
 class InterprovincialRouteInServiceEntity extends Equatable {
   final String id;
   final String name;
-  final String nameDriver;
+  final String driverPhone;
+  final String driverCellphone;
+  final String driverImage;
+  final String driverName;
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
   final double cost;
   final double starts;
+  final DateTime dateStart;
+  final InterprovincialStatus status;
 
   InterprovincialRouteInServiceEntity({
     @required this.id,
     @required this.name,
-    @required this.nameDriver,
+    @required this.driverName,
     @required this.cost,
     @required this.fromLocation,
     @required this.toLocation,
     @required this.starts,
+    this.driverPhone,
+    this.driverCellphone,
+    this.driverImage,
+    this.dateStart,
+    this.status
   });
 
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
-    'driver_name': nameDriver,
+    'driver_phone':  driverPhone,
+    'driver_cellphone': driverCellphone,
+    'driver_image': driverImage,
+    'name_driver': driverName,
     'from': fromLocation.toMap,
     'to': toLocation.toMap,
     'cost': cost,
     'starts': starts,
+    'date_start': dateStart,
   };
 
   factory InterprovincialRouteInServiceEntity.test(){
     return InterprovincialRouteInServiceEntity(
       id: '1',
       name: 'Huacho - Chancay - Lima',
-      nameDriver: 'Pepe lopez Peres' ,
+      driverName: 'Pepe lopez Peres' ,
       cost: 50,
       fromLocation: LocationEntity(
         latLang: LatLng(-11.109722, -77.596091),
@@ -63,7 +78,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     return InterprovincialRouteInServiceEntity(
       id: id,
       name: interprovincialRoute.name,
-      nameDriver: driverName,
+      driverName: driverName,
       cost: interprovincialRoute.cost,
       fromLocation: interprovincialRoute.from,
       toLocation: interprovincialRoute.to,
@@ -72,30 +87,54 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   }
 
   factory InterprovincialRouteInServiceEntity.fromJson(Map<String, dynamic> dataJson){
+   
     double starts;
     dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
     return InterprovincialRouteInServiceEntity(
       id: dataJson['id'],
       name: dataJson['name'],
-      nameDriver: dataJson['driver_name'],
+      driverPhone: dataJson['driver_phone'],
+      driverCellphone: dataJson['driver_cellphone'],
+      driverImage: dataJson['driver_image'],
+      driverName: dataJson['driver_name'],
       cost: double.parse(dataJson['cost']),
       fromLocation: LocationEntity.fromJson(dataJson['from']),
       toLocation: LocationEntity.fromJson(dataJson['to']),
       starts: starts,
     );
   }
+  factory InterprovincialRouteInServiceEntity.fromJsonRecovery(Map<String, dynamic> dataJson){
+    double starts;
+    dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
+    return InterprovincialRouteInServiceEntity(
+      id: dataJson['id'],
+      name: dataJson['name'],
+      driverPhone: dataJson['driver_phone'],
+      driverCellphone: dataJson['driver_cellphone'],
+      driverImage: dataJson['driver_image'],
+      driverName: dataJson['driver_name'],
+      cost: double.parse(dataJson['cost']),
+      fromLocation: LocationEntity.fromJson(dataJson['from']),
+      toLocation: LocationEntity.fromJson(dataJson['to']),
+      dateStart:DateTime.parse(dataJson['date_start']) ,
+      status: toInterprovincialStatusFromString(dataJson['status']),
+      starts: starts,
+    );
+  }
+
   factory InterprovincialRouteInServiceEntity.onlyLocation(LocationEntity toLocation){
     return InterprovincialRouteInServiceEntity(
       id: null,
       name: null,
-      nameDriver: null,
+      driverName: null,
       cost: null,
       fromLocation: null,
       toLocation: toLocation,
+      dateStart: null,
       starts: null,
     );
   }
 
   @override
-  List<Object> get props => [id, name, nameDriver, cost, fromLocation, toLocation, starts];
+  List<Object> get props => [id, name, driverName, driverPhone, driverCellphone, driverImage, cost, fromLocation, toLocation, starts];
 }

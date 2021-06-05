@@ -53,7 +53,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
             SizedBox(height: 15,),
             Text(widget.availablesRoutesEntity.route.name,style: TextStyle(fontWeight: FontWeight.bold),),
             SizedBox(height: 15,),
-            Text( widget.availablesRoutesEntity.route.nameDriver ),
+            Text( widget.availablesRoutesEntity.route.driverName ),
             SizedBox(height: 15,),
             StreamBuilder<List<InterprovincialRequestEntity>>(
               stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
@@ -255,6 +255,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   void deleteRequestAndRedirectionalMap(String documentId, InterprovincialRequestEntity request ) async {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     openLoadingDialog(context);
+    final user = await _session.get();
     String passengerDocumentId =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
     LocationEntity currentlocation =  await LocationUtil.currentLocation();
     Navigator.of(context).pop();
@@ -264,6 +265,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       price: request.price,
       passengerDocumentId: passengerDocumentId,
       currentLocation: currentlocation,
+      passengerPhone: user.cellphone,
     )), (_) => false);
   }
 }

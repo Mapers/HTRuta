@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/dialog.dart';
@@ -12,6 +13,8 @@ import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
   final LocationEntity currentLocation;
@@ -19,7 +22,8 @@ class MapCoordenationDrivePage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
   final String documentId;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation}) : super(key: key);
+  final String passengerPhone;
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation, this.passengerPhone}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -39,9 +43,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   
   @override
   void initState() {
-    //!verificar que el latlog no entre nul y que redireccione a la ubicacion del usuaario 
     currenActual = widget.currentLocation;
-
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
@@ -97,7 +99,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     );
     _markers[markerPassenger.markerId] = markerPassenger;
     double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
-    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters);
+    interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters, passengerPhone: widget.passengerPhone);
     bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
     if(passengerStatus){
       Navigator.of(context).pushAndRemoveUntil(Routes.toQualificationClientPage(  documentId:widget.documentId ,passengerId:widget.passengerDocumentId ,availablesRoutesEntity: widget.availablesRoutesEntity ) , (_) => false);
@@ -109,6 +111,10 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     _locationUtil.disposeListener();
     subscription?.cancel();
     super.dispose();
+  }
+  
+  Future<void> makePhoneCall(String url) async {
+      await launch(url);
   }
 
   @override
@@ -125,7 +131,80 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           )
         ),
         Positioned(
-          top: 400,
+          top: 90,
+          right: 15,
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            color: green1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(150),
+            ),
+            child: InkWell(
+              onTap: ()async{
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                      content:Container(
+                        width: 150,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill, image: NetworkImage(widget.availablesRoutesEntity.route.driverImage)
+                          ),
+                        ),
+                      ),
+                    )
+                );
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover, image: NetworkImage(widget.availablesRoutesEntity.route.driverImage)
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            )
+          ),
+        ),
+        Positioned(
+          top: 25,
+          right: 15,
+          left: 15,
+          child: Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text('Recuerda acercarte a tu ruta, tambien puede llamar al conductor'),
+            ),
+          )
+        ),
+        Positioned(
+          bottom: 210,
+          right: 15,
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            color: green1,
+            child: InkWell(
+              onTap: ()async{
+                await launch('tel:+51'+widget.availablesRoutesEntity.route.driverCellphone );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(Icons.call, color: Colors.white,),
+                    Text('Llamar al conductor', style: TextStyle( color: Colors.white), ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ),
+        Positioned(
+          bottom: 10,
           right: 15,
           left: 15,
           child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
@@ -163,37 +242,37 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Text('S/.' + price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
-            // Row(
-            //   children: [
-            //     Container(
-            //       padding: EdgeInsets.all(4),
-            //       margin: EdgeInsets.symmetric(vertical: 5),
-            //       width: 90,
-            //       decoration: BoxDecoration(
-            //         color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
-            //         borderRadius: BorderRadius.circular(5),
-            //       ),
-            //       child: Text(
-            //         availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
-            //         style: TextStyle(color: Colors.white, fontSize: 12),
-            //         textAlign: TextAlign.center,
-            //       ),
-            //     ),
-            //     SizedBox(width: 10,),
-            //   ],
-            // ),
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  width: 90,
+                  decoration: BoxDecoration(
+                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(width: 10,),
+              ],
+            ),
             Row(
               children: [
                 Icon(Icons.person, color: Colors.black87),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.nameDriver , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(availablesRoutesEntity.route.driverName ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
               ],
             ),
             Row(
               children: [
-                Icon(Icons.location_on, color: Colors.black87),
+                Icon(Icons.trip_origin, color: Colors.amber),
                 SizedBox(width: 5),
                 Expanded(
                   child: Text(availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
@@ -203,7 +282,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
             SizedBox(height: 5),
             Row(
               children: [
-                Icon(Icons.directions_bus_rounded, color: Colors.black87),
+                Icon(Icons.location_on, color: Colors.red),
                 SizedBox(width: 5),
                 Expanded(
                   child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
@@ -217,7 +296,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 SizedBox(width: 5),
                 Text(availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 SizedBox(width: 20),
-                Icon(Icons.calendar_today, color: Colors.black87),
+                Icon(Icons.calendar_today, color: Colors.blueAccent),
                 SizedBox(width: 5),
                 Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
               ],

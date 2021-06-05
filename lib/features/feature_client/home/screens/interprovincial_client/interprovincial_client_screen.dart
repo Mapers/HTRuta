@@ -5,7 +5,6 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
@@ -130,6 +129,23 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                                 ),
                               ),
                             ),
+                            // Card(
+                            //   elevation: 5,
+                            //   color: Colors.white,
+                            //   child: PaymentSelector(
+                            //     onSelected: (_methods){
+                            //       paymentMethodsSelected = _methods;
+                            //     },
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        left: 15,
+                        top: 235,
+                        child: Row(
+                          children: [
                             Card(
                               elevation: 5,
                               color: Colors.white,
@@ -156,19 +172,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                                 ),
                               ),
                             )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        left: 15,
-                        top: 250,
-                        child: Row(
-                          children: [
-                            Card(
-                              elevation: 5,
-                              color: Colors.white,
-                              child: PaymentSelector(),
-                            ),
                           ],
                         ),
                       ),
@@ -199,14 +202,14 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             );
             return;
           }
-          if(_prefs.getClientPaymentMethods.isEmpty){
-            Fluttertoast.showToast(
-              msg: 'Seleccione al menos un método de pago que disponga',
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-            );
-            return;
-          }
+          // if(paymentMethodsSelected.isEmpty){
+          //   Fluttertoast.showToast(
+          //     msg: 'Seleccione al menos un método de pago que disponga',
+          //     toastLength: Toast.LENGTH_LONG,
+          //     gravity: ToastGravity.BOTTOM,
+          //   );
+          //   return;
+          // }
           showDialog(
             context: context,
             child: Center(
