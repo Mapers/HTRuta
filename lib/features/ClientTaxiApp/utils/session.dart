@@ -23,7 +23,7 @@ class Session{
     await storage.write(key: key, value: jsonEncode(data.toMap));
   }
 
-  void setDriverData(String name, String pName, String mName, String phone, String email, String dni) async{
+  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento) async{
     final data = DriverSession(
       name: name,
       pName: pName,
@@ -31,6 +31,8 @@ class Session{
       phone: phone,
       email: email,
       dni: dni,
+      sexo: sexo,
+      fechaNacimiento: fechaNacimiento
     );
     await storage.write(key: 'DRIVER', value: jsonEncode(data.toMap));
   }
@@ -110,6 +112,8 @@ class DriverSession extends Equatable{
   final String phone;
   final String email;
   final String dni;
+  final String sexo;
+  final String fechaNacimiento;
 
   DriverSession({
     @required this.name,
@@ -118,6 +122,8 @@ class DriverSession extends Equatable{
     @required this.phone,
     @required this.email,
     @required this.dni,
+    @required this.sexo,
+    @required this.fechaNacimiento,
   });
 
   Map<String, String> get toMap => {
@@ -127,6 +133,8 @@ class DriverSession extends Equatable{
     'phone': phone,
     'email': email,
     'dni': dni,
+    'sexo': sexo,
+    'fechaNacimiento': fechaNacimiento,
   };
 
   factory DriverSession.fromMap(dynamic json) => DriverSession(
@@ -135,9 +143,11 @@ class DriverSession extends Equatable{
     mName: json['mName'],
     phone: json['phone'],
     email: json['email'],
-    dni: json['dnir']
+    dni: json['dnir'],
+    sexo: json['sexo'],
+    fechaNacimiento: json['fechaNacimiento']
   );
 
   @override
-  List<Object> get props => [name, pName, mName, phone, email, dni];
+  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento];
 }

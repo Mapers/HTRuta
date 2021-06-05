@@ -45,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onTap: (){
                         Navigator.of(context).push(MaterialPageRoute<Null>(
                           builder: (BuildContext context) {
-                            return EditProfile();
+                            return EditProfile(null);
                           },
                         ));
                       },

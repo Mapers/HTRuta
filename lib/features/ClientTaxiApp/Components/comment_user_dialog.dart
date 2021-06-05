@@ -6,7 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 
 // ignore: must_be_immutable
 class CommentUserDialog extends StatefulWidget {
@@ -18,7 +18,7 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
   double stars = 3;
   String commentary = '';
   final pickupApi = PickupApi();
-  
+  final _prefs = UserPreferences();
   @override
   Widget build(BuildContext context) {
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
@@ -100,6 +100,7 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
                       Dialogs.alert(context,title: 'Lo sentimos', message: 'No se pudo guardar su calificación');
                       return;
                     }else{
+                      _prefs.isClientInTaxi = false;
                       Navigator.pop(context);
                     }
                   },

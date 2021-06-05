@@ -6,8 +6,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/historical_detail_response.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
-import 'package:HTRuta/app/components/dialogs.dart';
 
 class HistoryDetail extends StatefulWidget {
   final String id;
@@ -38,7 +36,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
         elevation: 2.0,
         iconTheme: IconThemeData(color: blackColor),
       ),
-      bottomNavigationBar: ButtonTheme(
+      /* bottomNavigationBar: ButtonTheme(
         minWidth: screenSize.width,
         height: 45.0,
         child: RaisedButton(
@@ -62,7 +60,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
             Navigator.pop(context);
           },
         ),
-      ),
+      ), */
       body: Scrollbar(
         child: SingleChildScrollView(
           child: InkWellCustom(
@@ -126,8 +124,8 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Olivia Ramos2',style: textBoldBlack,),
-                      Text('08 Ene 2019 12:00 PM', style: textGrey,),
-                      Container(
+                      Text('${detail.fechaRegistro.toString().substring(0, 16)}', style: textGrey,),
+                      /* Container(
                         child: Row(
                           children: <Widget>[
                             Container(
@@ -153,7 +151,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                             ),
                           ],
                         ),
-                      ),
+                      ), */
                     ],
                   ),
                 ),
@@ -256,7 +254,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
               ],
             ),
           ),
-          Form(
+          /* Form(
             key: formKey,
             child: Container(
               //margin: EdgeInsets.all(10.0),
@@ -309,7 +307,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                 ],
               ),
             )
-          ),
+          ), */
         ],
       )
     );

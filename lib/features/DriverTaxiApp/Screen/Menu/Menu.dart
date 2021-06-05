@@ -55,12 +55,7 @@ class MenuDriverScreens extends StatelessWidget {
                           children: <Widget>[
                             GestureDetector(
                               onTap: (){
-                                Navigator.of(context).pop();
-                                Navigator.of(context).push( MaterialPageRoute<Null>(
-                                  builder: (BuildContext context) {
-                                    return ProfileDriver();
-                                  },
-                                fullscreenDialog: true));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileDriver()));
                               },
                               child: Material(
                                 elevation: 5.0,
@@ -80,14 +75,8 @@ class MenuDriverScreens extends StatelessWidget {
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){
-                                /* Navigator.of(context).pop();
-                                Navigator.of(context).push( MaterialPageRoute<Null>(
-                                  builder: (BuildContext context) {
-                                    return MyProfile();
-                                  },
-                                  fullscreenDialog: true)); */
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyProfile()));
+                              onTap: () async {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileDriver()));
                               },
                               child: Container(
                                 padding: EdgeInsets.only(left: 10.0),
@@ -113,53 +102,6 @@ class MenuDriverScreens extends StatelessWidget {
                             ),
                           ],
                         ),
-                        /* Container(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(Icons.access_time,color: greyColor,),
-                                    Text('10.2',style: heading18,),
-                                    Text('Horas online',style: TextStyle(
-                                      fontSize: 11,
-                                      color: greyColor,
-                                    ),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(Icons.poll,color: greyColor,),
-                                    Text('30 KM',style: heading18,),
-                                    Text('Distancia total',style: TextStyle(
-                                      fontSize: 11,
-                                      color: greyColor,
-                                    ),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(Icons.content_paste,color: greyColor,),
-                                    Text('22',style: heading18,),
-                                    Text('Trabajo total',style: TextStyle(
-                                      fontSize: 11,
-                                      color: greyColor,
-                                    ),),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        ), */
                       ],
                     ),
                   );
@@ -171,27 +113,6 @@ class MenuDriverScreens extends StatelessWidget {
           }
         }
       ),
-
-//          UserAccountsDrawerHeader(
-//            margin: EdgeInsets.all(0.0),
-//            accountName:Text('John',style: headingWhite,),
-//            accountEmail:Text('100 point - Gold member'),
-//            currentAccountPicture:CircleAvatar(
-//                backgroundColor: Colors.white,
-//                child:Image(
-//                    width: 100.0,
-//                    image:AssetImage('assets/image/taxi-driver.png',)
-//                )
-//            ),
-//            onDetailsPressed: (){
-//              Navigator.pop(context);
-//              Navigator.of(context).push(new MaterialPageRoute<Null>(
-//                  builder: (BuildContext context) {
-//                    return MyProfile();
-//                  },
-//                  fullscreenDialog: true));
-//            },
-//          ),
         MediaQuery.removePadding(
             context: context,
             // DrawerHeader consumes top MediaQuery padding.

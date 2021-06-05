@@ -440,7 +440,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.iIdUsuario);
+                                            await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.idChofer);
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newRequest' : '1',

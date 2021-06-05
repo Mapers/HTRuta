@@ -7,10 +7,13 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
 class EditProfile extends StatefulWidget {
+  final UserSession userData;
+  EditProfile(this.userData);
   @override
   _EditProfileState createState() => _EditProfileState();
 }
@@ -23,6 +26,12 @@ class _EditProfileState extends State<EditProfile> {
   String lastSelectedValue;
   DateTime date = DateTime.now();
   var _image;
+  String newNames;
+  String newFName;
+  String newMName;
+  String newPhone;
+  String newEmail;
+   final session = Session();
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -106,9 +115,20 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  void submit(){
+  void submit() async {
     final FormState form = formKey.currentState;
     form.save();
+    await session.set(
+      widget.userData.id,
+      widget.userData.dni,
+      newNames ?? widget.userData.names,
+      newFName ?? widget.userData.lastNameFather,
+      newMName ?? widget.userData.lastNameMother,
+      newPhone ?? widget.userData.cellphone,
+      newEmail ?? widget.userData.email,
+      widget.userData.password
+    );
+    Navigator.pop(context, true);
   }
 
   @override
@@ -203,52 +223,52 @@ class _EditProfileState extends State<EditProfile> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        TextField(
+                                        TextFormField(
+                                          initialValue: widget.userData.names,
                                           style: textStyle,
                                           decoration: InputDecoration(
-                                              fillColor: whiteColor,
-                                              labelStyle: textStyle,
-                                              hintStyle: TextStyle(color: Colors.white),
-                                              counterStyle: textStyle,
-                                              hintText: 'Nombres',
-                                              border: UnderlineInputBorder(
-                                                  borderSide:
-                                                  BorderSide(color: Colors.white))),
-                                          controller:
-                                          TextEditingController.fromValue(
-                                            TextEditingValue(
-                                              text: 'Nombres',
-                                              selection: TextSelection.collapsed(
-                                                offset: 11
-                                              ),
-                                            ),
-                                          ),
+                                            fillColor: whiteColor,
+                                            labelStyle: textStyle,
+                                            hintStyle: TextStyle(color: Colors.white),
+                                            counterStyle: textStyle,
+                                            hintText: 'Nombres',
+                                            border: UnderlineInputBorder(
+                                                borderSide:
+                                                BorderSide(color: Colors.white))),
                                           onChanged: (String _firstName) {
-
+                                            newNames = _firstName;
                                           },
                                         ),
-                                        TextField(
+                                        TextFormField(
+                                          initialValue: widget.userData.lastNameFather,
                                           style: textStyle,
                                           decoration: InputDecoration(
                                               fillColor: whiteColor,
                                               labelStyle: textStyle,
                                               hintStyle: TextStyle(color: Colors.white),
                                               counterStyle: textStyle,
-                                              hintText: 'Apellidos',
+                                              hintText: 'Apellido paterno',
                                               border: UnderlineInputBorder(
                                                   borderSide:
                                                   BorderSide(color: Colors.white))),
-                                          controller:
-                                          TextEditingController.fromValue(
-                                            TextEditingValue(
-                                              text: 'Apellidos',
-                                              selection: TextSelection.collapsed(
-                                                offset: 11
-                                              ),
-                                            ),
-                                          ),
                                           onChanged: (String _lastName) {
-
+                                            newFName = _lastName;
+                                          },
+                                        ),
+                                        TextFormField(
+                                          initialValue: widget.userData.lastNameMother,
+                                          style: textStyle,
+                                          decoration: InputDecoration(
+                                              fillColor: whiteColor,
+                                              labelStyle: textStyle,
+                                              hintStyle: TextStyle(color: Colors.white),
+                                              counterStyle: textStyle,
+                                              hintText: 'Apellido materno',
+                                              border: UnderlineInputBorder(
+                                                  borderSide:
+                                                  BorderSide(color: Colors.white))),
+                                          onChanged: (String _lastName) {
+                                            newMName = _lastName;
                                           },
                                         ),
                                       ],
@@ -279,28 +299,21 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     Expanded(
                                       flex: 4,
-                                      child: TextField(
+                                      child: TextFormField(
+                                        initialValue: widget.userData.cellphone,
                                         style: textStyle,
                                         keyboardType: TextInputType.phone,
                                         decoration: InputDecoration(
-                                            fillColor: whiteColor,
-                                            labelStyle: textStyle,
-                                            hintStyle: TextStyle(color: Colors.white),
-                                            counterStyle: textStyle,
-                                            border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.white))
-                                        ),
-                                        controller: TextEditingController.fromValue(
-                                          TextEditingValue(
-                                            text: '03584565656',
-                                            selection: TextSelection.collapsed(
-                                              offset: 11
-                                            ),
-                                          ),
+                                          fillColor: whiteColor,
+                                          labelStyle: textStyle,
+                                          hintStyle: TextStyle(color: Colors.white),
+                                          counterStyle: textStyle,
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.white))
                                         ),
                                         onChanged: (String _phone) {
-
+                                          newPhone = _phone;
                                         },
                                       ),
                                     )
@@ -323,7 +336,8 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     Expanded(
                                       flex: 4,
-                                      child: TextField(
+                                      child: TextFormField(
+                                        initialValue: widget.userData.email,
                                         keyboardType: TextInputType.emailAddress,
                                         style: textStyle,
                                         decoration: InputDecoration(
@@ -336,16 +350,8 @@ class _EditProfileState extends State<EditProfile> {
                                                 borderSide: BorderSide(
                                                     color: Colors.white))
                                         ),
-                                        controller: TextEditingController.fromValue(
-                                          TextEditingValue(
-                                            text: 'abc@example.com',
-                                            selection: TextSelection.collapsed(
-                                              offset: 11
-                                            ),
-                                          ),
-                                        ),
                                         onChanged: (String _email) {
-
+                                          newEmail = _email;
                                         },
                                       ),
                                     )

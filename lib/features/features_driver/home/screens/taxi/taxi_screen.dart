@@ -140,7 +140,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       });
       fetchLocation();
       fetchEstadoConductor();
-      isLoading = false; 
+      isLoading = false;
+      if (!mounted) return;
       setState(() {});
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
@@ -150,6 +151,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         'id': e.id,
         'precio': e.mPrecio 
       }).toList();
+      if (!mounted) return;
       setState(() {});
       verifyTaxiInService();
     });
@@ -329,6 +331,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   /// Get current location
   Future<void> _initCurrentLocation() async {
     LocationEntity locationEntity = await LocationUtil.currentLocation();
+    if (!mounted) return;
     setState(() {
       currentLocation = locationEntity.latLang;
       currentLocationName = locationEntity.streetName;
@@ -372,6 +375,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   }
 
   void _setMapStyle(String mapStyle) {
+    if (!mounted) return;
     setState(() {
       nightMode = true;
       _mapController.setMapStyle(mapStyle);
@@ -380,6 +384,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void changeMapType(int id, String fileName){
     if (fileName == null) {
+      if (!mounted) return;
       setState(() {
         nightMode = false;
         _mapController.setMapStyle(null);

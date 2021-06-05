@@ -534,24 +534,6 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                 ),
               )
             )
-            // Positioned(
-            //     top: 0,
-            //     left: 0,
-            //     child: GestureDetector(
-            //       onTap: (){
-            //         _scaffoldKey.currentState.openDrawer();
-            //       },
-            //       child: Container(
-            //         height: 40.0,
-            //         width: 40.0,
-            //         decoration: BoxDecoration(
-            //           color: Colors.white,
-            //           borderRadius: BorderRadius.all(Radius.circular(100.0),),
-            //         ),
-            //         child: Icon(Icons.menu, color: blackColor,),
-            //       ),
-            //     )
-            // ),
           ],
         ),
     );

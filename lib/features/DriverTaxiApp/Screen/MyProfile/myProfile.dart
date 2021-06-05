@@ -11,6 +11,8 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 const double _kPickerSheetHeight = 216.0;
 
 class MyProfile extends StatefulWidget {
+  final DriverSession driverSession;
+  MyProfile(this.driverSession);
   @override
   _MyProfileState createState() => _MyProfileState();
 }
@@ -18,13 +20,18 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   final GlobalKey<FormState> formKey =GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey =GlobalKey<ScaffoldState>();
-  List<Map<String, dynamic>> listGender = [{'id': '0','name' : 'Masculino',},{'id': '1','name' : 'Femenino',}];
+  List<Map<String, dynamic>> listGender = [{'id': '1','name' : 'Masculino',},{'id': '0','name' : 'Femenino',}];
   String selectedGender;
   String lastSelectedValue;
   DateTime date = DateTime.now();
   final session = Session();
   DriverSession driverSession;
   var _image;
+  String newNames;
+  String newFName;
+  String newMName;
+  String newPhone;
+  String newEmail;
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -109,9 +116,20 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  void submit(){
+  void submit() async {
     final FormState form = formKey.currentState;
     form.save();
+    await session.setDriverData(
+      newNames ?? widget.driverSession.mName,
+      newFName ?? widget.driverSession.pName,
+      newMName ?? widget.driverSession.mName,
+      newPhone ?? widget.driverSession.phone,
+      newEmail ?? widget.driverSession.email,
+      widget.driverSession.dni,
+      widget.driverSession.sexo,
+      widget.driverSession.fechaNacimiento
+    );
+    Navigator.pop(context, true);
   }
 
   @override
@@ -129,30 +147,12 @@ class _MyProfileState extends State<MyProfile> {
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
-          child: driverSession == null ? FutureBuilder(
-            future: session.getDriverData() ,
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              if(snapshot.hasError) return Container();
-              switch(snapshot.connectionState){
-                case ConnectionState.waiting: return Container();
-                case ConnectionState.none: return Container();
-                case ConnectionState.active: {
-                  driverSession = snapshot.data;
-                  return createContent(driverSession);
-                }
-                case ConnectionState.done: {
-                  driverSession = snapshot.data;
-                  return createContent(driverSession);
-                }
-              }
-              return Container();
-            }
-          ): createContent(driverSession) 
+          child: createContent() 
         ),
       ),
     );
   }
-  Widget createContent(DriverSession sesion){
+  Widget createContent(){
     return InkWellCustom(
       onTap: () => FocusScope.of(context).requestFocus( FocusNode()),
       child: Form(
@@ -168,30 +168,6 @@ class _MyProfileState extends State<MyProfile> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    /* Material(
-                      elevation: 5.0,
-                      borderRadius: BorderRadius.circular(50.0),
-                      child:ClipRRect(
-                          borderRadius:BorderRadius.circular(100.0),
-                          child:_image == null
-                              ? GestureDetector(
-                              onTap: (){selectCamera();},
-                              child:Container(
-                                  height: 80.0,
-                                  width: 80.0,
-                                  color: primaryColor,
-                                  child:Image.asset('assets/image/icon/avatar.png',fit: BoxFit.cover, height: 80.0,width: 80.0,)
-                              )
-                          ):GestureDetector(
-                              onTap: () {selectCamera();},
-                              child:Container(
-                                height: 80.0,
-                                width: 80.0,
-                                child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
-                              )
-                          )
-                      ),
-                    ), */
                     Expanded(
                       child: Container(
                       padding: EdgeInsets.only(left: 20.0),
@@ -200,50 +176,51 @@ class _MyProfileState extends State<MyProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           TextFormField(
-                            initialValue: sesion.name,
+                            initialValue: widget.driverSession.name,
                             style: textStyle,
                             decoration: InputDecoration(
                                 fillColor: whiteColor,
                                 labelStyle: textStyle,
                                 hintStyle: TextStyle(color: Colors.white),
                                 counterStyle: textStyle,
-                                hintText: 'First Name',
+                                hintText: 'Nombres',
                                 border: UnderlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white))),
-                            /* controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: 'First Name',
-                                selection:TextSelection.collapsed(
-                                    offset: 11),
-                              ),
-                            ), */
                             onChanged: (String _firstName) {
-
+                              newNames = _firstName;
                             },
                           ),
                           TextFormField(
                             style: textStyle,
-                            initialValue: sesion.pName + ' ' + sesion.mName,
+                            initialValue: widget.driverSession.pName,
                             decoration: InputDecoration(
                                 fillColor: whiteColor,
                                 labelStyle: textStyle,
                                 hintStyle: TextStyle(color: Colors.white),
                                 counterStyle: textStyle,
-                                hintText: 'Last Name',
+                                hintText: 'Apellido paterno',
                                 border: UnderlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.white))),
-                            /* controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: 'Last Name',
-                                selection:TextSelection.collapsed(
-                                  offset: 11
-                                ),
-                              ),
-                            ), */
                             onChanged: (String _lastName) {
-
+                              newFName = _lastName;
+                            },
+                          ),
+                          TextFormField(
+                            style: textStyle,
+                            initialValue: widget.driverSession.mName,
+                            decoration: InputDecoration(
+                                fillColor: whiteColor,
+                                labelStyle: textStyle,
+                                hintStyle: TextStyle(color: Colors.white),
+                                counterStyle: textStyle,
+                                hintText: 'Apellido materno',
+                                border: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.white))),
+                            onChanged: (String _lastName) {
+                              newMName = _lastName;
                             },
                           ),
                         ],
@@ -267,7 +244,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: Container(
                               padding: EdgeInsets.only(right: 10.0),
                               child: Text(
-                                'Phone Number',
+                                'Número de celular',
                                 style: textStyle,
                               ),
                             ),
@@ -275,7 +252,7 @@ class _MyProfileState extends State<MyProfile> {
                           Expanded(
                             flex: 4,
                             child: TextFormField(
-                              initialValue: sesion.phone,
+                              initialValue: widget.driverSession.phone,
                               style: textStyle,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
@@ -287,15 +264,8 @@ class _MyProfileState extends State<MyProfile> {
                                       borderSide: BorderSide(
                                           color: Colors.white))
                               ),
-                              /* controller:TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: '03584565656',
-                                  selection:TextSelection.collapsed(
-                                      offset: 11),
-                                ),
-                              ), */
                               onChanged: (String _phone) {
-
+                                newPhone = _phone;
                               },
                             ),
                           )
@@ -311,7 +281,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: Container(
                               padding: EdgeInsets.only(right: 10.0),
                               child: Text(
-                                'Email',
+                                'Correo electrónico',
                                 style: textStyle,
                               ),
                             ),
@@ -319,7 +289,7 @@ class _MyProfileState extends State<MyProfile> {
                           Expanded(
                             flex: 4,
                             child: TextFormField(
-                              initialValue: sesion.email,
+                              initialValue: widget.driverSession.email,
                               keyboardType: TextInputType.emailAddress,
                               style: textStyle,
                               decoration: InputDecoration(
@@ -333,7 +303,7 @@ class _MyProfileState extends State<MyProfile> {
                                           color: Colors.white))
                               ),
                               onChanged: (String _email) {
-
+                                newEmail = _email;
                               },
                             ),
                           )
@@ -349,7 +319,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: Container(
                               padding: EdgeInsets.only(right: 10.0),
                               child: Text(
-                                'Gender',
+                                'Género',
                                 style: textStyle,
                               ),
                             ),
@@ -364,7 +334,7 @@ class _MyProfileState extends State<MyProfile> {
                                     ),
                                     isEmpty: selectedGender == null,
                                     child:DropdownButton<String>(
-                                      hint:Text('Gender',style: textStyle,),
+                                      hint:Text('Género',style: textStyle,),
                                       value: selectedGender,
                                       isDense: true,
                                       onChanged: (String newValue) {
@@ -395,7 +365,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: Container(
                               padding: EdgeInsets.only(right: 10.0),
                               child: Text(
-                                'Birthday',
+                                'Fecha de nacimiento',
                                 style: textStyle,
                               ),
                             ),

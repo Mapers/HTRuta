@@ -6,6 +6,7 @@ import 'package:HTRuta/core/error/exceptions.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/usuario_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Api/response/driver_data_response.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -58,7 +59,10 @@ class AuthApi{
       await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword);
       if(responseUsuario.data.length > 1){
         if(responseUsuario.data[1] != null){
-          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni);
+          final url = '${Config.nuevaRutaApi}/chofer/obtener-informacion-personal?choferId=${responseUsuario.data[1].iIdChofer}';
+          final response = await http.get(url);
+          DriverDataResponse driverDataResponse = driverDataResponseFromJson(response.body);
+          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString());
           final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();

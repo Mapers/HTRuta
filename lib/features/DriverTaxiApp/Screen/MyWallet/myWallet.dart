@@ -118,7 +118,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: data.historial.length,
-                reverse: true,
+                reverse: false,
                 itemBuilder: (BuildContext context, int index){
                   return Container(
                     margin: EdgeInsets.only(left: 20.0,right: 20.0,bottom: 10.0),
