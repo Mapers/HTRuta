@@ -4,6 +4,8 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 
 class TermsConditionsScreen extends StatefulWidget {
   @override
@@ -12,45 +14,48 @@ class TermsConditionsScreen extends StatefulWidget {
 
 class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
+
   final _key = UniqueKey();
-  int indexStack = 1;
+
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+
+  final String screenName = 'TERMS';
+  bool initilized = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: whiteColor,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: (){
-            Navigator.of(context).pushReplacementNamed(AppRoute.homeScreen);
-          },
-        ),
-      ),
-      body: IndexedStack(
-        index: indexStack,
-        children: <Widget>[
-          WebView(
-            key: _key,
-            initialUrl: 'https://flutter.dev/tos',
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller.complete(webViewController);
-            },
-            onPageFinished: (String value){
-              setState(() {
-                indexStack = 0;
-              });
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: whiteColor,
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
             },
           ),
-          Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-            ),
-          )
-        ],
-      ),
+        ),
+        body: WebView(
+          key: _key,
+          initialUrl: 'https://flutter.dev/tos',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            if(!initilized){
+              _controller.complete(webViewController);
+              initilized = true;
+            }
+          },
+        ),
+      )
     );
   }
 }

@@ -135,20 +135,21 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Widget rideHistoryList(List<HistoryItem> historyItems){
     return ListView.separated(
-      itemCount: historyItems.length,
+      itemCount: historyItems.reversed.length,
       shrinkWrap: true,
       padding: EdgeInsets.only(left: 10.0, right: 10.0),
       separatorBuilder:(_,int i){
         return Divider();
       },
       itemBuilder: (BuildContext context, int index) {
+        HistoryItem item = historyItems.reversed.toList()[index];
         return AnimationListView(
           index: index,
           child: GestureDetector(
             onTap: () {
-              navigateToDetail(historyItems[index].iIdViaje);
+              navigateToDetail(item.iIdViaje);
             },
-            child: rideHistory(historyItems[index])
+            child: rideHistory(item)
           )
         );
       }

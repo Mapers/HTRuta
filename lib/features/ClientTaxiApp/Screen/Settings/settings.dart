@@ -7,6 +7,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/listMenu.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/edit_profile.dart';
 import 'invite_friends.dart';
+import 'package:HTRuta/app_router.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -15,29 +17,43 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final String screenName = 'SETTINGS';
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: whiteColor,
-        centerTitle: true,
-        title: Text('Configuraciones',style: TextStyle(color: blackColor),),
-      ),
-      drawer:MenuScreens(activeScreenName: screenName),
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overScroll) {
-          overScroll.disallowGlow();
-          return false;
-        },
-        child: SingleChildScrollView(
-          child: InkWellCustom(
-            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-            child: Container(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: whiteColor,
+          centerTitle: true,
+          title: Text('Configuraciones',style: TextStyle(color: blackColor)),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              final _state = _sideMenuKey.currentState;
+              if (_state.isOpened)
+                _state.closeSideMenu(); // close side menu
+              else
+                _state.openSideMenu();// open side menu
+            },
+          ),
+        ),
+        drawer:MenuScreens(activeScreenName: screenName),
+        body: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll) {
+            overScroll.disallowGlow();
+            return false;
+          },
+          child: SingleChildScrollView(
+            child: InkWellCustom(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              child: Container(
                 color: Colors.grey[300],
                 child: Column(
                   children: <Widget>[
@@ -94,19 +110,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                    ListsMenu(
+                    /* ListsMenu(
                       title: '100 Puntos * Miembro',
                       onPress: (){
 
                       },
-                    ),
+                    ), */
                     ListsMenu(
                       title: 'Reseñas',
                       onPress: (){
 
                       },
                     ),
-                    ListsMenu(
+                    /* ListsMenu(
                       title: 'Invitar amigos',
                       onPress: (){
                         Navigator.of(context).push(MaterialPageRoute<Null>(
@@ -115,17 +131,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             },
                             fullscreenDialog: true));
                       },
-                    ),
+                    ), */
                     ListsMenu(
                       title: 'Notificaciones',
                       onPress: (){
-
+                        Navigator.of(context).pushNamed(AppRoute.notificationScreen);
                       },
                     ),
                     ListsMenu(
                       title: 'Terminos y condiciones',
                       onPress: (){
-
+                        Navigator.of(context).pushNamed(AppRoute.termsConditionsScreen);
                       },
                     ),
                     ListsMenu(
@@ -136,9 +152,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ],
                 )
+              ),
             ),
           ),
-        ),
+        )
       )
     );
   }

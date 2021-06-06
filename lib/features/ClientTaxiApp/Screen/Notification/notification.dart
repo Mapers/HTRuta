@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'itemNotification.dart';
+import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class NotificationScreens extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class NotificationScreens extends StatefulWidget {
 class _NotificationScreensState extends State<NotificationScreens> {
   final String screenName = 'NOTIFICATIONS';
   List<Map<String, dynamic>> listNotification = [];
-
+  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   /* void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NotificationDetail(
@@ -61,7 +62,12 @@ class _NotificationScreensState extends State<NotificationScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SideMenu(
+      key: _sideMenuKey,
+      background: primaryColor,
+      menu: MenuScreens(activeScreenName: screenName),
+      type: SideMenuType.slideNRotate, // check above images
+      child: Scaffold(
       appBar: AppBar(
         title: Text(
           'Notificaciones',
@@ -71,6 +77,16 @@ class _NotificationScreensState extends State<NotificationScreens> {
         centerTitle: true,
         elevation: 0.0,
         iconTheme: IconThemeData(color: blackColor),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            final _state = _sideMenuKey.currentState;
+            if (_state.isOpened)
+              _state.closeSideMenu(); // close side menu
+            else
+              _state.openSideMenu();// open side menu
+          },
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -147,6 +163,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
             ),
           ),
         ),
+      )
     );
   }
 }
