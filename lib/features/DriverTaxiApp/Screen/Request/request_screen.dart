@@ -625,7 +625,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                             if(acceptedTravels.contains(taxi.id)){
                               PushMessage pushMessage = getIt<PushMessage>();
                               Map<String, String> data = {
-                                'newOffer' : '1'
+                                'newReffuse' : '1',
+                                'idChofer': _prefs.idChoferReal
                               };
                               lastUserToken = taxi.token;
                               pushMessage.sendPushMessage(token: taxi.token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);

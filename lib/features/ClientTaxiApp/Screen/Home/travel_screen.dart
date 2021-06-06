@@ -32,6 +32,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:HTRuta/models/direction_model.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
 
 class TravelScreen extends StatefulWidget {
   @override
@@ -65,7 +66,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   var apis = MapNetwork();
   final GMapViewHelper _gMapViewHelper = GMapViewHelper();
   List<RoutesDirectionModel> routesData;
-
+  bool travelInits = false;
   final pickupApi = PickupApi();
   final referenceDatabase = FirebaseDatabase.instance.reference();
   PushNotificationProvider pushProvider;
@@ -115,9 +116,10 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
           );
         }
         _prefs.isClientInTaxi = false;
-        Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       }
       if(travelInit == '1'){
+        travelInits = true;
         _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha iniciado';
         await getRouter();
         addMakers();
@@ -140,7 +142,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             textColor: Colors.white,
             fontSize: 16.0
           ); */
-          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+          Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
         }
       }
     });
@@ -338,9 +340,29 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       }
     }
   }
+  Future<String> _getFileData(String path) async {
+    return await rootBundle.loadString(path);
+  }
+  void _setMapStyle(String mapStyle) {
+    setState(() {
+      nightMode = true;
+      _mapController.setMapStyle(mapStyle);
+    });
+  }
+  void changeMapType(int id, String fileName){
+    if (fileName == null) {
+      setState(() {
+        nightMode = false;
+        _mapController.setMapStyle(null);
+      });
+    } else {
+      _getFileData(fileName)?.then(_setMapStyle);
+    }
+  }
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
+    changeMapType(3, 'assets/style/dark_mode.json');
     MarkerId markerId = MarkerId(_markerIdVal());
     LatLng position;
     if(currentLocation == null){
@@ -436,7 +458,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
               child: Column(
                 children: <Widget>[
                   SizedBox(height: responsive.hp(15),),
-                  Text('${pedidoProvider.requestDriver.vchNombres.split(' ')[0]} aceptó su pedido de S/${double.parse(pedidoProvider.requestDriver.mPrecio).toStringAsFixed(1)}, llegará en 3 minutos', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600),textAlign: TextAlign.center,)
+                  !travelInits ? Text('${pedidoProvider.requestDriver.vchNombres.split(' ')[0]} aceptó su pedido de S/${double.parse(pedidoProvider.requestDriver.mPrecio).toStringAsFixed(1)}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center) : Container()
                 ],
               ),
             ),
@@ -460,16 +482,16 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                       Divider(color: Colors.grey,),
                       ListTile(
                         leading: Container(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                                      fit: BoxFit.cover,
-                                      width: responsive.wp(14),
-                                      height: responsive.wp(14)
-                                    ),
-                                  ),
-                                ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50.0),
+                            child: CachedNetworkImage(
+                              imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                              fit: BoxFit.cover,
+                              width: responsive.wp(14),
+                              height: responsive.wp(14)
+                            ),
+                          ),
+                        ),
                         title: Text('${pedidoProvider.requestDriver.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
                         subtitle: Row(
                           children: <Widget>[
@@ -521,7 +543,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                             _prefs.isClientInTaxi = false;
                             pushMessage.sendPushMessage(token: pedidoProvider.requestDriver.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
                             Navigator.pop(context);
-                            Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+                            Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
                           }else{
                             Navigator.pop(context);
                             Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');

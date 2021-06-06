@@ -89,7 +89,7 @@ class MenuScreens extends StatelessWidget {
                               isSelected: activeScreenName.compareTo('HOME') == 0,
                               onTap: () {
                                 Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.homeScreen, (Route<dynamic> route) => false);
+                                Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
                               },
                             ),
                             /* getItemMenu(

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-
+import 'package:flutter/services.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -75,11 +75,12 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   PanelController panelController =PanelController();
   String selectedService;
   PushNotificationProvider pushProvider;
-
+  bool nightMode = false;
   final pickUpApi = PickupApi();
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    changeMapType(3, 'assets/style/dark_mode.json');
   }
   @override
   void dispose() {
@@ -146,6 +147,26 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     });
     // initPusher();
     super.initState();
+  }
+
+  Future<String> _getFileData(String path) async {
+    return await rootBundle.loadString(path);
+  }
+  void _setMapStyle(String mapStyle) {
+    setState(() {
+      nightMode = true;
+      _mapController.setMapStyle(mapStyle);
+    });
+  }
+  void changeMapType(int id, String fileName){
+    if (fileName == null) {
+      setState(() {
+        nightMode = false;
+        _mapController.setMapStyle(null);
+      });
+    } else {
+      _getFileData(fileName)?.then(_setMapStyle);
+    }
   }
 
   void addMakers(){
@@ -387,96 +408,96 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
         children: <Widget>[
           buildContent(context),
           Positioned(
-                bottom: 0,
-                child: Container(
-                    // height: responsive.hp(26),
-                    width: responsive.wp(94),
-                    margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-                    padding: EdgeInsets.all(responsive.wp(4)),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Text('${pedidoProvider.request.vchNombreInicial}',style: TextStyle(fontSize: responsive.ip(2.0)), textAlign: TextAlign.center,),
-                        SizedBox(height: responsive.hp(2),),
-                        Text('${pedidoProvider.request.vchNombreFinal}',style: TextStyle(fontSize: responsive.ip(2.0)),textAlign: TextAlign.center,),
-                        Divider(color: Colors.grey,),
-                        ListTile(
-                          leading: Container(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: CachedNetworkImage(
-                                imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                                fit: BoxFit.cover,
-                                width: responsive.wp(14),
-                                height: responsive.wp(14)
-                              ),
-                            ),
-                          ),
-                          title: Text('${pedidoProvider.request.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
-                          subtitle: Row(
-                            children: <Widget>[
-                              Icon(Icons.star, color: primaryColor,),
-                              Text('4.8 (5)',style: TextStyle(fontSize: responsive.ip(1.8)))
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green,),
-                            onPressed: ()async{
-                              final url = 'tel:${pedidoProvider.request.vchCelular}';
-                              try{
-                                if (await canLaunch(url)) {
-                                  await launch(url);
-                                } else {
-                                  throw 'Could not launch $url';
-                                }
-                              }catch(e){
-                                Dialogs.alert(e);
-                              }
-                            },
-                          )
-                        ),
-                        !travelInit ? MaterialButton(
-                          color: primaryColor,
-                          child: Text('Empezar viaje', style: TextStyle(color: Colors.white)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          onPressed: (){
-                            PushMessage pushMessage = getIt<PushMessage>();
-                            Map<String, String> data = {
-                              'travelInit' : '1'
-                            };
-                            pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
-                            travelInit = true;
-                            setState(() {});
-                          },
-                        ) : Container(),
-                        travelInit ? MaterialButton(
-                          color: primaryColor,
-                          child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          onPressed: (){
-                            final _prefs = UserPreferences();
-                            _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
-                            PushMessage pushMessage = getIt<PushMessage>();
-                            Map<String, String> data = {
-                              'travelFinish' : '1',
-                              'idSolicitud': pedidoProvider.request.idSolicitud
-                            };
-                            _prefs.isDriverInService = false;
-                            pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
-                            Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
-                          },
-                        ) : Container()
-                      ],
-                    )
-                ),
+            bottom: 0,
+            child: Container(
+              // height: responsive.hp(26),
+              width: responsive.wp(94),
+              margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+              padding: EdgeInsets.all(responsive.wp(4)),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
               ),
+              child: Column(
+                children: <Widget>[
+                  Text('${pedidoProvider.request.vchNombreInicial}',style: TextStyle(fontSize: responsive.ip(2.0)), textAlign: TextAlign.center,),
+                  SizedBox(height: responsive.hp(2),),
+                  Text('${pedidoProvider.request.vchNombreFinal}',style: TextStyle(fontSize: responsive.ip(2.0)),textAlign: TextAlign.center,),
+                  Divider(color: Colors.grey,),
+                  ListTile(
+                    leading: Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50.0),
+                        child: CachedNetworkImage(
+                          imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                          fit: BoxFit.cover,
+                          width: responsive.wp(14),
+                          height: responsive.wp(14)
+                        ),
+                      ),
+                    ),
+                    title: Text('${pedidoProvider.request.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
+                    subtitle: Row(
+                      children: <Widget>[
+                        Icon(Icons.star, color: primaryColor,),
+                        Text('4.8 (5)',style: TextStyle(fontSize: responsive.ip(1.8)))
+                      ],
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green,),
+                      onPressed: ()async{
+                        final url = 'tel:${pedidoProvider.request.vchCelular}';
+                        try{
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        }catch(e){
+                          Dialogs.alert(e);
+                        }
+                      },
+                    )
+                  ),
+                  !travelInit ? MaterialButton(
+                    color: primaryColor,
+                    child: Text('Empezar viaje', style: TextStyle(color: Colors.white)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                    onPressed: (){
+                      PushMessage pushMessage = getIt<PushMessage>();
+                      Map<String, String> data = {
+                        'travelInit' : '1'
+                      };
+                      pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
+                      travelInit = true;
+                      setState(() {});
+                    },
+                  ) : Container(),
+                  travelInit ? MaterialButton(
+                    color: primaryColor,
+                    child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                    onPressed: (){
+                      final _prefs = UserPreferences();
+                      _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
+                      PushMessage pushMessage = getIt<PushMessage>();
+                      Map<String, String> data = {
+                        'travelFinish' : '1',
+                        'idSolicitud': pedidoProvider.request.idSolicitud
+                      };
+                      _prefs.isDriverInService = false;
+                      pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
+                      Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                    },
+                  ) : Container()
+                ],
+              )
+            ),
+          ),
           isLoading ? Center(
             child: CircularProgressIndicator(),
           ) : Container(),

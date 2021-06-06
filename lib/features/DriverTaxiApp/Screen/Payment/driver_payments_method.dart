@@ -15,7 +15,7 @@ class DriverPaymentsMethods extends StatefulWidget {
 }
 
 class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
-  final String screenName = 'PAYMENT';
+  final String screenName = 'PAYMENTS';
 
   final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
 

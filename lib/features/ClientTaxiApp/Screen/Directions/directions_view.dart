@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
@@ -27,13 +28,11 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/booking_
 import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/app_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'widgets/select_service_widget.dart';
-import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 
 class DirectionsView extends StatefulWidget {
@@ -73,9 +72,31 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   List<DriverRequest> requestTaxi = [];
   PushNotificationProvider pushProvider;
   PedidoProvider pedidoProvider;
+  bool nightMode = false;
 
+  Future<String> _getFileData(String path) async {
+    return await rootBundle.loadString(path);
+  }
+  void _setMapStyle(String mapStyle) {
+    setState(() {
+      nightMode = true;
+      _mapController.setMapStyle(mapStyle);
+    });
+  }
+  void changeMapType(int id, String fileName){
+    if (fileName == null) {
+      setState(() {
+        nightMode = false;
+        _mapController.setMapStyle(null);
+      });
+    } else {
+      _getFileData(fileName)?.then(_setMapStyle);
+    }
+  }
+  
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    changeMapType(3, 'assets/style/dark_mode.json');
   }
   @override
   void dispose() {
@@ -96,9 +117,16 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       Map data = argumento['data'];
       if(data == null) return;
       String newOffer = data['newOffer'] ?? '0';
+      String newReffuse = data['newReffuse'] ?? '0';
+      String idChofer = data['idChofer'] ?? '0';
       if (!mounted) return;
       if(newOffer == '1'){
         _prefs.setNotificacionUsuario = 'Solicitudes,Tiene una nueva oferta de conductor';
+        await loadOffers();
+      }
+      if(newReffuse == '1'){
+        _prefs.setNotificacionUsuario = 'Solicitudes,El conductor canceló su solicitud';
+        await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, idChofer);
         await loadOffers();
       }
     });
@@ -344,7 +372,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
           left: responsive.wp(17),
           child: Container(
             color: Colors.grey.withOpacity(0.05),
-            child: Text('Ofreciendo su tarifa, espere', style: TextStyle(fontSize: responsive.ip(2.2),fontWeight: FontWeight.w600),)
+            child: Text('Ofreciendo su tarifa, espere', style: TextStyle(fontSize: responsive.ip(2.2),fontWeight: FontWeight.w600, color: Colors.white))
             )
         ),
         Positioned(

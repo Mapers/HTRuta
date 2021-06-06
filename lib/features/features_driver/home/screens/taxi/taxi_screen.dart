@@ -664,7 +664,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     if(acceptedTravels.contains(requestTaxi[index].id)){
                       PushMessage pushMessage = getIt<PushMessage>();
                       Map<String, String> data = {
-                        'newOffer' : '1'
+                        'newReffuse' : '1',
+                        'idChofer': _prefs.idChoferReal
                       };
                       lastUserToken = requestTaxi[index].token;
                       pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);
