@@ -253,7 +253,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   }
 
   /// Get current location name
-  void getLocationName(double lat, double lng) async {
+  /* void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks != null && placemarks.isNotEmpty) {
@@ -267,15 +267,39 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
         ));
       };
     }
+  } */
+  void updateOriginPoint() async {
+    if(_position == null) return;
+    List<Placemark> placemarks = await placemarkFromCoordinates(_position.target.latitude, _position.target.longitude);
+    if (placemarks == null || placemarks.isEmpty) return;
+    final Placemark newPosition = placemarks[0];
+    widget?.placeBloc?.getCurrentLocation(Place(
+      name: newPosition.name + ', ' + newPosition.thoroughfare,
+      formattedAddress: '',
+      lat: _position.target.latitude,
+      lng: _position.target.longitude
+    ));
+    MarkerId markerId = MarkerId('origin');
+    Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(_position.target.latitude, _position.target.longitude),
+      draggable: false,
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
+    );
+    if(!mounted) return;
+    setState(() {
+      _markers[markerId] = marker;
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     changeMapType(3, 'assets/style/dark_mode.json');
-    MarkerId markerId = MarkerId(_markerIdVal());
+    /* MarkerId markerId = MarkerId(_markerIdVal());*/
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
-    Marker marker = Marker(
+    /*Marker marker = Marker(
       markerId: markerId,
       position: position,
       draggable: false,
@@ -285,7 +309,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     if(!mounted) return;
     setState(() {
       _markers[markerId] = marker;
-    });
+    }); */
     
     Future.delayed(Duration(milliseconds: 200), () async {
       controller?.animateCamera(
@@ -536,12 +560,14 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                 compassEnabled: false,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
-                      currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
-                      currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
+                    currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
+                    currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
                   zoom: 12.0,
                 ),
-                /* onCameraMove: (CameraPosition position) {
-                  if(_markers.isNotEmpty) {
+                onCameraMove: (CameraPosition position) {
+                  print('Moviendo');
+                  _position = position;
+                  /* if(_markers.isNotEmpty) {
                     MarkerId markerId = MarkerId(_markerIdVal());
                     Marker marker = _markers[markerId];
                     Marker updatedMarker = marker?.copyWith(
@@ -551,12 +577,16 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                       _markers[markerId] = updatedMarker;
                       _position = position;
                     });
-                  }
-                }, */
-                onCameraIdle: () => getLocationName(
+                  } */
+                },
+                onCameraIdle: (){
+                  print('Finalizado' + _position.toString());
+                  /* getLocationName(
                     _position?.target?.latitude ?? currentLocation?.latitude,
                     _position?.target?.longitude ?? currentLocation?.longitude
-                ),
+                  ); */
+                  updateOriginPoint();
+                }
               ),
             ),
             // streamMap(),

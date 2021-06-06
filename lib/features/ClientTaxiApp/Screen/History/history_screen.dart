@@ -20,8 +20,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   final pickupApi = PickupApi();
   List<HistoryItem> historyItemsLoaded;
 
-  void navigateToDetail(String id) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
+  void navigateToDetail(String id) async {
+    bool newComment = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
+    if(newComment != null && newComment){
+      historyItemsLoaded = null;
+      setState(() {});
+    }
+    
   }
 
   @override
@@ -141,7 +146,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           index: index,
           child: GestureDetector(
             onTap: () {
-              navigateToDetail(index.toString());
+              navigateToDetail(historyItems[index].iIdViaje);
             },
             child: rideHistory(historyItems[index])
           )
@@ -172,7 +177,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     fontSize: 13,
                   ),
                 ),
-                Text('Cancelado'.toUpperCase(),
+                Text(codeToEstado(item.estado),
                   style: TextStyle(
                     color: redColor,
                     fontWeight: FontWeight.bold,
@@ -203,7 +208,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               fontSize: 13.0
                             ),
                           ),
-                          Text('10:50',
+                          Text(item.fechaRegistro.add(Duration(minutes: 10)).toString().substring(11, 16),
                             style: TextStyle(
                               color: Color(0xFF97ADB6),
                               fontSize: 13.0
@@ -373,5 +378,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
     );
   }
-
+  String codeToEstado(String code){
+    switch(code){
+      case '1':
+      return 'Aceptado por el chofer';
+      case '2':
+      return 'Rechazado por el chofer';
+      case '3':
+      return 'Aceptado por el cliente';
+      case '4':
+      return 'Rechazado por el cliente';
+      default : 
+      return '';
+    }
+  }
 }

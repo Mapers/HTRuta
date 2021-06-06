@@ -5,6 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/historical_detail_response.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 
 class HistoryDetail extends StatefulWidget {
   final String id;
@@ -18,15 +22,37 @@ class HistoryDetail extends StatefulWidget {
 class _HistoryDetailState extends State<HistoryDetail> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  String yourReview;
-  double ratingScore;
+  String yourReview = '';
+  double ratingScore = 2.5;
+  final pickupApi = PickupApi();
+  HistoryDetailItem detailLoaded;
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-
+    return detailLoaded == null ? FutureBuilder(
+      future: pickupApi.getHistoryDriverDetail(widget.id),
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        if(snapshot.hasError) return Container();
+        switch(snapshot.connectionState){
+          case ConnectionState.waiting: return Scaffold(body: Center(child: CircularProgressIndicator()));
+          case ConnectionState.none: return Scaffold(body: Center(child: CircularProgressIndicator()));
+          case ConnectionState.active: {
+            detailLoaded = snapshot.data;
+            return createContent(screenSize, detailLoaded);
+          }
+          case ConnectionState.done: {
+            detailLoaded = snapshot.data;
+            return createContent(screenSize, detailLoaded);
+          }
+        }
+        return Container();
+      }
+    ): createContent(screenSize, detailLoaded);
+  }
+  Widget createContent(Size screenSize, HistoryDetailItem detail){
     return Scaffold(
-      bottomNavigationBar: Container(
+      bottomNavigationBar: detail.calificacionEstrellas == null ? Container(
         padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
         child: ButtonTheme(
           minWidth: screenSize.width,
@@ -37,8 +63,42 @@ class _HistoryDetailState extends State<HistoryDetail> {
             color: primaryColor,
             child: Text('Enviar',style: headingWhite,
             ),
-            onPressed: (){
-                Navigator.of(context).pushReplacementNamed(AppRoute.historyScreen);
+            onPressed: () async {
+              SaveQualificationBody body = SaveQualificationBody(
+                viajeId: int.parse(detailLoaded.iIdViaje),
+                stars: ratingScore,
+                comment: yourReview
+              );
+              bool success = await pickupApi.sendUserQualification(body);
+              if(!success){
+                Dialogs.alert(context,title: 'Lo sentimos', message: 'No se pudo guardar su calificación');
+                return;
+              }else{
+                Dialogs.success(
+                  context,
+                  title: 'Correcto', 
+                  message: 'Tu calificación ha sido guardada',
+                  onConfirm: (){
+                    Navigator.pop(context);
+                    Navigator.pop(context, true);
+                  }
+                );
+              }
+            },
+          ),
+        ),
+      ) : Container(
+        padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+        child: ButtonTheme(
+          minWidth: screenSize.width,
+          height: 50.0,
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            elevation: 0.0,
+            color: Colors.white,
+            child: Text('Enviar',style: headingWhite,
+            ),
+            onPressed: () async {
             },
           ),
         ),
@@ -53,10 +113,10 @@ class _HistoryDetailState extends State<HistoryDetail> {
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text('Historial',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    )
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  )
                 ),
                 background: Container(
                   color: whiteColor,
@@ -131,7 +191,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                         ),
                       ),
                     ),
-                    rideHistory(),
+                    rideHistory(detail),
                     Container(
                       padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
                       color: whiteColor,
@@ -154,27 +214,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Tarifa de viaje', style: textStyle,),
-                                Text('S/.10.99', style: textStyle,),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text('Impuestos', style: textStyle,),
-                                Text('S/.1.99', style: textStyle,),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 8.0,bottom: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text('Descuento', style: textStyle,),
-                                Text('- S/.5.99', style: textStyle,),
+                                Text('S/.${double.parse(detail.precio).toStringAsFixed(2)}', style: textStyle,),
                               ],
                             ),
                           ),
@@ -189,7 +229,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                       fontSize: 16
                                   ),
                                 ),
-                                Text('S/.7.49',
+                                Text('S/.${double.parse(detail.precio).toStringAsFixed(2)}',
                                     style: TextStyle(
                                         color: blackColor,
                                         fontSize: 16
@@ -202,28 +242,28 @@ class _HistoryDetailState extends State<HistoryDetail> {
                       ),
                     ),
                     Divider(),
-                    Container(
+                    detail.calificacionEstrellas == null ? Container(
                       padding: EdgeInsets.only(left: 20.0),
-                      child: Text('Revisar',
+                      child: Text('Calificar viaje',
                         style: TextStyle(
                             color: blackColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 18
                         ),
                       ),
-                    ),
-                    Form(
+                    ) : Container(),
+                    detail.calificacionEstrellas == null ? Form(
                         key: formKey,
                         child: Container(
                           padding: EdgeInsets.only(left: 20,top: 10,right: 20),
                           color: whiteColor,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               RatingBar(
-                                initialRating: 4,
+                                initialRating: 2.5,
                                 allowHalfRating: true,
-                                itemSize: 25.0,
+                                itemSize: 35.0,
                                 glowColor: whiteColor,
                                 ratingWidget: RatingWidget(
                                   empty: Icon(
@@ -239,10 +279,6 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                     color: Colors.amber,
                                   ) 
                                 ),
-                                // itemBuilder: (context, _) => Icon(
-                                //   Icons.star,
-                                //   color: Colors.amber,
-                                // ),
                                 onRatingUpdate: (rating) {
                                   ratingScore = rating;
                                 },
@@ -264,21 +300,23 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                         fontSize: 16.0,
                                       ),
                                       border: OutlineInputBorder(
-                                          borderRadius:BorderRadius.circular(5.0)),
+                                        borderRadius:BorderRadius.circular(5.0)),
                                     ),
                                     maxLines: 2,
                                     keyboardType: TextInputType.multiline,
-                                    onChanged: (String value) { setState(() => yourReview = value );},
+                                    onChanged: (String value) { 
+                                      yourReview = value;
+                                    },
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         )
-                    ),
+                    ) : Container(),
                   ],
                 ),
-              ),
+              )
             ),
           ),
         ),
@@ -286,7 +324,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
     );
   }
 
-  Widget rideHistory(){
+  Widget rideHistory(HistoryDetailItem detail){
     return Material(
       elevation: 0.0,
       borderRadius: BorderRadius.circular(15.0),
@@ -295,9 +333,9 @@ class _HistoryDetailState extends State<HistoryDetail> {
         padding: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
         margin: EdgeInsets.only(left: 20, right: 20),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            border: Border.all(color: greyColor, width: 1.0),
-            color: whiteColor,
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(color: greyColor, width: 1.0),
+          color: whiteColor,
         ),
         child: Container(
           height: 100,
@@ -313,17 +351,16 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text('10:24',
+                      Text(detail.fechaRegistro.toString().substring(11, 16),
                         style: TextStyle(
-                            color: Color(0xFF97ADB6),
-                            fontSize: 13.0
+                          color: Color(0xFF97ADB6),
+                          fontSize: 13.0
                         ),
                       ),
-
-                      Text('10:50',
+                      Text(detail.fechaRegistro.add(Duration(minutes: 10)).toString().substring(11, 16),
                         style: TextStyle(
-                            color: Color(0xFF97ADB6),
-                            fontSize: 13.0
+                          color: Color(0xFF97ADB6),
+                          fontSize: 13.0
                         ),
                       ),
                     ],
@@ -352,14 +389,14 @@ class _HistoryDetailState extends State<HistoryDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Av. Los incas 567, Trujillo , Perú',
+                    Text(detail.origen,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 15,
                       ),
                     ),
-                    Text('Av. Pumacahua 678, El Porvenir, Perú',
+                    Text(detail.destino,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
