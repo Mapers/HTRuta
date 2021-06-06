@@ -110,6 +110,7 @@ class _CommentUserDialogState extends State<CommentUserDialog> {
               FlatButton(
                 child: Text('Por ahora no', style: TextStyle(color: Colors.black54)),
                 onPressed: (){
+                  _prefs.isClientInTaxi = false;
                   Navigator.pop(context);
                 },
               )

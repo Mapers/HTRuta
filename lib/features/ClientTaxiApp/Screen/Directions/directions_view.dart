@@ -98,19 +98,11 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       String newOffer = data['newOffer'] ?? '0';
       if (!mounted) return;
       if(newOffer == '1'){
+        _prefs.setNotificacionUsuario = 'Solicitudes,Tiene una nueva oferta de conductor';
         await loadOffers();
       }
     });
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-      // final providerData = Provider.of<PedidoProvider>(context,listen: false);
-      // final data = await pickUpApi.getRequestDriver(providerData.idSolicitud);
-      // if(data != null){
-      //   requestTaxi.addAll(data);
-      //   setState(() {
-      //   });
-      // }
-    });
     addMakers();
     getRouter();
     super.initState();
@@ -443,7 +435,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                             await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, actualRequest.idChofer);
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
-                                              'newRequest' : '1',
+                                              'newCancelSol' : '1',
                                             };
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Negación', description: 'El usuario rechazó su oferta', data: data);
                                             setState(() {
@@ -482,6 +474,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               Dialogs.alert(context, title: 'Error', message: 'No se pudo aceptar la solicitud');
                                               return;
                                             }
+                                            _prefs.setNotificacionUsuario = 'Solicitudes,Ha aceptado la oferta de un conductor';
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',
@@ -501,7 +494,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                             Navigator.pop(context);
                                             Dialogs.alert(context, title: 'Error', message: '${error.message}');
                                           }
-                                          //navigateToDetail(requestActual);
                                         },
                                       ),
                                     ),
@@ -534,40 +526,40 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                 elevation: 0.0,
                 centerTitle: true,
                 leading: GestureDetector(
-                    onTap: () {
-                      Dialogs.confirm(context,title: 'Advertencia', message: '¿Desea cancelar la solicitud de viaje?',
-                        onConfirm: () async{
-                          final respuesta = await pickUpApi.cancelTravel(pedidoProvider.idSolicitud);
-                          if(respuesta){
-                            PushMessage pushMessage = getIt<PushMessage>();
-                            Map<String, String> data = {
-                              'newRequest' : '1',
-                            };
-                            DriverFirestoreService driverFirestoreService = DriverFirestoreService();
-                            List<String> tokens = await driverFirestoreService.getDrivers();
-                            pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
-                            Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
-                            // BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
-                            // Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
-                          }else{
-                            Navigator.pop(context);
-                            Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');
-                          }
-                        },
-                        onCancel: (){
+                  onTap: () {
+                    Dialogs.confirm(context,title: 'Advertencia', message: '¿Desea cancelar la solicitud de viaje?',
+                      onConfirm: () async{
+                        final respuesta = await pickUpApi.cancelTravel(pedidoProvider.idSolicitud);
+                        if(respuesta){
+                          PushMessage pushMessage = getIt<PushMessage>();
+                          Map<String, String> data = {
+                            'newCancelSol' : '1',
+                          };
+                          DriverFirestoreService driverFirestoreService = DriverFirestoreService();
+                          List<String> tokens = await driverFirestoreService.getDrivers();
+                          pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                          Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+                          // BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
+                          // Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
+                        }else{
                           Navigator.pop(context);
-                        },
-                        textoConfirmar: 'Si',
-                        textoCancelar: 'No'
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        color: Colors.white
-                      ),
-                      child: Icon(Icons.arrow_back_ios,color: blackColor,)
-                    )
+                          Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');
+                        }
+                      },
+                      onCancel: (){
+                        Navigator.pop(context);
+                      },
+                      textoConfirmar: 'Si',
+                      textoCancelar: 'No'
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: Colors.white
+                    ),
+                    child: Icon(Icons.arrow_back_ios,color: blackColor,)
+                  )
                 ),
               ),
             ],

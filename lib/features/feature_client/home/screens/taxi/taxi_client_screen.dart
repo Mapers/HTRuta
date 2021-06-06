@@ -124,13 +124,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       setState(() {});
       verifyTaxiInService();
     });
-    /* showPersBottomSheetCallBack = _showBottomSheet;
-    sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
-    sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
-    sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
-    sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
-    sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')); */
   }
 
   void verifyTaxiInService(){
@@ -251,23 +244,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       ),
     );
   }
-
-  /// Get current location name
-  /* void getLocationName(double lat, double lng) async {
-    if(lat != null && lng != null) {
-      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-        widget?.placeBloc?.getCurrentLocation(Place(
-          name: _placemark,
-          formattedAddress: '',
-          lat: lat,
-          lng: lng
-        ));
-      };
-    }
-  } */
   void updateOriginPoint() async {
     if(_position == null) return;
     List<Placemark> placemarks = await placemarkFromCoordinates(_position.target.latitude, _position.target.longitude);
@@ -296,21 +272,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     changeMapType(3, 'assets/style/dark_mode.json');
-    /* MarkerId markerId = MarkerId(_markerIdVal());*/
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
-    /*Marker marker = Marker(
-      markerId: markerId,
-      position: position,
-      draggable: false,
-      // ignore: deprecated_member_use
-      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
-    );
-    if(!mounted) return;
-    setState(() {
-      _markers[markerId] = marker;
-    }); */
-    
     Future.delayed(Duration(milliseconds: 200), () async {
       controller?.animateCamera(
         CameraUpdate?.newCameraPosition(
@@ -321,12 +284,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
         ),
       );
     });
-  }
-
-  String _markerIdVal({bool increment = false}) {
-    String val = 'marker_id_$_markerIdCounter';
-    if (increment) _markerIdCounter++;
-    return val;
   }
 
   Future<String> _getFileData(String path) async {
@@ -416,25 +373,26 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   Widget getListOptionDistance() {
     final List<Widget> choiceChips = listDistance.map<Widget>((value) {
       return Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: ChoiceChip(
-              key: ValueKey<String>(value['id'].toString()),
-              labelStyle: textGrey,
-              backgroundColor: greyColor2,
-              selectedColor: primaryColor,
-              elevation: 2.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(3.0),
-              ),
-              selected: selectedDistance == value['id'].toString(),
-              label: Text((value['title']), style: TextStyle(color: Colors.white)),
-              onSelected: (bool check) {
-                setState(() {
-                  distanceOptionSelected = listDistance.where((element) => element['id'] == value['id']).toList().first;
-                  selectedDistance = check ? value['id'].toString() : '';
-                  changeCircle(selectedDistance);
-                });
-              })
+        padding: const EdgeInsets.all(3.0),
+        child: ChoiceChip(
+          key: ValueKey<String>(value['id'].toString()),
+          labelStyle: textGrey,
+          backgroundColor: greyColor2,
+          selectedColor: primaryColor,
+          elevation: 2.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3.0),
+          ),
+          selected: selectedDistance == value['id'].toString(),
+          label: Text((value['title']), style: TextStyle(color: Colors.white)),
+          onSelected: (bool check) {
+            setState(() {
+              distanceOptionSelected = listDistance.where((element) => element['id'] == value['id']).toList().first;
+              selectedDistance = check ? value['id'].toString() : '';
+              changeCircle(selectedDistance);
+            });
+          }
+        )
       );
     }).toList();
     return Wrap(
@@ -479,10 +437,10 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   void _moveCamera(double zoom){
     _mapController?.animateCamera(
       CameraUpdate?.newCameraPosition(
-          CameraPosition(
-            target: LatLng(currentLocation.latitude,currentLocation.longitude),
-            zoom: zoom,
-          )
+        CameraPosition(
+          target: LatLng(currentLocation.latitude,currentLocation.longitude),
+          zoom: zoom,
+        )
       ),
     );
   }
@@ -513,8 +471,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 - c((lat2 - lat1) * p)/2 +
-        c(lat1 * p) * c(lat2 * p) *
-            (1 - c((lon2 - lon1) * p))/2;
+      c(lat1 * p) * c(lat2 * p) *
+        (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a));
   }
 
@@ -523,8 +481,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       final ImageConfiguration imageConfiguration =
       createLocalImageConfiguration(context);
       BitmapDescriptor.fromAssetImage(
-          imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
-          .then(_updateBitmap);
+        imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
+        .then(_updateBitmap);
     }
   }
 
@@ -565,32 +523,13 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                   zoom: 12.0,
                 ),
                 onCameraMove: (CameraPosition position) {
-                  print('Moviendo');
                   _position = position;
-                  /* if(_markers.isNotEmpty) {
-                    MarkerId markerId = MarkerId(_markerIdVal());
-                    Marker marker = _markers[markerId];
-                    Marker updatedMarker = marker?.copyWith(
-                      positionParam: position?.target,
-                    );
-                    setState(() {
-                      _markers[markerId] = updatedMarker;
-                      _position = position;
-                    });
-                  } */
                 },
                 onCameraIdle: (){
-                  print('Finalizado' + _position.toString());
-                  /* getLocationName(
-                    _position?.target?.latitude ?? currentLocation?.latitude,
-                    _position?.target?.longitude ?? currentLocation?.longitude
-                  ); */
                   updateOriginPoint();
                 }
               ),
             ),
-            // streamMap(),
-            // ChangeServiceClientWidget(),
             CustomDropdownClient(),
             Positioned(
               bottom: 30.0,
@@ -621,19 +560,19 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                   getListOptionDistance(),
                   Container(height: 10),
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: SelectAddress(
-                        fromAddress: widget?.placeBloc?.formLocation,
-                        toAddress: widget?.placeBloc?.locationSelect,
-                        unidad: distanceOptionSelected['unidad'],
-                        distancia: distanceOptionSelected['distancia'],
-                        onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => SearchAddressScreen(),
-                              fullscreenDialog: true
-                          ));
-                        },
-                      )
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: SelectAddress(
+                      fromAddress: widget?.placeBloc?.formLocation,
+                      toAddress: widget?.placeBloc?.locationSelect,
+                      unidad: distanceOptionSelected['unidad'],
+                      distancia: distanceOptionSelected['distancia'],
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SearchAddressScreen(),
+                          fullscreenDialog: true
+                        ));
+                      },
+                    )
                   ),
                 ],
               ),

@@ -103,6 +103,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       if(newCancel == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
         if(idSolicitud == pedidoProvider.request.id){
+          _prefs.setNotificacionUsuario = 'Viajes,El conductor canceló el viaje';
           Fluttertoast.showToast(
             msg: 'Se canceló una solicitud de viaje',
             toastLength: Toast.LENGTH_LONG,
@@ -117,10 +118,12 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
         Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
       }
       if(travelInit == '1'){
+        _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha iniciado';
         await getRouter();
         addMakers();
       }
       if(travelFinish == '1'){
+        _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha finalizado';
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
         if(idSolicitud == pedidoProvider.request.id){
           await showDialog(

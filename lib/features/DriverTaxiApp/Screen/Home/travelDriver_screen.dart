@@ -109,8 +109,10 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
       if(newCancel == '1'){
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
         if(idSolicitud == pedidoProvider.request.idSolicitud){
+          final _prefs = UserPreferences();
+          _prefs.setNotificacionConductor = 'Viajes,El usuario canceló el viaje';
           Fluttertoast.showToast(
-            msg: 'Se canceló una solicitud de viaje',
+            msg: 'Se canceló el viaje',
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -403,16 +405,16 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                         Divider(color: Colors.grey,),
                         ListTile(
                           leading: Container(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                                        fit: BoxFit.cover,
-                                        width: responsive.wp(14),
-                                        height: responsive.wp(14)
-                                      ),
-                                    ),
-                                  ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: CachedNetworkImage(
+                                imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                                fit: BoxFit.cover,
+                                width: responsive.wp(14),
+                                height: responsive.wp(14)
+                              ),
+                            ),
+                          ),
                           title: Text('${pedidoProvider.request.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
                           subtitle: Row(
                             children: <Widget>[
@@ -459,6 +461,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                             borderRadius: BorderRadius.circular(20)
                           ),
                           onPressed: (){
+                            final _prefs = UserPreferences();
+                            _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
                             PushMessage pushMessage = getIt<PushMessage>();
                             Map<String, String> data = {
                               'travelFinish' : '1',

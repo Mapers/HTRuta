@@ -57,14 +57,25 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
+      String newCancelSol = data['newCancelSol'] ?? '0';
       String newConfirm = data['newConfirm'] ?? '0';
       String idSolicitud = data['idSolicitud'] ?? '0';
       if (!mounted) return;
       if(newRequest == '1'){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Solicitudes,Tiene una nueva solicitud';
         await loadRequests();
-        analizeChanges();  
+        analizeChanges(); 
+      }
+      if(newCancelSol == '1'){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Solicitudes,El usuario canceló la solicitud';
+        await loadRequests();
+        analizeChanges(); 
       }
       if(newConfirm == '1'){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Viajes,Haz iniciado un nuevo viaje';
         await travelConfirmation(idSolicitud);
       }
     });

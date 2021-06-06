@@ -3,11 +3,9 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'detail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'itemNotification.dart';
 
 class NotificationScreens extends StatefulWidget {
@@ -19,12 +17,13 @@ class _NotificationScreensState extends State<NotificationScreens> {
   final String screenName = 'NOTIFICATIONS';
   List<Map<String, dynamic>> listNotification = [];
 
-  void navigateToDetail(String id) {
+  /* void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NotificationDetail(
               id: id,
             )));
-  }
+  } */
+  final _prefs = UserPreferences();
 
   void dialogInfo() {
     showDialog(
@@ -38,94 +37,54 @@ class _NotificationScreensState extends State<NotificationScreens> {
           content: Text('Estas seguro de borrar todas las notificaciones ?'),
           actions: <Widget>[
             FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child:Text(
-                  'Cancelar',
-                  style: textGrey,
-                )),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child:Text(
+                'Cancelar',
+                style: textGrey,
+              )
+            ),
             FlatButton(
-                onPressed: () {
-                  setState(() {
-                    listNotification.clear();
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('Ok')),
+              onPressed: () {
+                _prefs.clearNotificacionUsuario();
+                Navigator.pop(context);
+                setState(() {});
+              },
+              child: Text('Ok')
+            ),
           ],
         );
-      });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    listNotification = [
-      {
-        'id': '0',
-        'title': 'Sistema',
-        'subTitle': 'Sit amet ullamco qui nostrud adipisicing cupidatat dolor duis sit Lorem.',
-        'icon': Icons.check_circle
-      },
-      {
-        'id': '1',
-        'title': 'Promoción',
-        'subTitle': 'Ad mollit nulla eiusmod deserunt adipisicing.',
-        'icon': MdiIcons.camcorder
-      },
-      {
-        'id': '2',
-        'title': 'Promoción',
-        'subTitle': 'Labore excepteur aliquip exercitation et sint aliqua aliqua dolore.',
-        'icon': MdiIcons.camcorder
-      },
-      {
-        'id': '3',
-        'title': 'Sistema',
-        'subTitle': 'Deserunt mollit Lorem aliqua duis.',
-        'icon': MdiIcons.cancel
-      },
-      {
-        'id': '3',
-        'title': 'Sistema',
-        'subTitle': 'Exercitation consequat incididunt qui aliquip exercitation.',
-        'icon': Icons.check_circle
-      },
-    ];
-  }
-
-  @override
-  void dispose() {
-    // 
-    super.dispose();
+      }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            'Notificaciones',
-            style: TextStyle(color: blackColor),
-          ),
-          backgroundColor: whiteColor,
-          centerTitle: true,
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: blackColor),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.restore_from_trash,
-                color: blackColor,
-              ),
-              onPressed: () {
-                dialogInfo();
-              }
-            )
-          ]),
+        title: Text(
+          'Notificaciones',
+          style: TextStyle(color: blackColor),
+        ),
+        backgroundColor: whiteColor,
+        centerTitle: true,
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: blackColor),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.restore_from_trash,
+              color: blackColor,
+            ),
+            onPressed: () {
+              dialogInfo();
+            }
+          )
+        ]
+      ),
       drawer: MenuScreens(activeScreenName: screenName),
-      body: listNotification.isNotEmpty
+      body: _prefs.notificacionesUsuario.isNotEmpty
         ? NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (overScroll) {
               overScroll.disallowGlow();
@@ -133,54 +92,61 @@ class _NotificationScreensState extends State<NotificationScreens> {
             },
             child: AnimationLimiter(
               child: ListView.builder(
-                  itemCount: listNotification.length,
+                  itemCount: _prefs.notificacionesUsuario.reversed.toList().length,
                   padding: EdgeInsets.only(top: 0),
                   itemBuilder: (BuildContext context, int index) {
+                    String notificacion = _prefs.notificacionesUsuario.reversed.toList()[index];
                     return AnimationListView(
                       index: index,
                       child: Slidable(
-                          actionPane: SlidableScrollActionPane(),
-                          actionExtentRatio: 0.25,
-                          secondaryActions: <Widget>[
-                            IconSlideAction(
-                              caption: 'Borrar',
-                              color: Colors.red,
-                              icon: Icons.delete,
-                              onTap: () {
-                                setState(() {
-                                  listNotification.removeAt(index);
-                                });
-                              },
-                            ),
-                          ],
+                        actionPane: SlidableScrollActionPane(),
+                        actionExtentRatio: 0.25,
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Borrar',
+                            color: Colors.red,
+                            icon: Icons.delete,
+                            onTap: () {
+                              _prefs.clearNotificacionUsuarioIndex(_prefs.notificacionesUsuario.length - 1 - index);
+                              setState(() {});
+                            },
+                          ),
+                        ],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: greyColor2, 
+                                width: 1
+                              )
+                            )
+                          ),
                           child: Container(
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: greyColor2, width: 1))),
-                              child: GestureDetector(
-                                onTap: () {
-                                  navigateToDetail(index.toString());
-                                },
-                                child: ItemNotification(
-                                  title: listNotification[index]
-                                  ['title'],
-                                  subTitle: listNotification[index]
-                                  ['subTitle'],
-                                  icon: listNotification[index]['icon'],
-                                )))),
-                    );
-                  }),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: greyColor,width: 1)
+                          )
+                        ),
+                        child: ItemNotification(
+                          title: notificacion.split(',').first,
+                          subTitle: notificacion.split(',').last,
+                          icon: Icons.check_circle,
+                        )
+                      )
+                    )
+                  )
+                );
+              }
             )
           )
-          : Container(
-              child: Center(
-                child: Image.asset(
-                  'assets/image/empty_state_trash_300.png',
-                  width: 100.0,
-                ),
-              ),
+        ): Container(
+          child: Center(
+            child: Image.asset(
+              'assets/image/empty_state_trash_300.png',
+              width: 100.0,
             ),
+          ),
+        ),
     );
   }
 }

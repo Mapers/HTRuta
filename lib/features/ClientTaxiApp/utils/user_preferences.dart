@@ -105,4 +105,42 @@ class UserPreferences{
   set setClientPaymentMethods(List<String> values) {
     _prefs.setStringList('clientPayments', values);
   }
+
+  List<String> get notificacionesConductor => _prefs.getStringList('notificacionesConductor') ?? [];
+
+  set setNotificacionConductor(String nuevaNotificacion) {
+    List<String> notificacionesPasadas = _prefs.getStringList('notificacionesConductor') ?? [];
+    notificacionesPasadas.add(nuevaNotificacion);
+    if(notificacionesPasadas.length > 10){
+      notificacionesPasadas.removeAt(0);
+    }
+    _prefs.setStringList('notificacionesConductor', notificacionesPasadas);
+  }
+  void clearNotificacionConductor() {
+    _prefs.setStringList('notificacionesConductor', null);
+  }
+  void clearNotificacionConductorIndex(int index) {
+    List<String> notificacionesPasadas = _prefs.getStringList('notificacionesConductor') ?? [];
+    notificacionesPasadas.removeAt(index);
+    _prefs.setStringList('notificacionesConductor', notificacionesPasadas);
+  }
+
+  List<String> get notificacionesUsuario => _prefs.getStringList('notificacionesUsuario') ?? [];
+
+  set setNotificacionUsuario(String nuevaNotificacion) {
+    List<String> notificacionesPasadas = _prefs.getStringList('notificacionesUsuario') ?? [];
+    notificacionesPasadas.add(nuevaNotificacion);
+    if(notificacionesPasadas.length > 10){
+      notificacionesPasadas.removeAt(0);
+    }
+    _prefs.setStringList('notificacionesUsuario', notificacionesPasadas);
+  }
+  void clearNotificacionUsuario() {
+    _prefs.setStringList('notificacionesUsuario', null);
+  }
+  void clearNotificacionUsuarioIndex(int index) {
+    List<String> notificacionesPasadas = _prefs.getStringList('notificacionesUsuario') ?? [];
+    notificacionesPasadas.removeAt(index);
+    _prefs.setStringList('notificacionesUsuario', notificacionesPasadas);
+  }
 }

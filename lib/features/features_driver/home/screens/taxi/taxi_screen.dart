@@ -19,7 +19,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown_driver.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/features/features_driver/home/presentations/widgets/button_layer_widget.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -105,14 +104,25 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       Map data = argumento['data'];
       if(data == null) return;
       String newRequest = data['newRequest'] ?? '0';
+      String newCancelSol = data['newCancelSol'] ?? '0';
       String newConfirm = data['newConfirm'] ?? '0';
       String idSolicitud = data['idSolicitud'] ?? '0';
       if (!mounted) return;
       if(newRequest == '1' && isWorking){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Solicitudes,Tiene una nueva solicitud';
+        await getSolicitudes();
+        analizeChanges(); 
+      }
+      if(newCancelSol == '1' && isWorking){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Solicitudes,El usuario canceló la solicitud';
         await getSolicitudes();
         analizeChanges(); 
       }
       if(newConfirm == '1'&& isWorking){
+        final _prefs = UserPreferences();
+        _prefs.setNotificacionConductor = 'Viajes,Haz iniciado un nuevo viaje';
         await travelConfirmation(idSolicitud);
       }
     });
@@ -517,7 +527,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         )
       ),
       // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
-      Align(
+      requestTaxi.isNotEmpty ? Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
         Container(
@@ -683,17 +693,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 }else{
                   acceptTravel(requestTaxi[index]);
                 }
-                
-                /*
-                setState(() {
-                  if(index == listRequest.length-1){
-                    setState(() {
-                      isShowDefault = true;
-                    });
-                  }else{
-                    addMarker(listRequest[index+1]['locationForm'], listRequest[index+1]['locationTo']);
-                  }
-                }); */
               }
             ),
         ): MyActivity(
@@ -705,7 +704,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           totalDistance: '22Km',
           totalJob: 8,
         ),
-      )
+      ) : Container()
     ];
 
     return isLoading ? Center(child: CircularProgressIndicator(),) : Container(
@@ -801,8 +800,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         markers: _markers,
         polyLines: _polyLines,
         myLocationEnabled: false,
-        onTap: (_){
-        }
       ),
     );
   }

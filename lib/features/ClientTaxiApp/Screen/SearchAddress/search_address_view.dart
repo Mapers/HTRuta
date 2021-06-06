@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_map.dart';
 
 class SearchAddressView extends StatefulWidget {
   final ClientTaxiPlaceBloc placeBloc;
@@ -103,88 +104,86 @@ class _SearchAddressViewState extends State<SearchAddressView> {
           Expanded(
             flex: 5,
             child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    TextField(
-                      style: textStyle,
-                      focusNode: nodeFrom,
-                      decoration: InputDecoration(
-                        fillColor: whiteColor,
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: greyColor),
-                        hintText: 'De',
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  TextField(
+                    style: textStyle,
+                    focusNode: nodeFrom,
+                    decoration: InputDecoration(
+                      fillColor: whiteColor,
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: greyColor),
+                      hintText: 'De',
+                    ),
+                    controller: TextEditingController.fromValue(
+                      TextEditingValue(
+                        // ignore: prefer_if_null_operators
+                        text: formLocation != null ? formLocation :'',
+                        selection: TextSelection.collapsed(
+                          offset: formLocation != null ? formLocation?.length : 0),
                       ),
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          // ignore: prefer_if_null_operators
-                          text: formLocation != null ? formLocation :'',
-                          selection: TextSelection.collapsed(
-                            offset: formLocation != null ? formLocation?.length : 0),
+                    ),
+                    onChanged: (String value) async {
+                      formLocation = value;
+                      await placeBloc?.search(value);
+                    },
+                    onTap: (){
+                      setState(() {
+                        inputFrom = true;
+                        inputTo = false;
+                      });
+                    },
+                  ),
+                  Container(
+                      child: Divider(color: Colors.grey,)
+                  ),
+                  TextField(
+                    style: textStyle,
+                    autofocus: true,
+                    focusNode: nodeTo,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'A',
+                      hintStyle: TextStyle(
+                        color: greyColor,
+                        fontSize: 14
+                      ),
+                      contentPadding: EdgeInsets.only(top: 15.0),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.place),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc)));
+                        },
+                      )
+                    ),
+                    controller: TextEditingController.fromValue(
+                      TextEditingValue(
+                        // ignore: prefer_if_null_operators
+                        text: toLocation != null ? toLocation :'',
+                        selection: TextSelection.collapsed(
+                          offset: toLocation != null ? toLocation?.length : 0
                         ),
                       ),
-                      onChanged: (String value) async {
-                        formLocation = value;
-                        await placeBloc?.search(value);
-                      },
-                      onTap: (){
-                        setState(() {
-                          inputFrom = true;
-                          inputTo = false;
-                        });
-                      },
                     ),
-                    Container(
-                        child: Divider(color: Colors.grey,)
-                    ),
-                    TextField(
-                      style: textStyle,
-                      autofocus: true,
-                      focusNode: nodeTo,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'A',
-                        hintStyle: TextStyle(
-                            color: greyColor,
-                            fontSize: 14
-                        ),
-                        contentPadding: EdgeInsets.only(top: 15.0),
-//                                  suffixIcon: _addressTo != null ? IconButton(
-//                                    icon: Icon(CupertinoIcons.clear_thick_circled,
-//                                      size: 20,
-//                                      color: greyColor2,
-//                                    ),
-//                                    onPressed: (){
-//                                    },
-//                                  ):SizedBox.shrink()
-                      ),
-                      controller: TextEditingController.fromValue(
-                        TextEditingValue(
-                          // ignore: prefer_if_null_operators
-                          text: toLocation != null ? toLocation :'',
-                          selection: TextSelection.collapsed(
-                            offset: toLocation != null ? toLocation?.length : 0
-                          ),
-                        ),
-                      ),
-                      onChanged: (String value) async {
-                        toLocation = value;
-                        _timer?.cancel();
-                        _timer = Timer(Duration(milliseconds: 1000), (){
-                          placeBloc?.search(value);
-                        });
-                      },
-                      onTap: (){
-                        setState(() {
-                          inputTo = true;
-                          inputFrom = false;
-                        });
-                      },
-                    ),
-                  ],
-                )
+                    onChanged: (String value) async {
+                      toLocation = value;
+                      _timer?.cancel();
+                      _timer = Timer(Duration(milliseconds: 1000), (){
+                        placeBloc?.search(value);
+                      });
+                    },
+                    onTap: (){
+                      setState(() {
+                        inputTo = true;
+                        inputFrom = false;
+                      });
+                    },
+                  ),
+                ],
+              )
             ),
           ),
         ],
