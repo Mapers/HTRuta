@@ -62,7 +62,7 @@ class AuthApi{
           final url = '${Config.nuevaRutaApi}/chofer/obtener-informacion-personal?choferId=${responseUsuario.data[1].iIdChofer}';
           final response = await http.get(url);
           DriverDataResponse driverDataResponse = driverDataResponseFromJson(response.body);
-          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString());
+          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString(), driverDataResponse.data.fechaRegistro.toString());
           final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();

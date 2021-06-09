@@ -48,23 +48,24 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
       );
     });
   }
-
-  void updateOriginPoint() async {
-    if(_position == null) return;
-    List<Placemark> placemarks = await placemarkFromCoordinates(_position.target.latitude, _position.target.longitude);
+  void updateOriginPointFromCoordinates(LatLng coordinates) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
     if (placemarks == null || placemarks.isEmpty) return;
     final Placemark newPosition = placemarks[0];
     widget?.placeBloc?.selectLocation(Place(
       name: newPosition.name + ', ' + newPosition.thoroughfare,
       formattedAddress: '',
-      lat: _position.target.latitude,
-      lng: _position.target.longitude
+      lat: coordinates.latitude,
+      lng: coordinates.longitude
     ));
     MarkerId markerId = MarkerId('origin');
     Marker marker = Marker(
       markerId: markerId,
-      position: LatLng(_position.target.latitude, _position.target.longitude),
-      draggable: false,
+      position: LatLng(coordinates.latitude, coordinates.longitude),
+      draggable: true,
+      onDragEnd: (LatLng newPosition){
+        print(newPosition);
+      },
       // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
@@ -99,27 +100,15 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
               target: LatLng(_lastKnownPosition?.latitude ?? 0.0, _lastKnownPosition?.longitude ?? 0.0),
               zoom: 12.0,
             ),
-            onCameraMove: (CameraPosition position) {
+            onTap: (LatLng newPosition){
+              updateOriginPointFromCoordinates(newPosition);
+            },
+            /* onCameraMove: (CameraPosition position) {
               _position = position;
-              /* if(_markers.isNotEmpty) {
-                MarkerId markerId = MarkerId(_markerIdVal());
-                Marker marker = _markers[markerId];
-                Marker updatedMarker = marker?.copyWith(
-                  positionParam: position?.target,
-                );
-                setState(() {
-                  _markers[markerId] = updatedMarker;
-                  _position = position;
-                });
-              } */
             },
             onCameraIdle: (){
-              /* getLocationName(
-                _position?.target?.latitude ?? currentLocation?.latitude,
-                _position?.target?.longitude ?? currentLocation?.longitude
-              ); */
               updateOriginPoint();
-            }
+            } */
           ),
           Positioned(
             bottom: 20,

@@ -244,7 +244,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       ),
     );
   }
-  void updateOriginPoint() async {
+  /* void updateOriginPoint() async {
     if(_position == null) return;
     List<Placemark> placemarks = await placemarkFromCoordinates(_position.target.latitude, _position.target.longitude);
     if (placemarks == null || placemarks.isEmpty) return;
@@ -259,7 +259,36 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     Marker marker = Marker(
       markerId: markerId,
       position: LatLng(_position.target.latitude, _position.target.longitude),
-      draggable: false,
+      draggable: true,
+      onDragEnd: (LatLng newPosition){
+        print(newPosition);
+      },
+      // ignore: deprecated_member_use
+      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
+    );
+    if(!mounted) return;
+    setState(() {
+      _markers[markerId] = marker;
+    });
+  } */
+  void updateOriginPointFromCoordinates(LatLng coordinates) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+    if (placemarks == null || placemarks.isEmpty) return;
+    final Placemark newPosition = placemarks[0];
+    widget?.placeBloc?.getCurrentLocation(Place(
+      name: newPosition.name + ', ' + newPosition.thoroughfare,
+      formattedAddress: '',
+      lat: coordinates.latitude,
+      lng: coordinates.longitude
+    ));
+    MarkerId markerId = MarkerId('origin');
+    Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(coordinates.latitude, coordinates.longitude),
+      draggable: true,
+      onDragEnd: (LatLng newPosition){
+        print(newPosition);
+      },
       // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
     );
@@ -516,18 +545,21 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
                 compassEnabled: false,
+                onTap: (LatLng newPosition){
+                  updateOriginPointFromCoordinates(newPosition);
+                },
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
                     currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
                     currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
                   zoom: 12.0,
                 ),
-                onCameraMove: (CameraPosition position) {
+                /* onCameraMove: (CameraPosition position) {
                   _position = position;
                 },
                 onCameraIdle: (){
                   updateOriginPoint();
-                }
+                } */
               ),
             ),
             CustomDropdownClient(),

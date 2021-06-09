@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/inputDropdown.dart';
-import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -26,6 +31,8 @@ class _MyProfileState extends State<MyProfile> {
   DateTime date = DateTime.now();
   final session = Session();
   DriverSession driverSession;
+  final pickupApi = PickupApi();
+  final _prefs = UserPreferences();
   var _image;
   String newNames;
   String newFName;
@@ -39,6 +46,11 @@ class _MyProfileState extends State<MyProfile> {
     setState(() {
       _image = gallery;
     });
+    List<int> imageBytes = gallery.readAsBytesSync();
+    print(imageBytes);
+    String base64Image = base64Encode(imageBytes);
+    bool success = await pickupApi.uploadPhoto(_prefs.idChoferReal, base64Image);
+    print(success);
   }
 
   Future cameraImage() async {
@@ -126,10 +138,40 @@ class _MyProfileState extends State<MyProfile> {
       newPhone ?? widget.driverSession.phone,
       newEmail ?? widget.driverSession.email,
       widget.driverSession.dni,
-      widget.driverSession.sexo,
-      widget.driverSession.fechaNacimiento
+      selectedGender,
+      date.year.toString() + '-' + date.month.toString() + '-' + date.day.toString(),
+      widget.driverSession.fechaRegistro
     );
-    Navigator.pop(context, true);
+    SaveProfileBody body = SaveProfileBody(
+      iIdUsuario: _prefs.idChoferReal,
+      nombres: newNames ?? widget.driverSession.mName,
+      apellidoPaterno: newFName ?? widget.driverSession.pName,
+      apellidoMaterno: newMName ?? widget.driverSession.mName,
+      fechaNacimiento: date ?? DateTime.now(),
+      sexo: selectedGender,
+      telefono: newPhone ?? widget.driverSession.phone,
+      celular: newPhone ?? widget.driverSession.phone
+    );
+    bool profileSavedSuccess = await pickupApi.saveProfile(body);
+    print('resultado: ' + profileSavedSuccess.toString());
+    if(!profileSavedSuccess){
+      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+    }else{
+      Navigator.pop(context, true);
+    }
+  }
+
+  @override
+  void initState() {
+    selectedGender = widget.driverSession.sexo;
+    print(widget.driverSession.fechaNacimiento);
+    date = DateTime(
+      int.parse(widget.driverSession.fechaNacimiento.split('-')[0]),
+      int.parse(widget.driverSession.fechaNacimiento.split('-')[1]),
+      int.parse(widget.driverSession.fechaNacimiento.split('-')[2]),
+    );
+    print(widget.driverSession.fechaNacimiento);
+    super.initState();
   }
 
   @override
@@ -168,6 +210,39 @@ class _MyProfileState extends State<MyProfile> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
+                    Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: _image == null
+                          ? GestureDetector(
+                          onTap: (){selectCamera();},
+                          child: Container(
+                            height: 80.0,
+                            width: 80.0,
+                            color: primaryColor,
+                            child: Hero(
+                              tag: 'avatar_profile',
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: CachedNetworkImageProvider(
+                                  'https://source.unsplash.com/300x300/?portrait',
+                                )
+                              ),
+                            ),
+                          )
+                        ): GestureDetector(
+                          onTap: () {selectCamera();},
+                          child: Container(
+                            height: 80.0,
+                            width: 80.0,
+                            child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
+                          )
+                        )
+                      ),
+                    ),
                     Expanded(
                       child: Container(
                       padding: EdgeInsets.only(left: 20.0),
@@ -179,14 +254,15 @@ class _MyProfileState extends State<MyProfile> {
                             initialValue: widget.driverSession.name,
                             style: textStyle,
                             decoration: InputDecoration(
-                                fillColor: whiteColor,
-                                labelStyle: textStyle,
-                                hintStyle: TextStyle(color: Colors.white),
-                                counterStyle: textStyle,
-                                hintText: 'Nombres',
-                                border: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white))),
+                              fillColor: whiteColor,
+                              labelStyle: textStyle,
+                              hintStyle: TextStyle(color: Colors.white),
+                              counterStyle: textStyle,
+                              hintText: 'Nombres',
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)
+                              )
+                            ),
                             onChanged: (String _firstName) {
                               newNames = _firstName;
                             },
@@ -195,14 +271,15 @@ class _MyProfileState extends State<MyProfile> {
                             style: textStyle,
                             initialValue: widget.driverSession.pName,
                             decoration: InputDecoration(
-                                fillColor: whiteColor,
-                                labelStyle: textStyle,
-                                hintStyle: TextStyle(color: Colors.white),
-                                counterStyle: textStyle,
-                                hintText: 'Apellido paterno',
-                                border: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white))),
+                              fillColor: whiteColor,
+                              labelStyle: textStyle,
+                              hintStyle: TextStyle(color: Colors.white),
+                              counterStyle: textStyle,
+                              hintText: 'Apellido paterno',
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)
+                              )
+                            ),
                             onChanged: (String _lastName) {
                               newFName = _lastName;
                             },
@@ -211,14 +288,15 @@ class _MyProfileState extends State<MyProfile> {
                             style: textStyle,
                             initialValue: widget.driverSession.mName,
                             decoration: InputDecoration(
-                                fillColor: whiteColor,
-                                labelStyle: textStyle,
-                                hintStyle: TextStyle(color: Colors.white),
-                                counterStyle: textStyle,
-                                hintText: 'Apellido materno',
-                                border: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white))),
+                              fillColor: whiteColor,
+                              labelStyle: textStyle,
+                              hintStyle: TextStyle(color: Colors.white),
+                              counterStyle: textStyle,
+                              hintText: 'Apellido materno',
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)
+                              )
+                            ),
                             onChanged: (String _lastName) {
                               newMName = _lastName;
                             },
@@ -256,13 +334,15 @@ class _MyProfileState extends State<MyProfile> {
                               style: textStyle,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
-                                  fillColor: whiteColor,
-                                  labelStyle: textStyle,
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  counterStyle: textStyle,
-                                  border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white))
+                                fillColor: whiteColor,
+                                labelStyle: textStyle,
+                                hintStyle: TextStyle(color: Colors.white),
+                                counterStyle: textStyle,
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white
+                                  )
+                                )
                               ),
                               onChanged: (String _phone) {
                                 newPhone = _phone;
@@ -292,19 +372,22 @@ class _MyProfileState extends State<MyProfile> {
                               initialValue: widget.driverSession.email,
                               keyboardType: TextInputType.emailAddress,
                               style: textStyle,
+                              enabled: false,
+                              readOnly: true,
                               decoration: InputDecoration(
-                                  fillColor: whiteColor,
-                                  labelStyle: textStyle,
-                                  hintStyle:
-                                  TextStyle(color: Colors.white),
-                                  counterStyle: textStyle,
-                                  border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.white))
+                                fillColor: whiteColor,
+                                labelStyle: textStyle,
+                                hintStyle: TextStyle(color: Colors.white),
+                                counterStyle: textStyle,
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white
+                                  )
+                                )
                               ),
-                              onChanged: (String _email) {
+                              /* onChanged: (String _email) {
                                 newEmail = _email;
-                              },
+                              }, */
                             ),
                           )
                         ],
@@ -327,30 +410,29 @@ class _MyProfileState extends State<MyProfile> {
                           Expanded(
                             flex: 4,
                             child:DropdownButtonHideUnderline(
-                                child: Container(
-                                  // padding: EdgeInsets.only(bottom: 12.0),
-                                  child:InputDecorator(
-                                    decoration: const InputDecoration(
-                                    ),
-                                    isEmpty: selectedGender == null,
-                                    child:DropdownButton<String>(
-                                      hint:Text('Género',style: textStyle,),
-                                      value: selectedGender,
-                                      isDense: true,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          selectedGender = newValue;
-                                        });
-                                      },
-                                      items: listGender.map((value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value['id'],
-                                          child:Text(value['name'],style: textStyle,),
-                                        );
-                                      }).toList(),
-                                    ),
+                              child: Container(
+                                // padding: EdgeInsets.only(bottom: 12.0),
+                                child: InputDecorator(
+                                  decoration: const InputDecoration(),
+                                  isEmpty: selectedGender == null,
+                                  child:DropdownButton<String>(
+                                    hint:Text('Género',style: textStyle,),
+                                    value: selectedGender,
+                                    isDense: true,
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        selectedGender = newValue;
+                                      });
+                                    },
+                                    items: listGender.map((value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value['id'],
+                                        child:Text(value['name'],style: textStyle,),
+                                      );
+                                    }).toList(),
                                   ),
-                                )
+                                ),
+                              )
                             ),
                           )
                         ],
@@ -392,7 +474,7 @@ class _MyProfileState extends State<MyProfile> {
                                 );
                               },
                               child: InputDropdown(
-                                valueText: DateFormat.yMMMMd().format(date),
+                                valueText: date.toString().substring(0, 10),
                                 valueStyle: TextStyle(color: blackColor),
                               )
                             ),
@@ -424,6 +506,6 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
       )
-  );
+    );
   }
 }

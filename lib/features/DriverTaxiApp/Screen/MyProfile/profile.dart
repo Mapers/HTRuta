@@ -97,7 +97,9 @@ class _ProfileDriverState extends State<ProfileDriver> {
                     shape: BoxShape.circle,
                     color: greenColor,
                     border: Border.all(
-                      color: Colors.white, width: 2.0)),
+                      color: Colors.white, width: 2.0
+                    )
+                  ),
                 ),
               ),
             ],
@@ -108,12 +110,15 @@ class _ProfileDriverState extends State<ProfileDriver> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                driverData.name ?? '',
-                style: TextStyle( color: blackColor,fontSize: 35.0),
+              Container(
+                width: MediaQuery.of(context).size.width  * 0.9,
+                child: Text(
+                  driverData.name ?? '',
+                  style: TextStyle( color: blackColor,fontSize: 35.0),
+                ),
               ),
               Text(
-                'Cliente desde 2016',
+                'Cliente desde ${driverData.fechaRegistro.substring(0, 4)}',
                 style: TextStyle( color: blackColor, fontSize: 13.0),
               ),
             ],
@@ -149,10 +154,10 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 height: 50,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border(
-                        bottom: BorderSide(width: 1.0,color: backgroundColor)
-                    )
+                  color: whiteColor,
+                  border: Border(
+                    bottom: BorderSide(width: 1.0,color: backgroundColor)
+                  )
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,10 +171,10 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 height: 50,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border(
-                        bottom: BorderSide(width: 1.0,color: backgroundColor)
-                    )
+                  color: whiteColor,
+                  border: Border(
+                    bottom: BorderSide(width: 1.0,color: backgroundColor)
+                  )
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,16 +188,16 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 height: 50,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border(
-                        bottom: BorderSide(width: 1.0,color: backgroundColor)
-                    )
+                  color: whiteColor,
+                  border: Border(
+                    bottom: BorderSide(width: 1.0,color: backgroundColor)
+                  )
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text('Fecha de nacimiento',style: textStyle,),
-                    Text('27/05/1994',style: textGrey,)
+                    Text(driverData?.fechaNacimiento, style: textGrey,)
                   ],
                 ),
               ),

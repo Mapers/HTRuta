@@ -8,6 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/payment_methods_response.dar
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/register_travel_body.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/travel_accepted_response.dart';
@@ -380,6 +381,43 @@ class PickupApi{
     }catch(e){
       print(e);
       throw Exception();
+    }
+  }
+  Future<bool> saveProfile(SaveProfileBody body) async {
+    try{
+      final response = await http.post(
+        Uri.parse('${Config.nuevaRutaApi}/usuario/actualizar-informacion-personal'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body: saveProfileBodyToJson(body)
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        return false;
+      }
+    }catch(e){
+      print(e);
+      return false;
+    }
+  }
+  Future<bool> uploadPhoto(String idUsuario, String photo) async {
+    try{
+      final response = await http.post(
+        Uri.parse('${Config.nuevaRutaApi}/usuario/actualizar-imagen'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body: json.encode({
+          'iIdUsuario': idUsuario,
+          'image': photo
+        })
+      );
+      if(response.statusCode == 200){
+        return true;
+      }else{
+        return false;
+      }
+    }catch(e){
+      print(e);
+      return false;
     }
   }
 }

@@ -8,6 +8,9 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -21,17 +24,18 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormState> formKey =GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Map<String, dynamic>> listGender = [{'id': '0','name' : 'Male',},{'id': '1','name' : 'Female',}];
+  List<Map<String, dynamic>> listGender = [{'id': '1','name' : 'Masculino',},{'id': '2','name' : 'Femenino'}];
   String selectedGender;
   String lastSelectedValue;
   DateTime date = DateTime.now();
+  final pickupApi = PickupApi();
   var _image;
   String newNames;
   String newFName;
   String newMName;
   String newPhone;
   String newEmail;
-   final session = Session();
+  final session = Session();
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -128,7 +132,24 @@ class _EditProfileState extends State<EditProfile> {
       newEmail ?? widget.userData.email,
       widget.userData.password
     );
-    Navigator.pop(context, true);
+    SaveProfileBody body = SaveProfileBody(
+      iIdUsuario: widget.userData.id,
+      nombres: newNames ?? widget.userData.names,
+      apellidoPaterno: newFName ?? widget.userData.lastNameFather,
+      apellidoMaterno: newMName ?? widget.userData.lastNameMother,
+      fechaNacimiento: date ?? DateTime.now(),
+      sexo: selectedGender,
+      telefono: newPhone ?? widget.userData.cellphone,
+      celular: newPhone ?? widget.userData.cellphone
+    );
+    bool profileSavedSuccess = await pickupApi.saveProfile(body);
+    print('resultado: ' + profileSavedSuccess.toString());
+    if(!profileSavedSuccess){
+      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+    }else{
+      Navigator.pop(context, true);
+    }
+    
   }
 
   @override
@@ -163,8 +184,8 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: Scrollbar(
         child: NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (overScroll) {
-              overScroll.disallowGlow();
+          onNotification: (overScroll) {
+            overScroll.disallowGlow();
             return false;
           },
           child: SingleChildScrollView(
@@ -187,33 +208,33 @@ class _EditProfileState extends State<EditProfile> {
                                 elevation: 5.0,
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child:_image == null
-                                        ?GestureDetector(
-                                        onTap: (){selectCamera();},
-                                        child: Container(
-                                          height: 80.0,
-                                          width: 80.0,
-                                          color: primaryColor,
-                                          child: Hero(
-                                            tag: 'avatar_profile',
-                                            child: CircleAvatar(
-                                                radius: 30,
-                                                backgroundColor: Colors.transparent,
-                                                backgroundImage: CachedNetworkImageProvider(
-                                                  'https://source.unsplash.com/300x300/?portrait',
-                                                )
-                                            ),
-                                          ),
-                                        )
-                                    ): GestureDetector(
-                                        onTap: () {selectCamera();},
-                                        child: Container(
-                                          height: 80.0,
-                                          width: 80.0,
-                                          child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
-                                        )
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  child:_image == null
+                                    ? GestureDetector(
+                                    onTap: (){selectCamera();},
+                                    child: Container(
+                                      height: 80.0,
+                                      width: 80.0,
+                                      color: primaryColor,
+                                      child: Hero(
+                                        tag: 'avatar_profile',
+                                        child: CircleAvatar(
+                                          radius: 30,
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage: CachedNetworkImageProvider(
+                                            'https://source.unsplash.com/300x300/?portrait',
+                                          )
+                                        ),
+                                      ),
                                     )
+                                  ): GestureDetector(
+                                    onTap: () {selectCamera();},
+                                    child: Container(
+                                      height: 80.0,
+                                      width: 80.0,
+                                      child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
+                                    )
+                                  )
                                 ),
                               ),
                               Expanded(
@@ -341,14 +362,15 @@ class _EditProfileState extends State<EditProfile> {
                                         keyboardType: TextInputType.emailAddress,
                                         style: textStyle,
                                         decoration: InputDecoration(
-                                            fillColor: whiteColor,
-                                            labelStyle: textStyle,
-                                            hintStyle:
-                                            TextStyle(color: Colors.white),
-                                            counterStyle: textStyle,
-                                            border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.white))
+                                          fillColor: whiteColor,
+                                          labelStyle: textStyle,
+                                          hintStyle: TextStyle(color: Colors.white),
+                                          counterStyle: textStyle,
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.white
+                                            )
+                                          )
                                         ),
                                         onChanged: (String _email) {
                                           newEmail = _email;
