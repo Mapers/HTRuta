@@ -308,7 +308,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     return AlertDialog(
       title: Text('Opcion'),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
+        borderRadius: BorderRadius.circular(10.0)
       ),
       content: Container(
         child: TextFormField(

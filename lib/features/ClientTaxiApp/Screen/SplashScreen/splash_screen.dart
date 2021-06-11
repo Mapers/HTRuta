@@ -17,6 +17,7 @@ import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Loading/loading_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -67,7 +68,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if(data != null){
         if(data.email != null || data.email != ''){
           // availabilityProvider.available = _prefs.drivingState;
-          _sendToPage();
+          // _sendToPage();
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
         }else{
           if(_prefs.primeraSesion){
             dataOnBoarding = await onboardingApi.getOnBoardingData();
@@ -89,12 +91,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     });
   }
 
-  void _sendToPage() async{
+  /* void _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
     final data = await _session.get();
     if(serviceInCourse == null){
-      Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
+      // Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
 
@@ -134,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         }
       }
     }
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
