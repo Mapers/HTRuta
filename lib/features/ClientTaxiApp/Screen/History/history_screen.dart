@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
@@ -172,7 +173,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(item.fechaRegistro.toString().substring(0, 10),
+                Text(DateTimeExtension.changeDateFormat(item.fechaRegistro.toString().substring(0, 10)),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,

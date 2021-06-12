@@ -19,6 +19,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/my_wallet_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/historical_detail_response.dart';
+import 'package:HTRuta/models/minutes_response.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -418,6 +419,27 @@ class PickupApi{
     }catch(e){
       print(e);
       return false;
+    }
+  }
+  Future<AproxElement> calculateMinutes(double latIni, double lonIni, double latFin, double lonFin) async {
+    try{
+      final response = await http.get(
+        Uri.parse('https://maps.googleapis.com/maps/api/distancematrix/json?origins=$latIni,$lonIni&destinations=$latFin,$lonFin&mode=driving&key=${Config.googleMapsApiKey}'),
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+      );
+      if(response.statusCode == 200){
+        final body = minutesResponseFromJson(response.body);
+        if(body.rows.isNotEmpty && body.rows[0].elements.isNotEmpty){
+          return body.rows[0].elements[0];
+        }else{
+          throw Exception();
+        }
+      }else{
+        throw Exception();
+      }
+    }catch(e){
+      print(e);
+      rethrow;
     }
   }
 }

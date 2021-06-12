@@ -97,7 +97,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
     // GPS está activo
     final gpsActivo  = await Geolocator.isLocationServiceEnabled();
     if ( permisoGPS && gpsActivo ) {
-      _sendToPage();
+      await _sendToPage();
       return '';
     } else if ( !permisoGPS ) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AccessGpsPage()));  
@@ -106,7 +106,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
       return 'Active el GPS';
     }
   }
-  void _sendToPage() async{
+  Future<void> _sendToPage() async{
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
     final data = await _session.get();

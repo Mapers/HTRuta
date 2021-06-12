@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:HTRuta/app/colors.dart';
@@ -216,7 +217,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   ///This function works by: every 5 or 2 seconds will request for api and after the data returns,
   ///the function will update the driver's position on the map.
 
-  double valueRotation;
+  /* double valueRotation;
   void runTrackingDriver(var _listPosition){
     int count = 1;
     int two = count;
@@ -244,7 +245,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
 
       }
     });
-  }
+  } */
 
   void addMakersDriver(LatLng _position){
     final MarkerId markerDriver = MarkerId('driver');
@@ -265,70 +266,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
     });
   }
 
-  AlertDialog dialogOption(){
-
-    return AlertDialog(
-      title: Text('Opcion'),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-      ),
-      content: Container(
-        child: TextFormField(
-          style: textStyle,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            //border: InputBorder.none,
-            hintText: 'Ejemplo: Estoy parado frente a la parada del bus...',
-            // hideDivider: true
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Cancel'),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        ),
-        FlatButton(
-          child: Text('Ok'),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        ),
-
-      ],
-    );
-  }
-
-  AlertDialog dialogPromoCode(){
-    return AlertDialog(
-      title: Text('Codigo Promoción'),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      content: Container(
-        child: TextFormField(
-          style: textStyle,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            //border: InputBorder.none,
-            hintText: 'Ingresa código de promoción',
-            // hideDivider: true
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Confirmar'),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        )
-      ],
-    );
-  }
-
   void handSubmit(){
     setState(() {
       isLoading = true;
@@ -340,25 +277,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       });
     });
   }
-
-  AlertDialog dialogInfo(){
-    return AlertDialog(
-      title: Text('Información'),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-      ),
-      content: Text('Viaje completado. Revisa tu viaje ahora!.'),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Ok'),
-          onPressed: (){
-            Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(AppRoute.reviewTripScreen);
-          },
-        )
-      ],
-    );
-  }
+  List<AproximationGroup> aproximationsLoaded = [];
 
   @override
   Widget build(BuildContext context) {
@@ -396,14 +315,24 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                   itemCount: requestTaxi.length,
                   itemBuilder: (context, index) {
                     final actualRequest = requestTaxi[index];
+                    bool included = false;
+                    AproximationGroup data;
+                    aproximationsLoaded.forEach((element) {
+                      if(element.id == actualRequest.idChofer){
+                        included = true;
+                        data = element;
+                      }
+                    });
                     return Card(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       child: Padding(
                         padding: EdgeInsets.only(top: responsive.hp(1),left: responsive.wp(2),right: responsive.wp(2), bottom: responsive.hp(1)),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
                                   child: ClipRRect(
@@ -422,6 +351,14 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                   children: <Widget>[
                                     Text('${actualRequest.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
                                     Text('${actualRequest.vchMarca} ${actualRequest.vchModelo}',style: TextStyle(fontSize: responsive.ip(2)),),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(Icons.star,color: primaryColor,),
+                                        SizedBox(width: responsive.wp(1),),
+                                        Text('4,9 (5)', style: TextStyle(fontSize: responsive.ip(2))),
+                                      ],
+                                    ),
                                   ],
                                 ),
                                 Spacer(),
@@ -429,19 +366,50 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                     Text('S/${double.parse(actualRequest.mPrecio)}',style: TextStyle(fontSize: responsive.ip(3))),
-                                    Text('3 min.',style: TextStyle(fontSize: responsive.ip(2))),
+                                    !included ? FutureBuilder(
+                                      future: pickUpApi.calculateMinutes(double.parse(actualRequest.vchLatInicial), double.parse(actualRequest.vchLongInicial), double.parse(actualRequest.vchLatFinal), double.parse(actualRequest.vchLongFinal)),
+                                      builder: (BuildContext context, AsyncSnapshot snapshot){
+                                        if(snapshot.hasError) return Container();
+                                        switch(snapshot.connectionState){
+                                          case ConnectionState.waiting: return Container();
+                                          case ConnectionState.none: return Container();
+                                          case ConnectionState.active: {
+                                            final AproxElement element = snapshot.data;
+                                            aproximationsLoaded.add(AproximationGroup(actualRequest.idChofer, element.duration.text, element.distance.text));
+                                            return Column(
+                                              children: [
+                                                Text(element.distance.text, style: TextStyle(fontSize: responsive.ip(2))),
+                                                Text(element.duration.text, style: TextStyle(fontSize: responsive.ip(2), color: greyColor2)),
+                                              ]
+                                            );
+                                          }
+                                          case ConnectionState.done: {
+                                            final AproxElement element = snapshot.data;
+                                            aproximationsLoaded.add(AproximationGroup(actualRequest.idChofer, element.duration.text, element.distance.text));
+                                            return Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(element.distance.text, style: TextStyle(fontSize: responsive.ip(2))),
+                                                Text(element.duration.text, style: TextStyle(fontSize: responsive.ip(2))),
+                                              ]
+                                            );
+                                          }
+                                        }
+                                        return Container();
+                                      }
+                                    ) : Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(data.kilometers, style: TextStyle(fontSize: responsive.ip(2))),
+                                        Text(data.minutes, style: TextStyle(fontSize: responsive.ip(2))),
+                                      ]
+                                    ),
+                                    // Text('3 min.',style: TextStyle(fontSize: responsive.ip(2))),
                                   ],
                                 )
                               ],
                             ),
-                            Row(
-                              children: <Widget>[
-                                SizedBox(width: responsive.wp(16),),
-                                Icon(Icons.star,color: primaryColor,),
-                                SizedBox(width: responsive.wp(1),),
-                                Text('4,9 (5)', style: TextStyle(fontSize: responsive.ip(2))),
-                              ],
-                            ),
+                            
                             Row(
                               children: <Widget>[
                                 Expanded(
@@ -631,18 +599,18 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
             child: Material(
               elevation: 10.0,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  )
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                )
               ),
               child: BookingDetailWidget(
                 bookingSubmit: handSubmit,
                 panelController: panelController,
                 distance: distance,
                 duration: duration,
-                onTapOptionMenu: () => showDialog(context: context, child: dialogOption()),
-                onTapPromoMenu: () => showDialog(context: context, child: dialogPromoCode()),
+                // onTapOptionMenu: () => showDialog(context: context, child: dialogOption()),
+                // onTapPromoMenu: () => showDialog(context: context, child: dialogPromoCode()),
               ),
             ),
           ),
@@ -657,25 +625,31 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
 
   Widget searchDriver(BuildContext context){
     return Container(
-        height: 270.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Container(
-              child: LoadingBuilder(),
+      height: 270.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Container(
+            child: LoadingBuilder(),
+          ),
+          SizedBox(height: 20),
+          Text('Buscando un conductor',
+            style: TextStyle(
+              fontSize: 18,
+              color: greyColor,
+              fontWeight: FontWeight.bold
             ),
-            SizedBox(height: 20),
-            Text('Buscando un conductor',
-              style: TextStyle(
-                fontSize: 18,
-                color: greyColor,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-          ],
-        )
+          ),
+        ],
+      )
     );
   }
+}
+class AproximationGroup{
+  String id;
+  String minutes;
+  String kilometers;
+  AproximationGroup(this.id, this.minutes, this.kilometers);
 }

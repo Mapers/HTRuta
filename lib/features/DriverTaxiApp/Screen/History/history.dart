@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
@@ -229,7 +230,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
               width: screenSize.width*0.4,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.attach_money,size: 30.0,),
+                  Text('S/ ', style: TextStyle(fontWeight: FontWeight.bold, color: primaryColor, fontSize: 28)),
                   SizedBox(width: 10,),
                   Container(
                     child: Column(
@@ -299,7 +300,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
               width: screenSize.width*0.4,
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.attach_money,size: 30.0,),
+                  Text('S/ ', style: TextStyle(fontWeight: FontWeight.bold, color: primaryColor, fontSize: 28)),
                   SizedBox(width: 10,),
                   Container(
                     child: Column(
@@ -374,7 +375,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           // Text(item.,style: textBoldBlack,),
-                          Text(item.fechaRegistro.toString().substring(0, 10), style: textGrey,),
+                          Text(DateTimeExtension.changeDateFormat(item.fechaRegistro.toString().substring(0, 10)), style: textGrey,),
                           // Text('08 Ene 2019 12:00 PM', style: textGrey,),
                           /* Container(
                             child: Row(

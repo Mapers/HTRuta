@@ -58,12 +58,13 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   title: Text(widget?.placeBloc?.listPlace[index].name),
                   subtitle: Text(widget?.placeBloc?.listPlace[index].formattedAddress),
                   onTap: () {
-                    widget?.placeBloc?.selectLocation(widget?.placeBloc?.listPlace[index])?.then((_){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc, initialPlace: widget?.placeBloc?.listPlace[index])));
+                    /* widget?.placeBloc?.selectLocation(widget?.placeBloc?.listPlace[index])?.then((_){
                       toLocation = widget?.placeBloc?.locationSelect?.name;
                       FocusScope.of(context).requestFocus(nodeTo);
                       Navigator.pop(context);
                       // navigator();
-                    });
+                    }); */
                   },
                 );
               },

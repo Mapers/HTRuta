@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -31,6 +32,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           'Historial',
           style: TextStyle(color: blackColor),
         ),
+        centerTitle: true,
         backgroundColor: whiteColor,
         elevation: 2.0,
         iconTheme: IconThemeData(color: blackColor),
@@ -123,34 +125,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Olivia Ramos2',style: textBoldBlack,),
-                      Text('${detail.fechaRegistro.toString().substring(0, 16)}', style: textGrey,),
-                      /* Container(
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              height: 25.0,
-                              padding: EdgeInsets.all(5.0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: primaryColor
-                              ),
-                              child: Text('ApplePay',style: textBoldWhite,),
-                            ),
-                            SizedBox(width: 10),
-                            Container(
-                              height: 25.0,
-                              padding: EdgeInsets.all(5.0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: primaryColor
-                              ),
-                              child: Text('Descuento',style: textBoldWhite,),
-                            ),
-                          ],
-                        ),
-                      ), */
+                      Text('${DateTimeExtension.changeDateFormat((detail.fechaRegistro.toString().substring(0, 10)))} ${detail.fechaRegistro.toString().substring(11, 16)}', style: textGrey,),
                     ],
                   ),
                 ),
@@ -199,7 +174,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('note'.toUpperCase(),style: textGreyBold,),
+                        Text('COMENTARIO'.toUpperCase(),style: textGreyBold,),
                         Text(detail.observacion,style: textStyle,),
                       ],
                     ),
@@ -214,7 +189,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Detalles de la factura (pago en efectivo)'.toUpperCase(), style: textGreyBold,),
+                Text('Detalles de la factura'.toUpperCase(), style: textGreyBold,),
                 Container(
                   padding: EdgeInsets.only(top: 8.0),
                   child:Row(
@@ -253,60 +228,6 @@ class _HistoryDetailState extends State<HistoryDetail> {
               ],
             ),
           ),
-          /* Form(
-            key: formKey,
-            child: Container(
-              //margin: EdgeInsets.all(10.0),
-              padding: EdgeInsets.all(10.0),
-              color: whiteColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  RatingBar(
-                    ratingWidget: RatingWidget(
-                      empty: Icon(
-                        Icons.star_border_outlined,
-                        color: Colors.amber,
-                      ),
-                      full: Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      half: Icon(
-                        Icons.star_half_outlined,
-                        color: Colors.amber,
-                      ) 
-                    ),
-                    itemSize: 20.0,
-                    itemCount: 5,
-                    glowColor: Colors.white,
-                    onRatingUpdate: (rating) {
-                      ratingScore = rating;
-                    },
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: SizedBox(
-                      height: 100.0,
-                      child: TextField(
-                        style: textStyle,
-                        decoration: InputDecoration(
-                          hintText: 'Escribe tu reseña',
-                          border: OutlineInputBorder(
-                              borderRadius:BorderRadius.circular(5.0)),
-                        ),
-                        maxLines: 2,
-                        keyboardType: TextInputType.multiline,
-                        onChanged: (String value){ 
-                          yourReview = value;
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ), */
         ],
       )
     );

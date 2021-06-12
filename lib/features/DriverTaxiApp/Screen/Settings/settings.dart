@@ -10,6 +10,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/MyProfile/profile.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'inviteFriends.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:share/share.dart';
 
 class SettingsDriverScreen extends StatefulWidget {
   @override
@@ -167,11 +168,19 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                     },
                   ),
                   ListsMenu(
+                    title: 'Compartir aplicación',
+                    icon: Icons.share,
+                    backgroundIcon: primaryColor,
+                    onPress: (){
+                      Share.share('Te invito a descargar esta aplicación https://google.com');
+                    },
+                  ),
+                  ListsMenu(
                     title: 'Términos y condiciones',
                     icon: Icons.description,
                     backgroundIcon: Colors.deepPurple,
                     onPress: (){
-
+                      
                     },
                   ),
                   ListsMenu(

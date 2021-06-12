@@ -46,5 +46,14 @@ extension DateTimeExtension on DateTime {
     DateTime comparationDay = otherDay ?? DateTime.now();
     return comparationDay.difference(this).inDays;
   }
+  static String changeDateFormat(String englishFormat){
+    if(englishFormat.isEmpty) return englishFormat;
+    String spanishFormat = '';
+    String year = englishFormat.substring(0, 4);
+    String month = englishFormat.substring(5, 7);
+    String day = englishFormat.substring(8, 10);
+    spanishFormat = day + '-' +  month + '-' + year;
+    return spanishFormat;
+  }
 
 }

@@ -12,6 +12,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/map_type_model.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +72,9 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   final referenceDatabase = FirebaseDatabase.instance.reference();
   PushNotificationProvider pushProvider;
   final _prefs = UserPreferences();
-
-  dynamic posicionChofer;
+  GeoPoint driverPosition;
+  Timer timer;
+  AproxElement aproxElement;
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -82,7 +84,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      _mapController.setMapStyle('[]');
+      changeMapType(3, 'assets/style/dark_mode.json');
     }
   }
   @override
@@ -116,10 +118,12 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
           );
         }
         _prefs.isClientInTaxi = false;
+        timer?.cancel();
         Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       }
       if(travelInit == '1'){
         travelInits = true;
+        timer?.cancel();
         _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha iniciado';
         await getRouter();
         addMakers();
@@ -146,13 +150,29 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
         }
       }
     });
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t){
+        updateTimeAproximation();
+        setState(() {});
+      }
+    );
     // showPersBottomSheetCallBack = _showBottomSheet;
-    sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
+    /* sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
     sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
     sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
     sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
     sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json'));
+    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')); */
+  }
+  Future<void> updateTimeAproximation() async {
+    if(driverPosition == null) return;
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    try{
+      aproxElement = await pickupApi.calculateMinutes(driverPosition.latitude, driverPosition.longitude, double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial));
+    }catch(e){
+      return;
+    }
+    if(!mounted) return;
+    setState(() {});
   }
   Future<void> getRouter() async {
     final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
@@ -229,6 +249,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     reference.snapshots().listen((querySnapshot) {
       GeoPoint position = querySnapshot['posicion'];
       if(position == null) return;
+      driverPosition = position;
       final MarkerId markerIdDriver = MarkerId(querySnapshot.id);
       _markers[markerIdDriver] = GMapViewHelper.createMaker(
         markerIdVal: querySnapshot.id,
@@ -449,20 +470,19 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                 ),
               ),
             ),
-
-            Container(
+            !travelInits ? Container(
               width: responsive.wp(100),
-              height: responsive.hp(23),
+              height: responsive.hp(30),
               color: Colors.grey.withOpacity(0.3),
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
               child: Column(
                 children: <Widget>[
                   SizedBox(height: responsive.hp(15),),
-                  !travelInits ? Text('${pedidoProvider.requestDriver.vchNombres.split(' ')[0]} aceptó su pedido de S/${double.parse(pedidoProvider.requestDriver.mPrecio).toStringAsFixed(1)}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center) : Container()
+                  Text('${pedidoProvider.requestDriver.vchNombres.split(' ')[0]} aceptó su pedido de S/${double.parse(pedidoProvider.requestDriver.mPrecio).toStringAsFixed(1)}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center),
+                  aproxElement != null ? Text('Está a ${aproxElement.duration.text}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center) : Container()
                 ],
               ),
-            ),
-
+            ) : Container(),
             Positioned(
               bottom: 0,
               child: Container(
@@ -542,6 +562,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                             };
                             _prefs.isClientInTaxi = false;
                             pushMessage.sendPushMessage(token: pedidoProvider.requestDriver.token, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                            timer?.cancel();
                             Navigator.pop(context);
                             Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
                           }else{

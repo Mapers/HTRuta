@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -208,7 +209,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text(date, style: textGrey)
+                  child: Text(DateTimeExtension.changeDateFormat(date), style: textGrey)
                 ),
               ],
             ),

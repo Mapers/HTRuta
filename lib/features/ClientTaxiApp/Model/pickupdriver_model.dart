@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:geolocator/geolocator.dart';
+
 PickUpDriverRequest pickUpDriverRequestFromJson(String str) => PickUpDriverRequest.fromJson(json.decode(str));
 
 String pickUpDriverRequestToJson(PickUpDriverRequest data) => json.encode(data.toJson());
@@ -107,4 +109,7 @@ class DriverRequest {
     'vchModelo': vchModelo,
     'vchMarca': vchMarca,
   };
+  Future<double> get calculateDistance async{
+    return await Geolocator.distanceBetween(double.parse(vchLatInicial), double.parse(vchLongInicial), double.parse(vchLatFinal), double.parse(vchLongFinal))/1000;
+  }
 }
