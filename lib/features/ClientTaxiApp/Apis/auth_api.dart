@@ -26,7 +26,7 @@ class AuthApi{
             final responseLogin = userModelFromJson(response.body);
             final usuario = responseLogin.data[0];
             final session = Session();
-            await session.set(usuario.iIdUsuario.toString(),dni, nombre, apellidoPaterno, apellidoMaterno, celular,correo, password);
+            await session.set(usuario.iIdUsuario.toString(),dni, nombre, apellidoPaterno, apellidoMaterno, celular,correo, password, usuario.urlImage, usuario.sexo);
             return true;
           }else{
             Dialogs.alert(context,title: 'Error',message: usuarioResponse['message']);
@@ -56,13 +56,13 @@ class AuthApi{
       final usuario = responseUsuario.data[0];
       final session = Session();
       _prefs.idUsuario = usuario.iIdUsuario.toString();
-      await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword);
+      await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword, usuario.urlImage, usuario.sexo);
       if(responseUsuario.data.length > 1){
         if(responseUsuario.data[1] != null){
           final url = '${Config.nuevaRutaApi}/chofer/obtener-informacion-personal?choferId=${responseUsuario.data[1].iIdChofer}';
           final response = await http.get(url);
           DriverDataResponse driverDataResponse = driverDataResponseFromJson(response.body);
-          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString(), driverDataResponse.data.fechaRegistro.toString());
+          await session.setDriverData(responseUsuario.data[1].vchNombres, responseUsuario.data[1].vchApellidoP, responseUsuario.data[1].vchApellidoM, responseUsuario.data[1].vchCelular, responseUsuario.data[1].vchCorreo, responseUsuario.data[1].vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString(), driverDataResponse.data.fechaRegistro.toString(), driverDataResponse.data.urlImage);
           final _prefs = UserPreferences();
           await _prefs.initPrefs();
           _prefs.idChofer = responseUsuario.data[1].iIdUsuario.toString();

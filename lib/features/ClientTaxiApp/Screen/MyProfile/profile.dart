@@ -103,10 +103,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: 15.0,
                       height: 15.0,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: greenColor,
-                          border: Border.all(
-                              color: Colors.white, width: 2.0)),
+                        shape: BoxShape.circle,
+                        color: greenColor,
+                        border: Border.all(color: Colors.white, width: 2.0)),
                     ),
                   ),
                 ],
@@ -137,10 +136,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 50,
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border(
-                            bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
-                        )
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,10 +153,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 50,
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border(
-                            bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
-                        )
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,10 +170,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 50,
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border(
-                            bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
-                        )
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,10 +187,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 50,
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border(
-                            bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
-                        )
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

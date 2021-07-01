@@ -21,7 +21,7 @@ class PushMessage {
       final result = await client.post(
         _uriHttps,
         headers: headers,
-        body: _constructFCMPayload(token, title, description, data),
+        body: _constructFCMPayload(token, title, description, data, displayNotification: displayNotification),
       );
       return result.statusCode == 200;
     } catch (e) {
@@ -29,12 +29,12 @@ class PushMessage {
     }
   }
 
-  String _constructFCMPayload(String token, String title, String description, Map<String, String> data) {
+  String _constructFCMPayload(String token, String title, String description, Map<String, String> data, {bool displayNotification = true}) {
     return jsonEncode({
       'priority': 'normal',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'display_notification': 'true',
+        'display_notification': displayNotification.toString(),
         ...data,
       },
       'notification': {
@@ -55,19 +55,19 @@ class PushMessage {
       final http.Response result = await http.post(
         _uriHttps,
         headers: headers,
-        body: _constructFCMPayloadBroad(tokens, title, description, data),
+        body: _constructFCMPayloadBroad(tokens, title, description, data, displayNotification: displayNotification),
       );
       return result.statusCode == 200;
     } catch (e) {
       return false;
     }
   }
-  String _constructFCMPayloadBroad(List<String> tokens, String title, String description, Map<String, String> data) {
+  String _constructFCMPayloadBroad(List<String> tokens, String title, String description, Map<String, String> data, {bool displayNotification = true}) {
     return jsonEncode({
       'priority': 'normal',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'display_notification': 'true',
+        'display_notification': displayNotification.toString(),
         ...data,
       },
       

@@ -44,6 +44,7 @@ class Data {
         this.sexo,
         this.telefono,
         this.celular,
+        this.urlImage,
     });
 
     String iIdChofer;
@@ -56,6 +57,7 @@ class Data {
     String sexo;
     String telefono;
     String celular;
+    String urlImage;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
         iIdChofer: json['iIdChofer'],
@@ -68,6 +70,7 @@ class Data {
         sexo: json['sexo'],
         telefono: json['telefono'],
         celular: json['celular'],
+        urlImage: json['urlImage'],
     );
 
     Map<String, dynamic> toJson() => {
@@ -81,5 +84,6 @@ class Data {
         'sexo': sexo,
         'telefono': telefono,
         'celular': celular,
+        'urlImage': urlImage,
     };
 }

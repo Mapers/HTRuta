@@ -9,7 +9,7 @@ class Session{
   final storage = FlutterSecureStorage();
 
   // ignore: always_declare_return_types
-  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password) async{
+  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password, String imageUrl, String sexo) async{
     final data = UserSession(
       id: id,
       dni: dni,
@@ -19,11 +19,13 @@ class Session{
       cellphone: cellphone,
       email: email,
       password: password,
+      imageUrl: imageUrl,
+      sexo: sexo,
     );
     await storage.write(key: key, value: jsonEncode(data.toMap));
   }
 
-  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro) async{
+  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro, String imageUrl) async{
     final data = DriverSession(
       name: name,
       pName: pName,
@@ -33,7 +35,8 @@ class Session{
       dni: dni,
       sexo: sexo,
       fechaNacimiento: fechaNacimiento,
-      fechaRegistro: fechaRegistro
+      fechaRegistro: fechaRegistro,
+      imageUrl: imageUrl
     );
     await storage.write(key: 'DRIVER', value: jsonEncode(data.toMap));
   }
@@ -66,6 +69,8 @@ class UserSession extends Equatable{
   final String cellphone;
   final String email;
   final String password;
+  final String imageUrl;
+  final String sexo;
 
   UserSession({
     @required this.id,
@@ -75,7 +80,9 @@ class UserSession extends Equatable{
     @required this.lastNameMother,
     @required this.cellphone,
     @required this.email,
-    @required this.password
+    @required this.password,
+    @required this.imageUrl,
+    @required this.sexo
   });
 
   Map<String, String> get toMap => {
@@ -86,7 +93,9 @@ class UserSession extends Equatable{
     'last_name_mother': lastNameMother,
     'cellphone': cellphone,
     'email': email,
-    'password': password
+    'password': password,
+    'imageUrl': imageUrl,
+    'sexo': sexo
   };
 
   String get fullNames => '$lastNameFather $lastNameMother $names';
@@ -99,11 +108,13 @@ class UserSession extends Equatable{
     lastNameMother: json['last_name_mother'],
     cellphone: json['cellphone'],
     email: json['email'],
-    password: json['password']
+    password: json['password'],
+    imageUrl: json['imageUrl'],
+    sexo: json['sexo']
   );
 
   @override
-  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password];
+  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password, imageUrl, sexo];
 }
 
 class DriverSession extends Equatable{
@@ -116,6 +127,7 @@ class DriverSession extends Equatable{
   final String sexo;
   final String fechaNacimiento;
   final String fechaRegistro;
+  final String imageUrl;
 
   DriverSession({
     @required this.name,
@@ -127,6 +139,7 @@ class DriverSession extends Equatable{
     @required this.sexo,
     @required this.fechaNacimiento,
     @required this.fechaRegistro,
+    @required this.imageUrl,
   });
 
   Map<String, String> get toMap => {
@@ -139,6 +152,7 @@ class DriverSession extends Equatable{
     'sexo': sexo,
     'fechaNacimiento': fechaNacimiento,
     'fechaRegistro': fechaRegistro,
+    'imageUrl': imageUrl,
   };
 
   factory DriverSession.fromMap(dynamic json) => DriverSession(
@@ -150,9 +164,10 @@ class DriverSession extends Equatable{
     dni: json['dnir'],
     sexo: json['sexo'],
     fechaNacimiento: json['fechaNacimiento'],
-    fechaRegistro: json['fechaRegistro']
+    fechaRegistro: json['fechaRegistro'],
+    imageUrl: json['imageUrl']
   );
 
   @override
-  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro];
+  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro, imageUrl];
 }

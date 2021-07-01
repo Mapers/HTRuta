@@ -1,5 +1,3 @@
-import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
@@ -19,6 +17,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
+import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 
 import 'app_router.dart';
 import 'package:flutter/material.dart';

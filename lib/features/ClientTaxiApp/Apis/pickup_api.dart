@@ -412,7 +412,12 @@ class PickupApi{
         })
       );
       if(response.statusCode == 200){
-        return true;
+        final data = json.decode(response.body);
+        if(data['success']){
+          return true;
+        }else{
+          return false;
+        }
       }else{
         return false;
       }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:HTRuta/app_router.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';

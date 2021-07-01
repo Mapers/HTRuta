@@ -55,5 +55,24 @@ extension DateTimeExtension on DateTime {
     spanishFormat = day + '-' +  month + '-' + year;
     return spanishFormat;
   }
+  static String parseDateEnglish(int day, int month, int year){
+    String date = '';
+    date += year.toString();
+    date += '-';
+    if(month < 10){
+      date+='0';
+      date+=month.toString();
+    }else{
+      date+=month.toString();
+    }
+    date += '-';
+    if(day < 10){
+      date+='0';
+      date+=day.toString();
+    }else{
+      date+=day.toString();
+    }
+    return date;
+  }
 
 }

@@ -58,39 +58,38 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: (){
-                      Navigator.of(context).push( MaterialPageRoute<Null>(
-                          builder: (BuildContext context) {
-                            return ProfileDriver();
-                          },
+                      Navigator.of(context).push(MaterialPageRoute<Null>(
+                        builder: (BuildContext context) {
+                          return ProfileDriver();
+                        },
                       ));
                     },
                     child: Container(
                       color: whiteColor,
                       padding: EdgeInsets.all(10.0),
                       margin: EdgeInsets.only(top: 10.0,bottom: 10.0),
-                      child: Row(
-                        //mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Material(
-                            elevation: 5.0,
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: CachedNetworkImage(
-                                imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                                fit: BoxFit.cover,
-                                width: 50.0,
-                                height: 50.0,
-                              ),
-                            ),
-                          ),
-                          FutureBuilder<UserSession>(
-                            future: _session.get(),
-                            builder: (context, snapshot) {
-                              if(snapshot.connectionState == ConnectionState.done){
-                                if(snapshot.hasData){
-                                  final data = snapshot.data;
-                                  return Container(
+                      child: FutureBuilder<DriverSession>(
+                        future: _session.getDriverData(),
+                        builder: (context, snapshot) {
+                          if(snapshot.connectionState == ConnectionState.done){
+                            if(snapshot.hasData){
+                              final data = snapshot.data;
+                              return Row(
+                                children: [
+                                  Material(
+                                    elevation: 5.0,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      child: data.imageUrl != null ?  CachedNetworkImage(
+                                        imageUrl: data.imageUrl,
+                                        fit: BoxFit.cover,
+                                        width: 50.0,
+                                        height: 50.0,
+                                      ) : Container(),
+                                    ),
+                                  ),
+                                  Container(
                                     width: screenSize.width-70 ,
                                     padding: EdgeInsets.only(left: 20.0),
                                     child: Row(
@@ -102,13 +101,16 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Container(
-                                                child: Text(data.names.toString(),style: textBoldBlack,),
+                                                child: Text(data.name.toString(),style: textBoldBlack,),
                                               ),
                                               Container(
-                                                  child: Text('Miembro Gold',style: TextStyle(
+                                                child: Text(
+                                                  'Miembro Gold',
+                                                  style: TextStyle(
                                                     fontSize: 12,
                                                     color: greyColor2
-                                                  ),)
+                                                  )
+                                                )
                                               ),
                                             ],
                                           ),
@@ -119,17 +121,16 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                                         )
                                       ],
                                     ),
-                                  );
-                                }else{
-                                  return Center(child: Text('Sin informacion del perfil'),);
-                                }
-                              }else{
-                                return Center(child: CircularProgressIndicator(),);
-                              }
+                                  ),
+                                ],
+                              );
+                            }else{
+                              return Center(child: Text('Sin informacion del perfil'),);
                             }
-                          ),
-                          
-                        ],
+                          }else{
+                            return Center(child: CircularProgressIndicator(),);
+                          }
+                        }
                       ),
                     ),
                   ),

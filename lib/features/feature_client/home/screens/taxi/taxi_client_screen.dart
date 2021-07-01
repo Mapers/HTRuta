@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
@@ -97,16 +98,24 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     // saveUserPhoto();
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
-      // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(mounted && userPhoto != null){
-        _markers.clear();
+      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(mounted && diferencia > 20){
         final MarkerId _markerMy = MarkerId('user_position');
-        _markers[_markerMy] = GMapViewHelper.createMakerNetwork(
+        /* _markers[_markerMy] = GMapViewHelper.createMakerNetwork(
           markerIdVal: 'user_position',
           icon: userPhoto,
           lat: event.latitude,
           lng: event.longitude,
+        ); */
+        _markers[_markerMy] = MapViewerUtil.generateMarker(
+          latLng: LatLng(event.latitude, event.longitude),
+          nameMarkerId: 'user_position',
+          icon: await MapViewerUtil.getMarkerIcon('https://source.unsplash.com/500x500/?portrait'),
+          onTap: ()=>{
+
+          }
         );
+        currentLocation = Position(longitude: event.longitude, latitude: event.latitude);
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
@@ -150,34 +159,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     if (!mounted) return;
     _lastKnownPosition = position;
   }
-  /* Future<void> saveUserPhoto() async {
-    userPhoto = await pickupApi.getUserPhoto();
-    ui.Image userImage = await loadImage(userPhoto);
-    userPhoto = await getBytesFromCanvas(userImage, 100, 100);
-    if(userPhoto != null){
-    }
-  }
-  Future<ui.Image> loadImage(Uint8List img) async {
-    final Completer<ui.Image> completer = Completer();
-    ui.decodeImageFromList(img, (ui.Image img) {
-      return completer.complete(img);
-    });
-    return completer.future;
-  }
-  Future<Uint8List> getBytesFromCanvas(ui.Image image, int width, int height) async {
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-
-    Path path = Path()
-      ..addOval(Rect.fromLTWH(0, 0,
-          image.width.toDouble(), image.height.toDouble()));
-
-    canvas.clipPath(path);
-    canvas.drawImage(image, Offset(0, 0), Paint());
-    final img = await pictureRecorder.endRecording().toImage(width, height);
-    final data = await img.toByteData(format: ui.ImageByteFormat.png);
-    return data.buffer.asUint8List();
-  } */
 
   Future<void> checkPermission() async {
     isEnabledLocation = await Permission.location.serviceStatus.isEnabled;

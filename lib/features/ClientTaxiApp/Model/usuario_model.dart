@@ -42,6 +42,8 @@ class UserEntity {
     this.vchCelular,
     this.vchCorreo,
     this.vchPassword,
+    this.urlImage,
+    this.sexo,
     this.iIdUsuario,
     this.iIdChofer
   });
@@ -55,6 +57,8 @@ class UserEntity {
   String vchCelular;
   String vchCorreo;
   String vchPassword;
+  String urlImage;
+  String sexo;
   int iIdUsuario;
   int iIdChofer;
 
@@ -68,6 +72,8 @@ class UserEntity {
     vchCelular: json['vchCelular'],
     vchCorreo: json['vchCorreo'],
     vchPassword: json['vchPassword'],
+    urlImage: json['urlImage'],
+    sexo: json['sexo'].toString(),
     iIdUsuario: json['iIdUsuario'],
     iIdChofer: json['iIdChofer'],
   );
@@ -82,6 +88,8 @@ class UserEntity {
     'vchCelular': vchCelular,
     'vchCorreo': vchCorreo,
     'vchPassword': vchPassword,
+    'urlImage': urlImage,
+    'sexo': sexo,
     'iIdUsuario' : iIdUsuario,
     'iIdChofer' : iIdChofer,
   };

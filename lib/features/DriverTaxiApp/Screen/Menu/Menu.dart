@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../MyProfile/profile.dart';
 import '../../../../app/styles/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../MyProfile/myProfile.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -37,8 +36,8 @@ class MenuDriverScreens extends StatelessWidget {
       elevation: 0,
       child: Column(
         children: <Widget>[
-          FutureBuilder<UserSession>(
-            future: _session.get(),
+          FutureBuilder<DriverSession>(
+            future: _session.getDriverData(),
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.done){
                 if(snapshot.hasData){
@@ -60,16 +59,16 @@ class MenuDriverScreens extends StatelessWidget {
                               child: Material(
                                 elevation: 5.0,
                                 borderRadius: BorderRadius.circular(50.0),
-                                child:ClipRRect(
+                                child: ClipRRect(
                                   borderRadius:BorderRadius.circular(100.0),
-                                  child:Container(
-                                    height: 50.0,
-                                    width: 50.0,
+                                  child: Container(
+                                    height: 70.0,
+                                    width: 70.0,
                                     color: primaryColor,
-                                    child: CachedNetworkImage(
-                                      imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                                    child: data.imageUrl != null ? CachedNetworkImage(
+                                      imageUrl: data.imageUrl,
                                       fit: BoxFit.cover,
-                                    ),
+                                    ) : Container(),
                                   )
                                 ),
                               ),
@@ -84,7 +83,7 @@ class MenuDriverScreens extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(data.names.toString(),style: textBoldWhite,),
+                                    Text(data.name.toString(), style: textBoldWhite),
                                     Container(
                                       padding: EdgeInsets.only(left: 4.0, right: 4.0, top: 2.0, bottom: 2.0),
                                       decoration: BoxDecoration(

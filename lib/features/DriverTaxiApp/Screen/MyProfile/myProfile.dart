@@ -11,6 +11,7 @@ import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 const double _kPickerSheetHeight = 216.0;
@@ -132,15 +133,17 @@ class _MyProfileState extends State<MyProfile> {
     final FormState form = formKey.currentState;
     form.save();
     await session.setDriverData(
-      newNames ?? widget.driverSession.mName,
+      newNames ?? widget.driverSession.name,
       newFName ?? widget.driverSession.pName,
       newMName ?? widget.driverSession.mName,
       newPhone ?? widget.driverSession.phone,
       newEmail ?? widget.driverSession.email,
       widget.driverSession.dni,
       selectedGender,
-      date.year.toString() + '-' + date.month.toString() + '-' + date.day.toString(),
-      widget.driverSession.fechaRegistro
+      DateTimeExtension.parseDateEnglish(date.day, date.month, date.year),
+      widget.driverSession.fechaRegistro,
+      ''
+      //TODO: Ponerle la url
     );
     SaveProfileBody body = SaveProfileBody(
       iIdUsuario: _prefs.idChoferReal,
@@ -168,7 +171,7 @@ class _MyProfileState extends State<MyProfile> {
     date = DateTime(
       int.parse(widget.driverSession.fechaNacimiento.split('-')[0]),
       int.parse(widget.driverSession.fechaNacimiento.split('-')[1]),
-      int.parse(widget.driverSession.fechaNacimiento.split('-')[2]),
+      int.parse(widget.driverSession.fechaNacimiento.split('-')[2].substring(0,2)),
     );
     print(widget.driverSession.fechaNacimiento);
     super.initState();

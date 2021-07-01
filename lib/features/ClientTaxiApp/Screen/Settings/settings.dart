@@ -9,7 +9,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/listMenu.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/edit_profile.dart';
 import 'package:share/share.dart';
-import 'invite_friends.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 

@@ -256,7 +256,7 @@ class _SelectAddressState extends State<SelectAddress> {
                       _prefs.setNotificacionUsuario = 'Solicitudes,Ha realizado una nueva solicitud';
                       DriverFirestoreService driverFirestoreService = DriverFirestoreService();
                       List<String> tokens = await driverFirestoreService.getDrivers();
-                      pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Solicitud de viaje', description: 'Nueva o actualización de solicitud', data: data);
+                      pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Solicitud de viaje', description: 'Nueva o actualización de solicitud', data: data, displayNotification: false);
                       Navigator.pop(context);
                       if(viaje.success){
                         pedidoProvider.idSolicitud = viaje.data[0].idSolicitud;

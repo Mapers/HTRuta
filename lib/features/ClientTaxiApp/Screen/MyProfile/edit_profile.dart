@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,6 +12,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -36,6 +38,7 @@ class _EditProfileState extends State<EditProfile> {
   String newPhone;
   String newEmail;
   final session = Session();
+  final _prefs = UserPreferences();
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -43,6 +46,12 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image = gallery;
     });
+    if(gallery == null) return;
+    List<int> imageBytes = gallery.readAsBytesSync();
+    print(imageBytes);
+    String base64Image = base64Encode(imageBytes);
+    bool success = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
+    print(success);
   }
 
   Future cameraImage() async {
@@ -91,30 +100,30 @@ class _EditProfileState extends State<EditProfile> {
     showDemoActionSheet(
       context: context,
       child: CupertinoActionSheet(
-          title: const Text('Selecciona Camara'),
-          actions: <Widget>[
-            CupertinoActionSheetAction(
-              child: const Text('Camara'),
-              onPressed: () {
-                Navigator.pop(context, 'Camera');
-                cameraImage();
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: const Text('Libreria de fotos'),
-              onPressed: () {
-                Navigator.pop(context, 'Photo Library');
-                getImageLibrary();
-              },
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
-            isDefaultAction: true,
+        title: const Text('Selecciona Camara'),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: const Text('Camara'),
             onPressed: () {
-              Navigator.pop(context, 'Cancel');
+              Navigator.pop(context, 'Camera');
+              cameraImage();
             },
-          )
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Libreria de fotos'),
+            onPressed: () {
+              Navigator.pop(context, 'Photo Library');
+              getImageLibrary();
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: const Text('Cancelar'),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+        )
       ),
     );
   }
@@ -130,7 +139,9 @@ class _EditProfileState extends State<EditProfile> {
       newMName ?? widget.userData.lastNameMother,
       newPhone ?? widget.userData.cellphone,
       newEmail ?? widget.userData.email,
-      widget.userData.password
+      widget.userData.password,
+      'imageUrl',//TODO: Completar los campos
+      'sexo',
     );
     SaveProfileBody body = SaveProfileBody(
       iIdUsuario: widget.userData.id,
@@ -138,7 +149,7 @@ class _EditProfileState extends State<EditProfile> {
       apellidoPaterno: newFName ?? widget.userData.lastNameFather,
       apellidoMaterno: newMName ?? widget.userData.lastNameMother,
       fechaNacimiento: date ?? DateTime.now(),
-      sexo: selectedGender,
+      sexo: '1',
       telefono: newPhone ?? widget.userData.cellphone,
       celular: newPhone ?? widget.userData.cellphone
     );
@@ -238,63 +249,73 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                               Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 20.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        TextFormField(
-                                          initialValue: widget.userData.names,
-                                          style: textStyle,
-                                          decoration: InputDecoration(
-                                            fillColor: whiteColor,
-                                            labelStyle: textStyle,
-                                            hintStyle: TextStyle(color: Colors.white),
-                                            counterStyle: textStyle,
-                                            hintText: 'Nombres',
-                                            border: UnderlineInputBorder(
-                                                borderSide:
-                                                BorderSide(color: Colors.white))),
-                                          onChanged: (String _firstName) {
-                                            newNames = _firstName;
-                                          },
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 20.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      TextFormField(
+                                        initialValue: widget.userData.names,
+                                        style: textStyle,
+                                        decoration: InputDecoration(
+                                          fillColor: whiteColor,
+                                          labelStyle: textStyle,
+                                          hintStyle: TextStyle(color: Colors.white),
+                                          counterStyle: textStyle,
+                                          hintText: 'Nombres',
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.white
+                                            )
+                                          )
                                         ),
-                                        TextFormField(
-                                          initialValue: widget.userData.lastNameFather,
-                                          style: textStyle,
-                                          decoration: InputDecoration(
-                                              fillColor: whiteColor,
-                                              labelStyle: textStyle,
-                                              hintStyle: TextStyle(color: Colors.white),
-                                              counterStyle: textStyle,
-                                              hintText: 'Apellido paterno',
-                                              border: UnderlineInputBorder(
-                                                  borderSide:
-                                                  BorderSide(color: Colors.white))),
-                                          onChanged: (String _lastName) {
-                                            newFName = _lastName;
-                                          },
+                                        onChanged: (String _firstName) {
+                                          newNames = _firstName;
+                                        },
+                                      ),
+                                      TextFormField(
+                                        initialValue: widget.userData.lastNameFather,
+                                        style: textStyle,
+                                        decoration: InputDecoration(
+                                          fillColor: whiteColor,
+                                          labelStyle: textStyle,
+                                          hintStyle: TextStyle(color: Colors.white),
+                                          counterStyle: textStyle,
+                                          hintText: 'Apellido paterno',
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.white
+                                            )
+                                          )
                                         ),
-                                        TextFormField(
-                                          initialValue: widget.userData.lastNameMother,
-                                          style: textStyle,
-                                          decoration: InputDecoration(
-                                              fillColor: whiteColor,
-                                              labelStyle: textStyle,
-                                              hintStyle: TextStyle(color: Colors.white),
-                                              counterStyle: textStyle,
-                                              hintText: 'Apellido materno',
-                                              border: UnderlineInputBorder(
-                                                  borderSide:
-                                                  BorderSide(color: Colors.white))),
-                                          onChanged: (String _lastName) {
-                                            newMName = _lastName;
-                                          },
+                                        onChanged: (String _lastName) {
+                                          newFName = _lastName;
+                                        },
+                                      ),
+                                      TextFormField(
+                                        initialValue: widget.userData.lastNameMother,
+                                        style: textStyle,
+                                        decoration: InputDecoration(
+                                          fillColor: whiteColor,
+                                          labelStyle: textStyle,
+                                          hintStyle: TextStyle(color: Colors.white),
+                                          counterStyle: textStyle,
+                                          hintText: 'Apellido materno',
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.white
+                                            )
+                                          )
                                         ),
-                                      ],
-                                    ),
-                                  ))
+                                        onChanged: (String _lastName) {
+                                          newMName = _lastName;
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              )
                             ],
                           ),
                         ),
@@ -331,7 +352,9 @@ class _EditProfileState extends State<EditProfile> {
                                           counterStyle: textStyle,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                              color: Colors.white))
+                                              color: Colors.white
+                                            )
+                                          )
                                         ),
                                         onChanged: (String _phone) {
                                           newPhone = _phone;
@@ -361,6 +384,7 @@ class _EditProfileState extends State<EditProfile> {
                                         initialValue: widget.userData.email,
                                         keyboardType: TextInputType.emailAddress,
                                         style: textStyle,
+                                        enabled: false,
                                         decoration: InputDecoration(
                                           fillColor: whiteColor,
                                           labelStyle: textStyle,

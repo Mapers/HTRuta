@@ -41,19 +41,19 @@ class _ProfileDriverState extends State<ProfileDriver> {
             future: _session.getDriverData(),
             builder: (context, snapshot) {
               if(snapshot.hasError) return Container();
-                switch(snapshot.connectionState){
-                  case ConnectionState.waiting: return Container();
-                  case ConnectionState.none: return Container();
-                  case ConnectionState.active: {
-                    driverDataLoaded = snapshot.data;
-                    return createContent(driverDataLoaded);
-                  }
-                  case ConnectionState.done: {
-                    driverDataLoaded = snapshot.data;
-                    return createContent(driverDataLoaded);
-                  }
+              switch(snapshot.connectionState){
+                case ConnectionState.waiting: return Container();
+                case ConnectionState.none: return Container();
+                case ConnectionState.active: {
+                  driverDataLoaded = snapshot.data;
+                  return createContent(driverDataLoaded);
                 }
-                return Container();
+                case ConnectionState.done: {
+                  driverDataLoaded = snapshot.data;
+                  return createContent(driverDataLoaded);
+                }
+              }
+              return Container();
             }
           ),
         ),
@@ -78,7 +78,9 @@ class _ProfileDriverState extends State<ProfileDriver> {
                     child: CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
-                      backgroundImage: CachedNetworkImageProvider(
+                      backgroundImage: driverData.imageUrl != null ?  CachedNetworkImageProvider(
+                        driverData.imageUrl,
+                      ) : CachedNetworkImageProvider(
                         'https://source.unsplash.com/1600x900/?portrait',
                       )
                     ),
@@ -115,6 +117,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 child: Text(
                   driverData.name ?? '',
                   style: TextStyle( color: blackColor,fontSize: 35.0),
+                  textAlign: TextAlign.center,
                 ),
               ),
               Text(
