@@ -1,11 +1,15 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class PhoneVerification extends StatefulWidget {
+  final String numeroTelefono;
+  PhoneVerification({this.numeroTelefono});
   @override
   _PhoneVerificationState createState() => _PhoneVerificationState();
 }
@@ -13,10 +17,11 @@ class PhoneVerification extends StatefulWidget {
 class _PhoneVerificationState extends State<PhoneVerification> {
   TextEditingController controller = TextEditingController();
   String thisText = '';
-  int pinLength = 4;
+  int pinLength = 6;
 
   bool hasError = false;
   String errorMessage;
+  final authApi = AuthApi();
 
   @override
   Widget build(BuildContext context) {
@@ -36,74 +41,85 @@ class _PhoneVerificationState extends State<PhoneVerification> {
             child: Container(
               padding: EdgeInsets.fromLTRB(20, 0.0, 20, 0.0),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
-                      child: Text('Verificación sms',style: heading35Black,),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
+                    child: Text('Verificación sms',style: heading35Black,),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 0.0),
+                    child: Text('Ingresa tu código aqui'),
+                  ),
+                  Center(
+                    child: PinCodeTextField(
+                      pinBoxWidth: MediaQuery.of(context).size.width * 0.12,
+                      autofocus: true,
+                      controller: controller,
+                      hideCharacter: false,
+                      highlight: true,
+                      highlightColor: secondary,
+                      defaultBorderColor: blackColor,
+                      hasTextBorderColor: primaryColor,
+                      maxLength: pinLength,
+                      hasError: hasError,
+                      maskCharacter: '*',
+                      onTextChanged: (text) {
+                        setState(() {
+                          hasError = false;
+                        });
+                      },
+                      onDone: (text){},
+                      wrapAlignment: WrapAlignment.start,
+                      pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
+                      pinTextStyle: heading35Black,
+                      pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
+                      pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 0.0),
-                      child: Text('Ingresa tu código aqui'),
+                  ),
+                  SizedBox(height: 20),
+                  ButtonTheme(
+                    height: 50.0,
+                    minWidth: MediaQuery.of(context).size.width-50,
+                    child: RaisedButton.icon(
+                      shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
+                      elevation: 0.0,
+                      color: primaryColor,
+                      icon:Text(''),
+                      label:Text('Verificar ahora', style: headingWhite,),
+                      onPressed: () async {
+                        Dialogs.openLoadingDialog(context);
+                        
+                        final isOk = await authApi.loginUserSMS(widget.numeroTelefono, controller.value.text);
+                        Navigator.pop(context);
+                        if(isOk){
+                          Navigator.pushNamedAndRemoveUntil(context, AppRoute.splashScreen, (route) => false);
+                        }
+                      },
                     ),
-                    Center(
-                      child: PinCodeTextField(
-                        autofocus: true,
-                        controller: controller,
-                        hideCharacter: false,
-                        highlight: true,
-                        highlightColor: secondary,
-                        defaultBorderColor: blackColor,
-                        hasTextBorderColor: primaryColor,
-                        maxLength: pinLength,
-                        hasError: hasError,
-                        maskCharacter: '*',
-                        onTextChanged: (text) {
-                          setState(() {
-                            hasError = false;
-                          });
-                        },
-                        onDone: (text){},
-                        wrapAlignment: WrapAlignment.start,
-                        pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
-                        pinTextStyle: heading35Black,
-                        pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
-                        pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ButtonTheme(
-                      height: 50.0,
-                      minWidth: MediaQuery.of(context).size.width-50,
-                      child: RaisedButton.icon(
-                        shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
-                        elevation: 0.0,
-                        color: primaryColor,
-                        icon:Text(''),
-                        label:Text('Verificar ahora', style: headingWhite,),
-                        onPressed: (){
-                          Navigator.of(context).pushReplacementNamed(AppRoute.introScreen);
-                        },
-                      ),
-                    ),
-                    Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                        child:Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
-                              child:Text('No recibí un código',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  decoration: TextDecoration.underline
-                                ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
+                            child:Text('No recibí un código',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline
                               ),
                             ),
-                          ],
-                        )
-                    ),
-                  ]
+                          ),
+                        ],
+                      )
+                  ),
+                ]
               ),
             ),
           )

@@ -9,7 +9,7 @@ class Session{
   final storage = FlutterSecureStorage();
 
   // ignore: always_declare_return_types
-  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password, String imageUrl, String sexo) async{
+  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password, String imageUrl, String sexo, String smsCode) async{
     final data = UserSession(
       id: id,
       dni: dni,
@@ -17,6 +17,7 @@ class Session{
       lastNameFather: lastNameFather,
       lastNameMother: lastNameMother,
       cellphone: cellphone,
+      smsCode: smsCode,
       email: email,
       password: password,
       imageUrl: imageUrl,
@@ -25,7 +26,7 @@ class Session{
     await storage.write(key: key, value: jsonEncode(data.toMap));
   }
 
-  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro, String imageUrl) async{
+  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro, String imageUrl, String smsCode) async{
     final data = DriverSession(
       name: name,
       pName: pName,
@@ -36,7 +37,8 @@ class Session{
       sexo: sexo,
       fechaNacimiento: fechaNacimiento,
       fechaRegistro: fechaRegistro,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      smsCode: smsCode
     );
     await storage.write(key: 'DRIVER', value: jsonEncode(data.toMap));
   }
@@ -71,6 +73,7 @@ class UserSession extends Equatable{
   final String password;
   final String imageUrl;
   final String sexo;
+  final String smsCode;
 
   UserSession({
     @required this.id,
@@ -82,7 +85,8 @@ class UserSession extends Equatable{
     @required this.email,
     @required this.password,
     @required this.imageUrl,
-    @required this.sexo
+    @required this.sexo,
+    @required this.smsCode,
   });
 
   Map<String, String> get toMap => {
@@ -95,7 +99,8 @@ class UserSession extends Equatable{
     'email': email,
     'password': password,
     'imageUrl': imageUrl,
-    'sexo': sexo
+    'sexo': sexo,
+    'smsCode': smsCode,
   };
 
   String get fullNames => '$lastNameFather $lastNameMother $names';
@@ -110,11 +115,12 @@ class UserSession extends Equatable{
     email: json['email'],
     password: json['password'],
     imageUrl: json['imageUrl'],
-    sexo: json['sexo']
+    sexo: json['sexo'],
+    smsCode: json['smsCode'],
   );
 
   @override
-  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password, imageUrl, sexo];
+  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password, imageUrl, sexo, smsCode];
 }
 
 class DriverSession extends Equatable{
@@ -128,6 +134,7 @@ class DriverSession extends Equatable{
   final String fechaNacimiento;
   final String fechaRegistro;
   final String imageUrl;
+  final String smsCode;
 
   DriverSession({
     @required this.name,
@@ -140,6 +147,7 @@ class DriverSession extends Equatable{
     @required this.fechaNacimiento,
     @required this.fechaRegistro,
     @required this.imageUrl,
+    @required this.smsCode,
   });
 
   Map<String, String> get toMap => {
@@ -153,6 +161,7 @@ class DriverSession extends Equatable{
     'fechaNacimiento': fechaNacimiento,
     'fechaRegistro': fechaRegistro,
     'imageUrl': imageUrl,
+    'smsCode': smsCode,
   };
 
   factory DriverSession.fromMap(dynamic json) => DriverSession(
@@ -165,9 +174,10 @@ class DriverSession extends Equatable{
     sexo: json['sexo'],
     fechaNacimiento: json['fechaNacimiento'],
     fechaRegistro: json['fechaRegistro'],
-    imageUrl: json['imageUrl']
+    imageUrl: json['imageUrl'],
+    smsCode: json['smsCode']
   );
 
   @override
-  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro, imageUrl];
+  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro, imageUrl, smsCode];
 }

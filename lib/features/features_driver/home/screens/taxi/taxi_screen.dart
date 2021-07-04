@@ -139,6 +139,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         );
         driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
+      currentLocation = LatLng(event.latitude, event.longitude);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       
@@ -184,43 +185,45 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
   }
   Future<void> getSolicitudes() async {
-      final _prefs = UserPreferences();
-      LocationEntity locationEntity = await LocationUtil.currentLocation();
-      final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
-      if(data != null){
-        requestTaxi.clear();
-        aceptados.clear();
-        rechazados.clear();
-        requestTaxi.addAll(data);
-        requestTaxi.reversed;
-        var removeData = [];
+    final _prefs = UserPreferences();
+    LocationEntity locationEntity = await LocationUtil.currentLocation();
+    final data = await pickupApi.getRequest(_prefs.idChoferReal, locationEntity.latLang.latitude.toString(),locationEntity.latLang.longitude.toString());
+    if(data != null){
+      requestTaxi.clear();
+      aceptados.clear();
+      rechazados.clear();
+      requestTaxi.addAll(data);
+      requestTaxi.reversed;
+      var removeData = [];
 
-        requestTaxi.forEach((data) {
-          if(data.aceptados != null){
-            aceptados = data.aceptados.split(',');
-            aceptados.forEach((element) {
-              if(element == _prefs.idChofer){
-                removeData.add(data);
-              }
-            });
-          }
-        });
-        requestTaxi.removeWhere((element) => removeData.contains(element));
+      requestTaxi.forEach((data) {
+        if(data.aceptados != null){
+          aceptados = data.aceptados.split(',');
+          aceptados.forEach((element) {
+            if(element == _prefs.idChofer){
+              removeData.add(data);
+            }
+          });
+        }
+      });
+      requestTaxi.removeWhere((element) => removeData.contains(element));
 
-        removeData.clear();
+      removeData.clear();
 
-        requestTaxi.forEach((data) {
-          if(data.rechazados != null){
-            rechazados = data.rechazados.split(',');
-            rechazados.forEach((element) {
-              if(element == _prefs.idChofer){
-                removeData.add(data);
-              }
-            });
-          }
-        });
-        requestTaxi.removeWhere((element) => removeData.contains(element));
-      }
+      requestTaxi.forEach((data) {
+        if(data.rechazados != null){
+          rechazados = data.rechazados.split(',');
+          rechazados.forEach((element) {
+            if(element == _prefs.idChofer){
+              removeData.add(data);
+            }
+          });
+        }
+      });
+      requestTaxi.removeWhere((element) => removeData.contains(element));
+    }else{
+      requestTaxi.clear();
+    }
   }
   void analizeChanges(){
     if(requestTaxi.length == requestPast.length){
@@ -540,7 +543,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
               minHeight: MediaQuery.of(context).size.width * 0.85,
               cardBuilder: (context, index) => InkWell(
                 onTap: () async {
-                  String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index])));
+                  String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index], driverLocation: currentLocation)));
                   if(newPrice != null){
                     try{
                       final _prefs = UserPreferences();

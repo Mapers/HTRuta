@@ -17,17 +17,17 @@ class UserModel {
 
   String message;
   bool success;
-  List<UserEntity> data;
+  UserEntity data;
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     message: json['message'],
     success: json['success'],
-    data: List<UserEntity>.from(json['data'].map((x) => UserEntity.fromJson(x))),
+    data: UserEntity.fromJson(json['data'])
   );
 
   Map<String, dynamic> toJson() => {
     'message': message,
     'success': success,
-    'data': List<dynamic>.from(data.map((x) => x.toJson())),
+    'data': data.toJson(),
   };
 }
 
@@ -63,8 +63,8 @@ class UserEntity {
   int iIdChofer;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-    bAdministrador: json['bAdministrador'],
-    bInactivo: json['bInactivo'],
+    bAdministrador: json['bAdministrador'] != null ? int.parse(json['bAdministrador']) : 0,
+    bInactivo: json['bInactivo'] != null ? int.parse(json['bInactivo']) : 0,
     vchDni: json['vchDni'],
     vchNombres: json['vchNombres'],
     vchApellidoP: json['vchApellidoP'],
@@ -74,8 +74,8 @@ class UserEntity {
     vchPassword: json['vchPassword'],
     urlImage: json['urlImage'],
     sexo: json['sexo'].toString(),
-    iIdUsuario: json['iIdUsuario'],
-    iIdChofer: json['iIdChofer'],
+    iIdUsuario: json['iIdUsuario'] != null ? int.parse(json['iIdUsuario']) : 0,
+    iIdChofer: json['iIdChofer'] != null ? int.parse(json['iIdChofer']) : 0,
   );
 
   Map<String, dynamic> toJson() => {

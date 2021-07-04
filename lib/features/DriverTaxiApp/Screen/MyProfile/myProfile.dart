@@ -142,7 +142,8 @@ class _MyProfileState extends State<MyProfile> {
       selectedGender,
       DateTimeExtension.parseDateEnglish(date.day, date.month, date.year),
       widget.driverSession.fechaRegistro,
-      ''
+      '',
+      widget.driverSession.smsCode
       //TODO: Ponerle la url
     );
     SaveProfileBody body = SaveProfileBody(

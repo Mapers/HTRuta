@@ -60,7 +60,7 @@ class Data {
     String urlImage;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        iIdChofer: json['iIdChofer'],
+        iIdChofer: json['iIdChofer'] != null ? json['iIdChofer'] : '0',
         vchCorreo: json['vchCorreo'],
         nombres: json['nombres'],
         apellidoPaterno: json['apellidoPaterno'],

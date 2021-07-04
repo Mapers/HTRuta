@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
       // final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
       if(data != null){
-        if(data.email != null || data.email != ''){
+        if(data.smsCode != null || data.smsCode != ''){
           // availabilityProvider.available = _prefs.drivingState;
           // _sendToPage();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoadingScreen()));

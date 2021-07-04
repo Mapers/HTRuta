@@ -168,7 +168,7 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                         padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
                         color: primaryColor,
                         onPressed: () async{
-                          final provider = Provider.of<RegistroProvider>(context,listen: false);
+                          /* final provider = Provider.of<RegistroProvider>(context,listen: false);
                           try{
                             final registroConductor = RegistroConductorApi();
                             final authApi = AuthApi();
@@ -188,7 +188,7 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                           }catch(error){
                             Navigator.pop(context);
                             Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
-                          }
+                          } */
 
                         },
                         child: Text(

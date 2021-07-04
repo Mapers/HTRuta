@@ -142,6 +142,7 @@ class _EditProfileState extends State<EditProfile> {
       widget.userData.password,
       'imageUrl',//TODO: Completar los campos
       'sexo',
+      widget.userData.smsCode
     );
     SaveProfileBody body = SaveProfileBody(
       iIdUsuario: widget.userData.id,

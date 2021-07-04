@@ -120,7 +120,7 @@ class ItemRequest extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text('${double.parse(price).toStringAsFixed(2)}',style: textBoldBlack,),
+                        Text('${double.parse(price).toStringAsFixed(2)} PEN',style: textBoldBlack,),
                         Text(distance ?? '',style: textGrey,),
                       ],
                     ),
@@ -196,7 +196,7 @@ class ItemRequest extends StatelessWidget {
                     },
                     child: Text('-0.5', style: TextStyle(color:Colors.grey)),
                   ),
-                  Text('S/${double.parse(price).toStringAsFixed(2)}',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
+                  Text('S/${double.parse(price).toStringAsFixed(2)} PEN',style: TextStyle(fontSize: responsive.ip(2.2), fontWeight: FontWeight.w600),),
                   OutlineButton(
                     padding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
                     borderSide: BorderSide(color: primaryColor, width: 2.0),

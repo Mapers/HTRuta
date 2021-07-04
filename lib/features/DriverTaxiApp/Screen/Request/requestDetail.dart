@@ -13,11 +13,14 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 
 class RequestDetail extends StatefulWidget {
   final RequestModel requestItem;
+  final LatLng driverLocation;
 
-  RequestDetail({this.requestItem});
+  RequestDetail({this.requestItem, this.driverLocation});
 
   @override
   _RequestDetailState createState() => _RequestDetailState();
@@ -74,9 +77,19 @@ class _RequestDetailState extends State<RequestDetail> {
     setState(() {});
   }
   void addMakers(){
+    final MarkerId markerIdDriver = MarkerId('my_position');
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
 
+    final Marker markerDriver = Marker(
+      markerId: markerIdDriver,
+      position: widget.driverLocation ?? LatLng(0, 0),
+      infoWindow: InfoWindow(title: widget.requestItem.vchNombreInicial, snippet: 'Inicio'),
+      // ignore: deprecated_member_use
+      icon:  BitmapDescriptor.fromAsset('assets/image/marker/taxi_marker.png'),
+      onTap: () {
+      },
+    );
     final Marker marker = Marker(
       markerId: markerIdFrom,
       position: LatLng(double.parse(widget.requestItem.vchLatInicial), double.parse(widget.requestItem.vchLongInicial)),
@@ -99,6 +112,7 @@ class _RequestDetailState extends State<RequestDetail> {
     );
 
     setState(() {
+      markers[markerIdDriver] = markerDriver;
       markers[markerIdFrom] = marker;
       markers[markerIdTo] = markerTo;
     });
@@ -250,7 +264,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('Recoger'.toUpperCase(),style: textGreyBold,),
+                              Text('Recoger al cliente en'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.vchNombreInicial,style: textStyle,),
 
                             ],
@@ -291,6 +305,11 @@ class _RequestDetailState extends State<RequestDetail> {
                       target: LatLng(double.parse(widget.requestItem.vchLatFinal), double.parse(widget.requestItem.vchLongFinal)),
                       zoom: 13,
                     ),
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                      Factory<OneSequenceGestureRecognizer>(
+                        () => EagerGestureRecognizer(),
+                      ),
+                    ].toSet(),
                     markers: Set<Marker>.of( markers.values),
                     polylines: Set<Polyline>.of(polyLines.values),
                   )
@@ -313,7 +332,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           ],
                         ),
                       ),
-                      Container(
+                      /* Container(
                         padding: EdgeInsets.only(top: 8.0),
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -322,8 +341,8 @@ class _RequestDetailState extends State<RequestDetail> {
                             Text('S/.0.00', style: textBoldBlack,),
                           ],
                         ),
-                      ),
-                      Container(
+                      ), */
+                      /* Container(
                         padding: EdgeInsets.only(top: 8.0,bottom: 8.0),
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,7 +351,7 @@ class _RequestDetailState extends State<RequestDetail> {
                             Text('- S/.0.00', style: textBoldBlack,),
                           ],
                         ),
-                      ),
+                      ), */
                       Container(
                         width: screenSize.width - 50.0,
                         height: 1.0,
@@ -382,7 +401,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 0.5}', style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2)),),
-                        color: primaryColor,
+                        color: Colors.blue.withOpacity(0.8),
                         padding: EdgeInsets.all(responsive.wp(3)),
                       ),
                       FlatButton(
@@ -410,7 +429,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 1.0}',style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2))),
-                        color: primaryColor,
+                        color: Colors.blue.withOpacity(0.8),
                         padding: EdgeInsets.all(responsive.wp(3)),
                       ),
                       FlatButton(
@@ -438,7 +457,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           setState(() {});
                         }, 
                         child: Text('${double.parse(widget.requestItem.mPrecio) + 1.5}',style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.2))),
-                        color: primaryColor,
+                        color: Colors.blue.withOpacity(0.8),
                         padding: EdgeInsets.all(responsive.wp(3)),
 
                       ),
