@@ -9,7 +9,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
 import 'package:HTRuta/app_router.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -119,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         TextFormField(
-                                          keyboardType: TextInputType.emailAddress,
+                                          keyboardType: TextInputType.phone,
                                           validator: (value){
                                             if(value.length != 9){
                                               return 'Número de teléfono inválido';
