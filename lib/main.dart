@@ -19,13 +19,17 @@ import 'package:provider/provider.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
-
+import 'package:flutter/services.dart';
 import 'app_router.dart';
 import 'package:flutter/material.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await ij.init();
+  await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp());
 }
 

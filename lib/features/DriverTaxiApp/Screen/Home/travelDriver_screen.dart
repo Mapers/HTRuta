@@ -140,10 +140,10 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
             lat: event.latitude,
             lng: event.longitude,
           );
-          currentLocation = LatLng(event.latitude, event.longitude);
           driverFirestoreService.updateDriverPosition(event.latitude, event.longitude, _prefs.idChofer);
         }
       }
+      currentLocation = LatLng(event.latitude, event.longitude);
     });
     // initPusher();
     super.initState();
@@ -466,32 +466,57 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                       borderRadius: BorderRadius.circular(20)
                     ),
                     onPressed: (){
-                      PushMessage pushMessage = getIt<PushMessage>();
-                      Map<String, String> data = {
-                        'travelInit' : '1'
-                      };
-                      pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
-                      travelInit = true;
-                      setState(() {});
+                      Dialogs.confirm(
+                        context,
+                        title: 'Atención', 
+                        message: '¿Desea comenzar el viaje?',
+                        onConfirm: () async{
+                          PushMessage pushMessage = getIt<PushMessage>();
+                          Map<String, String> data = {
+                            'travelInit' : '1'
+                          };
+                          pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
+                          travelInit = true;
+                          setState(() {});
+                        },
+                        onCancel: (){
+                          Navigator.pop(context);
+                        },
+                        textoConfirmar: 'Si',
+                        textoCancelar: 'No'
+                      );
                     },
                   ) : Container(),
                   travelInit ? MaterialButton(
-                    color: primaryColor,
+                    color: Colors.blue.withOpacity(0.8),
                     child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)
                     ),
                     onPressed: (){
-                      final _prefs = UserPreferences();
-                      _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
-                      PushMessage pushMessage = getIt<PushMessage>();
-                      Map<String, String> data = {
-                        'travelFinish' : '1',
-                        'idSolicitud': pedidoProvider.request.idSolicitud
-                      };
-                      _prefs.isDriverInService = false;
-                      pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
-                      Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                      Dialogs.confirm(
+                        context,
+                        title: 'Atención', 
+                        message: '¿Desea finalizar el viaje?',
+                        onConfirm: () async{
+                          final _prefs = UserPreferences();
+                          _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
+                          PushMessage pushMessage = getIt<PushMessage>();
+                          Map<String, String> data = {
+                            'travelFinish' : '1',
+                            'idSolicitud': pedidoProvider.request.idSolicitud
+                          };
+                          _prefs.isDriverInService = false;
+                          pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
+                          Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                        },
+                        onCancel: (){
+                          Navigator.pop(context);
+                        },
+                        textoConfirmar: 'Si',
+                        textoCancelar: 'No'
+                      );
+                      
                     },
                   ) : Container()
                 ],
