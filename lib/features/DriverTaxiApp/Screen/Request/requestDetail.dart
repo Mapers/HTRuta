@@ -201,11 +201,11 @@ class _RequestDetailState extends State<RequestDetail> {
                 Container(
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      )
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    )
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +266,6 @@ class _RequestDetailState extends State<RequestDetail> {
                             children: <Widget>[
                               Text('Recoger al cliente en'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.vchNombreInicial,style: textStyle,),
-
                             ],
                           ),
                         ),
@@ -277,7 +276,6 @@ class _RequestDetailState extends State<RequestDetail> {
                             children: <Widget>[
                               Text('Destino'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.vchNombreFinal,style: textStyle,),
-
                             ],
                           ),
                         ),

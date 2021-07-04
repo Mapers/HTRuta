@@ -419,10 +419,13 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('${pedidoProvider.request.vchNombreInicial}',style: TextStyle(fontSize: responsive.ip(2.0)), textAlign: TextAlign.center,),
+                  Text('Recoger al cliente en'.toUpperCase(),style: textGreyBold,),
+                  Text('${pedidoProvider.request.vchNombreInicial}',style: TextStyle(fontSize: responsive.ip(1.8)), textAlign: TextAlign.center,),
                   SizedBox(height: responsive.hp(2),),
-                  Text('${pedidoProvider.request.vchNombreFinal}',style: TextStyle(fontSize: responsive.ip(2.0)),textAlign: TextAlign.center,),
+                  Text('Destino'.toUpperCase(),style: textGreyBold,),
+                  Text('${pedidoProvider.request.vchNombreFinal}',style: TextStyle(fontSize: responsive.ip(1.8)),textAlign: TextAlign.center,),
                   Divider(color: Colors.grey,),
                   ListTile(
                     leading: Container(
@@ -443,7 +446,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                         Text('4.8 (5)',style: TextStyle(fontSize: responsive.ip(1.8)))
                       ],
                     ),
-                    trailing: IconButton(
+                    trailing: !travelInit ? IconButton(
                       icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green,),
                       onPressed: ()async{
                         final url = 'tel:${pedidoProvider.request.vchCelular}';
@@ -457,67 +460,77 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                           Dialogs.alert(e);
                         }
                       },
-                    )
+                    ): Container()
                   ),
-                  !travelInit ? MaterialButton(
-                    color: primaryColor,
-                    child: Text('Empezar viaje', style: TextStyle(color: Colors.white)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    onPressed: (){
-                      Dialogs.confirm(
-                        context,
-                        title: 'Atención', 
-                        message: '¿Desea comenzar el viaje?',
-                        onConfirm: () async{
-                          PushMessage pushMessage = getIt<PushMessage>();
-                          Map<String, String> data = {
-                            'travelInit' : '1'
-                          };
-                          pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
-                          travelInit = true;
-                          setState(() {});
+                  !travelInit ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MaterialButton(
+                        color: primaryColor,
+                        child: Text('Empezar viaje', style: TextStyle(color: Colors.white)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                        onPressed: (){
+                          Dialogs.confirm(
+                            context,
+                            title: 'Atención', 
+                            message: '¿Desea comenzar el viaje?',
+                            onConfirm: () async{
+                              PushMessage pushMessage = getIt<PushMessage>();
+                              Map<String, String> data = {
+                                'travelInit' : '1'
+                              };
+                              pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
+                              travelInit = true;
+                              setState(() {});
+                            },
+                            onCancel: (){
+                              Navigator.pop(context);
+                            },
+                            textoConfirmar: 'Si',
+                            textoCancelar: 'No'
+                          );
                         },
-                        onCancel: (){
-                          Navigator.pop(context);
-                        },
-                        textoConfirmar: 'Si',
-                        textoCancelar: 'No'
-                      );
-                    },
+                      ),
+                    ],
                   ) : Container(),
-                  travelInit ? MaterialButton(
-                    color: Colors.blue.withOpacity(0.8),
-                    child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    onPressed: (){
-                      Dialogs.confirm(
-                        context,
-                        title: 'Atención', 
-                        message: '¿Desea finalizar el viaje?',
-                        onConfirm: () async{
-                          final _prefs = UserPreferences();
-                          _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
-                          PushMessage pushMessage = getIt<PushMessage>();
-                          Map<String, String> data = {
-                            'travelFinish' : '1',
-                            'idSolicitud': pedidoProvider.request.idSolicitud
-                          };
-                          _prefs.isDriverInService = false;
-                          pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
-                          Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                  travelInit ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MaterialButton(
+                        color: Colors.blue.withOpacity(0.8),
+                        child: Text('Finalizar viaje', style: TextStyle(color: Colors.white)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                        onPressed: (){
+                          Dialogs.confirm(
+                            context,
+                            title: 'Atención', 
+                            message: '¿Desea finalizar el viaje?',
+                            onConfirm: () async{
+                              final _prefs = UserPreferences();
+                              _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
+                              PushMessage pushMessage = getIt<PushMessage>();
+                              Map<String, String> data = {
+                                'travelFinish' : '1',
+                                'idSolicitud': pedidoProvider.request.idSolicitud
+                              };
+                              _prefs.isDriverInService = false;
+                              pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Su viaje ha terminado', description: 'Si desea puede completar la siguiente encuesta', data: data);
+                              Navigator.pushAndRemoveUntil(context, enrutador.Routes.toHomeDriverPage(), (_) => false);
+                            },
+                            onCancel: (){
+                              Navigator.pop(context);
+                            },
+                            textoConfirmar: 'Si',
+                            textoCancelar: 'No'
+                          );
+                          
                         },
-                        onCancel: (){
-                          Navigator.pop(context);
-                        },
-                        textoConfirmar: 'Si',
-                        textoCancelar: 'No'
-                      );
-                      
-                    },
+                      ),
+                    ],
                   ) : Container()
                 ],
               )
