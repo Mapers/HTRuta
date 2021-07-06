@@ -505,153 +505,147 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   @override
   Widget build(BuildContext context) {
     _createMarkerImageFromAsset(context);
-    return SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: MenuScreens(activeScreenName: screenName),
-        body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            SizedBox(
-              //height: MediaQuery.of(context).size.height - 180,
-              child: GoogleMap(
-                circles: Set<Circle>.of(circles.values),
-                zoomControlsEnabled: false,
-                markers: Set<Marker>.of(_markers.values),
-                onMapCreated: _onMapCreated,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: false,
-                compassEnabled: false,
-                onTap: (LatLng newPosition){
-                  updateOriginPointFromCoordinates(newPosition);
-                },
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                    currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
-                    currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
-                  zoom: 12.0,
-                ),
-                /* onCameraMove: (CameraPosition position) {
-                  _position = position;
-                },
-                onCameraIdle: (){
-                  updateOriginPoint();
-                } */
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: MenuScreens(activeScreenName: screenName),
+      body: loading ? Center(child: CircularProgressIndicator(),) : Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          SizedBox(
+            //height: MediaQuery.of(context).size.height - 180,
+            child: GoogleMap(
+              circles: Set<Circle>.of(circles.values),
+              zoomControlsEnabled: false,
+              markers: Set<Marker>.of(_markers.values),
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              compassEnabled: false,
+              onTap: (LatLng newPosition){
+                updateOriginPointFromCoordinates(newPosition);
+              },
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
+                  currentLocation != null ? currentLocation?.longitude : _lastKnownPosition?.longitude ?? 0.0),
+                zoom: 12.0,
               ),
+              /* onCameraMove: (CameraPosition position) {
+                _position = position;
+              },
+              onCameraIdle: (){
+                updateOriginPoint();
+              } */
             ),
-            CustomDropdownClient(),
-            Positioned(
-              bottom: 30.0,
-              left: 20.0,
-              right: 20.0,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          fetchLocation();
-                        },
-                        child: Container(
-                          height: 40.0,
-                          width: 40.0,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(100.0),),
-                          ),
-                          child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(height: 10),
-                  getListOptionDistance(),
-                  Container(height: 10),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: SelectAddress(
-                      fromAddress: widget?.placeBloc?.formLocation,
-                      toAddress: widget?.placeBloc?.locationSelect,
-                      unidad: distanceOptionSelected['unidad'],
-                      distancia: distanceOptionSelected['distancia'],
+          ),
+          CustomDropdownClient(),
+          Positioned(
+            bottom: 30.0,
+            left: 20.0,
+            right: 20.0,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchAddressScreen(),
-                          fullscreenDialog: true
-                        ));
+                        fetchLocation();
                       },
-                    )
-                  ),
-                ],
-              ),
-            ),
-            /* Positioned(
-                bottom: 380,
-                right: 20,
-                child: GestureDetector(
-                  onTap: (){
-                    fetchLocation();
-                  },
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                      child: Container(
+                        height: 40.0,
+                        width: 40.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                        ),
+                        child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
+                      ),
                     ),
-                    child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
-                  ),
-                )
-            ), */
-            // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
-            /* Positioned(
-                top: 60,
-                right: 10,
-                child: GestureDetector(
-                  onTap: (){
-                    _showBottomSheet();
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
-                      color: Colors.white
-                    ),
-                    child: Icon(Icons.layers,color: blackColor,)
-                  ),
-                )
-            ), */
-            Positioned(
-              top: 50,
-              left: 10,
-              child: Container(
-                height: 40.0,
-                width: 40.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                  ],
                 ),
-                child: IconButton(
-                  icon: Icon(Icons.menu,size: 20.0,color: blackColor),
-                  onPressed: (){
-                    final _state = _sideMenuKey.currentState;
-                    if (_state.isOpened)
-                      _state.closeSideMenu(); // close side menu
-                    else
-                      _state.openSideMenu();// open side menu
-                  }
+                Container(height: 10),
+                getListOptionDistance(),
+                Container(height: 10),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: SelectAddress(
+                    fromAddress: widget?.placeBloc?.formLocation,
+                    toAddress: widget?.placeBloc?.locationSelect,
+                    unidad: distanceOptionSelected['unidad'],
+                    distancia: distanceOptionSelected['distancia'],
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SearchAddressScreen(),
+                        fullscreenDialog: true
+                      ));
+                    },
+                  )
+                ),
+              ],
+            ),
+          ),
+          /* Positioned(
+              bottom: 380,
+              right: 20,
+              child: GestureDetector(
+                onTap: (){
+                  fetchLocation();
+                },
+                child: Container(
+                  height: 40.0,
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100.0),),
+                  ),
+                  child: Icon(Icons.my_location,size: 20.0,color: blackColor,),
                 ),
               )
+          ), */
+          // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+          /* Positioned(
+              top: 60,
+              right: 10,
+              child: GestureDetector(
+                onTap: (){
+                  _showBottomSheet();
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: Colors.white
+                  ),
+                  child: Icon(Icons.layers,color: blackColor,)
+                ),
+              )
+          ), */
+          Positioned(
+            top: 50,
+            left: 10,
+            child: Container(
+              height: 40.0,
+              width: 40.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(100.0),),
+              ),
+              child: IconButton(
+                icon: Icon(Icons.menu,size: 20.0,color: blackColor),
+                onPressed: (){
+                  final _state = _sideMenuKey.currentState;
+                  if (_state.isOpened)
+                    _state.closeSideMenu(); // close side menu
+                  else
+                    _state.openSideMenu();// open side menu
+                }
+              ),
             )
-          ],
-        ),
-      )
+          )
+        ],
+      ),
     );
   }
 }

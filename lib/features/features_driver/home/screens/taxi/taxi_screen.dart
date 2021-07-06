@@ -127,17 +127,24 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(diferencia > 5 && isWorking && mounted){
-        final _prefs = UserPreferences();
+      if(diferencia > 10 && isWorking && mounted){
         _markers.clear();
-        final MarkerId _markerMy = MarkerId('toLocation');
-        _markers[_markerMy] = GMapViewHelper.createMaker(
-          markerIdVal: 'fromLocation',
+        if(mounted){
+          setState(() {});
+        }
+        await Future.delayed(Duration(milliseconds: 250));
+        Marker marker = GMapViewHelper.createMaker(
+          markerIdVal: 'myPosition',
           icon: 'assets/image/marker/taxi_marker.png',
           lat: event.latitude,
           lng: event.longitude,
         );
-        driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
+        if(mounted){
+          setState(() {
+            _markers[marker.markerId] = marker;
+          });
+        }
+        await driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
       currentLocation = LatLng(event.latitude, event.longitude);
     });
@@ -405,7 +412,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     }
   }
 
-  void addMarker(LatLng locationForm, LatLng locationTo){
+  void 
+  addMarker(LatLng locationForm, LatLng locationTo){
     _markers.clear();
     final MarkerId _markerFrom = MarkerId('fromLocation');
     final MarkerId _markerTo = MarkerId('toLocation');
@@ -479,7 +487,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   _prefs.setDrivingState = false;
                   isWorking = false;
                 }else{
-                  
                   final _prefs = UserPreferences();
                   String token = _prefs.tokenPush;
                   String id = _prefs.idChofer;
@@ -534,114 +541,17 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         Container(
           height: MediaQuery.of(context).size.width,
           child: TinderSwapCard(
-              orientation: AmassOrientation.TOP,
-              totalNum: requestTaxi.length,
-              stackNum: 3,
-              maxWidth: MediaQuery.of(context).size.width,
-              minWidth: MediaQuery.of(context).size.width * 0.9,
-              maxHeight: MediaQuery.of(context).size.width * 1.4,
-              minHeight: MediaQuery.of(context).size.width * 0.85,
-              cardBuilder: (context, index) => InkWell(
-                onTap: () async {
-                  String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index], driverLocation: currentLocation)));
-                  if(newPrice != null){
-                    try{
-                      final _prefs = UserPreferences();
-                      await _prefs.initPrefs();
-                      Dialogs.openLoadingDialog(context);
-                      final dato = await pickupApi.actionTravel(
-                        _prefs.idChofer,
-                        requestTaxi[index].id,
-                        double.parse(requestTaxi[index].vchLatInicial),
-                        double.parse(requestTaxi[index].vchLatFinal),
-                        double.parse(requestTaxi[index].vchLongInicial),
-                        double.parse(requestTaxi[index].vchLongFinal),
-                        '',
-                        double.parse(newPrice),
-                        requestTaxi[index].iTipoViaje,
-                        '', '', '',
-                        requestTaxi[index].vchNombreInicial,
-                        requestTaxi[index].vchNombreFinal,
-                        aceptar,
-                        _prefs.tokenPush
-                      );
-                      PushMessage pushMessage = getIt<PushMessage>();
-                      Map<String, String> data = {
-                        'newOffer' : '1'
-                      };
-                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
-                      Navigator.pop(context);
-                      if(dato){
-                        //Esperar solicitud
-                      }else{
-                        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-                      }
-                    }on ServerException catch(e){
-                      Navigator.pop(context);
-                      Dialogs.alert(context,title: 'Error', message: e.message);
-                    }
-                  }
-                },
-                child: ItemRequest(
-                  avatar: 'https://source.unsplash.com/1600x900/?portrait',
-                  userName: requestTaxi[index].vchNombres,
-                  date: requestTaxi[index].dFecReg,
-                  price: requestTaxi[index].mPrecio,
-                  distance: '',
-                  addFrom: requestTaxi[index].vchNombreInicial,
-                  addTo: requestTaxi[index].vchNombreFinal,
-                  locationForm: LatLng(
-                    double.parse(requestTaxi[index].vchLatInicial),
-                    double.parse(requestTaxi[index].vchLongInicial),
-                  ),
-                  locationTo: LatLng(
-                    double.parse(requestTaxi[index].vchLatFinal),
-                    double.parse(requestTaxi[index].vchLongFinal),
-                  ),
-                  onPriceUpdate: (String newPrice){
-                    requestTaxi[index].mPrecio = newPrice;
-                    setState(() {});
-                  },
-                  onAccept: () async {
-                    try{
-                      final _prefs = UserPreferences();
-                      await _prefs.initPrefs();
-                      Dialogs.openLoadingDialog(context);
-                      final dato = await pickupApi.actionTravel(
-                        _prefs.idChofer,
-                        requestTaxi[index].id,
-                        double.parse(requestTaxi[index].vchLatInicial),
-                        double.parse(requestTaxi[index].vchLatFinal),
-                        double.parse(requestTaxi[index].vchLongInicial),
-                        double.parse(requestTaxi[index].vchLongFinal),
-                        '',
-                        double.parse(requestTaxi[index].mPrecio),
-                        requestTaxi[index].iTipoViaje,
-                        '', '', '',
-                        requestTaxi[index].vchNombreInicial,
-                        requestTaxi[index].vchNombreFinal,
-                        aceptar,
-                        _prefs.tokenPush
-                      );
-                      acceptedTravels.add(requestTaxi[index].id);
-                      lastUserToken = requestTaxi[index].token;
-                      PushMessage pushMessage = getIt<PushMessage>();
-                      Map<String, String> data = {
-                        'newOffer' : '1'
-                      };
-                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
-                      Navigator.pop(context);
-                      if(dato){
-                        //Esperar solicitud
-                      }else{
-                        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-                      }
-                    }on ServerException catch(e){
-                      Navigator.pop(context);
-                      Dialogs.alert(context,title: 'Error', message: e.message);
-                    }
-                  },
-                  onRefuse: () async {
+            orientation: AmassOrientation.TOP,
+            totalNum: requestTaxi.length,
+            stackNum: 3,
+            maxWidth: MediaQuery.of(context).size.width,
+            minWidth: MediaQuery.of(context).size.width * 0.9,
+            maxHeight: MediaQuery.of(context).size.width * 1.4,
+            minHeight: MediaQuery.of(context).size.width * 0.85,
+            cardBuilder: (context, index) => InkWell(
+              onTap: () async {
+                String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index], driverLocation: currentLocation)));
+                if(newPrice != null){
                   try{
                     final _prefs = UserPreferences();
                     await _prefs.initPrefs();
@@ -652,27 +562,21 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       double.parse(requestTaxi[index].vchLatInicial),
                       double.parse(requestTaxi[index].vchLatFinal),
                       double.parse(requestTaxi[index].vchLongInicial),
-                      double.parse(requestTaxi[index].vchLongInicial),
+                      double.parse(requestTaxi[index].vchLongFinal),
                       '',
-                      double.parse(requestTaxi[index].mPrecio),
+                      double.parse(newPrice),
                       requestTaxi[index].iTipoViaje,
-                       '', '','',
+                      '', '', '',
                       requestTaxi[index].vchNombreInicial,
                       requestTaxi[index].vchNombreFinal,
-                      rechazar,
+                      aceptar,
                       _prefs.tokenPush
                     );
-                    if(acceptedTravels.contains(requestTaxi[index].id)){
-                      PushMessage pushMessage = getIt<PushMessage>();
-                      Map<String, String> data = {
-                        'newReffuse' : '1',
-                        'idChofer': _prefs.idChoferReal
-                      };
-                      lastUserToken = requestTaxi[index].token;
-                      pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);
-                    }
-                    await getSolicitudes();
-                    analizeChanges();
+                    PushMessage pushMessage = getIt<PushMessage>();
+                    Map<String, String> data = {
+                      'newOffer' : '1'
+                    };
+                    pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
                     Navigator.pop(context);
                     if(dato){
                       //Esperar solicitud
@@ -683,20 +587,123 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     Navigator.pop(context);
                     Dialogs.alert(context,title: 'Error', message: e.message);
                   }
-                  },
-                ),
-              ),
-              swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
-              },
-              swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
-                /// Get orientation & index of swiped card!
-                if(orientation.index == 0){
-                  cancelTravel(requestTaxi[index]);
-                }else{
-                  acceptTravel(requestTaxi[index]);
                 }
-              }
+              },
+              child: ItemRequest(
+                avatar: 'https://source.unsplash.com/1600x900/?portrait',
+                userName: requestTaxi[index].vchNombres,
+                date: requestTaxi[index].dFecReg,
+                price: requestTaxi[index].mPrecio,
+                distance: '',
+                addFrom: requestTaxi[index].vchNombreInicial,
+                addTo: requestTaxi[index].vchNombreFinal,
+                locationForm: LatLng(
+                  double.parse(requestTaxi[index].vchLatInicial),
+                  double.parse(requestTaxi[index].vchLongInicial),
+                ),
+                locationTo: LatLng(
+                  double.parse(requestTaxi[index].vchLatFinal),
+                  double.parse(requestTaxi[index].vchLongFinal),
+                ),
+                onPriceUpdate: (String newPrice){
+                  requestTaxi[index].mPrecio = newPrice;
+                  setState(() {});
+                },
+                onAccept: () async {
+                  try{
+                    final _prefs = UserPreferences();
+                    await _prefs.initPrefs();
+                    Dialogs.openLoadingDialog(context);
+                    final dato = await pickupApi.actionTravel(
+                      _prefs.idChofer,
+                      requestTaxi[index].id,
+                      double.parse(requestTaxi[index].vchLatInicial),
+                      double.parse(requestTaxi[index].vchLatFinal),
+                      double.parse(requestTaxi[index].vchLongInicial),
+                      double.parse(requestTaxi[index].vchLongFinal),
+                      '',
+                      double.parse(requestTaxi[index].mPrecio),
+                      requestTaxi[index].iTipoViaje,
+                      '', '', '',
+                      requestTaxi[index].vchNombreInicial,
+                      requestTaxi[index].vchNombreFinal,
+                      aceptar,
+                      _prefs.tokenPush
+                    );
+                    acceptedTravels.add(requestTaxi[index].id);
+                    lastUserToken = requestTaxi[index].token;
+                    PushMessage pushMessage = getIt<PushMessage>();
+                    Map<String, String> data = {
+                      'newOffer' : '1'
+                    };
+                    pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
+                    Navigator.pop(context);
+                    if(dato){
+                      //Esperar solicitud
+                    }else{
+                      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                    }
+                  }on ServerException catch(e){
+                    Navigator.pop(context);
+                    Dialogs.alert(context,title: 'Error', message: e.message);
+                  }
+                },
+                onRefuse: () async {
+                try{
+                  final _prefs = UserPreferences();
+                  await _prefs.initPrefs();
+                  Dialogs.openLoadingDialog(context);
+                  final dato = await pickupApi.actionTravel(
+                    _prefs.idChofer,
+                    requestTaxi[index].id,
+                    double.parse(requestTaxi[index].vchLatInicial),
+                    double.parse(requestTaxi[index].vchLatFinal),
+                    double.parse(requestTaxi[index].vchLongInicial),
+                    double.parse(requestTaxi[index].vchLongInicial),
+                    '',
+                    double.parse(requestTaxi[index].mPrecio),
+                    requestTaxi[index].iTipoViaje,
+                      '', '','',
+                    requestTaxi[index].vchNombreInicial,
+                    requestTaxi[index].vchNombreFinal,
+                    rechazar,
+                    _prefs.tokenPush
+                  );
+                  if(acceptedTravels.contains(requestTaxi[index].id)){
+                    PushMessage pushMessage = getIt<PushMessage>();
+                    Map<String, String> data = {
+                      'newReffuse' : '1',
+                      'idChofer': _prefs.idChoferReal
+                    };
+                    lastUserToken = requestTaxi[index].token;
+                    pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Cancelación de oferta', description: 'El conductor canceló la oferta', data: data);
+                  }
+                  await getSolicitudes();
+                  analizeChanges();
+                  Navigator.pop(context);
+                  if(dato){
+                    //Esperar solicitud
+                  }else{
+                    Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                  }
+                }on ServerException catch(e){
+                  Navigator.pop(context);
+                  Dialogs.alert(context,title: 'Error', message: e.message);
+                }
+                },
+              ),
             ),
+            swipeUpdateCallback: (DragUpdateDetails details, Alignment align) {
+            },
+            swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
+              /// Get orientation & index of swiped card!
+              if(orientation.index == 0){
+                cancelTravel(requestTaxi[index]);
+              }else{
+                acceptTravel(requestTaxi[index]);
+              }
+            }
+          ),
         ): MyActivity(
           userImage: 'https://source.unsplash.com/1600x900/?portrait',
           userName: 'Naomi Cespedes',
