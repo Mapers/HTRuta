@@ -1,6 +1,9 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/profile.dart';
@@ -18,10 +21,13 @@ class MenuScreens extends StatelessWidget {
   final String activeScreenName;
 
   MenuScreens({this.activeScreenName});
-
+  
+  final Session _session = Session();
+  final _prefs = UserPreferences();
+  final registroConductorApi = RegistroConductorApi();
+  
   @override
   Widget build(BuildContext context) {
-    final Session _session = Session();
     return Drawer(
       elevation: 0,
       child: Column(
@@ -36,23 +42,18 @@ class MenuScreens extends StatelessWidget {
                     margin: EdgeInsets.all(0.0),
                     accountName: Text(data.names, style: headingWhite,),
                     accountEmail: Text('100 puntos - miembro Gold'),
-                    currentAccountPicture: CircleAvatar(
+                    currentAccountPicture: data.imageUrl.isNotEmpty ? CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
                       backgroundImage: CachedNetworkImageProvider(
-                        'https://source.unsplash.com/300x300/?portrait',
+                        data.imageUrl
                       )
+                    ) : CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.transparent,
                     ),
                     onDetailsPressed: (){
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute<Null>(
-                          builder: (BuildContext context) {
-                            return ProfileScreen();
-                          },
-                          fullscreenDialog: true
-                        )
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
                     },
                   );
                 }else{
@@ -170,7 +171,7 @@ class MenuScreens extends StatelessWidget {
                               onTap: () async {
                                 await _session.clear();
                                 Navigator.pop(context);
-                                Navigator.of(context).pushReplacementNamed(AppRoute.loginScreen);
+                                Navigator.of(context).pushNamed(AppRoute.loginScreen);
                               },
                             ),
                           ],
@@ -187,11 +188,50 @@ class MenuScreens extends StatelessWidget {
             height: 2.0,
             color: Colors.blueGrey,
           ),
-          SizedBox(height: 20.0,),
+          SizedBox(height: 20.0),
           FlatButton(
-            onPressed: (){
-              Navigator.pop(context);
-              Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
+            onPressed: () async {
+              if(_prefs.idChoferReal != '0'){
+                final session = Session();
+                final data = await session.get();
+                final estado = await registroConductorApi.obtenerEstadoChofer(data.dni);
+                if(estado.iEstado != 'Aprobado'){
+                  if(estado.iEstado == 'Rechazado'){
+                    Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada \n ¿Desea enviar los documentos que se solicitan?'
+                      ,onConfirm: (){
+                        Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
+                      }
+                      ,onCancel: (){
+                        Navigator.pop(context);
+                      }
+                    );
+                  }else{
+                    Dialogs.confirm(
+                      context,
+                      title: 'Alerta', 
+                      message: 'Su postulación está pendiente de aprobación',
+                      onConfirm: () async {
+                      },
+                    );
+                  }
+                }else{
+                  Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
+                }
+              }else{
+                Dialogs.confirm(
+                  context,
+                  title: 'Alerta', 
+                  message: 'Para entrar a la vista de chofer, tiene que postularse primero',
+                  onConfirm: () async {
+                    Navigator.of(context).pushNamed(AppRoute.registerDriverScreen);
+                  },
+                  onCancel: () async {
+
+                  }
+                );
+              }
+              
             }, 
             child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

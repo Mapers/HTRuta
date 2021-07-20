@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
+UserModel userModelRegisterFromJson(String str) => UserModel.fromJsonList(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
@@ -22,6 +23,11 @@ class UserModel {
     message: json['message'],
     success: json['success'],
     data: UserEntity.fromJson(json['data'])
+  );
+  factory UserModel.fromJsonList(Map<String, dynamic> json) => UserModel(
+    message: json['message'],
+    success: json['success'],
+    data: UserEntity.fromJsonList(json['data'][0])
   );
 
   Map<String, dynamic> toJson() => {
@@ -45,7 +51,12 @@ class UserEntity {
     this.urlImage,
     this.sexo,
     this.iIdUsuario,
-    this.iIdChofer
+    this.iIdChofer,
+    this.fechaNacimiento,
+    this.fechaRegistroUsuario,
+    this.fechaRegistroChofer,
+    this.direccion,
+    this.referencia
   });
 
   int bAdministrador;
@@ -61,10 +72,15 @@ class UserEntity {
   String sexo;
   int iIdUsuario;
   int iIdChofer;
+  String fechaNacimiento;
+  String fechaRegistroUsuario;
+  String fechaRegistroChofer;
+  String direccion;
+  String referencia;
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-    bAdministrador: json['bAdministrador'] != null ? int.parse(json['bAdministrador']) : 0,
-    bInactivo: json['bInactivo'] != null ? int.parse(json['bInactivo']) : 0,
+    bAdministrador: json['bAdministrador'] != null ? int.parse(json['bAdministrador'].toString()) : 0,
+    bInactivo: json['bInactivo'] != null ? int.parse(json['bInactivo'].toString()) : 0,
     vchDni: json['vchDni'],
     vchNombres: json['vchNombres'],
     vchApellidoP: json['vchApellidoP'],
@@ -72,10 +88,36 @@ class UserEntity {
     vchCelular: json['vchCelular'],
     vchCorreo: json['vchCorreo'],
     vchPassword: json['vchPassword'],
-    urlImage: json['urlImage'],
+    urlImage: json['urlImage'] ?? '',
+    fechaNacimiento: json['fechaNacimiento'] ?? '',
+    fechaRegistroUsuario: json['fechaRegistroUsuario'] ?? '',
+    fechaRegistroChofer: json['fechaRegistroChofer'] ?? '',
     sexo: json['sexo'].toString(),
-    iIdUsuario: json['iIdUsuario'] != null ? int.parse(json['iIdUsuario']) : 0,
-    iIdChofer: json['iIdChofer'] != null ? int.parse(json['iIdChofer']) : 0,
+    iIdUsuario: json['iIdUsuario'] != null ? int.parse(json['iIdUsuario'].toString()) : 0,
+    iIdChofer: json['iIdChofer'] != null ? int.parse(json['iIdChofer'].toString()) : 0,
+    direccion: json['direccion'] ?? '',
+    referencia: json['referencia'] ?? ''
+  );
+
+  factory UserEntity.fromJsonList(Map<String, dynamic> json) => UserEntity(
+    bAdministrador: json['bAdministrador'] != null ? int.parse(json['bAdministrador'].toString()) : 0,
+    bInactivo: json['bInactivo'] != null ? int.parse(json['bInactivo'].toString()) : 0,
+    vchDni: json['vchDni'],
+    vchNombres: json['vchNombres'],
+    vchApellidoP: json['vchApellidoP'],
+    vchApellidoM: json['vchApellidoM'],
+    vchCelular: json['vchCelular'],
+    vchCorreo: json['vchCorreo'],
+    vchPassword: json['vchPassword'],
+    urlImage: json['urlImage'] ?? '',
+    fechaNacimiento: json['fechaNacimiento'] != null ? json['fechaNacimiento']['date'].toString() : '',
+    fechaRegistroUsuario: json['fechaRegistroUsuario'] != null ? json['fechaRegistroUsuario']['date'].toString() : '',
+    fechaRegistroChofer: json['fechaRegistroChofer'] != null ? json['fechaRegistroChofer']['date'].toString() : '',
+    sexo: json['sexo'].toString(),
+    iIdUsuario: json['iIdUsuario'] != null ? int.parse(json['iIdUsuario'].toString()) : 0,
+    iIdChofer: json['iIdChofer'] != null ? int.parse(json['iIdChofer'].toString()) : 0,
+    direccion: json['direccion'] ?? '',
+    referencia: json['referencia'] ?? ''
   );
 
   Map<String, dynamic> toJson() => {
@@ -92,5 +134,7 @@ class UserEntity {
     'sexo': sexo,
     'iIdUsuario' : iIdUsuario,
     'iIdChofer' : iIdChofer,
+    'direccion': direccion,
+    'referencia': referencia
   };
 }

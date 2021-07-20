@@ -140,9 +140,13 @@ class _EditProfileState extends State<EditProfile> {
       newPhone ?? widget.userData.cellphone,
       newEmail ?? widget.userData.email,
       widget.userData.password,
-      'imageUrl',//TODO: Completar los campos
-      'sexo',
-      widget.userData.smsCode
+      widget.userData.imageUrl,//TODO: Completar los campos
+      widget.userData.sexo,
+      widget.userData.smsCode,
+      widget.userData.fechaNacimiento,
+      widget.userData.fechaRegistro,
+      widget.userData.direccion,
+      widget.userData.referencia,
     );
     SaveProfileBody body = SaveProfileBody(
       iIdUsuario: widget.userData.id,
@@ -234,7 +238,7 @@ class _EditProfileState extends State<EditProfile> {
                                           radius: 30,
                                           backgroundColor: Colors.transparent,
                                           backgroundImage: CachedNetworkImageProvider(
-                                            'https://source.unsplash.com/300x300/?portrait',
+                                            widget.userData.imageUrl.isNotEmpty ? widget.userData.imageUrl : 'https://source.unsplash.com/300x300/?portrait',
                                           )
                                         ),
                                       ),

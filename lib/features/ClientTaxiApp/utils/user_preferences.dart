@@ -143,4 +143,18 @@ class UserPreferences{
     notificacionesPasadas.removeAt(index);
     _prefs.setStringList('notificacionesUsuario', notificacionesPasadas);
   }
+
+
+  bool get newTravelInit => _prefs.getBool('newTravelInit') ?? false;
+
+  set newTravelInit(bool value) {
+    _prefs.setBool('newTravelInit', value);
+  }
+
+  bool get newTravelFinish => _prefs.getBool('newTravelFinish') ?? false;
+
+  set newTravelFinish(bool value) {
+    _prefs.setBool('newTravelFinish', value);
+  }
+
 }

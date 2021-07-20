@@ -175,6 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         )
                       ),
+                      /* InkWell(
+                        onTap: () => Navigator.of(context).pushNamed(AppRoute.registerDriverScreen),
+                        child: Text('Registrarse como conductor',style: textStyleActive,),
+                      ), */
                       /* Container(
                           padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
                           child: Column(

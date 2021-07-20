@@ -65,7 +65,7 @@ class MenuDriverScreens extends StatelessWidget {
                                     height: 70.0,
                                     width: 70.0,
                                     color: primaryColor,
-                                    child: data.imageUrl != null ? CachedNetworkImage(
+                                    child: data.imageUrl != null  && data.imageUrl.isNotEmpty ? CachedNetworkImage(
                                       imageUrl: data.imageUrl,
                                       fit: BoxFit.cover,
                                     ) : Container(),

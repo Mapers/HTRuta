@@ -4,6 +4,9 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/dropdown_input.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/register_user_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +15,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/tabla_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/tabla_codigo.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/register_phone_verification.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:intl/intl.dart';
 
@@ -35,8 +37,9 @@ class _SignupScreenState extends State<SignupScreen> {
   final authApi = AuthApi();
   String _email='', _password='',_nombres='',_apellidoP='',_apellidoM='',_dni='',_direccion='',_referencia='',_celular='';
   int _selectedSexo;
+  String _genderSelected = 'Masculino';
   final tablaApi = TablaApi();
-
+   final _prefs = UserPreferences();
   // ignore: unused_element
   void _submit() async{
     try{
@@ -47,7 +50,6 @@ class _SignupScreenState extends State<SignupScreen> {
       if(_isFetching) return;
       final isValid = formKey.currentState.validate();
       if(isValid){
-        Dialogs.openLoadingDialog(context);
         final deviceInfo = DeviceInfoPlugin();
         int dispositivo = 1;
         String marca='';
@@ -66,14 +68,32 @@ class _SignupScreenState extends State<SignupScreen> {
           nombreDispositivo = info.name;
           imei = info.identifierForVendor;
         }
-        final _prefs = UserPreferences();
-        await _prefs.initPrefs();
         final token = await _prefs.tokenPush;
-        final isOk = await authApi.registerUser(context,dni: _dni,nombre: _nombres,apellidoPaterno: _apellidoP,apellidoMaterno: _apellidoM,celular: _celular,correo: _email,password: _password,direccion: _direccion,fechaNacimiento: date.toString(),referencia: _referencia,tipoDispositivo: dispositivo.toString(),imei: imei,marca: marca,nombreDispositivo: nombreDispositivo,token: token,sexo: '1');
-        Navigator.pop(context);
-        if(isOk){
-          Navigator.pushNamedAndRemoveUntil(context, AppRoute.homeScreen, (route) => false);
+        final String code = await authApi.getVerificationCodeRegister(_celular);
+        if(code == ''){
+          Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
+          return;
         }
+        final user = RegisterUserModel(
+          dni: _dni, 
+          nombre:_nombres,
+          apellidoPaterno: _apellidoP,
+          apellidoMaterno: _apellidoM,
+          fechaNacimiento:date.toString(),
+          sexo: _genderSelected == 'Masculino' ? '1' : '2',
+          direccion: _direccion,
+          referencia:_referencia,
+          celular: _celular,
+          correo: _email,
+          password: _password,
+          tipoDispositivo: dispositivo.toString(),
+          marca: marca,
+          nombreDispositivo: nombreDispositivo,
+          imei: imei,
+          token: token,
+          code: code
+        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPhoneVerification(registerUser: user)));
       }
     }on ServerException catch (error){
       Navigator.pop(context);
@@ -172,6 +192,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     children: <Widget>[
                                                       Text('Registro', style: heading35Black,
                                                       ),
+                                                      Container(height: 20),
                                                       Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: <Widget>[
@@ -221,7 +242,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   prefixIcon: Icon(Icons.account_circle,
                                                                       color: yellowClear, size: 20.0),
                                                                   contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                  hintText: 'Apellido Paterno',
+                                                                  hintText: 'Apellido paterno',
                                                                   hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
                                                               )
                                                           ),
@@ -247,7 +268,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 prefixIcon: Icon(Icons.account_circle,
                                                                     color: yellowClear, size: 20.0),
                                                                 contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                                                                hintText: 'ApellidoMaterno',
+                                                                hintText: 'Apellido materno',
                                                                 hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
 
                                                               )
@@ -266,7 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               border: OutlineInputBorder(
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               ),
-                                                              prefixIcon: Icon(Icons.phone,
+                                                              prefixIcon: Icon(Icons.upload_file,
                                                                   color: yellowClear, size: 20.0),
                                                               contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                                                               hintText: 'Documento de identidad',
@@ -276,7 +297,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
-                                                          FutureBuilder<List<Datum>>(
+                                                          /* FutureBuilder<List<Datum>>(
                                                             future: tablaApi.getSexo(context),
                                                             builder: (context, snapshot) {
                                                               if(snapshot.hasData){
@@ -285,8 +306,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   width: double.infinity,
                                                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                                                                   decoration: BoxDecoration(
-                                                                      borderRadius: BorderRadius.circular(10.0),
-                                                                      border: Border.all()),
+                                                                    borderRadius: BorderRadius.circular(10.0),
+                                                                    border: Border.all()),
                                                                   child:  DropdownButton(
                                                                     value: _selectedSexo,
                                                                         items: snapshot.data
@@ -307,6 +328,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 return Center(child: CircularProgressIndicator(),);
                                                               }
                                                             },
+                                                          ), */
+                                                          DropdownInput(
+                                                            value: _genderSelected,
+                                                            items: ['Masculino', 'Femenino'],
+                                                            hintText: 'Género',
+                                                            onSelection: (value){
+                                                              
+                                                            },
                                                           ),
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
@@ -322,7 +351,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 border: OutlineInputBorder(
                                                                   borderRadius: BorderRadius.circular(10.0),
                                                                 ),
-                                                                prefixIcon: Icon(Icons.email,
+                                                                prefixIcon: Icon(Icons.place,
                                                                     color: yellowClear, size: 20.0),
                                                                 contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                                                                 hintText: 'Dirección',
@@ -343,7 +372,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               border: OutlineInputBorder(
                                                                 borderRadius: BorderRadius.circular(10.0),
                                                               ),
-                                                              prefixIcon: Icon(Icons.email,
+                                                              prefixIcon: Icon(Icons.place,
                                                                   color: yellowClear, size: 20.0),
                                                               contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
                                                               hintText: 'Referencia',
@@ -481,14 +510,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       ),
                                                       Padding( padding: EdgeInsets.only(top: 10.0), ),
                                                       Container(
-                                                          child:  Row(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            children: <Widget>[
-                                                              InkWell(
-                                                                child:  Text('¿Olvido contraseña?',style: textStyleActive,),
-                                                              ),
-                                                            ],
-                                                          )
+                                                        child:  Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            InkWell(
+                                                              child:  Text('¿Olvido contraseña?',style: textStyleActive,),
+                                                            ),
+                                                          ],
+                                                        )
                                                       ),
                                                       Padding( padding: EdgeInsets.only(top: 10.0),),
                                                       ButtonTheme(
@@ -500,10 +529,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           color: primaryColor,
                                                           icon:  Text(''),
                                                           label:  Text('Registrarse', style: headingWhite,),
-                                                          onPressed: () 
-                                                          {
-                                                            // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  HomeClientPage()));
-                                                          }
+                                                          onPressed: () => _submit()
                                                         ),
                                                       ),
                                                     ],

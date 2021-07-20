@@ -69,7 +69,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
-      await _cropImage(index);
+      // await _cropImage(index);
       setState(() {});
       Navigator.of(context).pop();
     }catch(_){}
@@ -80,7 +80,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       // ignore: deprecated_member_use
       var picture = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(picture.path);
-      await _cropImage(index);
+      // await _cropImage(index);
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
       Navigator.of(context).pop();
@@ -122,7 +122,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       appBar: AppBar(
         title: Text('Enviar documentos'),
         leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white,), onPressed: (){
-          Dialogs.confirm(context,title: 'Advertencia', message: '¿Desea salir de esta pantalla?, se perderá todo lo realizado',onConfirm: (){Navigator.pop(context); Navigator.of(context).pop();}, onCancel: (){Navigator.pop(context);}, textoConfirmar: 'Si', textoCancelar: 'No');
+          Dialogs.confirm(context,title: 'Advertencia', message: '¿Desea salir de esta pantalla?, se perderá todo lo realizado',onConfirm: (){Navigator.of(context).pop();}, onCancel: (){Navigator.pop(context);}, textoConfirmar: 'Si', textoCancelar: 'No');
         }),
       ),
       body: FutureBuilder<List<Documento>>(
@@ -192,9 +192,9 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
                               bool respuesta = await registroConductorApi.actualizarDocumentosRechazados(fotosData);
                               Navigator.pop(context);
                               if(respuesta){
-                                Dialogs.confirm(context, title: 'Informacion', message: 'Se envio la informacion exitosamente',onConfirm: (){Navigator.pushReplacement(context, Routes.toHomeDriverPage()); });
+                                Dialogs.confirm(context, title: 'Informacion', message: 'Se envio la informacion exitosamente',onConfirm: (){Navigator.pop(context); });
                               }else{
-                                Dialogs.alert(context, title: 'Error', message: 'No se pudo enviar la informacion, volver a intentarlo');
+                                Dialogs.alert(context, title: 'Error', message: 'No se pudo enviar la informacion, volver a intentarlo', onConfirm: (){});
                               }
                             }else{
                               Dialogs.alert(context, title: 'Error', message: 'Debe subir todas las fotos para proceder a enviar la información');

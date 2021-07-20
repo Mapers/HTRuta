@@ -22,7 +22,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Components/autoRotationMarker.dart' as rm;
 import 'package:HTRuta/app_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,6 +75,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   String selectedService;
   PushNotificationProvider pushProvider;
   bool nightMode = false;
+  bool isArriving = false;
+  bool bannerShowed = false;
   final pickUpApi = PickupApi();
 
   void _onMapCreated(GoogleMapController controller) {
@@ -91,14 +92,14 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      _mapController.setMapStyle('[]');
+      changeMapType(3, 'assets/style/dark_mode.json');
     }
   }
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    addMakers();
-    getRouter();
+    
+    getRouterInitial();
     _initCurrentLocation();
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
@@ -129,8 +130,10 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     });
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation  == null) return;
-      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(diferencia > 10 && mounted){
+      final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+      double diferencia1 = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      double diferencia2 = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal));
+      if(diferencia1 > 10 && mounted){
         final _prefs = UserPreferences();
         final MarkerId _markerMy = MarkerId('from_address');
         if(currentLocation != null){
@@ -142,6 +145,11 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
           );
           driverFirestoreService.updateDriverPosition(event.latitude, event.longitude, _prefs.idChofer);
         }
+      }
+      if(diferencia2 < 100 && !bannerShowed){
+        isArriving = true;
+        bannerShowed = true;
+        setState(() {});
       }
       currentLocation = LatLng(event.latitude, event.longitude);
     });
@@ -169,7 +177,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     }
   }
 
-  void addMakers(){
+  void addMakersFinal(){
+    markers.clear();
     final MarkerId markerIdFrom = MarkerId('from_address');
     final MarkerId markerIdTo = MarkerId('to_address');
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -203,9 +212,80 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     LocationEntity locationEntity = await LocationUtil.currentLocation();
     currentLocation = locationEntity.latLang;
   }
+  void addMakersInitial(Position currentPosition){
+    markers.clear();
+    final MarkerId markerIdFrom = MarkerId('from_address');
+    final MarkerId markerIdTo = MarkerId('to_address');
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+
+    final Marker marker = Marker(
+      markerId: markerIdFrom,
+      position: LatLng(currentPosition.latitude, currentPosition.longitude),
+      infoWindow: InfoWindow(title: 'Recojo', snippet: 'Mi posición actual'),
+      // ignore: deprecated_member_use
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
+      onTap: () {
+      },
+    );
+    final Marker markerTo = Marker(
+      markerId: markerIdFrom,
+      position: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),
+      infoWindow: InfoWindow(title: 'Recojo', snippet: pedidoProvider.request.vchNombreInicial),
+      // ignore: deprecated_member_use
+      icon:  checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_dropoff_96.png'),
+      onTap: () {
+      },
+    );
+    if(!mounted) return;
+    setState(() {
+      markers[markerIdFrom] = marker;
+      markers[markerIdTo] = markerTo;
+    });
+  }
 
   ///Calculate and return the best router
-  void getRouter() async {
+  void getRouterInitial() async {
+    Position currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    polyLines.clear();
+    var router;
+    LatLng _fromLocation = LatLng(currentLocation.latitude, currentLocation.longitude);
+    LatLng _toLocation = LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial));
+    bool routeFound = true;
+    await apis.getRoutes(
+      getRoutesRequest: GetRoutesRequestModel(
+          fromLocation: _fromLocation,
+          toLocation: _toLocation,
+          mode: 'DRIVING'
+      ),
+    ).then((data) {
+      if (data != null) {
+        if(data.result.routes.isEmpty){
+          routeFound = false;
+        }else{
+          router = data?.result?.routes[0]?.overviewPolyline?.points;
+          routesData = data?.result?.routes;
+        }
+      }
+    }).catchError((error) {
+    });
+    if(!routeFound) {
+      _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+      return;
+    }
+    distance = routesData[0]?.legs[0]?.distance?.text;
+    duration = routesData[0]?.legs[0]?.duration?.text;
+
+    polyLines[polylineId] = GMapViewHelper.createPolyline(
+      polylineIdVal: polylineIdVal,
+      router: router
+    );
+    addMakersInitial(currentLocation);
+    _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
+  }
+  void getRouterFinal() async {
     final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
     final PolylineId polylineId = PolylineId(polylineIdVal);
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -242,45 +322,8 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
       polylineIdVal: polylineIdVal,
       router: router
     );
-    if(!mounted) return;
-    setState(() {});
+    addMakersFinal();
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
-  }
-
-  ///Real-time test of driver's location
-  ///My data is demo.
-  ///This function works by: every 5 or 2 seconds will request for api and after the data returns,
-  ///the function will update the driver's position on the map.
-
-  double valueRotation;
-  void runTrackingDriver(var _listPosition){
-    int count = 1;
-    int two = count;
-    const timeRequest = Duration(seconds: 2);
-    Timer.periodic(timeRequest, (Timer t) {
-      LatLng positionDriverBefore = _listPosition[two-1];
-      positionDriver = _listPosition[count++];
-
-      valueRotation = rm.calculateangle(positionDriverBefore.latitude, positionDriverBefore.longitude,positionDriver.latitude, positionDriver.longitude);
-      addMakersDriver(positionDriver);
-      _mapController?.animateCamera(
-        CameraUpdate?.newCameraPosition(
-          CameraPosition(
-            target: positionDriver,
-            zoom: 15.0,
-          ),
-        ),
-      );
-      if(count == _listPosition.length){
-        if(!mounted) return;
-        setState(() {
-          t.cancel();
-          isComplete = true;
-          showDialog(context: context, child: dialogInfo());
-        });
-
-      }
-    });
   }
 
   void addMakersDriver(LatLng _position){
@@ -303,102 +346,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     });
   }
 
-  AlertDialog dialogOption(){
-
-    return AlertDialog(
-      title: Text('Opcion'),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      content: Container(
-        child: TextFormField(
-          style: textStyle,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            //border: InputBorder.none,
-            hintText: 'Ejemplo: Estoy parado frente a la parada del bus...',
-            // hideDivider: true
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Cancel'),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        ),
-        FlatButton(
-          child: Text('Ok'),
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-        ),
-
-      ],
-    );
-  }
-
-  // dialogPromoCode(){
-  //   return AlertDialog(
-  //     title: Text('Codigo Promoción'),
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(10.0)
-  //     ),
-  //     content: Container(
-  //       child: TextFormField(
-  //         style: textStyle,
-  //         keyboardType: TextInputType.text,
-  //         decoration: InputDecoration(
-  //           //border: InputBorder.none,
-  //           hintText: 'Ingresa código de promoción',
-  //           // hideDivider: true
-  //         ),
-  //       ),
-  //     ),
-  //     actions: <Widget>[
-  //       FlatButton(
-  //         child: Text('Confirmar'),
-  //         onPressed: (){
-  //           Navigator.of(context).pop();
-  //         },
-  //       )
-  //     ],
-  //   );
-  // }
-
-  // handSubmit(){
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   Timer(Duration(seconds: 5), () {
-  //     setState(() {
-  //       isLoading = false;
-  //       isResult = true;
-  //     });
-  //   });
-  // }
-
-  // ignore: always_declare_return_types
-  dialogInfo(){
-    AlertDialog(
-      title: Text('Información'),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-      ),
-      content: Text('Viaje completado. Revisa tu viaje ahora!.'),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('Ok'),
-          onPressed: (){
-            Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(AppRoute.reviewTripScreen);
-          },
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final pedidoProvider = Provider.of<PedidoProvider>(context);
@@ -407,6 +354,24 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
       body: Stack(
         children: <Widget>[
           buildContent(context),
+          /* isArriving ? Positioned(
+            top: 100,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white.withOpacity(0.2),
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Center(child: Text('Se encuentra próximo al punto de destino', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
+            ),
+          ) : Container(), */
+          Positioned(
+            top: 100,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white.withOpacity(0.2),
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Center(child: Text('Se encuentra próximo al punto de destino', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
+            ),
+          ),
           Positioned(
             bottom: 0,
             child: Container(
@@ -477,6 +442,12 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                             title: 'Atención', 
                             message: '¿Desea comenzar el viaje?',
                             onConfirm: () async{
+                              final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
+                              final success = await pickUpApi.updateState(_prefs.idChoferReal, pedidoProvider.request.idSolicitud, '5');
+                              if(!success){
+                                Dialogs.alert(context,title: 'Error', message: 'No se pudo actualizar el estado del viaje');
+                                return;
+                              }
                               PushMessage pushMessage = getIt<PushMessage>();
                               Map<String, String> data = {
                                 'travelInit' : '1'
@@ -484,6 +455,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                               pushMessage.sendPushMessage(token: pedidoProvider.request.token, title: 'Inicio de viaje', description: 'El chofer lo llevará a su destino', data: data);
                               travelInit = true;
                               setState(() {});
+                              getRouterFinal();
                             },
                             onCancel: (){
                               Navigator.pop(context);
@@ -510,7 +482,11 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                             title: 'Atención', 
                             message: '¿Desea finalizar el viaje?',
                             onConfirm: () async{
-                              final _prefs = UserPreferences();
+                              final success = await pickUpApi.updateState(_prefs.idChoferReal, pedidoProvider.request.idSolicitud, '6');
+                              if(!success){
+                                Dialogs.alert(context,title: 'Error', message: 'No se pudo actualizar el estado del viaje');
+                                return;
+                              }
                               _prefs.setNotificacionConductor = 'Viajes,El viaje ha concluido';
                               PushMessage pushMessage = getIt<PushMessage>();
                               Map<String, String> data = {
@@ -571,7 +547,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                             }
                           },
                           onCancel: (){
-                            Navigator.pop(context);
                           },
                           textoConfirmar: 'Si',
                           textoCancelar: 'No'

@@ -20,7 +20,11 @@ class DriverFirestoreService{
     DocumentReference ref = _db.collection('taxis_in_service').doc(path);
     await ref.update({
       'available': avaliability,
-    }).catchError((onError) => print(onError));
+    }).catchError((onError) => {
+      ref.set({
+        'available': avaliability,
+      })
+    });
     return ref.id;
   }
   Future<String> updateDriverPosition(double latitud, double longitud, String path) async {

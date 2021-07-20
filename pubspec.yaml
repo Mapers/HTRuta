@@ -68,6 +68,7 @@ dependencies:
   video_player: ^1.0.1
   flutter_cache_manager: ^2.1.2
   share: ^0.6.5+4
+  vibration: ^1.7.3
   
 dev_dependencies:
   flutter_test:

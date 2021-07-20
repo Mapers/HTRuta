@@ -98,6 +98,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         Navigator.pop(context);
                         if(isOk){
                           Navigator.pushNamedAndRemoveUntil(context, AppRoute.splashScreen, (route) => false);
+                        }else{
+                          Dialogs.alert(context,title: 'Error', message: 'El código ingresado es incorrecto');
                         }
                       },
                     ),

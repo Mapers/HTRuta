@@ -83,13 +83,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 150,
                         child: Hero(
                           tag: 'avatar_profile',
-                          child: CircleAvatar(
+                          child: userData.imageUrl.isNotEmpty ? CircleAvatar(
                             radius: 30,
                             backgroundColor: Colors.transparent,
                             backgroundImage: CachedNetworkImageProvider(
-                              'https://source.unsplash.com/300x300/?portrait',
+                              userData.imageUrl,
                             )
-                          ),
+                          ) : CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.transparent,
+                          )
                         ),
                       ),
                     ),
@@ -122,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    'Cliente desde 2020',
+                    'Cliente desde ${userData.fechaRegistro.isNotEmpty ? userData.fechaRegistro.substring(0,4) : ''}',
                     style: TextStyle( color: blackColor, fontSize: 13.0),
                   ),
                 ],

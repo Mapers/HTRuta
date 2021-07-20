@@ -45,6 +45,10 @@ class Data {
         this.telefono,
         this.celular,
         this.urlImage,
+        this.direccion,
+        this.referencia,
+        this.saldo,
+        this.metodosPago
     });
 
     String iIdChofer;
@@ -52,25 +56,33 @@ class Data {
     String nombres;
     String apellidoPaterno;
     String apellidoMaterno;
-    DateTime fechaNacimiento;
-    DateTime fechaRegistro;
+    String fechaNacimiento;
+    String fechaRegistro;
     String sexo;
     String telefono;
     String celular;
     String urlImage;
+    String direccion;
+    String referencia;
+    double saldo;
+    String metodosPago;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        iIdChofer: json['iIdChofer'] != null ? json['iIdChofer'] : '0',
-        vchCorreo: json['vchCorreo'],
-        nombres: json['nombres'],
-        apellidoPaterno: json['apellidoPaterno'],
-        apellidoMaterno: json['apellidoMaterno'],
-        fechaNacimiento: DateTime.parse(json['fechaNacimiento']),
-        fechaRegistro: DateTime.parse(json['fechaRegistro']),
-        sexo: json['sexo'],
-        telefono: json['telefono'],
-        celular: json['celular'],
-        urlImage: json['urlImage'],
+        iIdChofer: json['iIdChofer']  ?? '0',
+        vchCorreo: json['vchCorreo'] ?? '',
+        nombres: json['nombres'] ?? '',
+        apellidoPaterno: json['apellidoPaterno'] ?? '',
+        apellidoMaterno: json['apellidoMaterno'] ?? '',
+        fechaNacimiento: json['fechaNacimiento'] ?? '',
+        fechaRegistro: json['fechaRegistro'] ?? '',
+        sexo: json['sexo'] ?? '',
+        telefono: json['telefono'] ?? '',
+        celular: json['celular'] ?? '',
+        urlImage: json['urlImage'] ?? '',
+        direccion: json['direccion'] ?? '',
+        referencia: json['referencia'] ?? '',
+        saldo: json['saldo'] != null ? double.parse(json['saldo']) : 0,
+        metodosPago: json['metodos_pago'] ?? 'false'
     );
 
     Map<String, dynamic> toJson() => {
@@ -79,11 +91,13 @@ class Data {
         'nombres': nombres,
         'apellidoPaterno': apellidoPaterno,
         'apellidoMaterno': apellidoMaterno,
-        'fechaNacimiento': '${fechaNacimiento.year.toString().padLeft(4, '0')}-${fechaNacimiento.month.toString().padLeft(2, '0')}-${fechaNacimiento.day.toString().padLeft(2, '0')}',
-        'fechaRegistro': fechaRegistro.toIso8601String(),
+        'fechaNacimiento': fechaNacimiento,
+        'fechaRegistro': fechaRegistro,
         'sexo': sexo,
         'telefono': telefono,
         'celular': celular,
         'urlImage': urlImage,
+        'direccion': direccion,
+        'referencia': referencia
     };
 }

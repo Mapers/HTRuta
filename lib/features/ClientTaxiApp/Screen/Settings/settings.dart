@@ -90,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           height: 80.0,
                                           width: 80.0,
                                           child: CachedNetworkImage(
-                                            imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                                            imageUrl: data.imageUrl.isNotEmpty ? data.imageUrl : 'https://source.unsplash.com/1600x900/?portrait',
                                             fit: BoxFit.cover,
                                           ),
                                         )

@@ -119,6 +119,20 @@ class PickupApi{
       return false;
     }
   }
+  Future<bool> updateState(String choferId, String idSolicitud, String newState)async{
+    final url = '${Config.nuevaRutaApi}/viaje/actualizar-estado';
+    try{
+      final response = await http.post(url,body: {'choferId' : choferId, 'solicitudId': idSolicitud, 'status': newState} );
+      final responseData = json.decode(response.body);
+      if(responseData['success']){
+        return true;
+      }else{
+        return false;
+      }
+    } catch(error){
+      return false;
+    }
+  }
 
   Future<bool> acceptTravelFinish(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/actualizar-viaje';

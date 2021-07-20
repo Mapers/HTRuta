@@ -9,7 +9,7 @@ class Session{
   final storage = FlutterSecureStorage();
 
   // ignore: always_declare_return_types
-  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password, String imageUrl, String sexo, String smsCode) async{
+  set(String id,String dni, String names, String lastNameFather, String lastNameMother, String cellphone, String email, String password, String imageUrl, String sexo, String smsCode, String fechaNacimiento, String fechaRegistro, String direccion, String referencia) async{
     final data = UserSession(
       id: id,
       dni: dni,
@@ -22,11 +22,15 @@ class Session{
       password: password,
       imageUrl: imageUrl,
       sexo: sexo,
+      fechaNacimiento: fechaNacimiento,
+      fechaRegistro: fechaRegistro,
+      direccion: direccion,
+      referencia: referencia,
     );
     await storage.write(key: key, value: jsonEncode(data.toMap));
   }
 
-  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro, String imageUrl, String smsCode) async{
+  void setDriverData(String name, String pName, String mName, String phone, String email, String dni, String sexo, String fechaNacimiento, String fechaRegistro, String imageUrl, String smsCode, String direccion, String referencia, String metodosPago, double saldo) async{
     final data = DriverSession(
       name: name,
       pName: pName,
@@ -38,7 +42,11 @@ class Session{
       fechaNacimiento: fechaNacimiento,
       fechaRegistro: fechaRegistro,
       imageUrl: imageUrl,
-      smsCode: smsCode
+      smsCode: smsCode,
+      direccion: direccion,
+      referencia: referencia,
+      metodosPago: metodosPago,
+      saldo: saldo
     );
     await storage.write(key: 'DRIVER', value: jsonEncode(data.toMap));
   }
@@ -74,6 +82,10 @@ class UserSession extends Equatable{
   final String imageUrl;
   final String sexo;
   final String smsCode;
+  final String fechaRegistro;
+  final String fechaNacimiento;
+  final String direccion;
+  final String referencia;
 
   UserSession({
     @required this.id,
@@ -87,6 +99,10 @@ class UserSession extends Equatable{
     @required this.imageUrl,
     @required this.sexo,
     @required this.smsCode,
+    @required this.fechaRegistro,
+    @required this.fechaNacimiento,
+    @required this.direccion,
+    @required this.referencia,
   });
 
   Map<String, String> get toMap => {
@@ -101,6 +117,10 @@ class UserSession extends Equatable{
     'imageUrl': imageUrl,
     'sexo': sexo,
     'smsCode': smsCode,
+    'fechaRegistro': fechaRegistro,
+    'fechaNacimiento': fechaNacimiento,
+    'direccion': direccion,
+    'referencia': referencia,
   };
 
   String get fullNames => '$lastNameFather $lastNameMother $names';
@@ -117,10 +137,14 @@ class UserSession extends Equatable{
     imageUrl: json['imageUrl'],
     sexo: json['sexo'],
     smsCode: json['smsCode'],
+    fechaRegistro: json['fechaRegistro'],
+    fechaNacimiento: json['fechaNacimiento'],
+    direccion: json['direccion'],
+    referencia: json['referencia'],
   );
 
   @override
-  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password, imageUrl, sexo, smsCode];
+  List<Object> get props => [id, dni, names, lastNameFather, lastNameMother, cellphone, email, password, imageUrl, sexo, smsCode, fechaRegistro, fechaNacimiento, direccion, referencia];
 }
 
 class DriverSession extends Equatable{
@@ -135,6 +159,11 @@ class DriverSession extends Equatable{
   final String fechaRegistro;
   final String imageUrl;
   final String smsCode;
+  final String direccion;
+  final String referencia;
+  final String metodosPago;
+  final double saldo;
+  
 
   DriverSession({
     @required this.name,
@@ -148,6 +177,10 @@ class DriverSession extends Equatable{
     @required this.fechaRegistro,
     @required this.imageUrl,
     @required this.smsCode,
+    @required this.direccion,
+    @required this.referencia,
+    @required this.metodosPago,
+    @required this.saldo,
   });
 
   Map<String, String> get toMap => {
@@ -162,6 +195,10 @@ class DriverSession extends Equatable{
     'fechaRegistro': fechaRegistro,
     'imageUrl': imageUrl,
     'smsCode': smsCode,
+    'direccion': direccion,
+    'referencia': referencia,
+    'metodos_pago': metodosPago,
+    'saldo': saldo.toString(),
   };
 
   factory DriverSession.fromMap(dynamic json) => DriverSession(
@@ -175,9 +212,13 @@ class DriverSession extends Equatable{
     fechaNacimiento: json['fechaNacimiento'],
     fechaRegistro: json['fechaRegistro'],
     imageUrl: json['imageUrl'],
-    smsCode: json['smsCode']
+    smsCode: json['smsCode'],
+    direccion: json['direccion'],
+    referencia: json['referencia'],
+    metodosPago: json['metodos_pago'] ?? 'false',
+    saldo: json['saldo'] != null ? double.parse(json['saldo']) : 0.0,
   );
 
   @override
-  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro, imageUrl, smsCode];
+  List<Object> get props => [name, pName, mName, phone, email, dni, sexo, fechaNacimiento, fechaRegistro, imageUrl, smsCode, direccion, referencia, metodosPago, saldo];
 }

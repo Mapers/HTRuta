@@ -74,6 +74,8 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   GeoPoint driverPosition;
   Timer timer;
   AproxElement aproxElement;
+  bool appInBackground = false;
+  bool notificationListenerExecuted = false;
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -82,19 +84,31 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    print(state);
     if (state == AppLifecycleState.resumed) {
       changeMapType(3, 'assets/style/dark_mode.json');
+      if(!notificationListenerExecuted){
+        appInBackground = false;
+        updateStateWhenNoNotificationSelected(context);
+      }
+      appInBackground = false;
+    }
+    if (state == AppLifecycleState.paused) {
+      appInBackground = true;
+      //Escribir en los shared preferences
     }
   }
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // _initLastKnownLocation();
-    // fetchLocation();
     fechDriverLocation();
     pushProvider = PushNotificationProvider();
     pushProvider.mensajes.listen((argumento) async{
+      if(appInBackground){
+        notificationListenerExecuted = true;
+        appInBackground = false;
+      }
       Map data = argumento['data'];
       if(data == null) return;
       String newCancel = data['newCancel'] ?? '0';
@@ -136,33 +150,41 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             barrierDismissible: false,
             child: CommentUserDialog()
           );
-          /* Fluttertoast.showToast(
-            msg: 'El viaje ha concluido',
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0
-          ); */
           Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
         }
       }
     });
     timer = Timer.periodic(Duration(seconds: 10), (Timer t){
-        updateTimeAproximation();
+        updateTimeAproximation(context);
+        if(!mounted) return;
         setState(() {});
       }
     );
-    // showPersBottomSheetCallBack = _showBottomSheet;
-    /* sampleData.add(MapTypeModel(1,true, 'assets/style/maptype_nomal.png', 'Nomal', 'assets/style/nomal_mode.json'));
-    sampleData.add(MapTypeModel(2,false, 'assets/style/maptype_silver.png', 'Silver', 'assets/style/sliver_mode.json'));
-    sampleData.add(MapTypeModel(3,false, 'assets/style/maptype_dark.png', 'Dark', 'assets/style/dark_mode.json'));
-    sampleData.add(MapTypeModel(4,false, 'assets/style/maptype_night.png', 'Night', 'assets/style/night_mode.json'));
-    sampleData.add(MapTypeModel(5,false, 'assets/style/maptype_netro.png', 'Netro', 'assets/style/netro_mode.json'));
-    sampleData.add(MapTypeModel(6,false, 'assets/style/maptype_aubergine.png', 'Aubergine', 'assets/style/aubergine_mode.json')); */
   }
-  Future<void> updateTimeAproximation() async {
+  Future<void> updateStateWhenNoNotificationSelected(BuildContext context) async{
+    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    try{
+      final item = await pickupApi.getHistoryDriverDetail(pedidoProvider.idViaje);
+      if(item.estado == '5'){
+        travelInits = true;
+        timer?.cancel();
+        _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha iniciado';
+        await getRouter();
+        addMakers();
+      }else if (item.estado == '6'){
+        _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha finalizado';
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          child: CommentUserDialog()
+        );
+        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
+      }
+    }catch(e){
+      print(e);
+    }
+  }
+  Future<void> updateTimeAproximation(BuildContext context) async {
     if(driverPosition == null) return;
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
     try{
@@ -485,57 +507,56 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             Positioned(
               bottom: 0,
               child: Container(
-                  height: responsive.hp(23),
-                  width: responsive.wp(94),
-                  margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
-                  padding: EdgeInsets.all(responsive.wp(3)),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text('Modelo: ${pedidoProvider.requestDriver.vchModelo}',style: TextStyle(fontSize: responsive.ip(2.2)),),
-                      SizedBox(height: responsive.hp(2),),
-                      Text('Placa: ${pedidoProvider.requestDriver.vchPlaca}',style: TextStyle(fontSize: responsive.ip(2.2))),
-                      Divider(color: Colors.grey,),
-                      ListTile(
-                        leading: Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: CachedNetworkImage(
-                              imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
-                              fit: BoxFit.cover,
-                              width: responsive.wp(14),
-                              height: responsive.wp(14)
-                            ),
+                width: responsive.wp(94),
+                margin: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+                padding: EdgeInsets.all(responsive.wp(3)),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Text('Modelo: ${pedidoProvider.requestDriver.vchModelo}',style: TextStyle(fontSize: responsive.ip(2.2)),),
+                    SizedBox(height: responsive.hp(2),),
+                    Text('Placa: ${pedidoProvider.requestDriver.vchPlaca}',style: TextStyle(fontSize: responsive.ip(2.2))),
+                    Divider(color: Colors.grey,),
+                    ListTile(
+                      leading: Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: CachedNetworkImage(
+                            imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                            fit: BoxFit.cover,
+                            width: responsive.wp(14),
+                            height: responsive.wp(14)
                           ),
                         ),
-                        title: Text('${pedidoProvider.requestDriver.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
-                        subtitle: Row(
-                          children: <Widget>[
-                            Icon(Icons.star, color: primaryColor,),
-                            Text('4.8 (5)',style: TextStyle(fontSize: responsive.ip(1.8)))
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green,),
-                          onPressed: ()async{
-                            final url = 'tel:${pedidoProvider.requestDriver.vchCelular}';
-                            try{
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            }catch(e){
-                              Dialogs.alert(e);
+                      ),
+                      title: Text('${pedidoProvider.requestDriver.vchNombres}',style: TextStyle(fontSize: responsive.ip(2))),
+                      subtitle: Row(
+                        children: <Widget>[
+                          Icon(Icons.star, color: primaryColor,),
+                          Text('4.8 (5)',style: TextStyle(fontSize: responsive.ip(1.8)))
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(FontAwesomeIcons.phoneAlt, color: Colors.green,),
+                        onPressed: ()async{
+                          final url = 'tel:${pedidoProvider.requestDriver.vchCelular}';
+                          try{
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
                             }
-                          },
-                        )
+                          }catch(e){
+                            Dialogs.alert(e);
+                          }
+                        },
                       )
-                    ],
-                  )
+                    )
+                  ],
+                )
               ),
             ),
             Positioned(

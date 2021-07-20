@@ -32,6 +32,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 
 class TaxiDriverServiceScreen extends StatefulWidget {
@@ -128,7 +129,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       if(currentLocation == null) return;
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
       if(diferencia > 10 && isWorking && mounted){
-        _markers.clear();
+        /* _markers.clear();
         if(mounted){
           setState(() {});
         }
@@ -143,7 +144,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           setState(() {
             _markers[marker.markerId] = marker;
           });
-        }
+        } */
         await driverFirestoreService.updateDriverPosition(currentLocation.latitude, currentLocation.longitude, _prefs.idChofer);
       }
       currentLocation = LatLng(event.latitude, event.longitude);
@@ -155,7 +156,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         debugPrint(e.toString())
       });
       fetchLocation();
-      fetchEstadoConductor();
+      // fetchEstadoConductor();
+      fetchDataImportante();
       isLoading = false;
       if (!mounted) return;
       setState(() {});
@@ -288,7 +290,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0
-      ); 
+      );
+      vibrateNewRequest();
     }
     requestPast = requestTaxi.map((e) => {
       'id': e.id,
@@ -296,6 +299,18 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     }).toList();
     if (!mounted) return;
     setState(() {});  
+  }
+  Future<void> vibrateNewRequest() async {
+    if (await Vibration.hasCustomVibrationsSupport()) {
+      Vibration.vibrate(pattern: [500, 1000, 500, 1000, 500, 1000, 500, 1000]);
+    } else {
+      await Future.delayed(Duration(milliseconds: 500));
+      Vibration.vibrate(duration: 1000);
+      await Future.delayed(Duration(milliseconds: 500));
+      Vibration.vibrate(duration: 1000);
+      await Future.delayed(Duration(milliseconds: 500));
+      Vibration.vibrate(duration: 1000);
+    }
   }
   Future<void> fetchEstadoConductor() async{
     Dialogs.openLoadingDialog(context);
@@ -305,9 +320,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     Navigator.pop(context);
     if(estado != null){
       if(estado.iEstado == 'Rechazado'){
-        Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada totalmente!\n ¿Desea enviar los documentos que se solicitan?'
+        Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada!\n ¿Desea enviar los documentos que se solicitan?'
           ,onConfirm: (){
-            Navigator.pop(context);
             Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
           }
           ,onCancel: (){
@@ -315,6 +329,26 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           }
         );
       }
+    }
+  }
+  Future<void> fetchDataImportante() async{
+    final session = Session();
+    final data = await session.getDriverData();
+    if(data.saldo == 0 && data.metodosPago == 'false'){
+      Dialogs.confirm(context,title: 'Alerta', message: 'Recargue su saldo y guarde sus métodos de pago para recibir viajes'
+        ,onConfirm: (){
+        }
+      );
+    }else if (data.saldo == 0){
+      Dialogs.confirm(context,title: 'Alerta', message: 'Recargue su saldo para recibir viajes'
+        ,onConfirm: (){
+        }
+      );
+    }else if (data.metodosPago == 'false'){
+      Dialogs.confirm(context,title: 'Alerta', message: 'Guarde sus métodos de pago para recibir viajes'
+        ,onConfirm: (){
+        }
+      );
     }
   }
 
@@ -374,7 +408,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     changeMapType(3, 'assets/style/dark_mode.json');
-    final MarkerId _markerMy = MarkerId('toLocation');
+    /* final MarkerId _markerMy = MarkerId('toLocation');
     if(currentLocation != null){
       _markers[_markerMy] = GMapViewHelper.createMaker(
         markerIdVal: 'fromLocation',
@@ -382,7 +416,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         lat: currentLocation.latitude,
         lng: currentLocation.longitude,
       );
-    }
+    } */
     if(listRequest.isNotEmpty){
       addMarker(listRequest.first['locationForm'], listRequest.first['locationTo']);
     }
@@ -412,8 +446,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     }
   }
 
-  void 
-  addMarker(LatLng locationForm, LatLng locationTo){
+  void addMarker(LatLng locationForm, LatLng locationTo){
     _markers.clear();
     final MarkerId _markerFrom = MarkerId('fromLocation');
     final MarkerId _markerTo = MarkerId('toLocation');
@@ -808,7 +841,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         ),
         markers: _markers,
         polyLines: _polyLines,
-        myLocationEnabled: false,
+        myLocationEnabled: true,
       ),
     );
   }

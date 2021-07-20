@@ -37,7 +37,7 @@ class Dialogs{
     ..show();
   }
 
-  static void confirm(BuildContext context, {title = '', message= '', VoidCallback onCancel, VoidCallback onConfirm, String textoConfirmar='Ok', String textoCancelar = 'Cancelar'}){
+  static void confirm(BuildContext context, {title = '', message= '', VoidCallback onCancel, VoidCallback onConfirm, String textoConfirmar='Ok', String textoCancelar = 'Cancelar', VoidCallback onDismiss}){
     /* showDialog(
       context: context,
       builder: (context){
@@ -68,6 +68,7 @@ class Dialogs{
       title: title,
       desc: message,
       btnOkText: 'Ok',
+      onDissmissCallback: onDismiss,
       btnCancelText: 'Cancel',
       showCloseIcon: true,
       btnCancelOnPress: onCancel,
