@@ -24,7 +24,15 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
     return BlocBuilder<AvailablesRoutesBloc, AvailablesRoutesState>(
       builder: (context, state) {
         if (state is LoadingAvailablesRoutes) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+            child: Column(
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 10,),
+                Text('Buscado...')
+              ],
+            )
+          );
         }
         DataAvailablesRoutes param = state;
         if (param.availablesRoutes.isEmpty) {

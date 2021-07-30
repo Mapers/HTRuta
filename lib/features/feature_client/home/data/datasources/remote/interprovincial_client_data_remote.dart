@@ -18,17 +18,27 @@ class InterprovincialClientRemoteDataSoruce {
   List<ClientInterporvincialRoutesEntity> routes =[];
 
   Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating, @required final List<int> paymentMethods}) async{
-    ResponseHttp result = await requestHttp.post(
-      Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
-      data: {
-        'radio': radio,
-        'seating': seating,
-        'position_user': from.toMap,
-        'to': to.toMap,
-        'payment_methods': paymentMethods
-      }
-    );
-    List<AvailableRouteEntity> availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
+    List<AvailableRouteEntity> availablesRoutes = [];
+    int initial = 4;
+    do {
+      initial++;
+      print(initial);
+      ResponseHttp result = await requestHttp.post(
+        Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
+        data: {
+          'radio': initial,
+          'seating': seating,
+          'position_user': from.toMap,
+          'to': to.toMap,
+          'payment_methods': paymentMethods
+        }
+      );
+      print('consulte');
+      availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
+      print(availablesRoutes);
+      print(availablesRoutes.isEmpty.toString() + '_' + (initial < 15).toString());
+    } while (availablesRoutes.isEmpty & (initial < 15));
+    print('salir');
     return availablesRoutes;
   }
 

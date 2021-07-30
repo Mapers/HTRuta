@@ -17,7 +17,7 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rutas disponibles'),
+        title: Text('Rutas disponibles',),
       ),
       body: SingleChildScrollView(
         child: Padding(
