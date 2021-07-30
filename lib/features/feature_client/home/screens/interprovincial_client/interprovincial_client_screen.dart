@@ -5,10 +5,14 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/select_address_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,6 +29,8 @@ class InterprovincialClientScreen extends StatefulWidget {
 class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
   LocationEntity toLocation;
   LocationEntity fromLocation;
+  Place fromAddress;
+  Place toAddress;
   TextEditingController toController = TextEditingController();
   List<double> circularRadio = [1,2,3,4,5];
   List<int> seating = [1,2,3,4,5,6,7,8,9,10];
@@ -52,17 +58,13 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         changeStateCircle();
         DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
         initialSeat = param.requiredSeats;
-        destinationInput( param.distictTo);
+        getTo( param.distictTo);
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
         Navigator.of(context).push(Routes.toAvailableRoutesPage());
       }
     });
   }
-  void destinationInput(LocationEntity to){
-    toController.text = to.streetName;
-    toLocation = to;
-    setState(() {});
-  }
+
   void changeStateCircle(){
     drawCircle = true;
     setState(() {
@@ -70,6 +72,37 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   }
   void getfrom(LocationEntity from){
     fromLocation = from;
+    fromAddress = Place(
+      formattedAddress: fromLocation.districtName ,
+      name: fromLocation.streetName == '' ? fromLocation.districtName : fromLocation.streetName + ' - ' + fromLocation.districtName,
+      lat: fromLocation.latLang.latitude,
+      lng: fromLocation.latLang.longitude
+    );
+  }
+  void getTo( LocationEntity to){
+    toLocation = to;
+    toAddress = Place(
+      formattedAddress: toLocation.districtName ,
+      name: toLocation.streetName == '' ? toLocation.districtName : toLocation.streetName + ' - ' + toLocation.districtName,
+      lat: toLocation.latLang.latitude,
+      lng: toLocation.latLang.longitude
+    );
+    setState(() {
+    });
+  }
+  void onSearch() async {
+    if(toLocation == null){
+      Fluttertoast.showToast(
+        msg: 'Seleccione su destino',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return;
+    }
+    BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat, paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
+    await Future.delayed(Duration(seconds: 2));
+    Navigator.of(context).pop();
+    Navigator.of(context).push(Routes.toAvailableRoutesPage());
   }
 
   @override
@@ -79,7 +112,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         alignment: Alignment.bottomCenter,
         children: [
           MapInterprovincialClientWidget(
-            destinationInpit: destinationInput,
+            destinationInpit: getTo,
             drawCircle: drawCircle,
             radiusCircle: initialCircularRadio,
             getFrom: getfrom,
@@ -96,54 +129,25 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                 }else if(state.status == InterprovincialClientStatus.searchInterprovincial){
                   return Stack(
                     children: [
-                      InputMapSelecction(
-                        controller: toController,
-                        top: 110,
-                        labelText: 'Seleccione destino',
-                        province: toLocation.provinceName ==''?'':toLocation.provinceName  ,
-                        district: toLocation.districtName ==''?'':toLocation.districtName  ,
-                      ),
-                      SaveButtonWidget(context),
                       Positioned(
-                        left: 15,
-                        top: 180,
-                        child: Wrap(
-                          children: [
-                            Card(
-                              elevation: 5,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Select<double>(
-                                  value: initialCircularRadio,
-                                  // placeholderIsSelected: true,
-                                  showPlaceholder: false,
-                                  items:circularRadio.map((item) => DropdownMenuItem(
-                                    child: Center(child: Text(item.toString()+' km')),
-                                    value: item
-                                  )).toList(),
-                                  onChanged: (val){
-                                    initialCircularRadio = val;
-                                      setState((){});
-                                  },
-                                ),
-                              ),
-                            ),
-                            // Card(
-                            //   elevation: 5,
-                            //   color: Colors.white,
-                            //   child: PaymentSelector(
-                            //     onSelected: (_methods){
-                            //       paymentMethodsSelected = _methods;
-                            //     },
-                            //   ),
-                            // ),
-                          ],
+                        bottom: 10,
+                        left: 20,
+                        right: 20,
+                        child: Container(
+                            height: 230,
+                            child: SelectAddressWidget(
+                              fromAddress: fromAddress,
+                              toAddress: toAddress,
+                              onSearch: onSearch,
+                              onTap: (){
+                                Navigator.of(context).push( MaterialPageRoute( builder: (context) =>SearchAddressScreen( getTo: getTo,), fullscreenDialog: true ));
+                              },
+                            )
                         ),
                       ),
                       Positioned(
-                        left: 15,
-                        top: 235,
+                        right: 20,
+                        bottom: 240,
                         child: Row(
                           children: [
                             Card(
@@ -158,9 +162,9 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                                   items:seating.map((item) => DropdownMenuItem(
                                     child: Center(child: Row(
                                       children: [
-                                        Text(item.toString()),
+                                        Text(item.toString(),style: TextStyle(fontSize: 15),),
                                         SizedBox(width: 5,),
-                                        Icon(Icons.airline_seat_recline_normal ,size: 20,color: Colors.black,)
+                                        Icon(Icons.airline_seat_recline_normal ,size: 15,color: Colors.black,)
                                       ],
                                     )),
                                     value: item
@@ -202,20 +206,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             );
             return;
           }
-          // if(paymentMethodsSelected.isEmpty){
-          //   Fluttertoast.showToast(
-          //     msg: 'Seleccione al menos un método de pago que disponga',
-          //     toastLength: Toast.LENGTH_LONG,
-          //     gravity: ToastGravity.BOTTOM,
-          //   );
-          //   return;
-          // }
-          showDialog(
-            context: context,
-            child: Center(
-              child: Text('Buscando...',style: TextStyle(color: Colors.white, fontSize: 20,decoration: TextDecoration.none),)
-            ),
-          );
           BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: initialSeat, paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
           await Future.delayed(Duration(seconds: 2));
           Navigator.of(context).pop();

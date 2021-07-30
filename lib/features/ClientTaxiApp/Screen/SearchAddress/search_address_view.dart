@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
@@ -9,8 +10,9 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_map.dart';
 
 class SearchAddressView extends StatefulWidget {
+  final Function(LocationEntity) getTo;
   final ClientTaxiPlaceBloc placeBloc;
-  SearchAddressView({this.placeBloc});
+  SearchAddressView({this.placeBloc, this.getTo});
 
   @override
   _SearchAddressViewState createState() => _SearchAddressViewState();
@@ -58,7 +60,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   title: Text(widget?.placeBloc?.listPlace[index].name),
                   subtitle: Text(widget?.placeBloc?.listPlace[index].formattedAddress),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc, initialPlace: widget?.placeBloc?.listPlace[index])));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc, initialPlace: widget?.placeBloc?.listPlace[index], getTo: widget.getTo ,)));
                     /* widget?.placeBloc?.selectLocation(widget?.placeBloc?.listPlace[index])?.then((_){
                       toLocation = widget?.placeBloc?.locationSelect?.name;
                       FocusScope.of(context).requestFocus(nodeTo);

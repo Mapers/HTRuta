@@ -1,5 +1,6 @@
-import 'dart:io' show Platform;
+ import 'dart:io' show Platform;
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
@@ -10,9 +11,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 
 class SearchAddressMap extends StatefulWidget {
+  final Function(LocationEntity) getTo;
   final ClientTaxiPlaceBloc placeBloc;
   final Place initialPlace;
-  SearchAddressMap({this.placeBloc, this.initialPlace});
+  SearchAddressMap({this.placeBloc, this.initialPlace, this.getTo});
 
   @override
   _SearchAddressMapState createState() => _SearchAddressMapState();
@@ -35,8 +37,7 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
     if (!mounted) return;
     _lastKnownPosition = position;
   }
-  
-  
+
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     changeMapType(3, 'assets/style/dark_mode.json');
@@ -68,7 +69,6 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
       });
       updateOriginPointFromCoordinates(position);
     }
-    
   }
   Future<String> _getFileData(String path) async {
     return await rootBundle.loadString(path);
@@ -92,6 +92,8 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
     List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
     if (placemarks == null || placemarks.isEmpty) return;
     final Placemark newPosition = placemarks[0];
+    LocationEntity to  = LocationEntity( latLang: coordinates ,districtName: newPosition.locality ,provinceName: newPosition.subAdministrativeArea, regionName: newPosition.administrativeArea,streetName: newPosition.thoroughfare);
+    widget.getTo(to);
     widget?.placeBloc?.selectLocation(Place(
       name: newPosition.name + ', ' + newPosition.thoroughfare,
       formattedAddress: '',
@@ -143,6 +145,7 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
               zoom: 12.0,
             ),
             onTap: (LatLng newPosition){
+              
               updateOriginPointFromCoordinates(newPosition);
             },
             /* onCameraMove: (CameraPosition position) {
