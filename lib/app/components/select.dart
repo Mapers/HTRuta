@@ -36,7 +36,7 @@ class Select<V> extends StatelessWidget {
           }
           onChanged(val);
         },
-        icon: Icon(Icons.keyboard_arrow_down),
+        icon: Icon(Icons.arrow_drop_down),
       )
     );
   }

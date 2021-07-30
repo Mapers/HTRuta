@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/select.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/payment_selector.dart';
@@ -11,13 +12,16 @@ class SelectAddressWidget extends StatefulWidget {
   final int distancia;
   final String unidad;
   final Function() onSearch;
+  final Function(int) getSeating;
+
   SelectAddressWidget({
     this.fromAddress,
     this.toAddress,
     this.onTap,
     this.distancia,
     this.unidad,
-    this.onSearch
+    this.onSearch,
+    this.getSeating
   });
 
   @override
@@ -28,9 +32,16 @@ class _SelectAddressState extends State<SelectAddressWidget> {
   String selectedAddress;
   String precio = '';
   String comentarios = '';
+  List<int> seating = [1,2,3,4,5,6,7,8,9,10];
+  int initialSeat;
   FocusNode precioFocus = FocusNode();
   final pickUpApi = PickupApi();
   List<int> paymentMethodsSelected = [];
+  @override
+  void initState() {
+    super.initState();
+    initialSeat = 1;
+  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -125,13 +136,35 @@ class _SelectAddressState extends State<SelectAddressWidget> {
               padding: EdgeInsets.only(right: 20, left: 60),
               child: Divider(color: Colors.grey,)
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 45),
-              child: PaymentSelector(
-                onSelected: (List<int> selectedPaymentMethods){
-                  paymentMethodsSelected = selectedPaymentMethods;
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PaymentSelector(
+                  onSelected: (List<int> selectedPaymentMethods){
+                    paymentMethodsSelected = selectedPaymentMethods;
+                  },
+                ),
+                Select<int>(
+                  value: initialSeat,
+                  // placeholderIsSelected: true,
+                  showPlaceholder: false,
+                  items:seating.map((item) => DropdownMenuItem(
+                    child: Center(child: Row(
+                      children: [
+                        Text(item.toString(),style: TextStyle(fontSize: 15 ,color: Colors.black87),),
+                        SizedBox(width: 5,),
+                        Icon(Icons.airline_seat_recline_normal ,size: 15,color: Colors.black87,)
+                      ],
+                    )),
+                    value: item
+                  )).toList(),
+                  onChanged: (val){
+                    initialSeat = val;
+                    widget.getSeating(initialSeat);
+                      setState((){});
+                  },
+                )
+              ],
             ),
             Expanded(
               child: FlatButton(

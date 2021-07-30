@@ -105,7 +105,6 @@ class _PaymentSelectorState extends State<PaymentSelector> {
                     onChanged: (String newValue) async {
                       selectedPaymentMethod = data.where((element) => element.nNombre == newValue).toList().first;
                       setState(() {});
-                      
                       List<int> selectedPaymentMethods = [];
                       for(int i = 0; i < data.length; i++){
                         if(savedPaymentMethods[i]){
