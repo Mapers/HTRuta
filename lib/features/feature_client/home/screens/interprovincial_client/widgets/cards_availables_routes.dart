@@ -24,14 +24,12 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
     return BlocBuilder<AvailablesRoutesBloc, AvailablesRoutesState>(
       builder: (context, state) {
         if (state is LoadingAvailablesRoutes) {
-          return Center(
-            child: Column(
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 10,),
-                Text('Buscado...')
-              ],
-            )
+          return Column(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 10,),
+              Text('Buscado...')
+            ],
           );
         }
         DataAvailablesRoutes param = state;
@@ -40,46 +38,48 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
             child: Text('- Sin resultados -'),
           );
         }
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: Text(
-                    param.distictfrom.districtName ,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    textAlign: TextAlign.center,
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: Text(
+                      param.distictfrom.districtName ,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                SizedBox(width: 5),
-                Icon(Icons.arrow_forward_sharp),
-                SizedBox(width: 5),
-                Expanded(
-                  child: Text(
-                    param.distictTo.districtName ,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    textAlign: TextAlign.center,
+                  SizedBox(width: 5),
+                  Icon(Icons.arrow_forward_sharp),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      param.distictTo.districtName ,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: param.availablesRoutes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CardAvailiblesRoutes(
-                    availablesRoutesEntity: param.availablesRoutes[index],
-                    onTap: () {
-                      Navigator.of(context).push(Routes.toTravelNegotationPage(
-                          availablesRoutesEntity:
-                              param.availablesRoutes[index]));
-                    });
-              },
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 10),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: param.availablesRoutes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CardAvailiblesRoutes(
+                      availablesRoutesEntity: param.availablesRoutes[index],
+                      onTap: () {
+                        Navigator.of(context).push(Routes.toTravelNegotationPage(
+                            availablesRoutesEntity:
+                                param.availablesRoutes[index]));
+                      });
+                },
+              ),
+            ],
+          ),
         );
       },
     );

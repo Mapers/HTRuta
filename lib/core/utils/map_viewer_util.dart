@@ -62,12 +62,13 @@ class MapViewerUtil {
   Circle circular(LatLng currentLocation,{bool visible = false,double  radiusCircle = 4000}){
     Circle circles =
       Circle(
-        
+        fillColor: Colors.blue.shade200.withOpacity(0.2),
+        strokeColor: Colors.blue.shade200 ,
         visible: visible,
         circleId: CircleId('1'),
         center: LatLng(currentLocation.latitude, currentLocation.longitude),
         radius: radiusCircle,
-        strokeWidth: 1
+        strokeWidth: 4
       );
       return circles;
   }

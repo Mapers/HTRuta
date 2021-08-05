@@ -9,6 +9,7 @@ abstract class InterprovincialClientEvent extends Equatable {
 
 class LoadInterprovincialClientEvent extends InterprovincialClientEvent {}
 class SearchcInterprovincialClientEvent extends InterprovincialClientEvent {}
+class AvailablesInterprovincialClientEvent extends InterprovincialClientEvent {}
 class InitialInterprovincialClientEvent extends InterprovincialClientEvent {}
 class DestinationInterprovincialClientEvent extends InterprovincialClientEvent {
   final LatLng to;

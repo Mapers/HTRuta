@@ -16,13 +16,11 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Rutas disponibles',),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 10),
               CardsAvailablesRoutes()

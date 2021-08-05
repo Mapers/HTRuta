@@ -93,7 +93,9 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
     if (placemarks == null || placemarks.isEmpty) return;
     final Placemark newPosition = placemarks[0];
     LocationEntity to  = LocationEntity( latLang: coordinates ,districtName: newPosition.locality ,provinceName: newPosition.subAdministrativeArea, regionName: newPosition.administrativeArea,streetName: newPosition.thoroughfare);
-    widget.getTo(to);
+    if(widget.getTo != null){
+      widget.getTo(to);
+    }
     widget?.placeBloc?.selectLocation(Place(
       name: newPosition.name + ', ' + newPosition.thoroughfare,
       formattedAddress: '',
