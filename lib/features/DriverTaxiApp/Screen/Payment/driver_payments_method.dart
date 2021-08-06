@@ -6,7 +6,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.
 import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 
 class DriverPaymentsMethods extends StatefulWidget {
@@ -16,8 +15,7 @@ class DriverPaymentsMethods extends StatefulWidget {
 
 class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
   final String screenName = 'PAYMENTS';
-
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<PaymentMethod> paymentMethodsLoaded;
   final _prefs = UserPreferences();
@@ -25,48 +23,40 @@ class _DriverPaymentsMethodsState extends State<DriverPaymentsMethods> {
   final pickupApi = PickupApi();
   @override
   Widget build(BuildContext context) {
-    return SideMenu(
-      background: primaryColor,
-      key: _sideMenuKey,
-      type: SideMenuType.slideNRotate,
-      menu: MenuDriverScreens(activeScreenName: screenName),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Mis métodos de pago',style: TextStyle(color: blackColor)),
-          centerTitle: true,
-          backgroundColor: whiteColor,
-          elevation: 0.0,
-          leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: (){
-              final _state = _sideMenuKey.currentState;
-              if (_state.isOpened)
-                _state.closeSideMenu(); // close side menu
-              else
-                _state.openSideMenu();// open side menu
-            },
-          ),
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: MenuDriverScreens(activeScreenName: screenName),
+      appBar: AppBar(
+        title: Text('Mis métodos de pago',style: TextStyle(color: blackColor)),
+        centerTitle: true,
+        backgroundColor: whiteColor,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: (){
+            _scaffoldKey.currentState.openDrawer();
+          },
         ),
-        body: paymentMethodsLoaded == null ? FutureBuilder(
-          future: pickupApi.getDriverPaymentMethod(_prefs.idChoferReal),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            if(snapshot.hasError) return Container();
-            switch(snapshot.connectionState){
-              case ConnectionState.waiting: return Container();
-              case ConnectionState.none: return Container();
-              case ConnectionState.active: {
-                paymentMethodsLoaded = snapshot.data;
-                return createFutureContent(snapshot.data);
-              }
-              case ConnectionState.done: {
-                paymentMethodsLoaded = snapshot.data;
-                return createFutureContent(snapshot.data);
-              }
-            }
-            return Container();
-          }
-        ) : createFutureContent(paymentMethodsLoaded)
       ),
+      body: paymentMethodsLoaded == null ? FutureBuilder(
+        future: pickupApi.getDriverPaymentMethod(_prefs.idChoferReal),
+        builder: (BuildContext context, AsyncSnapshot snapshot){
+          if(snapshot.hasError) return Container();
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting: return Container();
+            case ConnectionState.none: return Container();
+            case ConnectionState.active: {
+              paymentMethodsLoaded = snapshot.data;
+              return createFutureContent(snapshot.data);
+            }
+            case ConnectionState.done: {
+              paymentMethodsLoaded = snapshot.data;
+              return createFutureContent(snapshot.data);
+            }
+          }
+          return Container();
+        }
+      ) : createFutureContent(paymentMethodsLoaded)
     );
   }
   Widget createFutureContent(List<PaymentMethod> paymentMethods){

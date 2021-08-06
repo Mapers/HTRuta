@@ -22,7 +22,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'requestDetail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -32,6 +31,7 @@ class RequestDriverScreen extends StatefulWidget {
 }
 
 class _RequestDriverScreenState extends State<RequestDriverScreen> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   final String screenName = 'REQUEST';
   List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
@@ -43,7 +43,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   String choferId = '';
   bool newTravel = false;
   String lastUserToken;
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   PushNotificationProvider pushProvider;
   List<String> acceptedTravels = [];
 
@@ -223,12 +222,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     
     return DefaultTabController(
       length: 3,
-      child: SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuDriverScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
             'Solicitudes',
@@ -248,11 +243,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              final _state = _sideMenuKey.currentState;
-              if (_state.isOpened)
-                _state.closeSideMenu(); // close side menu
-              else
-                _state.openSideMenu();// open side menu
+              _scaffoldKey.currentState.openDrawer();
             },
           ),
         ),
@@ -334,8 +325,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
             ),
           ]
         )
-      ),
-    )
+      )
     );
   }
 

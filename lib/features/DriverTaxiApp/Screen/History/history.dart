@@ -6,7 +6,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'detail.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,8 +24,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   final pickupApi = PickupApi();
   final _prefs = UserPreferences();
   List<HistoryItem> historyItemsLoaded;
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
-  
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
@@ -38,12 +37,8 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
-      child: SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuDriverScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
             'Historial',
@@ -56,11 +51,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              final _state = _sideMenuKey.currentState;
-              if (_state.isOpened)
-                _state.closeSideMenu(); // close side menu
-              else
-                _state.openSideMenu();// open side menu
+              _scaffoldKey.currentState.openDrawer();
             },
           ),
         ),
@@ -184,8 +175,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
             ],
           ),
         )
-      ),
-    )
+      )
     );
   }
   Widget gainResumeEmpty(Size screenSize){

@@ -71,6 +71,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   final registroConductorApi = RegistroConductorApi();
   bool isWorking = true;
   bool isLoading = true;
+  bool waitingForResponse = false;
 
   List<RequestModel> requestTaxi = [];
   List<Map> requestPast = [];
@@ -90,7 +91,8 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      changeMapType(3, 'assets/style/dark_mode.json');
+      // changeMapType(3, 'assets/style/dark_mode.json');
+      _mapController.setMapStyle(null);
     }
   }
   @override
@@ -116,19 +118,27 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       if(newCancelSol == '1' && isWorking){
         final _prefs = UserPreferences();
         _prefs.setNotificacionConductor = 'Solicitudes,El usuario canceló la solicitud';
+        if(mounted){
+          waitingForResponse = false;
+          setState(() {});
+        }
         await getSolicitudes();
         analizeChanges(); 
       }
       if(newConfirm == '1'&& isWorking){
         final _prefs = UserPreferences();
         _prefs.setNotificacionConductor = 'Viajes,Haz iniciado un nuevo viaje';
+        if(mounted){
+          waitingForResponse = false;
+          setState(() {});
+        }
         await travelConfirmation(idSolicitud);
       }
     });
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(diferencia > 10 && isWorking && mounted){
+      if(diferencia > 100 && isWorking && mounted){
         /* _markers.clear();
         if(mounted){
           setState(() {});
@@ -407,7 +417,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    changeMapType(3, 'assets/style/dark_mode.json');
+    // changeMapType(3, 'assets/style/dark_mode.json');
     /* final MarkerId _markerMy = MarkerId('toLocation');
     if(currentLocation != null){
       _markers[_markerMy] = GMapViewHelper.createMaker(
@@ -471,6 +481,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     List<Widget> bodyContent = [
       _buildMapLayer(),
       CustomDropdownDriver(),
+      
       Positioned(
         top: 110,
         child: FlutterSwitch(
@@ -568,7 +579,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         )
       ),
       // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
-      requestTaxi.isNotEmpty ? Align(
+      requestTaxi.isNotEmpty && !waitingForResponse ? Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
         Container(
@@ -586,8 +597,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 String newPrice = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestTaxi[index], driverLocation: currentLocation)));
                 if(newPrice != null){
                   try{
-                    final _prefs = UserPreferences();
-                    await _prefs.initPrefs();
                     Dialogs.openLoadingDialog(context);
                     final dato = await pickupApi.actionTravel(
                       _prefs.idChofer,
@@ -644,8 +653,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 },
                 onAccept: () async {
                   try{
-                    final _prefs = UserPreferences();
-                    await _prefs.initPrefs();
                     Dialogs.openLoadingDialog(context);
                     final dato = await pickupApi.actionTravel(
                       _prefs.idChofer,
@@ -663,6 +670,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                       aceptar,
                       _prefs.tokenPush
                     );
+                    if(!dato){
+                      Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                      return;
+                    }
                     acceptedTravels.add(requestTaxi[index].id);
                     lastUserToken = requestTaxi[index].token;
                     PushMessage pushMessage = getIt<PushMessage>();
@@ -671,6 +682,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     };
                     pushMessage.sendPushMessage(token: requestTaxi[index].token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
                     Navigator.pop(context);
+                    if(mounted){
+                      waitingForResponse = true;
+                      setState(() {});
+                    }
                     if(dato){
                       //Esperar solicitud
                     }else{
@@ -683,8 +698,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 },
                 onRefuse: () async {
                 try{
-                  final _prefs = UserPreferences();
-                  await _prefs.initPrefs();
                   Dialogs.openLoadingDialog(context);
                   final dato = await pickupApi.actionTravel(
                     _prefs.idChofer,
@@ -702,6 +715,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                     rechazar,
                     _prefs.tokenPush
                   );
+                  if(!dato){
+                    Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+                    return;
+                  }
                   if(acceptedTravels.contains(requestTaxi[index].id)){
                     PushMessage pushMessage = getIt<PushMessage>();
                     Map<String, String> data = {
@@ -714,11 +731,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                   await getSolicitudes();
                   analizeChanges();
                   Navigator.pop(context);
-                  if(dato){
-                    //Esperar solicitud
-                  }else{
-                    Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-                  }
+                  
                 }on ServerException catch(e){
                   Navigator.pop(context);
                   Dialogs.alert(context,title: 'Error', message: e.message);
@@ -746,7 +759,35 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           totalDistance: '22Km',
           totalJob: 8,
         ),
-      ) : Container()
+      ) : Container(),
+      waitingForResponse ? Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: primaryColor.withOpacity(0.6)
+      ) : Container(),
+      waitingForResponse ? Positioned(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle
+              ),
+              child: Container(
+                margin: EdgeInsets.all(10),
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator()
+              )
+            ),
+            Text('Esperando\nconfirmación', textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: Colors.black54))
+          ],
+        )
+      ) : Container(),
     ];
 
     return isLoading ? Center(child: CircularProgressIndicator(),) : Container(
@@ -759,8 +800,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   }
   void acceptTravel(RequestModel request) async {
     try{
-      final _prefs = UserPreferences();
-      await _prefs.initPrefs();
       Dialogs.openLoadingDialog(context);
       final dato = await pickupApi.actionTravel(
         _prefs.idChofer,
@@ -778,16 +817,19 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         aceptar,
         _prefs.tokenPush
       );
+      if(!dato){
+        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+        return;
+      }
       PushMessage pushMessage = getIt<PushMessage>();
       Map<String, String> data = {
         'newOffer' : '1'
       };
       pushMessage.sendPushMessage(token: request.token, title: 'Oferta de conductor', description: 'Nueva oferta de conductor', data: data);
       Navigator.pop(context);
-      if(dato){
-        //Esperar solicitud
-      }else{
-        Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
+      if(mounted){
+        waitingForResponse = true;
+        setState(() {});
       }
     }on ServerException catch(e){
       Navigator.pop(context);
@@ -796,8 +838,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
   }
   void cancelTravel(RequestModel request) async {
     try{
-      final _prefs = UserPreferences();
-      await _prefs.initPrefs();
       Dialogs.openLoadingDialog(context);
       final dato = await pickupApi.actionTravel(
         _prefs.idChofer,

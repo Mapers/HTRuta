@@ -87,7 +87,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      changeMapType(3, 'assets/style/dark_mode.json');
+      // changeMapType(3, 'assets/style/dark_mode.json');
+      _mapController.setMapStyle(null);
     }
   }
   @override
@@ -281,7 +282,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    changeMapType(3, 'assets/style/dark_mode.json');
+    // changeMapType(3, 'assets/style/dark_mode.json');
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
     Future.delayed(Duration(milliseconds: 200), () async {

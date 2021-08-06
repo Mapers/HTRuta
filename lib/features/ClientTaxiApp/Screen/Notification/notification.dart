@@ -7,7 +7,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'itemNotification.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 class NotificationScreens extends StatefulWidget {
   @override
@@ -16,8 +15,8 @@ class NotificationScreens extends StatefulWidget {
 
 class _NotificationScreensState extends State<NotificationScreens> {
   final String screenName = 'NOTIFICATIONS';
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   List<Map<String, dynamic>> listNotification = [];
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   /* void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => NotificationDetail(
@@ -62,13 +61,9 @@ class _NotificationScreensState extends State<NotificationScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
-      child: Scaffold(
-      appBar: AppBar(
+    return Scaffold(
+      key: _scaffoldKey,
+        appBar: AppBar(
         title: Text(
           'Notificaciones',
           style: TextStyle(color: blackColor),
@@ -80,11 +75,7 @@ class _NotificationScreensState extends State<NotificationScreens> {
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            final _state = _sideMenuKey.currentState;
-            if (_state.isOpened)
-              _state.closeSideMenu(); // close side menu
-            else
-              _state.openSideMenu();// open side menu
+            _scaffoldKey.currentState.openDrawer();
           },
         ),
         actions: <Widget>[
@@ -101,69 +92,68 @@ class _NotificationScreensState extends State<NotificationScreens> {
       ),
       drawer: MenuScreens(activeScreenName: screenName),
       body: _prefs.notificacionesUsuario.isNotEmpty
-        ? NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (overScroll) {
-              overScroll.disallowGlow();
-              return false;
-            },
-            child: AnimationLimiter(
-              child: ListView.builder(
-                  itemCount: _prefs.notificacionesUsuario.reversed.toList().length,
-                  padding: EdgeInsets.only(top: 0),
-                  itemBuilder: (BuildContext context, int index) {
-                    String notificacion = _prefs.notificacionesUsuario.reversed.toList()[index];
-                    return AnimationListView(
-                      index: index,
-                      child: Slidable(
-                        actionPane: SlidableScrollActionPane(),
-                        actionExtentRatio: 0.25,
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: 'Borrar',
-                            color: Colors.red,
-                            icon: Icons.delete,
-                            onTap: () {
-                              _prefs.clearNotificacionUsuarioIndex(_prefs.notificacionesUsuario.length - 1 - index);
-                              setState(() {});
-                            },
-                          ),
-                        ],
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: greyColor2, 
-                                width: 1
-                              )
-                            )
-                          ),
-                          child: Container(
+      ? NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll) {
+            overScroll.disallowGlow();
+            return false;
+          },
+          child: AnimationLimiter(
+            child: ListView.builder(
+                itemCount: _prefs.notificacionesUsuario.reversed.toList().length,
+                padding: EdgeInsets.only(top: 0),
+                itemBuilder: (BuildContext context, int index) {
+                  String notificacion = _prefs.notificacionesUsuario.reversed.toList()[index];
+                  return AnimationListView(
+                    index: index,
+                    child: Slidable(
+                      actionPane: SlidableScrollActionPane(),
+                      actionExtentRatio: 0.25,
+                      secondaryActions: <Widget>[
+                        IconSlideAction(
+                          caption: 'Borrar',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () {
+                            _prefs.clearNotificacionUsuarioIndex(_prefs.notificacionesUsuario.length - 1 - index);
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                      child: Container(
                         decoration: BoxDecoration(
                           border: Border(
-                            bottom: BorderSide(color: greyColor,width: 1)
+                            bottom: BorderSide(
+                              color: greyColor2, 
+                              width: 1
+                            )
                           )
                         ),
-                        child: ItemNotification(
-                          title: notificacion.split(',').first,
-                          subTitle: notificacion.split(',').last,
-                          icon: Icons.check_circle,
+                        child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: greyColor,width: 1)
                         )
+                      ),
+                      child: ItemNotification(
+                        title: notificacion.split(',').first,
+                        subTitle: notificacion.split(',').last,
+                        icon: Icons.check_circle,
                       )
                     )
                   )
-                );
-              }
-            )
+                )
+              );
+            }
           )
-        ): Container(
-          child: Center(
-            child: Image.asset(
-              'assets/image/empty_state_trash_300.png',
-              width: 100.0,
-            ),
+        )
+      ): Container(
+        child: Center(
+          child: Image.asset(
+            'assets/image/empty_state_trash_300.png',
+            width: 100.0,
           ),
         ),
-      )
+      ),
     );
   }
 }
