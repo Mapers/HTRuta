@@ -24,7 +24,7 @@ class InterprovincialScreen extends StatefulWidget {
 class _InterprovincialScreenState extends State<InterprovincialScreen> {
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       String documentID = widget.serviceInCourse?.serviceDocumentId;

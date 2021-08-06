@@ -39,7 +39,6 @@ class InterprovincialClientDataFirebase {
       }).toList()
     );
   }
-  
   Future<String> deleteRequest({String documentId, InterprovincialRequestEntity request, bool notificationLaunch = true}) async{
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);

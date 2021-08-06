@@ -133,13 +133,15 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     if(timeOfDay == null){
       return;
     }
+    print('..................');
+    print('..................');
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text('¿Desea iniciar con esta ruta?'),
-        content: ListView(
-          shrinkWrap: true,
+      builder: (context) => AlertDialog(
+        title: Column(
           children: [
+            Text('¿Desea iniciar con esta ruta?'),
+            SizedBox(height: 10),
             Text('Iniciará el servicio interprovincial con la ruta ${interprovincialRoute.name}.'),
             SizedBox(height: 10),
             Row(

@@ -122,7 +122,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
     }else if(serviceInCourse.entityType == TypeEntityEnum.passenger){
       if(serviceInCourse.passengerDocumentId == null  ){
         BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
-        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
+        Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       }else{
           InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
           DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);

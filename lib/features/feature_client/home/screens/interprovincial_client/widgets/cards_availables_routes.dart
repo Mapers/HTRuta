@@ -1,11 +1,14 @@
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/directions_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/coments_widgets.dart';
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
@@ -19,29 +22,42 @@ class CardsAvailablesRoutes extends StatefulWidget {
 }
 
 class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AvailablesRoutesBloc, AvailablesRoutesState>(
       builder: (context, state) {
         if (state is LoadingAvailablesRoutes) {
-          return Column(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 10,),
-              Text('Buscado...')
-            ],
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 10,),
+                Text('Buscado...', style: TextStyle(color: Colors.white ),)
+              ],
+            ),
           );
         }
         DataAvailablesRoutes param = state;
         if (param.availablesRoutes.isEmpty) {
           return Center(
-            child: Text('- Sin resultados -'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('- Sin resultados -'),
+              ],
+            ),
           );
         }
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
+        return Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+              color: Colors.white,
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
@@ -63,34 +79,42 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: param.availablesRoutes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return CardAvailiblesRoutes(
-                      availablesRoutesEntity: param.availablesRoutes[index],
-                      onTap: () {
-                        Navigator.of(context).push(Routes.toTravelNegotationPage(
-                            availablesRoutesEntity:
-                                param.availablesRoutes[index]));
-                      });
-                },
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: param.availablesRoutes.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CardAvailiblesRoutes(
+                        availablesRoutesEntity: param.availablesRoutes[index],
+                        onTap: () => Navigator.of(context).push(Routes.toTravelNegotationPage( availablesRoutesEntity: param.availablesRoutes[index] ) )
+                    );
+                  },
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
   }
 }
 
-class CardAvailiblesRoutes extends StatelessWidget {
+class CardAvailiblesRoutes extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final Function onTap;
+
   const CardAvailiblesRoutes({Key key, this.availablesRoutesEntity, this.onTap})
       : super(key: key);
+
+  @override
+  _CardAvailiblesRoutesState createState() => _CardAvailiblesRoutesState();
+}
+
+class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
+  final pickUpApi = PickupApi();
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CommentsDriveBloc>(
@@ -98,9 +122,9 @@ class CardAvailiblesRoutes extends StatelessWidget {
       child: Card(
         elevation: 5,
         clipBehavior: Clip.antiAlias,
-        margin: EdgeInsets.only(bottom: 20),
+        margin: EdgeInsets.only(bottom: 10),
         child: InkWell(
-          onTap: onTap,
+          onTap: widget.onTap,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -111,12 +135,12 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   children: [
                     Expanded(
                         child: Text(
-                      availablesRoutesEntity.route.name,
+                      widget.availablesRoutesEntity.route.name,
                       style: textStyleHeading18Black,
                     )),
                     SizedBox(width: 10),
                     Text(
-                      'S/.' + availablesRoutesEntity.route.cost.toStringAsFixed(2),
+                      'S/.' + widget.availablesRoutesEntity.route.cost.toStringAsFixed(2),
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 18,
@@ -132,13 +156,13 @@ class CardAvailiblesRoutes extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       width: 90,
                       decoration: BoxDecoration(
-                        color: availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
+                        color: widget.availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
                         ? Colors.green
                         : Colors.amber,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text(
-                        availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
+                        widget.availablesRoutesEntity.status == InterprovincialStatus.onWhereabouts
                         ? 'En paradero'
                         : 'En ruta',
                         style: TextStyle(color: Colors.white, fontSize: 12),
@@ -149,7 +173,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                       width: 10,
                     ),
                     RatingBar.builder(
-                      initialRating: availablesRoutesEntity.route.starts,
+                      initialRating: widget.availablesRoutesEntity.route.starts,
                       allowHalfRating: true,
                       itemSize: 18,
                       itemCount: 5,
@@ -165,7 +189,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return ComentsWirdgets(availablesRoutesEntity: availablesRoutesEntity,);
+                              return ComentsWirdgets(availablesRoutesEntity: widget.availablesRoutesEntity,);
                             }
                           );
                         },
@@ -177,21 +201,21 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(Icons.person, color: Colors.black87),
+                    Icon(Icons.face, color: Colors.black87),
                     SizedBox(width: 5),
                     Expanded(
-                      child: Text(availablesRoutesEntity.route.driverName,
+                      child: Text(widget.availablesRoutesEntity.route.driverName,
                           style: TextStyle(color: Colors.black87, fontSize: 14)),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.location_on, color: Colors.black87),
+                    Icon(Icons.trip_origin, color: Colors.amber),
                     SizedBox(width: 5),
                     Expanded(
                       child: Text(
-                          availablesRoutesEntity.route.fromLocation.streetName,
+                          widget.availablesRoutesEntity.route.fromLocation.streetName,
                           style: TextStyle(color: Colors.black87, fontSize: 14)),
                     ),
                   ],
@@ -199,18 +223,18 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 SizedBox(height: 5),
                 Row(
                   children: [
-                    Icon(Icons.directions_bus_rounded, color: Colors.black87),
+                    Icon(Icons.location_on, color: Colors.red),
                     SizedBox(width: 5),
                     Expanded(
                       child: Text(
-                        availablesRoutesEntity.route.toLocation.streetName,
+                        widget.availablesRoutesEntity.route.toLocation.streetName,
                         style: TextStyle(color: Colors.black87, fontSize: 14)
                       ),
                     ),
                     SizedBox(width: 15),
                     Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
                     SizedBox(width: 8),
-                    Text(availablesRoutesEntity.availableSeats.toString(),
+                    Text(widget.availablesRoutesEntity.availableSeats.toString(),
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16,
@@ -225,18 +249,51 @@ class CardAvailiblesRoutes extends StatelessWidget {
                     Icon(Icons.access_time, color: Colors.black87),
                     SizedBox(width: 5),
                     Text(
-                      availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
+                      widget.availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
                       style: TextStyle(color: Colors.black87, fontSize: 14)
                     ),
                     SizedBox(width: 20),
                     Icon(Icons.calendar_today, color: Colors.black87),
                     SizedBox(width: 5),
                     Text(
-                      availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
+                      widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
                       style: TextStyle(color: Colors.black87, fontSize: 14)
                     ),
                   ],
                 ),
+                FutureBuilder(
+                  future: pickUpApi.calculateMinutes( widget.availablesRoutesEntity.route.fromLocation.latLang.latitude, widget.availablesRoutesEntity.route.fromLocation.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude),
+                  builder: (BuildContext context, AsyncSnapshot snapshot){
+                    if(snapshot.hasError) return Container();
+                    switch(snapshot.connectionState){
+                      case ConnectionState.waiting: return Container();
+                      case ConnectionState.none: return Container();
+                      case ConnectionState.active: {
+                        final AproxElement element = snapshot.data;
+                        return Column(
+                          children: [
+                            Text(element.distance.text ),
+                            Text(element.duration.text),
+                          ]
+                        );
+                      }
+                      case ConnectionState.done: {
+                        final AproxElement element = snapshot.data;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(element.distance.text),
+                              Text(element.duration.text),
+                            ]
+                          ),
+                        );
+                      }
+                    }
+                    return Container();
+                  }
+                )
               ],
             ),
           ),

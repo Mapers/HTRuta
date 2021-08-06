@@ -36,6 +36,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
 
   @override
   void initState() {
+    seat = 1;
     initialCircularRadio = 2;
     toLocation = LocationEntity(
       latLang: null,
@@ -53,8 +54,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
         seat = param.requiredSeats;
         getTo( param.distictTo);
+        BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
-        Navigator.of(context).push(Routes.toAvailableRoutesPage());
       }
     });
   }
@@ -88,8 +89,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     seat = seating;
   }
   void onSearch() async {
-    BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
-    if(toLocation == null){
+    if(toLocation.districtName == ''){
       Fluttertoast.showToast(
         msg: 'Seleccione su destino',
         toastLength: Toast.LENGTH_LONG,
@@ -97,6 +97,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       );
       return;
     }
+    BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
     BlocProvider.of<AvailablesRoutesBloc>(context).add(
       GetAvailablesRoutesEvent(
         from: fromLocation,
@@ -105,7 +106,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         seating: seat,
         paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList())
       );
-    // Navigator.of(context).push(Routes.toAvailableRoutesPage());
   }
 
   @override
@@ -157,12 +157,12 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                       Positioned(
                         top: 100,
                         bottom: 10,
-                        left: 10,
-                        right: 10,
+                        left: 5,
+                        right: 5,
                         child: Container(
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.black45,
                             borderRadius: BorderRadius.circular(10)
                           ),
                           height: 230,
@@ -170,7 +170,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         ),
                       ),
                       Positioned(
-                        top: 105,
+                        top: 60,
                         right: 15,
                         child: IconButton(
                           icon: Icon(Icons.close ),

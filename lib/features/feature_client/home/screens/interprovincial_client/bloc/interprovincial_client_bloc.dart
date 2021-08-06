@@ -42,13 +42,10 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
         status: InterprovincialClientStatus.searchInterprovincial
       );
     }else if(event is AvailablesInterprovincialClientEvent){
-      print('..................');
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
         status: InterprovincialClientStatus.availablesInterprovincial
       );
-      print('llege pepe');
-      print('..................');
     }else if(event is DestinationInterprovincialClientEvent){
       List<Placemark> placemarkFrom = await placemarkFromCoordinates(event.to.latitude,event.to.longitude );
       Placemark placemark = placemarkFrom.first;

@@ -22,7 +22,6 @@ class InterprovincialClientRemoteDataSoruce {
     int initial = 4;
     do {
       initial++;
-      print(initial);
       ResponseHttp result = await requestHttp.post(
         Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
         data: {
@@ -33,12 +32,8 @@ class InterprovincialClientRemoteDataSoruce {
           'payment_methods': paymentMethods
         }
       );
-      print('consulte');
       availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
-      print(availablesRoutes);
-      print(availablesRoutes.isEmpty.toString() + '_' + (initial < 15).toString());
     } while (availablesRoutes.isEmpty & (initial < 15));
-    print('salir');
     return availablesRoutes;
   }
 

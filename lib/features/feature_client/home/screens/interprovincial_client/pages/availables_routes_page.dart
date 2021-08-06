@@ -3,9 +3,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:flutter/material.dart';
 
 class AvailableRoutesPage extends StatefulWidget {
-  final ProvinceDistrictClientEntity origin;
-  final ProvinceDistrictClientEntity destination;
-  AvailableRoutesPage({Key key, this.origin, this.destination})
+  AvailableRoutesPage({Key key,})
       : super(key: key);
 
   @override
@@ -16,17 +14,10 @@ class _AvailableRoutesPageState extends State<AvailableRoutesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 10),
-              CardsAvailablesRoutes()
-            ],
-          ),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: CardsAvailablesRoutes(),
       ),
     );
   }

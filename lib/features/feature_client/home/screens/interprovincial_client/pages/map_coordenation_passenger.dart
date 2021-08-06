@@ -7,9 +7,11 @@ import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
@@ -35,16 +37,17 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   Map<PolylineId, Polyline> polylines = {};
   LocationEntity currenActual;
   LocationUtil _locationUtil = LocationUtil();
+  final pickUpApi = PickupApi();
+  AproxElement element;
   BitmapDescriptor currentPinLocationIcon;
   InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-
-
   StreamSubscription subscription;
-  
   @override
   void initState() {
     currenActual = widget.currentLocation;
+    element = AproxElement(distance: null, duration: null, status: null);
     WidgetsBinding.instance.addPostFrameCallback((_)async {
+      element = await pickUpApi.calculateMinutes( currenActual.latLang.latitude , currenActual.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude);
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_96.png'),
@@ -91,7 +94,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     super.initState();
   }
   void _updateMarkerCurrentPosition(LocationEntity _driverLocation) async{
-  
+    element = await pickUpApi.calculateMinutes( currenActual.latLang.latitude , currenActual.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude);
+    print(element.distance.text);
     Marker markerPassenger = MapViewerUtil.generateMarker(
       latLng: currenActual.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
@@ -130,7 +134,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             height: MediaQuery.of(context).size.height,
           )
         ),
-        Positioned(
+        widget.availablesRoutesEntity.route.driverImage == null? Container() : Positioned(
           top: 90,
           right: 15,
           child: Card(
@@ -177,13 +181,22 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             elevation: 5,
             child: Padding(
               padding: const EdgeInsets.all(10),
-              child: Text('Recuerda acercarte a tu ruta, tambien puede llamar al conductor'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Llegarás a tu destino en '+ element.duration.text +' aproximadamente. Recuerda acercarte a tu ruta, tambien puede llamar al conductor.',
+                    style: TextStyle(color: Colors.black54, fontStyle: FontStyle.italic, ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
             ),
           )
         ),
         Positioned(
-          bottom: 210,
-          right: 15,
+          bottom: 175,
+          right: 11,
           child: Card(
             clipBehavior: Clip.antiAlias,
             color: green1,
@@ -204,7 +217,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
           )
         ),
         Positioned(
-          bottom: 10,
+          bottom: 0,
           right: 15,
           left: 15,
           child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
@@ -214,10 +227,16 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   }
 }
 
-class CardAvailiblesRoutes extends StatelessWidget {
+class CardAvailiblesRoutes extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
   const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.price}) : super(key: key);
+
+  @override
+  _CardAvailiblesRoutesState createState() => _CardAvailiblesRoutesState();
+}
+
+class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -234,12 +253,12 @@ class CardAvailiblesRoutes extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    availablesRoutesEntity.route.name,
+                    widget.availablesRoutesEntity.route.name,
                     style: textStyleHeading18Black,
                   )
                 ),
                 SizedBox(width: 10),
-                Text('S/.' + price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('S/.' + widget.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
             Row(
@@ -249,25 +268,22 @@ class CardAvailiblesRoutes extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 5),
                   width: 90,
                   decoration: BoxDecoration(
-                    color: availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
+                    color: widget.availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? Colors.green : Colors.amber ,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                    widget.availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(width: 10,),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.person, color: Colors.black87),
+                Icon(Icons.face, color: Colors.black87),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.driverName ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(widget.availablesRoutesEntity.route.driverName ?? '' , style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
+
               ],
             ),
             Row(
@@ -275,7 +291,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Icon(Icons.trip_origin, color: Colors.amber),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(widget.availablesRoutesEntity.route.fromLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
               ],
             ),
@@ -285,7 +301,7 @@ class CardAvailiblesRoutes extends StatelessWidget {
                 Icon(Icons.location_on, color: Colors.red),
                 SizedBox(width: 5),
                 Expanded(
-                  child: Text(availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  child: Text(widget.availablesRoutesEntity.route.toLocation.streetName, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 ),
               ],
             ),
@@ -294,11 +310,11 @@ class CardAvailiblesRoutes extends StatelessWidget {
               children: [
                 Icon(Icons.access_time, color: Colors.black87),
                 SizedBox(width: 5),
-                Text(availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                Text(widget.availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM, style: TextStyle(color: Colors.black87, fontSize: 14)),
                 SizedBox(width: 20),
                 Icon(Icons.calendar_today, color: Colors.blueAccent),
                 SizedBox(width: 5),
-                Text(availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                Text(widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
               ],
             ),
           ],

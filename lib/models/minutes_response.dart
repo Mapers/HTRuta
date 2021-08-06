@@ -21,13 +21,14 @@ class MinutesResponse {
     List<AproxRow> rows;
     String status;
 
-    factory MinutesResponse.fromJson(Map<String, dynamic> json) => MinutesResponse(
+    factory MinutesResponse.fromJson(Map<String, dynamic> json) {
+      return MinutesResponse(
         destinationAddresses: List<String>.from(json['destination_addresses'].map((x) => x)),
         originAddresses: List<String>.from(json['origin_addresses'].map((x) => x)),
         rows: List<AproxRow>.from(json['rows'].map((x) => AproxRow.fromJson(x))),
         status: json['status'],
-    );
-
+      );
+    }
     Map<String, dynamic> toJson() => {
         'destination_addresses': List<dynamic>.from(destinationAddresses.map((x) => x)),
         'origin_addresses': List<dynamic>.from(originAddresses.map((x) => x)),
@@ -43,9 +44,11 @@ class AproxRow {
 
     List<AproxElement> elements;
 
-    factory AproxRow.fromJson(Map<String, dynamic> json) => AproxRow(
+    factory AproxRow.fromJson(Map<String, dynamic> json)  {
+      return AproxRow(
         elements: List<AproxElement>.from(json['elements'].map((x) => AproxElement.fromJson(x))),
-    );
+      );
+    }
 
     Map<String, dynamic> toJson() => {
         'elements': List<dynamic>.from(elements.map((x) => x.toJson())),

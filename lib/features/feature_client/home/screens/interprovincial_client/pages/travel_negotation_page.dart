@@ -5,11 +5,14 @@ import 'package:HTRuta/core/utils/dialog.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
@@ -18,6 +21,8 @@ import 'package:HTRuta/features/features_driver/home/entities/interprovincial_re
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+
 
 class TravelNegotationPage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
@@ -33,7 +38,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   final _prefs = UserPreferences();
   TextEditingController amountController = TextEditingController();
   ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
+  InterprovincialRequestEntity request;
   String amount;
+  bool newPassagger = false;
   @override
   void initState() {
     amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
@@ -48,99 +55,169 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
       body: Form(
         key: formKey,
-        child: Column(
-          children: [
-            SizedBox(height: 15,),
-            Text(widget.availablesRoutesEntity.route.name,style: TextStyle(fontWeight: FontWeight.bold),),
-            SizedBox(height: 15,),
-            Text( widget.availablesRoutesEntity.route.driverName ),
-            SizedBox(height: 15,),
-            StreamBuilder<List<InterprovincialRequestEntity>>(
-              stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
-              builder: (ctx, asyncSnapshot){
-                if(asyncSnapshot.connectionState == ConnectionState.active){
-                  if(asyncSnapshot.data.isEmpty){
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: (){
-                                amountController.text = (double.parse(amountController.text)  - 1.00 ).toStringAsFixed(2);
-                              },
-                              icon: Icon(Icons.remove),
-                            ),
-                            SizedBox(width: 20,),
-                            Card(
-                              color: backgroundInputColor,
-                              child: Container(
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: TextFormField(
-                                    onSaved: (val)=> amount = val,
-                                    controller: amountController,
-                                    decoration: InputDecoration(
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              SizedBox(height: 15,),
+              Text(widget.availablesRoutesEntity.route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), ),
+              SizedBox(height: 5,),
+              Row(
+                children: [
+                  Icon(Icons.face, color: Colors.black87),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(widget.availablesRoutesEntity.route.driverName,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  ),
+                ],
+              ),
+              Row(
+                    children: [
+                      Icon(Icons.trip_origin, color: Colors.amber),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                            widget.availablesRoutesEntity.route.fromLocation.streetName,
+                            style: TextStyle(color: Colors.black87, fontSize: 14)),
+                      ),
+                    ],
+                  ),
+              Row(
+                children: [
+                  Icon(Icons.location_on, color: Colors.red),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                      widget.availablesRoutesEntity.route.toLocation.streetName,
+                      style: TextStyle(color: Colors.black87, fontSize: 14)
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text(widget.availablesRoutesEntity.availableSeats.toString(),
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    )
+                  )
+                ],
+              ),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Icon(Icons.access_time, color: Colors.black87),
+                  SizedBox(width: 5),
+                  Text(
+                    widget.availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
+                    style: TextStyle(color: Colors.black87, fontSize: 14)
+                  ),
+                  SizedBox(width: 20),
+                  Icon(Icons.calendar_today, color: Colors.black87),
+                  SizedBox(width: 5),
+                  Text(
+                    widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
+                    style: TextStyle(color: Colors.black87, fontSize: 14)
+                  ),
+                ],
+              ),
+              SizedBox(height: 15,),
+              StreamBuilder<List<InterprovincialRequestEntity>>(
+                stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
+                builder: (ctx, asyncSnapshot){
+                  if(asyncSnapshot.connectionState == ConnectionState.active){
+                    print( asyncSnapshot.data );
+                    List<InterprovincialRequestEntity>  ds = asyncSnapshot.data;
+                    for (InterprovincialRequestEntity item in ds) {
+                      if(item.passengerFcmToken ==  _prefs.tokenPush){
+                        request = item;
+                      }
+                    }
+                    if(request == null){
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: (){
+                                  amountController.text = (double.parse(amountController.text) - 1.00 ).toStringAsFixed(2);
+                                },
+                                icon: Icon(Icons.remove),
+                              ),
+                              SizedBox(width: 20,),
+                              Card(
+                                color: backgroundInputColor,
+                                child: Container(
+                                  width: 100,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                                    child: TextFormField(
+                                      onSaved: (val)=> amount = val,
+                                      controller: amountController,
+                                      decoration: InputDecoration(
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 20,),
-                            IconButton(
-                              onPressed: (){
-                                amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
-                              },
-                              icon: Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                        PrincipalButton(
-                          text: 'Negociar',
-                          onPressed: ()async{
-                            formKey.currentState.save();
-                            //! Agregar modal de consulta
-                            final user = await _session.get();
-                            LocationEntity from = await LocationUtil.currentLocation();
-                            DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
-                            InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
-                              condition: InterprovincialRequestCondition.offer,
-                              documentId: null,
-                              passengerFcmToken: _prefs.tokenPush,
-                              from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
-                              to: param.distictTo.districtName,
-                              passengerId: user.id,
-                              fullNames: user.fullNames,
-                              price: double.parse(amount),
-                              seats: param.requiredSeats
-                            );
-                            String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
-                            NegotiationEntity negotiation = NegotiationEntity(
-                              serviceId: widget.availablesRoutesEntity.id,
-                              passengerId: user.id,
-                              cost: double.parse(amount),
-                              seating: param.requiredSeats,
-                              requestDocumentId: requestDocumentId,
-                              from: from,
-                              to: widget.availablesRoutesEntity.route.toLocation
-                            );
-                            BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
-                            Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
-                          },
-                        )
-                      ],
-                    );
-                  }else{
-                    return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: asyncSnapshot.data.first, documentId: widget.availablesRoutesEntity.documentId);
+                              SizedBox(width: 20,),
+                              IconButton(
+                                onPressed: (){
+                                  amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
+                                },
+                                icon: Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                          PrincipalButton(
+                            text: 'Negociar',
+                            onPressed: ()async{
+                              formKey.currentState.save();
+                              //! Agregar modal de consulta
+                              final user = await _session.get();
+                              LocationEntity from = await LocationUtil.currentLocation();
+                              DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+                              InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
+                                condition: InterprovincialRequestCondition.offer,
+                                documentId: null,
+                                passengerFcmToken: _prefs.tokenPush,
+                                from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
+                                to: param.distictTo.districtName,
+                                passengerId: user.id,
+                                fullNames: user.fullNames,
+                                price: double.parse(amount),
+                                seats: param.requiredSeats
+                              );
+                              String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
+                              NegotiationEntity negotiation = NegotiationEntity(
+                                serviceId: widget.availablesRoutesEntity.id,
+                                passengerId: user.id,
+                                cost: double.parse(amount),
+                                seating: param.requiredSeats,
+                                requestDocumentId: requestDocumentId,
+                                from: from,
+                                to: widget.availablesRoutesEntity.route.toLocation
+                              );
+                              BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
+                              Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
+                            },
+                          )
+                        ],
+                      );
+                    }else{
+                      return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: request, documentId: widget.availablesRoutesEntity.documentId);
+                    }
                   }
+                  return Container();
                 }
-                return Container();
-              }
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -161,7 +238,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     width: 100,
                     onPressed: () async {
                       await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
+                      // DataClientServiceState param = BlocProvider.of<ClientServiceBloc>(context).state;
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeClientPage(rejected: true)), (Route<dynamic> route) => false);
                       BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
                     }
                   ),
@@ -193,7 +271,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     text: 'Ver ruta',
                     width: 100,
                     onPressed: () {
-
                       deleteRequestAndRedirectionalMap(documentId, request);
                     }
                   ),
@@ -224,7 +301,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                         requestDocumentId: null
                       );
                       BlocProvider.of<InterprovincialClientBloc>(context).add(RejecDataSolicitudInterprovincialClientEvent(negotiationEntity:  negotiation));
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InterprovincialClientScreen(rejected: true,)), (Route<dynamic> route) => false);
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeClientPage(rejected: true)), (Route<dynamic> route) => false);
                     },
                   ),
                   SizedBox(width: 30,),

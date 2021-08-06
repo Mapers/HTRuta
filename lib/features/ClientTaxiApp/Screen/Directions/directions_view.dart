@@ -408,7 +408,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                 )
                               ],
                             ),
-                            
                             Row(
                               children: <Widget>[
                                 Expanded(

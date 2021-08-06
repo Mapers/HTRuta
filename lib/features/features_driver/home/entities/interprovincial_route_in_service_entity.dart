@@ -18,7 +18,6 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   final double starts;
   final DateTime dateStart;
   final InterprovincialStatus status;
-
   InterprovincialRouteInServiceEntity({
     @required this.id,
     @required this.name,
@@ -31,7 +30,7 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     this.driverCellphone,
     this.driverImage,
     this.dateStart,
-    this.status
+    this.status,
   });
 
   Map<String, dynamic> get toMap => {
@@ -87,7 +86,6 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   }
 
   factory InterprovincialRouteInServiceEntity.fromJson(Map<String, dynamic> dataJson){
-   
     double starts;
     dataJson['starts'] == null ? starts = 0 : starts = double.parse(dataJson['starts']);
     return InterprovincialRouteInServiceEntity(

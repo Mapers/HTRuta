@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 class HomeClientPage extends StatefulWidget {
-  final ServiceInCourseEntity serviceInCourse;
-  const HomeClientPage({Key key, @required this.serviceInCourse}) : super(key: key);
+  final bool rejected;
+  const HomeClientPage({Key key, this.rejected = false}) : super(key: key);
 
   @override
   _HomeClientPageState createState() => _HomeClientPageState();
@@ -41,7 +41,7 @@ class _HomeClientPageState extends State<HomeClientPage> {
                   case TypeServiceEnum.taxi:
                     return HomeScreens(parentScaffoldKey: _scaffoldKey);
                   case TypeServiceEnum.interprovincial:
-                    return InterprovincialClientScreen();
+                    return InterprovincialClientScreen(rejected: widget.rejected,);
                   default:
                     return Text('Service not found!');
                 }
