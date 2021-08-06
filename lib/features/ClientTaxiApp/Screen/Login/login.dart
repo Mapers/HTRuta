@@ -34,10 +34,15 @@ class _LoginScreenState extends State<LoginScreen> {
         // final isOk = await authApi.loginUser(_email, _password);
         // Navigator.pop(context);
         // if(isOk){
-          final bool sent = await authApi.getVerificationCode(_phoneNumber);
-          if(!sent){
-            Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
-            return;
+          final String sent = await authApi.getVerificationCode(_phoneNumber);
+          if(sent != 'S'){
+            if(sent == 'N'){
+              Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
+              return;
+            }else{
+              Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
+              return;
+            }
           }
           Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(numeroTelefono: _phoneNumber)));
         // }

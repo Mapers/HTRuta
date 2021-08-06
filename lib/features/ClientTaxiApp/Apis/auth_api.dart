@@ -100,21 +100,21 @@ class AuthApi{
     }
     
   }
-  Future<bool> getVerificationCode(String phoneNumber) async {
+  Future<String> getVerificationCode(String phoneNumber) async {
     try{
       final response = await http.post('http://23.254.217.21:8000/api/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'true'});
       if(response.statusCode == 200){
         final data = json.decode(response.body);
         if(data['success']){
-          return true;
+          return 'S'; //Login exitoso
         }
-        return false;
+        return 'N'; //No existe la cuenta
       }else{
-        return false;
+        return 'E'; //Error desconocido
       }
     }catch(e){
       print(e);
-      return false;
+      return 'E';
     }
     
   }

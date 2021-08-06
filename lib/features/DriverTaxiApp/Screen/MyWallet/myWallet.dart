@@ -5,7 +5,6 @@ import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment_view.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/my_wallet_response.dart';
@@ -18,7 +17,7 @@ class MyWalletDriver extends StatefulWidget {
 
 class _MyWalletDriverState extends State<MyWalletDriver> {
   final String screenName = 'MY WALLET';
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
 //IconData icon, String title, String date, String balance
   List<Map<String, dynamic>> listService = [
     {'id': '0','icon' : Icons.local_taxi, 'title' : 'Recarga Taxi','date' : '22-05-2020','balance' : '+2 viajes'},
@@ -33,12 +32,8 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
   String amountValue = '5';
   @override
   Widget build(BuildContext context) {
-    return SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuDriverScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
-      child: Scaffold(
+    return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Billetera',style: TextStyle(color: blackColor),),
         centerTitle: true,
@@ -48,11 +43,7 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: () {
-            final _state = _sideMenuKey.currentState;
-            if (_state.isOpened)
-              _state.closeSideMenu(); // close side menu
-            else
-              _state.openSideMenu();// open side menu
+            _scaffoldKey.currentState.openDrawer();
           },
         ),
       ),
@@ -76,7 +67,6 @@ class _MyWalletDriverState extends State<MyWalletDriver> {
             return Container();
           }
         ): tabBarView(loadedData)
-      )
     );
   }
   Widget tabBarView(WalletData data){

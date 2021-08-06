@@ -16,7 +16,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   final String screenName = 'HISTORY';
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   final _prefs = UserPreferences();
   final pickupApi = PickupApi();
   List<HistoryItem> historyItemsLoaded;
@@ -35,14 +35,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
-      child: SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
-          title: Text('Historia de viajes',style: TextStyle(fontSize: 16.0)),
+          title: Text('Historial de viajes',style: TextStyle(fontSize: 16.0)),
           centerTitle: true,
           elevation: 0,
           backgroundColor: Colors.white,
@@ -57,11 +53,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              final _state = _sideMenuKey.currentState;
-              if (_state.isOpened)
-                _state.closeSideMenu(); // close side menu
-              else
-                _state.openSideMenu();// open side menu
+              _scaffoldKey.currentState.openDrawer();
             },
           ),
         ),
@@ -108,8 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
             ] 
           ),
-        ),
-      )
+        )
     );
   }
   Widget createFutureList(){
