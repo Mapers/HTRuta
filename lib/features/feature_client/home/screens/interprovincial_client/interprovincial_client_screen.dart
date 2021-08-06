@@ -6,6 +6,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/availables_routes_page.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/select_address_widget.dart';
@@ -35,7 +36,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
 
   @override
   void initState() {
-    initialCircularRadio = 3;
+    initialCircularRadio = 2;
     toLocation = LocationEntity(
       latLang: null,
       districtName: '',
@@ -87,6 +88,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     seat = seating;
   }
   void onSearch() async {
+    BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
     if(toLocation == null){
       Fluttertoast.showToast(
         msg: 'Seleccione su destino',
@@ -102,8 +104,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         radio: initialCircularRadio,
         seating: seat,
         paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList())
-        );
-    Navigator.of(context).push(Routes.toAvailableRoutesPage());
+      );
+    // Navigator.of(context).push(Routes.toAvailableRoutesPage());
   }
 
   @override
@@ -146,6 +148,36 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                               },
                             )
                         ),
+                      ),
+                    ],
+                  );
+                } else if( state.status == InterprovincialClientStatus.availablesInterprovincial ){
+                  return Stack(
+                    children: [
+                      Positioned(
+                        top: 100,
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                        child: Container(
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          height: 230,
+                          child: AvailableRoutesPage(),
+                        ),
+                      ),
+                      Positioned(
+                        top: 105,
+                        right: 15,
+                        child: IconButton(
+                          icon: Icon(Icons.close ),
+                          onPressed: (){
+                            BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+                          }
+                        )
                       ),
                     ],
                   );
