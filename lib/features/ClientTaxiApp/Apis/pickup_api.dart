@@ -7,6 +7,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/payment_methods_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickup_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/register_travel_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/request_model.dart';
@@ -20,6 +21,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/my_wallet_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/historical_detail_response.dart';
 import 'package:HTRuta/models/minutes_response.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -460,5 +462,11 @@ class PickupApi{
       print(e);
       rethrow;
     }
+  }
+  Future<List<Place>> searchPlaces(String query, Position formLocation) async {
+    String url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?key=${Config.googleMapsApiKey}&language=${Config.language}&region=${Config.region}&locationbias=circle:5000@${formLocation.latitude},${formLocation.longitude}&query='+Uri.encodeQueryComponent(query);
+    final response = await http.get(url);
+    final listPlace = Place.parseLocationList(json.decode(response.body));
+    return listPlace;
   }
 }

@@ -297,38 +297,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           Padding(
                                                             padding: EdgeInsets.only(top: 20.0),
                                                           ),
-                                                          /* FutureBuilder<List<Datum>>(
-                                                            future: tablaApi.getSexo(context),
-                                                            builder: (context, snapshot) {
-                                                              if(snapshot.hasData){
-                                                                // final dato = snapshot.data;
-                                                                return Container(
-                                                                  width: double.infinity,
-                                                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(10.0),
-                                                                    border: Border.all()),
-                                                                  child:  DropdownButton(
-                                                                    value: _selectedSexo,
-                                                                        items: snapshot.data
-                                                                          .map((sexo) => DropdownMenuItem(
-                                                                                child: Text(sexo.vchNombreCodigo),
-                                                                                value: sexo.vchValor,
-                                                                              ))
-                                                                          .toList(),
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            _selectedSexo = value;
-                                                                          }
-                                                                        );
-                                                                      }
-                                                                    ),
-                                                                );
-                                                              }else{
-                                                                return Center(child: CircularProgressIndicator(),);
-                                                              }
-                                                            },
-                                                          ), */
                                                           DropdownInput(
                                                             value: _genderSelected,
                                                             items: ['Masculino', 'Femenino'],

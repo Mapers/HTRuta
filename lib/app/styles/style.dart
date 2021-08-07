@@ -2,6 +2,13 @@ import 'package:HTRuta/core/utils/colors_util.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 
+double mqHeigth(BuildContext context, double percentage){
+  return MediaQuery.of(context).size.height * (percentage/100);
+}
+double mqWidth(BuildContext context, double percentage){
+  return MediaQuery.of(context).size.width * (percentage/100);
+}
+
 TextStyle textStyle = style();
 TextStyle textStyleWhite = style( color: Colors.white );
 TextStyle textBoldBlack = style(

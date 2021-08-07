@@ -191,8 +191,7 @@ class MenuScreens extends StatelessWidget {
           SizedBox(height: 20.0),
           FlatButton(
             onPressed: () async {
-              Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
-              /* if(_prefs.idChoferReal != '0'){
+              if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
                 final session = Session();
                 final data = await session.get();
                 final estado = await registroConductorApi.obtenerEstadoChofer(data.dni);
@@ -231,8 +230,7 @@ class MenuScreens extends StatelessWidget {
 
                   }
                 );
-              } */
-              
+              }
             }, 
             child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

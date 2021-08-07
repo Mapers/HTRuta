@@ -81,7 +81,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    changeMapType(3, 'assets/style/dark_mode.json');
   }
   @override
   void dispose() {
@@ -92,7 +91,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      changeMapType(3, 'assets/style/dark_mode.json');
+      _mapController.setMapStyle(null);
     }
   }
   @override
@@ -165,16 +164,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
       nightMode = true;
       _mapController.setMapStyle(mapStyle);
     });
-  }
-  void changeMapType(int id, String fileName){
-    if (fileName == null) {
-      setState(() {
-        nightMode = false;
-        _mapController.setMapStyle(null);
-      });
-    } else {
-      _getFileData(fileName)?.then(_setMapStyle);
-    }
   }
 
   void addMakersFinal(){
@@ -587,7 +576,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
           SizedBox(
             child: GoogleMap(
               onMapCreated: _onMapCreated,
-              myLocationEnabled: false,
+              myLocationEnabled: true,
               myLocationButtonEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: LatLng(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),

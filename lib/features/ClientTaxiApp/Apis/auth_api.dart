@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/person_data_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/usuario_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -134,6 +135,28 @@ class AuthApi{
       print(e);
       return '';
     }
-    
+  }
+  Future<PersonDataResponse> getPersonData(String dni) async {
+    try{
+      var headers = {
+        'Authorization': 'Bearer 610465b3b8bea7d58a996692a1013d2477db981006a545953e481bdbbee0dc36'
+      };
+      var request = http.Request('GET', Uri.parse('https://apiperu.dev/api/dni/$dni'));
+
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        final body = await response.stream.bytesToString();
+        final data = personDataResponseFromJson(body);
+        return data;
+      }
+      else {
+        return null;
+      }
+    }catch(e){
+      return null;
+    }
   }
 }

@@ -15,7 +15,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/PaymentMethod/payment_metho
 import 'package:HTRuta/features/ClientTaxiApp/Screen/ReviewTrip/review_trip_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/settings.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/terms_conditions_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/signup.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step1.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/intro_screen/intro_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/History/history.dart';
@@ -95,7 +95,7 @@ class AppRoute {
       case homeScreen2:
         return PageViewTransition(builder: (_) => HomeScreen2());
       case signUpScreen:
-        return PageViewTransition(builder: (_) => SignupScreen());
+        return PageViewTransition(builder: (_) => SignUpStep1());
       case notificationScreen:
         return PageViewTransition(builder: (_) => NotificationScreens());
       case profileScreen:
