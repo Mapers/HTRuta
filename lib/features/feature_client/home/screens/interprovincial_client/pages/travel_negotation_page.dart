@@ -6,6 +6,7 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
@@ -19,6 +20,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
@@ -36,6 +38,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   bool expectedSteate = true;
   Session _session = Session();
   final _prefs = UserPreferences();
+  final pickUpApi = PickupApi();
+  AproxElement element;
   TextEditingController amountController = TextEditingController();
   ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
   InterprovincialRequestEntity request;
@@ -122,6 +126,63 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                     style: TextStyle(color: Colors.black87, fontSize: 14)
                   ),
                 ],
+              ),
+              FutureBuilder(
+                future: pickUpApi.calculateMinutes( widget.availablesRoutesEntity.route.fromLocation.latLang.latitude, widget.availablesRoutesEntity.route.fromLocation.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude),
+                builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if(snapshot.hasError) return Container();
+                  switch(snapshot.connectionState){
+                    case ConnectionState.waiting: return Container();
+                    case ConnectionState.none: return Container();
+                    case ConnectionState.active: {
+                      final AproxElement element = snapshot.data;
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                              SizedBox(width: 8,),
+                              Text(element.distance.text),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                              SizedBox(width: 8,),
+                              Text(element.duration.text),
+                            ],
+                          ),
+                        ]
+                      );
+                    }
+                    case ConnectionState.done: {
+                      final AproxElement element = snapshot.data;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                SizedBox(width: 8,),
+                                Text(element.distance.text),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                SizedBox(width: 8,),
+                                Text(element.duration.text),
+                              ],
+                            ),
+                          ]
+                        ),
+                      );
+                    }
+                  }
+                  return Container();
+                }
               ),
               SizedBox(height: 15,),
               StreamBuilder<List<InterprovincialRequestEntity>>(

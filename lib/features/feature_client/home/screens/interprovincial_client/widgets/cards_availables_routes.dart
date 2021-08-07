@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CardsAvailablesRoutes extends StatefulWidget {
   CardsAvailablesRoutes({Key key}) : super(key: key);
@@ -34,7 +35,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(height: 10,),
-                Text('Buscado...', style: TextStyle(color: Colors.white ),)
+                Text('Buscado 5km a la redonda...', style: TextStyle(color: Colors.white ),)
               ],
             ),
           );
@@ -195,7 +196,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('ver comen...'),
+                          child: Text('Ver comentarios', style: TextStyle(color: Colors.lightBlue, decoration: TextDecoration.underline,),),
                         )),
                   ],
                 ),
@@ -272,8 +273,20 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                         final AproxElement element = snapshot.data;
                         return Column(
                           children: [
-                            Text(element.distance.text ),
-                            Text(element.duration.text),
+                            Row(
+                              children: [
+                                Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                SizedBox(width: 8,),
+                                Text(element.distance.text),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                SizedBox(width: 8,),
+                                Text(element.duration.text),
+                              ],
+                            ),
                           ]
                         );
                       }
@@ -284,8 +297,20 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(element.distance.text),
-                              Text(element.duration.text),
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.distance.text),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.duration.text),
+                                ],
+                              ),
                             ]
                           ),
                         );
