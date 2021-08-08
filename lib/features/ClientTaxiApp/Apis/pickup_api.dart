@@ -15,6 +15,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/save_qualification_body.dart
 import 'package:HTRuta/features/ClientTaxiApp/Model/travel_accepted_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/solicitud_usuario_response.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Model/driver_cupons.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/driver_payment_method_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/save_driver_py_body.dart';
@@ -260,6 +261,44 @@ class PickupApi{
       }else{
         throw Exception();
       }
+    } catch(error){
+      throw ServerException(message: 'Ocurrió un error con el servidor');
+    }
+  }
+  Future<List<DriverCuponsModel>> getDriverCupons(String idChofer)async{
+    final url = '${Config.nuevaRutaApi}/chofer/metodo-pago/informacion?choferId=$idChofer';
+    try{
+      await Future.delayed(Duration(seconds: 1));
+      return [
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '10% descuento',
+          description: 'En todas las nike store',
+          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+        ),
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '10% descuento',
+          description: 'En todas las nike store',
+          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+        ),
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '10% descuento',
+          description: 'En todas las nike store',
+          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+        ),
+      ];
+      /* final response = await http.get(url);
+      final responseData = driverPaymentMethodFromJson(response.body);
+      if(responseData.success){
+        return responseData.data;
+      }else{
+        throw Exception();
+      } */
     } catch(error){
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }

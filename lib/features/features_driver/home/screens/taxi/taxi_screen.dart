@@ -14,6 +14,7 @@ import 'package:HTRuta/features/DriverTaxiApp/Components/itemRequest.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/myActivity.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/requestDetail.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/custom_dropdown_driver.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -135,10 +136,10 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         await travelConfirmation(idSolicitud);
       }
     });
-    Geolocator.getPositionStream().listen((event) async{
+    Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
       if(currentLocation == null) return;
-      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(diferencia > 100 && isWorking && mounted){
+      double diferencia = Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      if(diferencia > 10 && isWorking && mounted){
         /* _markers.clear();
         if(mounted){
           setState(() {});
@@ -184,14 +185,18 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
       verifyTaxiInService();
     });
   }
-  void verifyTaxiInService(){
+  void verifyTaxiInService() async {
     bool inService = _prefs.isDriverInService;
     if(inService){
       RequestModel data = requestItemFromJson(_prefs.taxiRequestInCourse);
       final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
       // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
       pedidoProvider.request = data;
-      Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
+      if(currentLocation == null){
+        final position = await Geolocator.getCurrentPosition();
+        currentLocation = LatLng(position.latitude, position.longitude);
+      }
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelDriverScreen(currentLocation)), (route) => false);
     }
   }
   Future<void> travelConfirmation(String idSolicitud) async {
@@ -201,7 +206,11 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     _prefs.isDriverInService = true;
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
     pedidoProvider.request = data;
-    Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
+    if(currentLocation == null){
+      final position = await Geolocator.getCurrentPosition();
+      currentLocation = LatLng(position.latitude, position.longitude);
+    }
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelDriverScreen(currentLocation)), (route) => false);
   }
   Future<void> getSolicitudes() async {
     final _prefs = UserPreferences();

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/travel_screen.dart';
 import 'package:HTRuta/models/minutes_response.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:HTRuta/app/colors.dart';
@@ -28,6 +30,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/widgets/booking_detail_widget.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -70,9 +73,12 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   final _prefs = UserPreferences();
   final pickUpApi = PickupApi();
   List<DriverRequest> requestTaxi = [];
+  List<Map> driversData = [];
   PushNotificationProvider pushProvider;
   PedidoProvider pedidoProvider;
   bool nightMode = false;
+  Position currentLocation;
+  
 
   Future<String> _getFileData(String path) async {
     return await rootBundle.loadString(path);
@@ -133,7 +139,16 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     addMakers();
     getRouter();
+    Geolocator.getCurrentPosition().then((position) =>{
+      currentLocation = position
+    });
+    locationlistener();
     super.initState();
+  }
+  void locationlistener(){
+    Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
+      currentLocation = Position(latitude: event.latitude, longitude: event.longitude);
+    });
   }
   Future<void> loadOffers() async {
     final data = await pickUpApi.getRequestDriver(pedidoProvider.idSolicitud);
@@ -141,6 +156,15 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       requestTaxi.clear();
       setState(() {});
     }else{
+      List<String> ids = data.map((e) => e.iIdUsuario).toList();
+      Query reference = FirebaseFirestore.instance.collection('taxis_in_service').where('id', whereIn: ids);
+      QuerySnapshot snapshot = await reference.get();
+      final driverDocs = snapshot.docs;
+      driversData.clear();
+      driverDocs.forEach((element) {
+        final data = element.data();
+        driversData.add(data);
+      });
       requestTaxi.clear();
       requestTaxi.addAll(data);
       setState(() {});
@@ -210,41 +234,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
     setState(() {});
     _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
-
-  ///Real-time test of driver's location
-  ///My data is demo.
-  ///This function works by: every 5 or 2 seconds will request for api and after the data returns,
-  ///the function will update the driver's position on the map.
-
-  /* double valueRotation;
-  void runTrackingDriver(var _listPosition){
-    int count = 1;
-    int two = count;
-    const timeRequest = Duration(seconds: 2);
-    Timer.periodic(timeRequest, (Timer t) {
-      LatLng positionDriverBefore = _listPosition[two-1];
-      positionDriver = _listPosition[count++];
-
-      valueRotation = rm.calculateangle(positionDriverBefore.latitude, positionDriverBefore.longitude,positionDriver.latitude, positionDriver.longitude);
-      addMakersDriver(positionDriver);
-      _mapController?.animateCamera(
-        CameraUpdate?.newCameraPosition(
-          CameraPosition(
-            target: positionDriver,
-            zoom: 15.0,
-          ),
-        ),
-      );
-      if(count == _listPosition.length){
-        setState(() {
-          t.cancel();
-          isComplete = true;
-          showDialog(context: context, child: dialogInfo());
-        });
-
-      }
-    });
-  } */
 
   void addMakersDriver(LatLng _position){
     final MarkerId markerDriver = MarkerId('driver');
@@ -322,6 +311,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                         data = element;
                       }
                     });
+                    final GeoPoint driverLocation = driversData[index]['posicion'];
                     return Card(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -366,7 +356,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                   children: <Widget>[
                                     Text('S/${double.parse(actualRequest.mPrecio)}',style: TextStyle(fontSize: responsive.ip(3))),
                                     !included ? FutureBuilder(
-                                      future: pickUpApi.calculateMinutes(double.parse(actualRequest.vchLatInicial), double.parse(actualRequest.vchLongInicial), double.parse(actualRequest.vchLatFinal), double.parse(actualRequest.vchLongFinal)),
+                                      future: pickUpApi.calculateMinutes(currentLocation.latitude, currentLocation.longitude, driverLocation.latitude, driverLocation.longitude),
                                       builder: (BuildContext context, AsyncSnapshot snapshot){
                                         if(snapshot.hasError) return Container();
                                         switch(snapshot.connectionState){
@@ -468,7 +458,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               Dialogs.alert(context, title: 'Error', message: 'No se pudo aceptar la solicitud');
                                               return;
                                             }
-                                            _prefs.setNotificacionUsuario = 'Solicitudes,Ha aceptado la oferta de un conductor';
+                                            _prefs.setNotificacionUsuario = 'Solicitudes, Ha aceptado la oferta de un conductor';
                                             PushMessage pushMessage = getIt<PushMessage>();
                                             Map<String, String> data = {
                                               'newConfirm' : '1',

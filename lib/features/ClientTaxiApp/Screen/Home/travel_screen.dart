@@ -54,6 +54,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData = [];
+  final pickUpApi = PickupApi();
 
   Position currentLocation;
   Position _lastKnownPosition;
@@ -86,7 +87,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     super.didChangeAppLifecycleState(state);
     print(state);
     if (state == AppLifecycleState.resumed) {
-      changeMapType(3, 'assets/style/dark_mode.json');
+      _mapController.setMapStyle(null);
       if(!notificationListenerExecuted){
         appInBackground = false;
         updateStateWhenNoNotificationSelected(context);
@@ -136,12 +137,12 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       }
       if(travelInit == '1'){
         travelInits = true;
-        timer?.cancel();
         _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha iniciado';
         await getRouter();
         addMakers();
       }
       if(travelFinish == '1'){
+        timer?.cancel();
         _prefs.setNotificacionUsuario = 'Viajes,Su viaje ha finalizado';
         final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
         if(idSolicitud == pedidoProvider.request.id){
@@ -156,10 +157,14 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     });
     timer = Timer.periodic(Duration(seconds: 10), (Timer t){
         updateTimeAproximation(context);
-        if(!mounted) return;
-        setState(() {});
       }
     );
+    locationlistener();
+  }
+  void locationlistener(){
+    Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
+      currentLocation = Position(latitude: event.latitude, longitude: event.longitude);
+    });
   }
   Future<void> updateStateWhenNoNotificationSelected(BuildContext context) async{
     final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
@@ -185,10 +190,14 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
     }
   }
   Future<void> updateTimeAproximation(BuildContext context) async {
-    if(driverPosition == null) return;
-    final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+    if(driverPosition == null || currentLocation == null) return;
     try{
-      aproxElement = await pickupApi.calculateMinutes(driverPosition.latitude, driverPosition.longitude, double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial));
+      if(travelInits){
+        final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
+        aproxElement = await pickupApi.calculateMinutes(currentLocation.latitude, currentLocation.longitude, double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal));
+      }else{
+        aproxElement = await pickupApi.calculateMinutes(driverPosition.latitude, driverPosition.longitude, currentLocation.latitude, currentLocation.longitude);
+      }
     }catch(e){
       return;
     }
@@ -382,29 +391,9 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
       }
     }
   }
-  Future<String> _getFileData(String path) async {
-    return await rootBundle.loadString(path);
-  }
-  void _setMapStyle(String mapStyle) {
-    setState(() {
-      nightMode = true;
-      _mapController.setMapStyle(mapStyle);
-    });
-  }
-  void changeMapType(int id, String fileName){
-    if (fileName == null) {
-      setState(() {
-        nightMode = false;
-        _mapController.setMapStyle(null);
-      });
-    } else {
-      _getFileData(fileName)?.then(_setMapStyle);
-    }
-  }
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
-    changeMapType(3, 'assets/style/dark_mode.json');
     MarkerId markerId = MarkerId(_markerIdVal());
     LatLng position;
     if(currentLocation == null){
@@ -494,7 +483,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             !travelInits ? Container(
               width: responsive.wp(100),
               height: responsive.hp(30),
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.black.withOpacity(0.4),
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
               child: Column(
                 children: <Widget>[
@@ -519,6 +508,31 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                     Text('Modelo: ${pedidoProvider.requestDriver.vchModelo}',style: TextStyle(fontSize: responsive.ip(2.2)),),
                     SizedBox(height: responsive.hp(2),),
                     Text('Placa: ${pedidoProvider.requestDriver.vchPlaca}',style: TextStyle(fontSize: responsive.ip(2.2))),
+                    aproxElement != null ? Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                              SizedBox(width: 8,),
+                              Text(aproxElement.distance.text),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                              SizedBox(width: 8,),
+                              Text(aproxElement.duration.text),
+                            ],
+                          ),
+                        ]
+                      ),
+                    ) : Container(),
                     Divider(color: Colors.grey,),
                     ListTile(
                       leading: Container(
@@ -554,7 +568,7 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                           }
                         },
                       )
-                    )
+                    ),
                   ],
                 )
               ),

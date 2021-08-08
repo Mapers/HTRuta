@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/services.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
@@ -22,7 +23,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:HTRuta/app_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -38,7 +38,8 @@ import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 
 class TravelDriverScreen extends StatefulWidget {
-
+  LatLng currentLocation;
+  TravelDriverScreen(this.currentLocation);
   @override
   _TravelDriverScreenState createState() => _TravelDriverScreenState();
 }
@@ -377,9 +378,123 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                 children: <Widget>[
                   Text('Recoger al cliente en'.toUpperCase(),style: textGreyBold,),
                   Text('${pedidoProvider.request.vchNombreInicial}',style: TextStyle(fontSize: responsive.ip(1.8)), textAlign: TextAlign.center,),
+                  FutureBuilder(
+                    future: pickUpApi.calculateMinutes(widget.currentLocation.latitude, widget.currentLocation.longitude, double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial)),
+                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                      if(snapshot.hasError) return Container();
+                      switch(snapshot.connectionState){
+                        case ConnectionState.waiting: return Container();
+                        case ConnectionState.none: return Container();
+                        case ConnectionState.active: {
+                          final AproxElement element = snapshot.data;
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.distance.text),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.duration.text),
+                                ],
+                              ),
+                            ]
+                          );
+                        }
+                        case ConnectionState.done: {
+                          final AproxElement element = snapshot.data;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                    SizedBox(width: 8,),
+                                    Text(element.distance.text),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                    SizedBox(width: 8,),
+                                    Text(element.duration.text),
+                                  ],
+                                ),
+                              ]
+                            ),
+                          );
+                        }
+                      }
+                      return Container();
+                    }
+                  ),
                   SizedBox(height: responsive.hp(2),),
                   Text('Destino'.toUpperCase(),style: textGreyBold,),
                   Text('${pedidoProvider.request.vchNombreFinal}',style: TextStyle(fontSize: responsive.ip(1.8)),textAlign: TextAlign.center,),
+                  FutureBuilder(
+                    future: pickUpApi.calculateMinutes(double.parse(pedidoProvider.request.vchLatInicial), double.parse(pedidoProvider.request.vchLongInicial), double.parse(pedidoProvider.request.vchLatFinal), double.parse(pedidoProvider.request.vchLongFinal)),
+                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                      if(snapshot.hasError) return Container();
+                      switch(snapshot.connectionState){
+                        case ConnectionState.waiting: return Container();
+                        case ConnectionState.none: return Container();
+                        case ConnectionState.active: {
+                          final AproxElement element = snapshot.data;
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.distance.text),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                  SizedBox(width: 8,),
+                                  Text(element.duration.text),
+                                ],
+                              ),
+                            ]
+                          );
+                        }
+                        case ConnectionState.done: {
+                          final AproxElement element = snapshot.data;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+                                    SizedBox(width: 8,),
+                                    Text(element.distance.text),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+                                    SizedBox(width: 8,),
+                                    Text(element.duration.text),
+                                  ],
+                                ),
+                              ]
+                            ),
+                          );
+                        }
+                      }
+                      return Container();
+                    }
+                  ),
                   Divider(color: Colors.grey,),
                   ListTile(
                     leading: Container(

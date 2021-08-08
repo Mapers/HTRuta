@@ -286,14 +286,16 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
     Future.delayed(Duration(milliseconds: 200), () async {
-      controller?.animateCamera(
-        CameraUpdate?.newCameraPosition(
-          CameraPosition(
-            target: position,
-            zoom: 15.0,
+      if(mounted){
+        controller?.animateCamera(
+          CameraUpdate?.newCameraPosition(
+            CameraPosition(
+              target: position,
+              zoom: 15.0,
+            ),
           ),
-        ),
-      );
+        );
+      }
     });
   }
 

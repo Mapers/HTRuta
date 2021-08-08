@@ -11,6 +11,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Request/interprovincial_page.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/injection_container.dart';
@@ -21,6 +22,8 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'requestDetail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -102,7 +105,9 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
     final pedidoProvider = Provider.of<PedidoProvider>(context, listen: false);
     // pedidoProvider.request = Request(id: data.id, iIdUsuario: data.iIdUsuario,dFecReg: '',iTipoViaje: data.iTipoViaje,mPrecio: data.mPrecio,vchDni: data.vchDni,vchCelular: data.vchCelular,vchCorreo: data.vchCorreo,vchLatInicial: data.vchLatInicial,vchLatFinal: data.vchLatFinal,vchLongInicial: data.vchLongInicial,vchLongFinal: data.vchLongFinal,vchNombreInicial: data.vchNombreInicial,vchNombreFinal: data.vchNombreFinal,vchNombres: data.vchNombres,idSolicitud: data.idSolicitud);
     pedidoProvider.request = data;
-    Navigator.pushNamedAndRemoveUntil(context, AppRoute.travelDriverScreen, (route) => false);
+    final position = await Geolocator.getCurrentPosition();
+    final currentLocation = LatLng(position.latitude, position.longitude);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelDriverScreen(currentLocation)), (route) => false);
   }
   Future<void> loadRequests() async {
     final _prefs = UserPreferences();
