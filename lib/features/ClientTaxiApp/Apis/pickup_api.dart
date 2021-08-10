@@ -274,22 +274,43 @@ class PickupApi{
           driverId: '1',
           brand: 'nike',
           name: '10% descuento',
-          description: 'En todas las nike store',
-          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+          description: 'En todas tus recargas con VISA',
+          availableTime: '7 ago - 21 dic'
+        ),
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '15% descuento',
+          description: 'En todas tus recargas con Mastercard',
+          availableTime: '7 ago - 21 dic'
         ),
         DriverCuponsModel(
           driverId: '1',
           brand: 'nike',
           name: '10% descuento',
-          description: 'En todas las nike store',
-          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+          description: 'En todas tus recargas con VISA',
+          availableTime: '7 ago - 21 dic'
         ),
         DriverCuponsModel(
           driverId: '1',
           brand: 'nike',
           name: '10% descuento',
-          description: 'En todas las nike store',
-          availableTime: 'Del 7 de agosto al 21 de noviembre del 2021'
+          description: 'En todas tus recargas con Mastercard',
+          availableTime: '7 ago - 21 dic'
+        ),
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '10% descuento',
+          description: 'En todas tus recargas con Mastercard',
+          availableTime: '7 ago - 21 dic'
+        ),
+        DriverCuponsModel(
+          driverId: '1',
+          brand: 'nike',
+          name: '10% descuento',
+          description: 'En todas tus recargas con Mastercard',
+          availableTime: '7 ago - 21 dic'
         ),
       ];
       /* final response = await http.get(url);

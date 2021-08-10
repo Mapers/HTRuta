@@ -4,8 +4,9 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/driver_cupons.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
+import 'package:HTRuta/features/DriverTaxiApp/Screen/Cupons/driver_cupons_detail.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DriverCupons extends StatefulWidget {
   @override
@@ -63,54 +64,89 @@ class _DriverCuponsState extends State<DriverCupons> {
     List<Widget> elements = [];
     for(int i = 0; i < driverCupons.length; i++){
       elements.add(
-        Container(
-          width: mqWidth(context, 42),
-          height: mqHeigth(context, 42),
-          margin: EdgeInsets.symmetric(horizontal: i % 2 == 0 ? mqWidth(context, 6): 0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 15,
-                offset: Offset(10, 10),
-                spreadRadius: 10
-              )
-            ]
+        InkWell(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => DriverCuponsDetail(driverCupons[i])));
+          },
+          child: Container(
+            width: mqWidth(context, 42),
+            height: mqHeigth(context, 35),
+            margin: EdgeInsets.only(
+              left: i % 2 == 0 ? mqWidth(context, 6): 0,
+              right: i % 2 == 0 ? mqWidth(context, 6): 0,
+              bottom: mqHeigth(context, 3)
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 15,
+                  offset: Offset(10, 10),
+                  spreadRadius: 10
+                )
+              ]
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: mqWidth(context, 42),
+                  height: mqHeigth(context, 20),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    )
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: mqWidth(context, 25),
+                      height: mqWidth(context, 25),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider('https://firebasestorage.googleapis.com/v0/b/turuta-757ba.appspot.com/o/logosplash.png?alt=media&token=e8968b22-352b-4471-8529-7ee61e7fed68')
+                        )
+                      )
+                    )
+                  )
+                ),
+                Container(
+                  width: mqWidth(context, 42),
+                  height: mqHeigth(context, 15),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: mqWidth(context, 5),
+                    vertical: mqHeigth(context, 2.5),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    )
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(driverCupons[i].name, style: TextStyle(fontWeight: FontWeight.bold)),
+                      Expanded(child: Container()),
+                      Text(driverCupons[i].description, style: TextStyle(fontSize: 12)),
+                      Container(height: 5),
+                      Text(driverCupons[i].availableTime, style: TextStyle(fontSize: 12, color: Colors.blue)),
+                    ],
+                  )
+                ),
+              ],
+            )
           ),
-          child: Column(
-            children: [
-              Container(
-                width: mqWidth(context, 42),
-                height: mqHeigth(context, 15),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  )
-                ),
-              ),
-              Container(
-                width: mqWidth(context, 42),
-                height: mqHeigth(context, 25),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  )
-                ),
-                
-              ),
-            ],
-          )
         )  
       );
     }
 
-    return Wrap(
-      children: elements,
+    return SingleChildScrollView(
+      child: Wrap(
+        children: elements,
+      ),
     );
   }
 }

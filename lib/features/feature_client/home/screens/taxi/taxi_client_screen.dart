@@ -96,18 +96,11 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
-    // saveUserPhoto();
     Geolocator.getPositionStream().listen((event) async{
       if(currentLocation == null) return;
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
       if(mounted && diferencia > 20){
         final MarkerId _markerMy = MarkerId('user_position');
-        /* _markers[_markerMy] = GMapViewHelper.createMakerNetwork(
-          markerIdVal: 'user_position',
-          icon: userPhoto,
-          lat: event.latitude,
-          lng: event.longitude,
-        ); */
         _markers[_markerMy] = MapViewerUtil.generateMarker(
           latLng: LatLng(event.latitude, event.longitude),
           nameMarkerId: 'user_position',
@@ -122,15 +115,11 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await checkPermission();
       await _initLastKnownLocation();
-      /* if(_lastKnownPosition != null){
-        _initCurrentLocation();
-      }else{
-        await _initCurrentLocation();
-      } */
       iconTaxi = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/taxi_marker.png');
       fetchLocation();
       loading = false;
       if (!mounted) return;
+      
       setState(() {});
       verifyTaxiInService();
     });
@@ -171,7 +160,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   void fetchLocation(){
     checkPermission()?.then((_) {
       if(isEnabledLocation){
-        _initCurrentLocation();
+        _initCurrentLocation().then((value) => {
+          changeCircle(selectedDistance)
+        });
       }
     });
   }
