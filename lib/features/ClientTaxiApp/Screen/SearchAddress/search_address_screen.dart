@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_view.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SearchAddressScreen extends StatefulWidget {
   final Function(LocationEntity) getTo;
-  SearchAddressScreen({this.getTo});
+  final Position currentLocation;
+  SearchAddressScreen({this.getTo, this.currentLocation});
   @override
   _SearchAddressScreenState createState() => _SearchAddressScreenState();
 }
@@ -36,6 +38,7 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
         child: SearchAddressView(
           placeBloc: bloc,
           getTo: widget.getTo,
+          currentPosition: widget.currentLocation,
         )
       )
     );

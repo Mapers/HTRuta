@@ -96,10 +96,10 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
-    Geolocator.getPositionStream().listen((event) async{
+    Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
       if(currentLocation == null) return;
       double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(mounted && diferencia > 20){
+      if(mounted && diferencia > 10){
         final MarkerId _markerMy = MarkerId('user_position');
         _markers[_markerMy] = MapViewerUtil.generateMarker(
           latLng: LatLng(event.latitude, event.longitude),
@@ -109,8 +109,8 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
 
           }
         );
-        currentLocation = Position(longitude: event.longitude, latitude: event.latitude);
       }
+      currentLocation = Position(longitude: event.longitude, latitude: event.latitude);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       await checkPermission();
@@ -570,7 +570,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                     distancia: distanceOptionSelected['distancia'],
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SearchAddressScreen(),
+                        builder: (context) => SearchAddressScreen(
+                          currentLocation: currentLocation
+                        ),
                         fullscreenDialog: true
                       ));
                     },

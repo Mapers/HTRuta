@@ -8,11 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/direction_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_map.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 
 class SearchAddressView extends StatefulWidget {
   final Function(LocationEntity) getTo;
   final ClientTaxiPlaceBloc placeBloc;
-  SearchAddressView({this.placeBloc, this.getTo});
+  final Position currentPosition;
+  SearchAddressView({this.placeBloc, this.getTo, this.currentPosition});
 
   @override
   _SearchAddressViewState createState() => _SearchAddressViewState();
@@ -60,7 +63,11 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   title: Text(widget?.placeBloc?.listPlace[index].name),
                   subtitle: Text(widget?.placeBloc?.listPlace[index].formattedAddress),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc, initialPlace: widget?.placeBloc?.listPlace[index], getTo: widget.getTo ,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(
+                      placeBloc: widget.placeBloc, 
+                      initialPlace: widget?.placeBloc?.listPlace[index], 
+                      getTo: widget.getTo, 
+                    )));
                     /* widget?.placeBloc?.selectLocation(widget?.placeBloc?.listPlace[index])?.then((_){
                       toLocation = widget?.placeBloc?.locationSelect?.name;
                       FocusScope.of(context).requestFocus(nodeTo);
@@ -158,7 +165,13 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                       suffixIcon: IconButton(
                         icon: Icon(Icons.place),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(placeBloc: widget.placeBloc)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMap(
+                            placeBloc: widget.placeBloc,
+                            initialPlace: Place(
+                              lat: widget.currentPosition.latitude,
+                              lng: widget.currentPosition.longitude,
+                            )
+                          )));
                         },
                       )
                     ),
