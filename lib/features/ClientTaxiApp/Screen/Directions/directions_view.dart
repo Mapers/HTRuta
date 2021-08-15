@@ -311,7 +311,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                         data = element;
                       }
                     });
-                    final GeoPoint driverLocation = driversData[index]['posicion'];
+                    // final GeoPoint driverLocation = driversData[index]['posicion'];
                     return Card(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -351,7 +351,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                   ],
                                 ),
                                 Spacer(),
-                                Column(
+                                /* Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                     Text('S/${double.parse(actualRequest.mPrecio)}',style: TextStyle(fontSize: responsive.ip(3))),
@@ -395,7 +395,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                     ),
                                     // Text('3 min.',style: TextStyle(fontSize: responsive.ip(2))),
                                   ],
-                                )
+                                ) */
                               ],
                             ),
                             Row(
