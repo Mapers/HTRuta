@@ -17,7 +17,6 @@ class RouterDriveRemoteDataSoruce {
         'user_id': _prefs.idChofer,
       }
     );
-    
     if(result.success) return InterprovincialRouteEntity.fromListJson(result.data);
 
     return [];

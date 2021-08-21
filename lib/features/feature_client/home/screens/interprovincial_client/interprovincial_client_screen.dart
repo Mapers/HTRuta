@@ -190,30 +190,5 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       ),
     );
   }
-  //! dar delete cuando sea aprobado los cambios
-  // Positioned SaveButtonWidget(BuildContext context) {
-  //   return Positioned(
-  //     bottom: 10,
-  //     right: 15,
-  //     left: 15,
-  //     child: PrincipalButton(
-  //       text: 'Buscar interprovincial',
-  //       onPressed: () async{
-  //         if(toLocation == null){
-  //           Fluttertoast.showToast(
-  //             msg: 'Seleccione su destino',
-  //             toastLength: Toast.LENGTH_LONG,
-  //             gravity: ToastGravity.BOTTOM,
-  //           );
-  //           return;
-  //         }
-  //         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: fromLocation,to: toLocation,radio: initialCircularRadio,seating: seat, paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
-  //         await Future.delayed(Duration(seconds: 2));
-  //         Navigator.of(context).pop();
-  //         Navigator.of(context).push(Routes.toAvailableRoutesPage());
-  //       },
-  //     )
-  //   );
-  // }
 }
 
