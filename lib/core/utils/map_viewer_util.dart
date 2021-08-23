@@ -7,11 +7,11 @@ import 'package:HTRuta/config.dart';
 import 'package:HTRuta/core/utils/colors_util.dart';
 import 'package:HTRuta/core/utils/file_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 class MapViewerUtil {
 
   GoogleMapController googleMapController;

@@ -104,6 +104,12 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                     children: [
                                       Row(
                                         children: [
+                                          Text('Departamento: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                          Text(routerDrives.from.regionName),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
                                           Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),
                                           Text(routerDrives.from.provinceName),
                                         ],
@@ -140,6 +146,12 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
+                                      Row(
+                                        children: [
+                                          Text('Departamento: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                                          Text(routerDrives.to.regionName),
+                                        ],
+                                      ),
                                       Row(
                                         children: [
                                           Text('Provincia: ', style: TextStyle(fontWeight: FontWeight.bold),),

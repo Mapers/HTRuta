@@ -49,91 +49,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     });
     super.initState();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Stack(
-          children: [
-            MapViewWidget(context),
-            BackWidget(context),
-            InputMapSelecction(
-              isRequired: true,
-              controller: fromController,
-              top: 80,
-              onTap: (){
-                inputSelecter = true;
-                setState(() {});
-              },
-              labelText: 'Origen',
-              suffixIcon: inputSelecter ? Icons.radio_button_checked:null,
-              region: whereaboutsFrom.regionName == '' ? '' :whereaboutsFrom.regionName,
-              province: whereaboutsFrom.provinceName == '' ? '' :whereaboutsFrom.provinceName,
-              district: whereaboutsFrom.districtName == '' ? '' :whereaboutsFrom.districtName,
-            ),
-            InputMapSelecction(
-              isRequired: true,
-              controller: toController,
-              onTap: (){
-                inputSelecter = false;
-                setState(() {});
-              },
-              top: 155,
-              labelText: 'Destino',
-              suffixIcon: !inputSelecter ? Icons.radio_button_checked:null,
-              region: whereaboutsTo.regionName == '' ? '' :whereaboutsTo.regionName,
-              province: whereaboutsTo.provinceName == '' ? '' :whereaboutsTo.provinceName,
-              district: whereaboutsTo.districtName == '' ? '' :whereaboutsTo.districtName,
-            ),
-            messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
-            SaveButtonWidget(context),
-          ],
-        ),
-      ),
-    );
-  }
-  Positioned SaveButtonWidget(BuildContext context) {
-    return Positioned(
-      top: 500,
-      right: 15,
-      left: 15,
-      child: PrincipalButton(text: 'Guardar',onPressed: (){
-        if(!formKey.currentState.validate()){
-          return ;
-        }
-        formKey.currentState.save();
-        InterprovincialRouteEntity data = InterprovincialRouteEntity(
-          from: whereaboutsFrom,
-          to: whereaboutsTo,
-          cost: null,
-          name: null
-        );
-        widget.getFromAndTo(data);
-        Navigator.of(context).pop();
-      },)
-    );
-  }
-  SizedBox MapViewWidget(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: _mapViewerUtil.build(
-        height: MediaQuery.of(context).size.height,
-        currentLocation: LatLng(widget.la, widget.lo),
-        markers: _markers,
-        polyLines: polylines,
-        zoom: 16,
-        onTap: (pos){
-          if(inputSelecter){
-            _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
-          }else{
-            _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
-          }
-        }
-      )
-    );
-  }
   void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
     try {
       if(inputSelecter){
@@ -210,6 +125,99 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     messageController = false;
     setState(() {});
   }
+  void cleanFrom(){
+    whereaboutsFrom = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
+  }
+  void cleanTo(){
+    whereaboutsTo = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Form(
+        key: formKey,
+        child: Stack(
+          children: [
+            MapViewWidget(context),
+            BackWidget(context),
+            InputMapSelecction(
+              isRequired: true,
+              controller: fromController,
+              top: 80,
+              onTap: (){
+                inputSelecter = true;
+                setState(() {});
+              },
+              labelText: 'Origen',
+              suffixIcon: inputSelecter ? Icons.radio_button_checked:null,
+              region: whereaboutsFrom.regionName == '' ? '' :whereaboutsFrom.regionName,
+              province: whereaboutsFrom.provinceName == '' ? '' :whereaboutsFrom.provinceName,
+              district: whereaboutsFrom.districtName == '' ? '' :whereaboutsFrom.districtName,
+            ),
+            InputMapSelecction(
+              isRequired: true,
+              controller: toController,
+              onTap: (){
+                inputSelecter = false;
+                setState(() {});
+              },
+              top: 155,
+              labelText: 'Destino',
+              suffixIcon: !inputSelecter ? Icons.radio_button_checked:null,
+              region: whereaboutsTo.regionName == '' ? '' :whereaboutsTo.regionName,
+              province: whereaboutsTo.provinceName == '' ? '' :whereaboutsTo.provinceName,
+              district: whereaboutsTo.districtName == '' ? '' :whereaboutsTo.districtName,
+            ),
+            messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
+            SaveButtonWidget(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Positioned SaveButtonWidget(BuildContext context) {
+    return Positioned(
+      top: 500,
+      right: 15,
+      left: 15,
+      child: PrincipalButton(text: 'Guardar',onPressed: (){
+        if(!formKey.currentState.validate()){
+          return ;
+        }
+        formKey.currentState.save();
+        InterprovincialRouteEntity data = InterprovincialRouteEntity(
+          from: whereaboutsFrom,
+          to: whereaboutsTo,
+          cost: null,
+          name: null
+        );
+        widget.getFromAndTo(data);
+        Navigator.of(context).pop();
+      },)
+    );
+  }
+
+  SizedBox MapViewWidget(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: _mapViewerUtil.build(
+        height: MediaQuery.of(context).size.height,
+        currentLocation: LatLng(widget.la, widget.lo),
+        markers: _markers,
+        polyLines: polylines,
+        zoom: 16,
+        onTap: (pos){
+          if(inputSelecter){
+            _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
+          }else{
+            _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
+          }
+        }
+      )
+    );
+  }
 
   Positioned BackWidget(BuildContext context) {
     return Positioned(
@@ -230,12 +238,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         ),
       )
     );
-  }
-  void cleanFrom(){
-    whereaboutsFrom = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
-  }
-  void cleanTo(){
-    whereaboutsTo = LocationEntity.initialWithLocation(latitude: 0, longitude: 0) ;
   }
 }
 

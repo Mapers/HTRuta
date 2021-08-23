@@ -32,6 +32,9 @@ class InterprovincialClientRemoteDataSoruce {
           'payment_methods': paymentMethods
         }
       );
+      print('..................');
+      print(result.data);
+      print('..................');
       availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
     } while (availablesRoutes.isEmpty & (initial < 15));
     return availablesRoutes;

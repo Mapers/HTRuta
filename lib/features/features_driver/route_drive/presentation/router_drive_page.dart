@@ -107,7 +107,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                             SizedBox(width: 10,),
                             Container(
                               width: 275,
-                              child: Text(routeDrive.from.provinceName +' - ' + routeDrive.from.districtName+ ' - ' + routeDrive.from.streetName ),
+                              child: Text( routeDrive.from.regionName +' - ' +routeDrive.from.provinceName +' - ' + routeDrive.from.districtName+ ' - ' + routeDrive.from.streetName ),
                             )
                           ],
                         ),
@@ -118,7 +118,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
                             SizedBox(width: 10,),
                             Container(
                               width: 275,
-                              child: Text(routeDrive.to.provinceName +' - ' + routeDrive.to.districtName+ ' - ' + routeDrive.to.streetName ),
+                              child: Text(routeDrive.to.regionName + ' - ' + routeDrive.to.provinceName +' - ' + routeDrive.to.districtName+ ' - ' + routeDrive.to.streetName ),
                             )
                           ],
                         ),
