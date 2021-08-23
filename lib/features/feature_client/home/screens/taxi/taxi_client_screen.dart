@@ -9,6 +9,7 @@ import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/user_indicator.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -77,6 +78,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   Uint8List userPhoto;
   final pickupApi = PickupApi();
   final _prefs = UserPreferences();
+  LatLng coordinatesSelected;
   
   @override
   void dispose() {
@@ -97,9 +99,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
     Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
-      if(currentLocation == null) return;
-      double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
-      if(mounted && diferencia > 10){
+      // if(currentLocation == null) return;
+      // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
+      /* if(mounted && diferencia > 10){
         final MarkerId _markerMy = MarkerId('user_position');
         _markers[_markerMy] = MapViewerUtil.generateMarker(
           latLng: LatLng(event.latitude, event.longitude),
@@ -109,7 +111,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
 
           }
         );
-      }
+      } */
       currentLocation = Position(longitude: event.longitude, latitude: event.latitude);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
@@ -254,7 +256,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       lat: coordinates.latitude,
       lng: coordinates.longitude
     ));
-    MarkerId markerId = MarkerId('origin');
+    /* MarkerId markerId = MarkerId('origin');
     Marker marker = Marker(
       markerId: markerId,
       position: LatLng(coordinates.latitude, coordinates.longitude),
@@ -264,11 +266,11 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       },
       // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
-    );
+    ); */
     if(!mounted) return;
-    setState(() {
+    /* setState(() {
       _markers[markerId] = marker;
-    });
+    }); */
   }
 
   void _onMapCreated(GoogleMapController controller) async {
@@ -276,6 +278,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     // changeMapType(3, 'assets/style/dark_mode.json');
     Position currentPosition = await Geolocator.getCurrentPosition(forceAndroidLocationManager: true);
     LatLng position = LatLng(currentPosition.latitude, currentPosition.longitude);
+    coordinatesSelected = LatLng(currentPosition.latitude, currentPosition.longitude);
     Future.delayed(Duration(milliseconds: 200), () async {
       if(mounted){
         controller?.animateCamera(
@@ -290,7 +293,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     });
   }
 
-  Future<String> _getFileData(String path) async {
+  /* Future<String> _getFileData(String path) async {
     return await rootBundle.loadString(path);
   }
 
@@ -299,9 +302,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       nightMode = true;
       _mapController.setMapStyle(mapStyle);
     });
-  }
+  } */
 
-  void changeMapType(int id, String fileName){
+  /* void changeMapType(int id, String fileName){
     if (fileName == null) {
       setState(() {
         nightMode = false;
@@ -310,7 +313,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     } else {
       _getFileData(fileName)?.then(_setMapStyle);
     }
-  }
+  } */
 
   /* void _showBottomSheet() async {
     setState(() {
@@ -480,7 +483,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     return 12742 * asin(sqrt(a));
   }
 
-  Future<void> _createMarkerImageFromAsset(BuildContext context) async {
+  /* Future<void> _createMarkerImageFromAsset(BuildContext context) async {
     if (_markerIcon == null) {
       final ImageConfiguration imageConfiguration =
       createLocalImageConfiguration(context);
@@ -488,17 +491,17 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
         imageConfiguration, checkPlatform ? 'assets/image/marker/car_top_48.png' : 'assets/image/marker/car_top_96.png')
         .then(_updateBitmap);
     }
-  }
+  } */
 
-  void _updateBitmap(BitmapDescriptor bitmap) {
+  /* void _updateBitmap(BitmapDescriptor bitmap) {
     setState(() {
       _markerIcon = bitmap;
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
-    _createMarkerImageFromAsset(context);
+    // _createMarkerImageFromAsset(context);
     return Scaffold(
       key: _scaffoldKey,
       drawer: MenuScreens(activeScreenName: screenName),
@@ -515,9 +518,15 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               compassEnabled: false,
-              onTap: (LatLng newPosition){
-                updateOriginPointFromCoordinates(newPosition);
+              onCameraMove: ( cameraPosition ) {
+                coordinatesSelected = cameraPosition.target;
               },
+              onCameraIdle: (){
+                updateOriginPointFromCoordinates(coordinatesSelected);
+              },
+              /* onTap: (LatLng newPosition){
+                updateOriginPointFromCoordinates(newPosition);
+              }, */
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                   currentLocation != null ? currentLocation?.latitude : _lastKnownPosition?.latitude ?? 0.0,
@@ -532,9 +541,15 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               } */
             ),
           ),
+          Center(
+            child: Transform.translate(
+              offset: Offset(0, -40),
+              child: UserIndicator()
+            ),
+          ),
           CustomDropdownClient(),
           Positioned(
-            bottom: 30.0,
+            bottom: 20.0,
             left: 20.0,
             right: 20.0,
             child: Column(
@@ -558,9 +573,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                     ),
                   ],
                 ),
-                Container(height: 10),
                 getListOptionDistance(),
-                Container(height: 10),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   child: SelectAddress(

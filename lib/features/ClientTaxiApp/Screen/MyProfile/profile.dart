@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  Container(
+                  /* Container(
                     height: 50,
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Text('${userData.email}',style: textGrey,)
                       ],
                     ),
-                  ),
+                  ), */
                   Container(
                     height: 50,
                     padding: EdgeInsets.all(15),

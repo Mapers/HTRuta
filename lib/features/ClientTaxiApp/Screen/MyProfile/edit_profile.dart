@@ -13,6 +13,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -24,13 +25,13 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final GlobalKey<FormState> formKey =GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<Map<String, dynamic>> listGender = [{'id': '1','name' : 'Masculino',},{'id': '2','name' : 'Femenino'}];
   String selectedGender;
   String lastSelectedValue;
   String photoUrl;
-  DateTime date = DateTime.now();
+  DateTime birthdaySelected;
   final pickupApi = PickupApi();
   var _image;
   String newNames;
@@ -142,12 +143,12 @@ class _EditProfileState extends State<EditProfile> {
       newFName ?? widget.userData.lastNameFather,
       newMName ?? widget.userData.lastNameMother,
       newPhone ?? widget.userData.cellphone,
-      newEmail ?? widget.userData.email,
+      widget.userData.email,
       widget.userData.password,
       photoUrl ?? widget.userData.imageUrl,//TODO: Completar los campos
-      widget.userData.sexo,
+      selectedGender,
       widget.userData.smsCode,
-      widget.userData.fechaNacimiento,
+      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
       widget.userData.fechaRegistro,
       widget.userData.direccion,
       widget.userData.referencia,
@@ -157,8 +158,8 @@ class _EditProfileState extends State<EditProfile> {
       nombres: newNames ?? widget.userData.names,
       apellidoPaterno: newFName ?? widget.userData.lastNameFather,
       apellidoMaterno: newMName ?? widget.userData.lastNameMother,
-      fechaNacimiento: date ?? DateTime.now(),
-      sexo: '1',
+      fechaNacimiento: birthdaySelected,
+      sexo: selectedGender,
       telefono: newPhone ?? widget.userData.cellphone,
       celular: newPhone ?? widget.userData.cellphone
     );
@@ -169,6 +170,14 @@ class _EditProfileState extends State<EditProfile> {
     }else{
       Navigator.pop(context, true);
     } 
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedGender = widget.userData.sexo;
+    birthdaySelected = DateTimeExtension.dateFromString(widget.userData.fechaNacimiento);
+    newEmail = widget.userData.email;
   }
   @override
   Widget build(BuildContext context) {
@@ -242,6 +251,7 @@ class _EditProfileState extends State<EditProfile> {
                                       TextFormField(
                                         initialValue: widget.userData.names,
                                         style: textStyle,
+                                        enabled: false,
                                         decoration: InputDecoration(
                                           fillColor: whiteColor,
                                           labelStyle: textStyle,
@@ -261,6 +271,7 @@ class _EditProfileState extends State<EditProfile> {
                                       TextFormField(
                                         initialValue: widget.userData.lastNameFather,
                                         style: textStyle,
+                                        enabled: false,
                                         decoration: InputDecoration(
                                           fillColor: whiteColor,
                                           labelStyle: textStyle,
@@ -280,6 +291,7 @@ class _EditProfileState extends State<EditProfile> {
                                       TextFormField(
                                         initialValue: widget.userData.lastNameMother,
                                         style: textStyle,
+                                        enabled: false,
                                         decoration: InputDecoration(
                                           fillColor: whiteColor,
                                           labelStyle: textStyle,
@@ -326,6 +338,7 @@ class _EditProfileState extends State<EditProfile> {
                                     Expanded(
                                       flex: 4,
                                       child: TextFormField(
+                                        enabled: false,
                                         initialValue: widget.userData.cellphone,
                                         style: textStyle,
                                         keyboardType: TextInputType.phone,
@@ -348,7 +361,7 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
-                              Container(
+                              /* Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
@@ -386,7 +399,7 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   ],
                                 ),
-                              ),
+                              ), */
                               Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -404,30 +417,30 @@ class _EditProfileState extends State<EditProfile> {
                                     Expanded(
                                       flex: 4,
                                       child: DropdownButtonHideUnderline(
-                                          child: Container(
-                                            // padding: EdgeInsets.only(bottom: 12.0),
-                                            child: InputDecorator(
-                                              decoration: const InputDecoration(
-                                              ),
-                                              isEmpty: selectedGender == null,
-                                              child: DropdownButton<String>(
-                                                hint: Text('Género',style: textStyle,),
-                                                value: selectedGender,
-                                                isDense: true,
-                                                onChanged: (String newValue) {
-                                                  setState(() {
-                                                    selectedGender = newValue;
-                                                  });
-                                                },
-                                                items: listGender.map((value) {
-                                                  return DropdownMenuItem<String>(
-                                                    value: value['id'],
-                                                    child: Text(value['name'],style: textStyle,),
-                                                  );
-                                                }).toList(),
-                                              ),
+                                        child: Container(
+                                          // padding: EdgeInsets.only(bottom: 12.0),
+                                          child: InputDecorator(
+                                            decoration: const InputDecoration(
                                             ),
-                                          )
+                                            isEmpty: selectedGender == null,
+                                            child: DropdownButton<String>(
+                                              hint: Text('Género', style: textStyle),
+                                              value: selectedGender,
+                                              isDense: true,
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  selectedGender = newValue;
+                                                });
+                                              },
+                                              items: listGender.map((value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['id'],
+                                                  child: Text(value['name'],style: textStyle,),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        )
                                       ),
                                     )
                                   ],
@@ -450,28 +463,37 @@ class _EditProfileState extends State<EditProfile> {
                                     Expanded(
                                       flex: 4,
                                       child:  GestureDetector(
-                                          onTap: () {
-                                            showCupertinoModalPopup<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return _buildBottomPicker(
-                                                  CupertinoDatePicker(
-                                                    mode: CupertinoDatePickerMode.date,
-                                                    initialDateTime: date,
-                                                    onDateTimeChanged: (DateTime newDateTime) {
-                                                      setState(() {
-                                                        date = newDateTime;
-                                                      });
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: InputDropdown(
-                                            valueText: DateFormat.yMMMMd().format(date),
-                                            valueStyle: TextStyle(color: blackColor),
-                                          )
+                                        onTap: () async {
+                                          /* showCupertinoModalPopup<void>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return _buildBottomPicker(
+                                                CupertinoDatePicker(
+                                                  mode: CupertinoDatePickerMode.date,
+                                                  initialDateTime: date,
+                                                  onDateTimeChanged: (DateTime newDateTime) {
+                                                    setState(() {
+                                                      date = newDateTime;
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ); */
+                                          final selectedDate = await selectDate(context);
+                                          if(selectedDate != null){
+                                            if(selectedDate.isAfter(DateTime.now())){
+                                              Dialogs.alert(context,title: 'Error', message: 'Seleccione una fecha anterior a la actual');
+                                            }else{
+                                              birthdaySelected = selectedDate;
+                                              setState(() {});
+                                            }
+                                          }
+                                        },
+                                        child: InputDropdown(
+                                          valueText: DateTimeExtension.parseDateSpanishV2(birthdaySelected),
+                                          valueStyle: TextStyle(color: blackColor),
+                                        )
                                       ),
                                     )
                                   ],
@@ -489,6 +511,16 @@ class _EditProfileState extends State<EditProfile> {
         )
       ),
     );
+  }
+  Future<DateTime> selectDate(BuildContext context) async {  
+    DateTime pickedDateTime = await showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), 
+      firstDate: DateTime(1900), 
+      lastDate: DateTime(2100),
+      locale: Locale('es','ES'),
+    );
+    return pickedDateTime;
   }
   Widget createUserPhoto(){
     if(widget.userData.imageUrl.isEmpty || widget.userData.imageUrl == null){

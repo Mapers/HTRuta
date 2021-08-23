@@ -74,5 +74,76 @@ extension DateTimeExtension on DateTime {
     }
     return date;
   }
+  static String parseDateSpanishV2(DateTime date){
+    if(date == null) return '';
+    String dateStr = '';
+    if(date.day < 10){
+      dateStr+='0';
+      dateStr+=date.day.toString();
+    }else{
+      dateStr+=date.day.toString();
+    }
+    dateStr += '-';
+    if(date.month < 10){
+      dateStr+='0';
+      dateStr+=date.month.toString();
+    }else{
+      dateStr+=date.month.toString();
+    }
+    dateStr += '-';
+    dateStr += date.year.toString();
+    return dateStr;
+  }
+  static String parseDateEnglishV2(DateTime date){
+    if(date == null) return '';
+    String dateStr = '';
+    dateStr += date.year.toString();
+    dateStr += '-';
+    if(date.month < 10){
+      dateStr+='0';
+      dateStr+=date.month.toString();
+    }else{
+      dateStr+=date.month.toString();
+    }
+    dateStr += '-';
+    if(date.day < 10){
+      dateStr+='0';
+      dateStr+=date.day.toString();
+    }else{
+      dateStr+=date.day.toString();
+    }
+    return dateStr;
+  }
+  static String parseDateSpanish(DateTime date){
+    if(date == null) return '';
+    String dateStr = '';
+    if(date.day < 10){
+      dateStr+='0';
+      dateStr+=date.day.toString();
+    }else{
+      dateStr+=date.day.toString();
+    }
+    dateStr += '-';
+    if(date.month < 10){
+      dateStr+='0';
+      dateStr+=date.month.toString();
+    }else{
+      dateStr+=date.month.toString();
+    }
+    dateStr += '-';
+    dateStr += date.year.toString();
+    return dateStr;
+  }
+  static DateTime dateFromString(String value){
+    if(value.isEmpty) return null;
+    List<String> times = value.split('-');
+    if(times.length != 3) return null;
+    DateTime newDate = DateTime(
+      int.parse(times[0]),
+      int.parse(times[1]),
+      int.parse(times[2]),
+    );
+    return newDate;
+  }
 
 }

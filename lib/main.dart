@@ -22,6 +22,7 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/services.dart';
 import 'app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -116,6 +117,14 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           title: 'Taxi App',
           theme: appTheme,
+          localizationsDelegates: const [        
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', 'US'),
+            const Locale('es', 'ES')
+          ],
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRoute.generateRoute,
           home: SplashScreen(),

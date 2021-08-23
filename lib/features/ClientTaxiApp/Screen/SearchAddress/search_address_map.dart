@@ -81,10 +81,13 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
           ),
           Center(
             child: Transform.translate(
-              offset: Offset(0, -12),
+              offset: Offset(0, -25),
               child: Icon( Icons.location_on, size: 50, color: Theme.of(context).primaryColor)
             ),
           ),
+          /* Center(
+            child: Icon( Icons.location_on, size: 50, color: Theme.of(context).primaryColor)
+          ), */
           Positioned(
             bottom: 20,
             child: Container(
