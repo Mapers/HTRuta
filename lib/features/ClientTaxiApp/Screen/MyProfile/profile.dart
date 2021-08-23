@@ -92,6 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ) : CircleAvatar(
                             radius: 30,
                             backgroundColor: Colors.transparent,
+                            backgroundImage: AssetImage('assets/image/empty_user_photo.png')
                           )
                         ),
                       ),
@@ -119,10 +120,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '${userData.names} ${userData.lastNameFather} ${userData.lastNameMother}',
-                    style: TextStyle( color: blackColor,fontSize: 35.0),
-                    overflow: TextOverflow.ellipsis,
+                  Container(
+                    width: mqWidth(context, 80),
+                    child: Text(
+                      '${userData.names} ${userData.lastNameFather} ${userData.lastNameMother}',
+                      style: TextStyle( color: blackColor,fontSize: 35.0),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   Text(
                     'Cliente desde ${userData.fechaRegistro.isNotEmpty ? userData.fechaRegistro.substring(0,4) : ''}',

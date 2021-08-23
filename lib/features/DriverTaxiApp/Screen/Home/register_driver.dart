@@ -18,7 +18,6 @@ import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -279,7 +278,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
 
   bool recortado = false;
 
-  Future<Null> _cropImage(int index) async {
+  /* Future<Null> _cropImage(int index) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imagenes[index].path,
       aspectRatioPresets: [ CropAspectRatioPreset.square ],
@@ -296,7 +295,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
         recortado = true;
       });
     }
-  }
+  } */
 
   Future<String> obtenerBase64(File fileImage)async{
     String base64Image;
@@ -668,7 +667,7 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   bool recortado = false;
 
-  Future<Null> _cropImage() async {
+  /* Future<Null> _cropImage() async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
       aspectRatioPresets: [ CropAspectRatioPreset.square ],
@@ -685,7 +684,7 @@ class _SextaPaginaState extends State<SextaPagina> {
         recortado = true;
       });
     }
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -878,7 +877,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
 
   bool recortado = false;
 
-  Future<Null> _cropImage() async {
+  /* Future<Null> _cropImage() async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
       aspectRatioPresets: [ CropAspectRatioPreset.square ],
@@ -895,7 +894,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
         recortado = true;
       });
     }
-  }
+  } */
 
 
   @override

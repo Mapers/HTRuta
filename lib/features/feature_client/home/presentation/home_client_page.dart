@@ -1,5 +1,4 @@
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/entities/service_in_course_entity.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';

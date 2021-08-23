@@ -40,6 +40,7 @@ class _MyProfileState extends State<MyProfile> {
   String newMName;
   String newPhone;
   String newEmail;
+  String photoUrl;
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -50,8 +51,10 @@ class _MyProfileState extends State<MyProfile> {
     List<int> imageBytes = gallery.readAsBytesSync();
     print(imageBytes);
     String base64Image = base64Encode(imageBytes);
-    bool success = await pickupApi.uploadPhoto(_prefs.idChoferReal, base64Image);
-    print(success);
+    photoUrl = await pickupApi.uploadPhoto(_prefs.idChoferReal, base64Image);
+    if(photoUrl == null){
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+    }
   }
 
   Future cameraImage() async {

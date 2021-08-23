@@ -17,15 +17,20 @@ class MenuItems {
   MenuItems({this.icon, this.name});
 }
 
-class MenuScreens extends StatelessWidget {
+class MenuScreens extends StatefulWidget {
   final String activeScreenName;
-
   MenuScreens({this.activeScreenName});
-  
+  @override
+  _MenuScreensState createState() => _MenuScreensState();
+}
+
+class _MenuScreensState extends State<MenuScreens> {
   final Session _session = Session();
+
   final _prefs = UserPreferences();
+
   final registroConductorApi = RegistroConductorApi();
-  
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -41,7 +46,8 @@ class MenuScreens extends StatelessWidget {
                   return UserAccountsDrawerHeader(
                     margin: EdgeInsets.all(0.0),
                     accountName: Text(data.names, style: headingWhite,),
-                    accountEmail: Text('100 puntos - miembro Gold'),
+                    // accountEmail: Text('100 puntos - miembro Gold'),
+                    accountEmail: Text(data.cellphone),
                     currentAccountPicture: data.imageUrl.isNotEmpty ? CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
@@ -51,9 +57,11 @@ class MenuScreens extends StatelessWidget {
                     ) : CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
+                      backgroundImage: AssetImage('assets/image/empty_user_photo.png')
                     ),
-                    onDetailsPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                    onDetailsPressed: () async {
+                      await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                      setState(() {});
                     },
                   );
                 }else{
@@ -87,7 +95,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.home,
                               text: 'Inicio',
-                              isSelected: activeScreenName.compareTo('HOME') == 0,
+                              isSelected: widget.activeScreenName.compareTo('HOME') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
@@ -114,7 +122,7 @@ class MenuScreens extends StatelessWidget {
                             getItemMenu(
                               icon: FontAwesomeIcons.history,
                               text: 'Mis viajes',
-                              isSelected: activeScreenName.compareTo('HISTORY') == 0,
+                              isSelected: widget.activeScreenName.compareTo('HISTORY') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.historyScreen);
@@ -142,7 +150,7 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.notificationScreen);
                               },
-                              isSelected: activeScreenName.compareTo('NOTIFICATIONS') == 0,
+                              isSelected: widget.activeScreenName.compareTo('NOTIFICATIONS') == 0,
                               icon: FontAwesomeIcons.bell,
                               text: 'Notificaciones'
                             ),
@@ -151,14 +159,14 @@ class MenuScreens extends StatelessWidget {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.settingsScreen);
                               },
-                              isSelected: activeScreenName.compareTo('SETTINGS') == 0,
+                              isSelected: widget.activeScreenName.compareTo('SETTINGS') == 0,
                               icon: FontAwesomeIcons.cogs,
                               text: 'Configuraciones'
                             ),
                             getItemMenu(
                               icon: FontAwesomeIcons.fileAlt,
                               text: 'Términos y Condiciones',
-                              isSelected: activeScreenName.compareTo('TERMS') == 0,
+                              isSelected: widget.activeScreenName.compareTo('TERMS') == 0,
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.termsConditionsScreen);

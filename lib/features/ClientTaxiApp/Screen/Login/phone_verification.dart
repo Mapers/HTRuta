@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -22,6 +23,30 @@ class _PhoneVerificationState extends State<PhoneVerification> {
   bool hasError = false;
   String errorMessage;
   final authApi = AuthApi();
+  bool cancel = false;
+  int _start = 60;
+  Timer timer;
+
+  @override
+  void dispose() { 
+    controller?.dispose();
+    super.dispose();
+  }
+  @override
+  void initState() {
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(oneSec, (Timer t){
+        _start -= 1;
+        if(_start <= 0){
+          _start = 0;
+          timer?.cancel();
+          cancel = true;
+        }
+        setState(() {});
+      }
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +113,13 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     child: RaisedButton.icon(
                       shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(15.0)),
                       elevation: 0.0,
-                      color: primaryColor,
-                      icon:Text(''),
-                      label:Text('Verificar ahora', style: headingWhite,),
+                      color: (controller.value.text.length != 6) ? primaryColor.withOpacity(0.6) : primaryColor,
+                      icon: Text(''),
+                      label: Text('Verificar ahora', style: headingWhite),
                       onPressed: () async {
+                        if(controller.value.text.length != 6){
+                          return;
+                        }
                         Dialogs.openLoadingDialog(context);
                         
                         final isOk = await authApi.loginUserSMS(widget.numeroTelefono, controller.value.text);
@@ -109,14 +137,52 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                       child:Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          cancel ?  
                           InkWell(
-                            onTap: () => Navigator.of(context).pushNamed(AppRoute.loginScreen),
-                            child:Text('No recibí un código',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                decoration: TextDecoration.underline
-                              ),
+                            onTap: () async {
+                              final String sent = await authApi.getVerificationCode(widget.numeroTelefono);
+                              if(sent != 'S'){
+                                if(sent == 'N'){
+                                  Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
+                                  return;
+                                }else{
+                                  Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
+                                  return;
+                                }
+                              }
+                              const oneSec = Duration(seconds: 1);
+                              _start = 60;
+                              cancel = false;
+                              timer = Timer.periodic(oneSec, (Timer t){
+                                _start -= 1;
+                                if(_start <= 0){
+                                  _start = 0;
+                                  timer?.cancel();
+                                  cancel = true;
+                                }
+                                setState(() {});
+                                }
+                              );
+                              setState(() {});
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Reenviar código',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    decoration: TextDecoration.underline
+                                  )
+                                )
+                              ],
                             ),
+                          ):
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('Reenviar código en $_start seg', style: TextStyle(fontSize: 16, color: Colors.grey))
+                            ],
                           ),
                         ],
                       )

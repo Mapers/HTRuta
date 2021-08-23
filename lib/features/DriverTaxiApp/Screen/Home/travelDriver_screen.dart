@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:HTRuta/models/minutes_response.dart';
-import 'package:flutter/services.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -155,16 +154,6 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
     });
     // initPusher();
     super.initState();
-  }
-
-  Future<String> _getFileData(String path) async {
-    return await rootBundle.loadString(path);
-  }
-  void _setMapStyle(String mapStyle) {
-    setState(() {
-      nightMode = true;
-      _mapController.setMapStyle(mapStyle);
-    });
   }
 
   void addMakersFinal(){

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Components/dropdown_input.dart';
 
 class SignUpStep3 extends StatefulWidget {
   final String phoneNumber;
@@ -160,6 +159,7 @@ class _SignUpStep3State extends State<SignUpStep3> {
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               TextFormField(
+                                enabled: false,
                                 controller: nameController,
                                 keyboardType: TextInputType.text,
                                 validator: (value){
@@ -190,6 +190,7 @@ class _SignUpStep3State extends State<SignUpStep3> {
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               TextFormField(
+                                enabled: false,
                                 controller: fatherNameController,
                                 keyboardType: TextInputType.text,
                                 validator: (value){
@@ -220,6 +221,7 @@ class _SignUpStep3State extends State<SignUpStep3> {
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
                               TextFormField(
+                                enabled: false,
                                 controller: motherNameController,
                                 keyboardType: TextInputType.text,
                                 validator: (value){
@@ -251,13 +253,60 @@ class _SignUpStep3State extends State<SignUpStep3> {
                               Padding(
                                 padding: EdgeInsets.only(top: 20.0),
                               ),
-                              DropdownInput(
+                              /* DropdownInput(
                                 value: genderSelected,
                                 items: ['Masculino', 'Femenino'],
                                 hintText: 'Género',
                                 onSelection: (value){
                                   genderSelected = value;
                                 },
+                              ), */
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      genderSelected = 'Masculino';
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      width: mqWidth(context, 38),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: genderSelected == 'Masculino' ? Theme.of(context).primaryColor: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)
+                                        ),
+                                        border: Border.all(
+                                          color: Colors.black26,
+                                          width: genderSelected == 'Masculino' ? 0.0 : 1.0
+                                        )
+                                      ),
+                                      child: Center(child: Text('Masculino', style: TextStyle(color: genderSelected == 'Masculino' ? Colors.white : Theme.of(context).primaryColor, fontWeight: FontWeight.bold)))
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: (){
+                                      genderSelected = 'Femenino';
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      width: mqWidth(context, 38),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: genderSelected == 'Femenino' ? Theme.of(context).primaryColor: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)
+                                        ),
+                                        border: Border.all(
+                                          color: Colors.black26,
+                                          width: genderSelected == 'Femenino' ? 0.0 : 1.0
+                                        )
+                                      ),
+                                      child: Center(child: Text('Femenino', style: TextStyle(color: genderSelected == 'Femenino' ? Colors.white : Theme.of(context).primaryColor, fontWeight: FontWeight.bold)))
+                                    ),
+                                  ),
+                                ],
                               ),
                               Padding( padding: EdgeInsets.only(top: 40.0),),
                               ButtonTheme(

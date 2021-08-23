@@ -6,7 +6,6 @@ import 'package:HTRuta/app_router.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Model/register_user_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/select_address.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:device_info/device_info.dart';

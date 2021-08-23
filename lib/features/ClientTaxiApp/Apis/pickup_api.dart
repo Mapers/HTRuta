@@ -477,7 +477,7 @@ class PickupApi{
       return false;
     }
   }
-  Future<bool> uploadPhoto(String idUsuario, String photo) async {
+  Future<String> uploadPhoto(String idUsuario, String photo) async {
     try{
       final response = await http.post(
         Uri.parse('${Config.nuevaRutaApi}/usuario/actualizar-imagen'),
@@ -489,17 +489,18 @@ class PickupApi{
       );
       if(response.statusCode == 200){
         final data = json.decode(response.body);
-        if(data['success']){
-          return true;
+        final url = data['data']['urlImage'];
+        if(url != null && url.isNotEmpty){
+          return url;
         }else{
-          return false;
+          return null;
         }
       }else{
-        return false;
+        return null;
       }
     }catch(e){
       print(e);
-      return false;
+      return null;
     }
   }
   Future<AproxElement> calculateMinutes(double latIni, double lonIni, double latFin, double lonFin) async {

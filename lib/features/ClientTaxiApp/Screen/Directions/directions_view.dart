@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/travel_screen.dart';
-import 'package:HTRuta/models/minutes_response.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 

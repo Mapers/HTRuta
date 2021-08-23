@@ -22,7 +22,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/intro_screen/intro_screen.d
 import 'package:HTRuta/features/DriverTaxiApp/Screen/History/history.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/register_driver.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/send_documents.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/travelDriver_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyProfile/profile.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/myWallet.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyWallet/payment.dart';

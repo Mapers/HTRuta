@@ -29,6 +29,7 @@ class _EditProfileState extends State<EditProfile> {
   List<Map<String, dynamic>> listGender = [{'id': '1','name' : 'Masculino',},{'id': '2','name' : 'Femenino'}];
   String selectedGender;
   String lastSelectedValue;
+  String photoUrl;
   DateTime date = DateTime.now();
   final pickupApi = PickupApi();
   var _image;
@@ -50,8 +51,11 @@ class _EditProfileState extends State<EditProfile> {
     List<int> imageBytes = gallery.readAsBytesSync();
     print(imageBytes);
     String base64Image = base64Encode(imageBytes);
-    bool success = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
-    print(success);
+    photoUrl = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
+    if(photoUrl == null){
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+    }
+    print('La foto se subió correctamente');
   }
 
   Future cameraImage() async {
@@ -140,7 +144,7 @@ class _EditProfileState extends State<EditProfile> {
       newPhone ?? widget.userData.cellphone,
       newEmail ?? widget.userData.email,
       widget.userData.password,
-      widget.userData.imageUrl,//TODO: Completar los campos
+      photoUrl ?? widget.userData.imageUrl,//TODO: Completar los campos
       widget.userData.sexo,
       widget.userData.smsCode,
       widget.userData.fechaNacimiento,
@@ -164,13 +168,10 @@ class _EditProfileState extends State<EditProfile> {
       Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
     }else{
       Navigator.pop(context, true);
-    }
-    
+    } 
   }
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -191,7 +192,7 @@ class _EditProfileState extends State<EditProfile> {
             elevation: 0.0,
             color: primaryColor,
             icon: Text(''),
-            label: Text('Guardar', style: headingBlack,),
+            label: Text('Guardar', style: TextStyle(color: Colors.white, fontSize: 22)),
             onPressed: (){
               submit();
             },
@@ -225,31 +226,9 @@ class _EditProfileState extends State<EditProfile> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100.0),
-                                  child:_image == null
-                                    ? GestureDetector(
+                                  child: GestureDetector(
+                                    child: createUserPhoto(),
                                     onTap: (){selectCamera();},
-                                    child: Container(
-                                      height: 80.0,
-                                      width: 80.0,
-                                      color: primaryColor,
-                                      child: Hero(
-                                        tag: 'avatar_profile',
-                                        child: CircleAvatar(
-                                          radius: 30,
-                                          backgroundColor: Colors.transparent,
-                                          backgroundImage: CachedNetworkImageProvider(
-                                            widget.userData.imageUrl.isNotEmpty ? widget.userData.imageUrl : 'https://source.unsplash.com/300x300/?portrait',
-                                          )
-                                        ),
-                                      ),
-                                    )
-                                  ): GestureDetector(
-                                    onTap: () {selectCamera();},
-                                    child: Container(
-                                      height: 80.0,
-                                      width: 80.0,
-                                      child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
-                                    )
                                   )
                                 ),
                               ),
@@ -389,7 +368,6 @@ class _EditProfileState extends State<EditProfile> {
                                         initialValue: widget.userData.email,
                                         keyboardType: TextInputType.emailAddress,
                                         style: textStyle,
-                                        enabled: false,
                                         decoration: InputDecoration(
                                           fillColor: whiteColor,
                                           labelStyle: textStyle,
@@ -511,6 +489,39 @@ class _EditProfileState extends State<EditProfile> {
         )
       ),
     );
+  }
+  Widget createUserPhoto(){
+    if(widget.userData.imageUrl.isEmpty || widget.userData.imageUrl == null){
+      if(_image == null){
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: AssetImage('assets/image/empty_user_photo.png')
+        );
+      }else{
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: FileImage(_image),
+        );
+      }
+    }else{
+      if(_image == null){
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: CachedNetworkImageProvider(
+             widget.userData.imageUrl,
+          )
+        );
+      }else{
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: FileImage(_image),
+        );
+      }
+    }
   }
 }
 //hhh
