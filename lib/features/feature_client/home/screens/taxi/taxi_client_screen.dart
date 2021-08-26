@@ -12,6 +12,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.
 import 'package:HTRuta/features/ClientTaxiApp/Components/user_indicator.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/pickupdriver_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
@@ -19,7 +20,7 @@ import 'package:HTRuta/models/map_type_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:HTRuta/features/ClientTaxiApp/data/Model/get_routes_request_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/select_address_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
@@ -32,6 +33,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/google_map_helper.dart';
+import 'package:HTRuta/core/map_network/map_network.dart';
+import 'package:HTRuta/models/direction_model.dart';
 
 class TaxiClientScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
@@ -70,8 +73,9 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   bool isEnabledLocation = false;
   bool loading = true;
   double _radius = 500;
+  String distanceLine, durationLine;
+  int _polylineIdCounter = 1;
   Map<CircleId, Circle> circles = <CircleId, Circle>{};
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   double distance = 0;
   BitmapDescriptor iconTaxi;
   List<DocumentSnapshot> markersSnapshotList;
@@ -79,6 +83,12 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   final pickupApi = PickupApi();
   final _prefs = UserPreferences();
   LatLng coordinatesSelected;
+  bool selectedAddressVisible = true;
+  Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
+  var apis = MapNetwork();
+  List<RoutesDirectionModel> routesData;
+  final GMapViewHelper _gMapViewHelper = GMapViewHelper();
+  final Session _session = Session();
   
   @override
   void dispose() {
@@ -98,6 +108,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
+    Provider.of<ClientTaxiPlaceBloc>(context, listen: false).selectLocation(null);
     Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
       // if(currentLocation == null) return;
       // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
@@ -188,25 +199,75 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    await Geolocator.isLocationServiceEnabled();
-    currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-    if (placemarks != null && placemarks.isNotEmpty) {
-      final Placemark pos = placemarks[0];
-      if(!mounted) return;
-      setState(() {
-        _placemark = pos.name + ', ' + pos.thoroughfare;
-      });
-      widget?.placeBloc?.getCurrentLocation(Place(
-        name: _placemark,
-        formattedAddress: '',
-        lat: currentLocation?.latitude,
-        lng: currentLocation?.longitude
-      ));
-    }
+    try{
+      await Geolocator.isLocationServiceEnabled();
+      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+      if (placemarks != null && placemarks.isNotEmpty) {
+        final Placemark pos = placemarks[0];
+        if(!mounted) return;
+        setState(() {
+          _placemark = pos.name + ', ' + pos.thoroughfare;
+        });
+        widget?.placeBloc?.getCurrentLocation(Place(
+          name: _placemark,
+          formattedAddress: '',
+          lat: currentLocation?.latitude,
+          lng: currentLocation?.longitude
+        ));
+      }
+    }catch(e){
+
+    } 
     if(currentLocation != null){
       moveCameraToMyLocation();
     }
+  }
+  void getRouter() async {
+    final String polylineIdVal = 'polyline_id_$_polylineIdCounter';
+    final PolylineId polylineId = PolylineId(polylineIdVal);
+    polyLines.clear();
+    _markers.clear();
+    var router;
+    LatLng _fromLocation = LatLng(widget?.placeBloc?.formLocation?.lat, widget?.placeBloc?.formLocation?.lng);
+    LatLng _toLocation = LatLng(widget?.placeBloc?.locationSelect?.lat, widget?.placeBloc?.locationSelect?.lng);
+
+    await apis.getRoutes(
+      getRoutesRequest: GetRoutesRequestModel(
+        fromLocation: _fromLocation,
+        toLocation: _toLocation,
+        mode: 'driving'
+      ),
+    ).then((data) {
+      if (data != null) {
+        router = data?.result?.routes[0]?.overviewPolyline?.points;
+        routesData = data?.result?.routes;
+      }
+    }).catchError((_) {});
+
+    distanceLine = routesData[0]?.legs[0]?.distance?.text;
+    durationLine = routesData[0]?.legs[0]?.duration?.text;
+
+    polyLines[polylineId] = GMapViewHelper.createPolyline(
+      polylineIdVal: polylineIdVal,
+      router: router,
+    );
+    final MarkerId markerInicioId = MarkerId('marker${widget.placeBloc.formLocation.name}');
+    final Marker markerInicio = Marker(
+      markerId: markerInicioId,
+      position: LatLng(widget.placeBloc.formLocation.lat, widget.placeBloc.formLocation.lng),
+      infoWindow: InfoWindow(title: '', snippet: widget.placeBloc.formLocation.name),
+    );
+    final MarkerId markerFinalId = MarkerId('marker${widget.placeBloc.locationSelect.name}');
+    final Marker markerFinal = Marker(
+      markerId: markerFinalId,
+      position: LatLng(widget.placeBloc.locationSelect.lat, widget.placeBloc.locationSelect.lng),
+      infoWindow: InfoWindow(title: '', snippet: widget.placeBloc.locationSelect.name),
+    );
+    _markers[markerInicioId] = markerInicio;
+    _markers[markerFinalId] = markerFinal;
+    setState(() {});
+    _gMapViewHelper.cameraMove(fromLocation: _fromLocation,toLocation: _toLocation,mapController: _mapController);
   }
 
   void moveCameraToMyLocation(){
@@ -218,6 +279,28 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
         ),
       ),
     );
+  }
+  void createCustomMarker(Place place) async {
+    final data = await _session.get();
+    final MarkerId _markerMy = MarkerId('user_position');
+    if(data.imageUrl != null  && data.imageUrl.isNotEmpty){
+      _markers[_markerMy] = MapViewerUtil.generateMarker(
+        latLng: LatLng(place.lat, place.lng),
+        nameMarkerId: 'user_position',
+        icon: await MapViewerUtil.getMarkerIcon('${data.imageUrl}'),
+        onTap: ()=>{
+
+        }
+      );
+    }else{
+      _markers[_markerMy] = GMapViewHelper.createMaker(
+        markerIdVal: 'user_position',
+        icon: 'assets/image/empty_user_photo.png',
+        lat: place.lat,
+        lng: place.lng,
+      );
+    }
+    setState(() {});
   }
   /* void updateOriginPoint() async {
     if(_position == null) return;
@@ -247,15 +330,19 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     });
   } */
   void updateOriginPointFromCoordinates(LatLng coordinates) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    final Placemark newPosition = placemarks[0];
-    widget?.placeBloc?.getCurrentLocation(Place(
-      name: newPosition.name + ', ' + newPosition.thoroughfare,
-      formattedAddress: '',
-      lat: coordinates.latitude,
-      lng: coordinates.longitude
-    ));
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      final Placemark newPosition = placemarks[0];
+      widget?.placeBloc?.getCurrentLocation(Place(
+        name: newPosition.name + ', ' + newPosition.thoroughfare,
+        formattedAddress: '',
+        lat: coordinates.latitude,
+        lng: coordinates.longitude
+      ));
+    }catch(e){
+
+    }
     /* MarkerId markerId = MarkerId('origin');
     Marker marker = Marker(
       markerId: markerId,
@@ -514,15 +601,24 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               circles: Set<Circle>.of(circles.values),
               zoomControlsEnabled: false,
               markers: Set<Marker>.of(_markers.values),
+              polylines: Set<Polyline>.of(polyLines.values),
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               compassEnabled: false,
               onCameraMove: ( cameraPosition ) {
                 coordinatesSelected = cameraPosition.target;
+                if(selectedAddressVisible){
+                  selectedAddressVisible = false;
+                  setState(() {});
+                }
               },
               onCameraIdle: (){
-                updateOriginPointFromCoordinates(coordinatesSelected);
+                if(!(widget.placeBloc.routeReady())){
+                  updateOriginPointFromCoordinates(coordinatesSelected);
+                }
+                selectedAddressVisible = true;
+                setState(() {});
               },
               /* onTap: (LatLng newPosition){
                 updateOriginPointFromCoordinates(newPosition);
@@ -541,12 +637,12 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               } */
             ),
           ),
-          Center(
+          !(widget.placeBloc.routeReady()) ? Center(
             child: Transform.translate(
               offset: Offset(0, -40),
               child: UserIndicator()
             ),
-          ),
+          ) : Container(),
           CustomDropdownClient(),
           Positioned(
             bottom: 20.0,
@@ -573,24 +669,46 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                     ),
                   ],
                 ),
-                getListOptionDistance(),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: SelectAddress(
-                    fromAddress: widget?.placeBloc?.formLocation,
-                    toAddress: widget?.placeBloc?.locationSelect,
-                    unidad: distanceOptionSelected['unidad'],
-                    distancia: distanceOptionSelected['distancia'],
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SearchAddressScreen(
-                          currentLocation: currentLocation
-                        ),
-                        fullscreenDialog: true
-                      ));
-                    },
-                  )
-                ),
+                selectedAddressVisible ? Column(
+                  children: [
+                    getListOptionDistance(),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: SelectAddress(
+                        fromAddress: widget?.placeBloc?.formLocation,
+                        toAddress: widget?.placeBloc?.locationSelect,
+                        unidad: distanceOptionSelected['unidad'],
+                        distancia: distanceOptionSelected['distancia'],
+                        onTapFrom: () async {
+                          final bool ready = await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SearchAddressScreen(
+                              currentLocation: currentLocation,
+                              from: true
+                            ),
+                            fullscreenDialog: true,
+                          ));
+                          if(ready != null && ready){
+                            await createCustomMarker(widget.placeBloc.formLocation);
+                            getRouter();
+                          }
+                        },
+                        onTapTo: () async {
+                          final bool ready = await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SearchAddressScreen(
+                              currentLocation: currentLocation,
+                              from: false
+                            ),
+                            fullscreenDialog: true,
+                          ));
+                          if(ready != null && ready){
+                            await createCustomMarker(widget.placeBloc.formLocation);
+                            getRouter();
+                          }
+                        },
+                      )
+                    ),
+                  ],
+                ) : Container(),
               ],
             ),
           ),

@@ -13,6 +13,7 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,12 +21,16 @@ import 'package:provider/provider.dart';
 class SelectAddress extends StatefulWidget {
   final Place fromAddress,toAddress;
   final VoidCallback onTap;
+  final VoidCallback onTapFrom;
+  final VoidCallback onTapTo;
   final int distancia;
   final String unidad;
   SelectAddress({
     this.fromAddress,
     this.toAddress,
     this.onTap,
+    this.onTapFrom,
+    this.onTapTo,
     this.distancia,
     this.unidad
   });
@@ -78,7 +83,7 @@ class _SelectAddressState extends State<SelectAddress> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       GestureDetector(
-                        onTap: widget.onTap,
+                        onTap: widget.onTapFrom,
                         child: Container(
                           color: Colors.white,
                           child: Column(
@@ -105,7 +110,7 @@ class _SelectAddressState extends State<SelectAddress> {
                         child: Divider(color: Colors.grey,)
                       ),
                       GestureDetector(
-                        onTap: widget.onTap,
+                        onTap: widget.onTapTo,
                         child: Container(
                           color: Colors.white,
                           child: Column(
@@ -280,18 +285,6 @@ class _SelectAddressState extends State<SelectAddress> {
                 padding: EdgeInsets.symmetric(horizontal: 80),
               )
             )
-            // Expanded(
-            //   child: Container(
-            //     padding: EdgeInsets.only(left: 10),
-            //     child: NotificationListener<OverscrollIndicatorNotification>(
-            //       onNotification: (overScroll) {
-            //         overScroll.disallowGlow();
-            //         return false;
-            //       },
-            //       child: getOption()
-            //     )
-            //   )
-            // )
           ],
         ),
       ),

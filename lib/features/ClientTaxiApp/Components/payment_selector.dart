@@ -1,7 +1,9 @@
 import 'package:HTRuta/features/ClientTaxiApp/Model/payment_methods_response.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:HTRuta/features/DriverTaxiApp/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
+import 'package:provider/provider.dart';
 
 class PaymentSelector extends StatefulWidget {
 
@@ -20,30 +22,36 @@ class _PaymentSelectorState extends State<PaymentSelector> {
   PaymentMethodClient selectedPaymentMethod;
   final _prefs = UserPreferences();
   double widthDropdown;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+  Future<void> loadData() async {
+    try{
+      paymentMethods = Provider.of<UserProvider>(context, listen: false).userPaymentMethods;
+      if(paymentMethods == null){
+        final data = await pickUpApi.getPaymentMethods();
+        paymentMethods = getListaPaymentMethods(data);
+        savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
+        Provider.of<UserProvider>(context, listen: false).userPaymentMethods = paymentMethods;
+        if(mounted){
+          setState(() {});
+        }
+      }else{
+        savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
+      }
+    }catch(e){
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     widthDropdown = MediaQuery.of(context).size.width * 0.6;
-    return paymentMethods == null ? FutureBuilder(
-      future: pickUpApi.getPaymentMethods(),
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        if(snapshot.hasError) return Container();
-        switch(snapshot.connectionState){
-          case ConnectionState.waiting: return Container(height: 40);
-          case ConnectionState.none: return Container(height: 40);
-          case ConnectionState.active: 
-            return proccessDataToWidget(snapshot.data);
-          case ConnectionState.done:
-            return proccessDataToWidget(snapshot.data);
-        }
-        return Container();
-      }
-    ) : buildContent(paymentMethods, savedPaymentMethods);
-  }
-
-  Widget proccessDataToWidget(dynamic data){
-    paymentMethods = getListaPaymentMethods(data);
-    savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
+    if(paymentMethods == null){
+      return Container();
+    }
     List<String> paymentsLocally = _prefs.getClientPaymentMethods;
     for(int i = 0; i < paymentMethods.length; i++){
       if(paymentsLocally.contains(paymentMethods[i].iId)){
@@ -105,17 +113,19 @@ class _PaymentSelectorState extends State<PaymentSelector> {
                     onChanged: (String newValue) async {
                       selectedPaymentMethod = data.where((element) => element.nNombre == newValue).toList().first;
                       setState(() {});
-                      List<int> selectedPaymentMethods = [];
+                      List<PaymentMethodClient> selectedPaymentMethods = [];
                       for(int i = 0; i < data.length; i++){
                         if(savedPaymentMethods[i]){
                           selectedPaymentMethods.add(
-                            int.parse(data[i].iId)
+                            data[i]//.iId
                           );
                         }
                       }
-                      List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
+                      List<String> methodsToSave = selectedPaymentMethods.map((e) => e.iId.toString()).toList();
+                      List<int> methodsToSaveInt = selectedPaymentMethods.map((e) => int.parse(e.iId)).toList();
+                      Provider.of<UserProvider>(context, listen: false).userPaymentMethods = selectedPaymentMethods;
                       _prefs.setClientPaymentMethods = methodsToSave;
-                      return widget.onSelected(selectedPaymentMethods);
+                      return widget.onSelected(methodsToSaveInt);
                     },
                     style: TextStyle(
                       fontSize: 14,

@@ -358,16 +358,18 @@ class PickupApi{
     try{
       final response = await http.post(
         url,
-        body: {
+        headers: {'Content-type': 'application/json', 'Accept': 'application/json'},
+        body: json.encode({
           'eEstado': 'A',
-        });
+        }));
       final responseData = paymentMethodsResponseFromJson(response.body);
       if(response.statusCode == 200){
         return responseData;
       }else{
         throw Exception();
       }
-    } catch(_){
+    } catch(e){
+      print(e);
       throw ServerException(message: 'Ocurrió un error con el servidor');
     }
   }

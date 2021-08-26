@@ -9,7 +9,8 @@ import 'package:geolocator/geolocator.dart';
 class SearchAddressScreen extends StatefulWidget {
   final Function(LocationEntity) getTo;
   final Position currentLocation;
-  SearchAddressScreen({this.getTo, this.currentLocation});
+  final bool from;
+  SearchAddressScreen({this.getTo, this.currentLocation, this.from = false});
   @override
   _SearchAddressScreenState createState() => _SearchAddressScreenState();
 }
@@ -39,6 +40,7 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
           placeBloc: bloc,
           getTo: widget.getTo,
           currentPosition: widget.currentLocation,
+          from: widget.from
         )
       )
     );
