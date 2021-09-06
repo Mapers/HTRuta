@@ -1,4 +1,6 @@
+import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/qualification_widget.dart';
+import 'package:HTRuta/app/widgets/card_informativa_location.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/core/utils/extensions/double_extension.dart';
 import 'package:HTRuta/enums/type_entity_enum.dart';
@@ -11,7 +13,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/blo
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:HTRuta/app/colors.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListPassengersFullScreenDialog extends StatefulWidget {
@@ -26,11 +28,16 @@ class ListPassengersFullScreenDialog extends StatefulWidget {
 class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScreenDialog> {
 
   LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
+  void lauchWhasApp({String number, String message})async{
+    var url = 'whatsapp://send?phone=51$number&text=$message';
+    await  canLaunch(url)? launch(url): print('Cantdsds');
+  }
 
   @override
   Widget build(BuildContext context) {
     InterprovincialDataDriverFirestore interprovincialDataFirestore = getIt<InterprovincialDataDriverFirestore>();
     return Scaffold(
+      backgroundColor: primaryColor,
       appBar: AppBar(
         title: Text('Pasajeros'),
       ),
@@ -58,91 +65,100 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
   }
 
   Widget getItem(int index, PassengerEntity passenger){
-    return Column(
-      children: [
-        Row(
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
           children: [
-            Icon(Icons.person, color: Colors.black87),
-            SizedBox(width: 5),
-            Expanded(
-              child: Text(passenger.fullNames),
-            ),
-            Card(
-            clipBehavior: Clip.antiAlias,
-            color: green1,
-            child: InkWell(
-              onTap: ()async{
-                await launch('tel:+51'+ passenger.cellPhone);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                child: Row(
-                  children: [
-                    Icon(Icons.call, color: Colors.white,size: 15,),
-                    Text(' Llamar al conductor', style: TextStyle( color: Colors.white, fontSize: 12), ),
-                  ],
+            Row(
+              children: [
+                Icon(Icons.person, color: Colors.black87),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(passenger.fullNames),
                 ),
-              ),
+                passenger.cellPhone == null ? Container():IconButton(
+                  icon: Icon(Icons.call, color: Colors.blue,),
+                  onPressed: ()async{
+                    await launch('tel:+51'+ passenger.cellPhone);
+                  }
+                ),
+                passenger.cellPhone == null ? Container():IconButton(
+                  icon: Icon(FontAwesomeIcons.whatsapp, color: Colors.green, ),
+                  onPressed: (){
+                    lauchWhasApp(number: passenger.cellPhone, message: 'Hola querido pasajero');
+                  }
+                ),
+                IconButton(
+                  icon: Icon(Icons.map,color: Colors.orange,),
+                  onPressed: (){
+                    //? Codigo dari
+                  }
+                ),
+              ],
             ),
-          )
-          ],
-        ),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Icon(Icons.trip_origin),
-            SizedBox(width: 5),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(passenger.currentLocation?.streetName ?? 'Sin mapear', style: TextStyle(fontSize: 13)),
-                  Text(passenger.currentLocation?.addressAdministrative ?? 'Esperando información...', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
-                ],
-              ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Icon(Icons.trip_origin),
+                SizedBox(width: 5),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(passenger.currentLocation?.streetName ?? 'Sin mapear', style: TextStyle(fontSize: 13)),
+                      Text(passenger.currentLocation?.addressAdministrative ?? 'Esperando información...', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
+                      // Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
-                  // Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
-                ],
-              ),
+            CardInformationLocation(location: passenger.currentLocation,icon: Icons.trip_origin, iconColor: Colors.amber,),
+            SizedBox(height: 5),
+                CardInformationLocation(location: passenger.toLocation,icon: Icons.location_on,iconColor: Colors.red,),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Icon(Icons.person_pin_circle_outlined, color: Colors.black45),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
+                      Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Icon(Icons.airline_seat_recline_normal_outlined, color: Colors.green),
+                SizedBox(width: 5),
+                Text(passenger.seats.toString()),
+                Spacer(),
+                RaisedButton(
+                  onPressed: () => questionRemovePassenger(index, passenger),
+                  child: Text('Liberar asientos'),
+                )
+              ],
             ),
           ],
         ),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Icon(Icons.person_pin_circle_outlined, color: Colors.black45),
-            SizedBox(width: 5),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
-                  Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
-                ],
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Icon(Icons.airline_seat_recline_normal_outlined, color: Colors.green),
-            SizedBox(width: 5),
-            Text(passenger.seats.toString()),
-            Spacer(),
-            RaisedButton(
-              onPressed: () => questionRemovePassenger(index, passenger),
-              child: Text('Liberar asientos'),
-            )
-          ],
-        ),
-      ],
+      ),
     );
   }
 

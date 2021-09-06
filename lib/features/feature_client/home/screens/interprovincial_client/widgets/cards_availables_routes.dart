@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/app/widgets/card_informativa_location.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
@@ -209,9 +210,9 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                     ),
                   ],
                 ),
-                LocationWidget(location: widget.availablesRoutesEntity.route.fromLocation,icon: Icons.trip_origin, iconColor: Colors.amber,),
+                CardInformationLocation(location: widget.availablesRoutesEntity.route.fromLocation,icon: Icons.trip_origin, iconColor: Colors.amber,),
                 SizedBox(height: 5),
-                LocationWidget(location: widget.availablesRoutesEntity.route.toLocation,icon: Icons.location_on,iconColor: Colors.red,),
+                CardInformationLocation(location: widget.availablesRoutesEntity.route.toLocation,icon: Icons.location_on,iconColor: Colors.red,),
                 SizedBox(height: 5),
                 Row(
                   children: [
@@ -305,56 +306,4 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
     );
   }
 }
-class LocationWidget extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final LocationEntity location;
-  const LocationWidget({Key key, this.location, this.icon, this.iconColor}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Icon(icon, color: iconColor),
-            SizedBox(width: 5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LocationComplement(title: 'Región: ',subTitle: location.regionName,),
-                LocationComplement(title: 'Provincia: ',subTitle: location.provinceName,),
-                LocationComplement(title: 'Distrito: ',subTitle: location.districtName,),
-                LocationComplement(title: 'Calle: ',subTitle: location.streetName,),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-class LocationComplement extends StatelessWidget {
-  final String title;
-  final String subTitle;
-  const LocationComplement({Key key, this.title, this.subTitle}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold)),
-        Container(
-          width: 200,
-          child: Text(subTitle, style: TextStyle(color: Colors.black87, fontSize: 14))
-        ),
-      ],
-    );
-  }
-}

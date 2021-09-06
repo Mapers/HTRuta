@@ -44,13 +44,13 @@ class _ComentsWirdgetsState extends State<ComentsWirdgets> {
                 );
               }
               return ListView.builder(
-              itemCount: param.commentsDriver.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Estructure(
-                  commentsDriver: param.commentsDriver[index],
-                );
-              },
-            );
+                itemCount: param.commentsDriver.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Estructure(
+                    commentsDriver: param.commentsDriver[index],
+                  );
+                },
+              );
             }
           ),
         ),
@@ -74,7 +74,7 @@ class Estructure extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Image.network(
-                  'https://static2.abc.es/media/estilo/2016/05/06/maria-valverde--620x349.jpg',
+                  commentsDriver.imgUrl,
                   height: 40,
                   width: 40,
                   fit: BoxFit.cover,
@@ -91,7 +91,7 @@ class Estructure extends StatelessWidget {
                     Text(commentsDriver.registered_at.day.toString() +'/'+ commentsDriver.registered_at.month.toString()+ '/' + commentsDriver.registered_at.year.toString(), style: TextStyle(fontSize: 10,color: Colors.grey ,fontStyle: FontStyle.italic)),
                     SizedBox(width: 10,),
                     RatingBar.builder(
-                      initialRating: 2,
+                      initialRating: commentsDriver.start,
                       allowHalfRating: true,
                       itemSize: 18,
                       itemCount: 5,

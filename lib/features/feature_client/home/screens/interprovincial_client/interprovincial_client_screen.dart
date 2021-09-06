@@ -1,19 +1,26 @@
-import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/widgets/loading_positioned.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/stateinput_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/availables_routes_page.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/drawer_circle_from.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/search_address_screen_interprovincial.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/select_address_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final bool rejected;
@@ -29,15 +36,25 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   Place fromAddress;
   Place toAddress;
   TextEditingController toController = TextEditingController();
+  LocationEntity location = LocationEntity.initalPeruPosition();
   bool drawCircle = false;
   double initialCircularRadio;
   int seat;
+  bool isSelect;
+  BitmapDescriptor currentPinLocationIcon;
   final _prefs = UserPreferences();
 
   @override
   void initState() {
     seat = 1;
     initialCircularRadio = 2;
+    fromLocation = LocationEntity(
+      latLang: null,
+      districtName: '',
+      provinceName: '',
+      regionName: '',
+      streetName: '',
+    );
     toLocation = LocationEntity(
       latLang: null,
       districtName: '',
@@ -47,6 +64,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     );
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_)async{
+      location = await LocationUtil.currentLocation();
+      currentPinLocationIcon = await BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png');
       BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
       if(widget.rejected){
         BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
@@ -66,24 +85,35 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     });
   }
   void getfrom(LocationEntity from){
+    Marker markerFrom = MapViewerUtil.generateMarker(
+      latLng: from.latLang,
+      nameMarkerId: 'FROM_POSITION_MARKER',
+      icon: currentPinLocationIcon,
+    );
+    BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerFrom));
     fromLocation = from;
     fromAddress = Place(
       formattedAddress: fromLocation.districtName ,
-      name: fromLocation.streetName == '' ? fromLocation.districtName : fromLocation.streetName + ' - ' + fromLocation.districtName,
+      name: fromLocation.streetName == '' ? fromLocation.districtName +', ' + fromLocation.provinceName  :fromLocation.streetName + ', '+ fromLocation.districtName + ', ' + fromLocation.provinceName,
       lat: fromLocation.latLang.latitude,
       lng: fromLocation.latLang.longitude
     );
   }
   void getTo( LocationEntity to){
     toLocation = to;
+    Marker markerTo = MapViewerUtil.generateMarker(
+      latLng: to.latLang,
+      nameMarkerId: 'TO_POSITION_MARKER',
+      icon: currentPinLocationIcon,
+    );
+    BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerTo));
     toAddress = Place(
       formattedAddress: toLocation.districtName ,
-      name: toLocation.streetName == '' ? toLocation.districtName : toLocation.streetName + ' - ' + toLocation.districtName,
+      name: toLocation.streetName == '' ? toLocation.districtName +', ' + toLocation.provinceName  :toLocation.streetName + ', '+ toLocation.districtName + ', ' + toLocation.provinceName,
       lat: toLocation.latLang.latitude,
       lng: toLocation.latLang.longitude
     );
-    setState(() {
-    });
+    setState(() {});
   }
   void getSeating(int seating){
     seat = seating;
@@ -115,10 +145,12 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         alignment: Alignment.bottomCenter,
         children: [
           MapInterprovincialClientWidget(
-            destinationInpit: getTo,
-            drawCircle: drawCircle,
+            destinationInput: getTo,
+            pickUpInput: getfrom,
+            drawCircle: false,
             radiusCircle: initialCircularRadio,
             getFrom: getfrom,
+            iselect: isSelect,
           ),
           // ChangeServiceClientWidget(),
           CustomDropdownClient(),
@@ -143,12 +175,28 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                               toAddress: toAddress,
                               onSearch: onSearch,
                               getSeating: getSeating,
-                              onTap: (){
-                                Navigator.of(context).push( MaterialPageRoute( builder: (context) =>SearchAddressScreen( getTo: getTo,), fullscreenDialog: true ));
+                              onTapTo: (val){
+                                Navigator.of(context).push( MaterialPageRoute( builder: (context) =>
+                                  SearchAddressScreenInterprovincial(
+                                    getTo: getTo,
+                                    getfrom: getfrom,
+                                    fromSelect: fromLocation,
+                                    toSelect: toLocation,
+                                    isSelect: val,
+                                    currentLocation: Position(longitude: location.latLang.longitude,latitude: location.latLang.latitude)
+                                  ),
+                                    fullscreenDialog: true ));
                               },
                             )
                         ),
                       ),
+                      //! borrar cuando lo del circulo sea descratado
+                      // Center(
+                      //   child: Transform.translate(
+                      //     offset: Offset(0, -40),
+                      //     child: DragwerCircleFrom()
+                      //   ),
+                      // )
                     ],
                   );
                 } else if( state.status == InterprovincialClientStatus.availablesInterprovincial ){

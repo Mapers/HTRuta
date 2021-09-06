@@ -194,8 +194,8 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             ),
           )
         ),
-        Positioned(
-          bottom: 175,
+        widget.availablesRoutesEntity.route.driverCellphone== null? Container(): Positioned(
+          bottom: 200,
           right: 11,
           child: Card(
             clipBehavior: Clip.antiAlias,

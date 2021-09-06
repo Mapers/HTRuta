@@ -7,6 +7,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/stateinput_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
@@ -67,8 +68,11 @@ Future<void> init() async {
       pushMessage: getIt()
     )
   );
-    getIt.registerFactory<RouteDriveBloc>(
+  getIt.registerFactory<RouteDriveBloc>(
     () => RouteDriveBloc(getIt())
+  );
+  getIt.registerFactory<StateinputBloc>(
+    () => StateinputBloc()
   );
 
   //? Client
