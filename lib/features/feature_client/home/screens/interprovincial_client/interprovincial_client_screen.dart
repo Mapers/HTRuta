@@ -218,13 +218,22 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         ),
                       ),
                       Positioned(
-                        top: 60,
+                        top: 52,
                         right: 15,
-                        child: IconButton(
-                          icon: Icon(Icons.close ),
-                          onPressed: (){
-                            BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
-                          }
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            )
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.close, color: Colors.white),
+                            onPressed: (){
+                              BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+                            }
+                          ),
                         )
                       ),
                     ],

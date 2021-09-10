@@ -2,7 +2,6 @@ import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app/widgets/card_informativa_location.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
@@ -46,7 +45,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('- Sin resultados -'),
+                Text('- Sin resultados -', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic ),),
               ],
             ),
           );
@@ -55,7 +54,7 @@ class _CardsAvailablesRoutesState extends State<CardsAvailablesRoutes> {
           children: [
             Container(
               decoration: BoxDecoration(
-              color: Colors.white,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(5)
               ),
               child: Row(

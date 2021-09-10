@@ -1,29 +1,33 @@
-import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/app/components/principal_button.dart';
-import 'package:HTRuta/app/navigation/routes.dart';
-import 'package:HTRuta/core/utils/dialog.dart';
-import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/data/remote/service_data_remote.dart';
-import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/enums/type_service_enum.dart';
+import 'package:HTRuta/app/widgets/metting_drive_and_passenger.dart';
+import 'package:HTRuta/features/feature_client/home/entities/meetin_drive_and_passenger_entity.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/meeting_drive_and_passenger_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/information_drive_negotation.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/point_meeting.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/view_whereabout.dart';
+import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
+import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
+import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
+import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
-import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
-import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
-import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.dart';
-import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
-import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/map_coordenation_passenger.dart';
-import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
-import 'package:HTRuta/injection_container.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/app/components/principal_button.dart';
+import 'package:HTRuta/data/remote/service_data_remote.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/models/minutes_response.dart';
-import 'package:flutter/material.dart';
+import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:HTRuta/core/utils/dialog.dart';
+import 'package:HTRuta/app/colors.dart';
+import 'package:flutter/material.dart';
 
 
 class TravelNegotationPage extends StatefulWidget {
@@ -40,16 +44,47 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   final _prefs = UserPreferences();
   final pickUpApi = PickupApi();
   AproxElement element;
+  LocationEntity location = LocationEntity.initalPeruPosition();
+  LocationEntity whereAbouthOneLocation, whereAbouthTwoLocation, whereAbouthTheeLocation ;
   TextEditingController amountController = TextEditingController();
   ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
   InterprovincialRequestEntity request;
+  Map<PolylineId, Polyline> polylines = {};
   String amount;
   bool newPassagger = false;
+
   @override
   void initState() {
+    whereAbouthOneLocation = LocationEntity(streetName: '', districtName: '', provinceName: '', regionName: '', latLang: null);
+    whereAbouthTwoLocation = LocationEntity(streetName: '', districtName: '', provinceName: '', regionName: '', latLang: null);
+    whereAbouthTheeLocation = LocationEntity(streetName: '', districtName: '', provinceName: '', regionName: '', latLang: null);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      location = await LocationUtil.currentLocation();
+
+      BlocProvider.of<MeetingDriveAndPassengerBloc>(context).add(GetMeetingDriveAndPassengerEvent());
+      getWhereAboutLocation(id:1 , latlong: widget.availablesRoutesEntity.route.whereAboutstOne.latLang,title: 'Punto de encuentro 1', isSelect: true );
+      getWhereAboutLocation( id: 2, latlong: widget.availablesRoutesEntity.route.whereAboutstTwo.latLang,title: 'Punto de encuentro 2', isSelect: false );
+      setState(() {});
+    });
     amountController.text = widget.availablesRoutesEntity.route.cost.toStringAsFixed(2);
     super.initState();
   }
+
+  void getWhereAboutLocation( {LatLng latlong, String title,bool isSelect,int id })async{
+    List<Placemark> whereAbouthOne = await placemarkFromCoordinates(latlong.latitude,latlong.longitude);
+    Placemark placemark = whereAbouthOne.first;
+    LocationEntity location = LocationEntity(
+        streetName: placemark.thoroughfare ,
+        districtName: placemark.locality ,
+        provinceName: placemark.subAdministrativeArea ,
+        regionName: placemark.administrativeArea ,
+        latLang: latlong
+      );
+      MeetingDriveAndPassengerEntity mettingpon = MeetingDriveAndPassengerEntity(id: id, pointMeeting: location, isSelect: isSelect);
+      BlocProvider.of<MeetingDriveAndPassengerBloc>(context).add( AddMeetingDriveAndPassengerEvent(meetingPoint: mettingpon ));
+
+  }
+
   @override
   Widget build(BuildContext context) {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
@@ -59,225 +94,134 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       ),
       body: Form(
         key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              SizedBox(height: 15,),
-              Text(widget.availablesRoutesEntity.route.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), ),
-              SizedBox(height: 5,),
-              Row(
-                children: [
-                  Icon(Icons.face, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(widget.availablesRoutesEntity.route.driverName,
-                        style: TextStyle(color: Colors.black87, fontSize: 14)),
-                  ),
-                ],
-              ),
-              Row(
-                    children: [
-                      Icon(Icons.trip_origin, color: Colors.amber),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                            widget.availablesRoutesEntity.route.fromLocation.streetName,
-                            style: TextStyle(color: Colors.black87, fontSize: 14)),
-                      ),
-                    ],
-                  ),
-              Row(
-                children: [
-                  Icon(Icons.location_on, color: Colors.red),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Text(
-                      widget.availablesRoutesEntity.route.toLocation.streetName,
-                      style: TextStyle(color: Colors.black87, fontSize: 14)
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Icon(Icons.airline_seat_recline_normal_rounded, color: Colors.green),
-                  SizedBox(width: 8),
-                  Text(widget.availablesRoutesEntity.availableSeats.toString(),
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                    )
-                  )
-                ],
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Icon(Icons.access_time, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Text(
-                    widget.availablesRoutesEntity.routeStartDateTime.formatOnlyTimeInAmPM,
-                    style: TextStyle(color: Colors.black87, fontSize: 14)
-                  ),
-                  SizedBox(width: 20),
-                  Icon(Icons.calendar_today, color: Colors.black87),
-                  SizedBox(width: 5),
-                  Text(
-                    widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate,
-                    style: TextStyle(color: Colors.black87, fontSize: 14)
-                  ),
-                ],
-              ),
-              FutureBuilder(
-                future: pickUpApi.calculateMinutes( widget.availablesRoutesEntity.route.fromLocation.latLang.latitude, widget.availablesRoutesEntity.route.fromLocation.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude),
-                builder: (BuildContext context, AsyncSnapshot snapshot){
-                  if(snapshot.hasError) return Container();
-                  switch(snapshot.connectionState){
-                    case ConnectionState.waiting: return Container();
-                    case ConnectionState.none: return Container();
-                    case ConnectionState.active: {
-                      final AproxElement element = snapshot.data;
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              Image.asset('assets/image/tracking.png',width: 22,height: 22,),
-                              SizedBox(width: 8,),
-                              Text(element.distance.text),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
-                              SizedBox(width: 8,),
-                              Text(element.duration.text),
-                            ],
-                          ),
-                        ]
-                      );
-                    }
-                    case ConnectionState.done: {
-                      final AproxElement element = snapshot.data;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset('assets/image/tracking.png',width: 22,height: 22,),
-                                SizedBox(width: 8,),
-                                Text(element.distance.text),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
-                                SizedBox(width: 8,),
-                                Text(element.duration.text),
-                              ],
-                            ),
-                          ]
-                        ),
-                      );
-                    }
-                  }
-                  return Container();
-                }
-              ),
-              SizedBox(height: 15,),
-              StreamBuilder<List<InterprovincialRequestEntity>>(
-                stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
-                builder: (ctx, asyncSnapshot){
-                  if(asyncSnapshot.connectionState == ConnectionState.active){
-                    print( asyncSnapshot.data );
-                    List<InterprovincialRequestEntity>  ds = asyncSnapshot.data;
-                    for (InterprovincialRequestEntity item in ds) {
-                      if(item.passengerFcmToken ==  _prefs.tokenPush){
-                        request = item;
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                StreamBuilder<List<InterprovincialRequestEntity>>(
+                  stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
+                  builder: (ctx, asyncSnapshot){
+                    if(asyncSnapshot.connectionState == ConnectionState.active){
+                      print( asyncSnapshot.data );
+                      List<InterprovincialRequestEntity>  ds = asyncSnapshot.data;
+                      for (InterprovincialRequestEntity item in ds) {
+                        if(item.passengerFcmToken ==  _prefs.tokenPush){
+                          request = item;
+                        }
                       }
-                    }
-                    if(request == null){
-                      return Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: (){
-                                  amountController.text = (double.parse(amountController.text) - 1.00 ).toStringAsFixed(2);
-                                },
-                                icon: Icon(Icons.remove),
-                              ),
-                              SizedBox(width: 20,),
-                              Card(
-                                color: backgroundInputColor,
-                                child: Container(
-                                  width: 100,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    child: TextFormField(
-                                      onSaved: (val)=> amount = val,
-                                      controller: amountController,
-                                      decoration: InputDecoration(
-                                        hintStyle: TextStyle(color: Colors.grey),
-                                        border: InputBorder.none,
+                      if(request == null){
+                        return Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                InformationDriveNegotation(availablesRoutesEntity: widget.availablesRoutesEntity ,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Puntos de encunetro:'),
+                                    IconButton(
+                                      icon: Icon(Icons.push_pin ),
+                                      onPressed: (){
+                                        Navigator.of(context).push( MaterialPageRoute(builder: (context) => ViewWhereabouth(whereAbouthOneLocation: whereAbouthOneLocation,whereAbouthTwoLocation: whereAbouthTwoLocation, currentLocation: location,)));
+                                      }
+                                    )
+                                  ],
+                                ),
+                                PointMeeting(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: (){
+                                        amountController.text = (double.parse(amountController.text) - 1.00 ).toStringAsFixed(2);
+                                      },
+                                      icon: Icon(Icons.remove),
+                                    ),
+                                    SizedBox(width: 20,),
+                                    Card(
+                                      color: backgroundInputColor,
+                                      child: Container(
+                                        width: 100,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                                          child: TextFormField(
+                                            onSaved: (val)=> amount = val,
+                                            controller: amountController,
+                                            decoration: InputDecoration(
+                                              hintStyle: TextStyle(color: Colors.grey),
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(width: 20,),
+                                    IconButton(
+                                      onPressed: (){
+                                        amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
+                                      },
+                                      icon: Icon(Icons.add),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 20,),
-                              IconButton(
-                                onPressed: (){
-                                  amountController.text = (double.parse(amountController.text)  + 1.00 ).toStringAsFixed(2);
-                                },
-                                icon: Icon(Icons.add),
-                              ),
-                            ],
-                          ),
-                          PrincipalButton(
-                            text: 'Negociar',
-                            onPressed: ()async{
-                              formKey.currentState.save();
-                              //! Agregar modal de consulta
-                              final user = await _session.get();
-                              LocationEntity from = await LocationUtil.currentLocation();
-                              DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
-                              InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
-                                condition: InterprovincialRequestCondition.offer,
-                                documentId: null,
-                                passengerFcmToken: _prefs.tokenPush,
-                                from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
-                                to: param.distictTo.districtName,
-                                passengerId: user.id,
-                                fullNames: user.fullNames,
-                                price: double.parse(amount),
-                                seats: param.requiredSeats
-                              );
-                              String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
-                              NegotiationEntity negotiation = NegotiationEntity(
-                                serviceId: widget.availablesRoutesEntity.id,
-                                passengerId: user.id,
-                                cost: double.parse(amount),
-                                seating: param.requiredSeats,
-                                requestDocumentId: requestDocumentId,
-                                from: from,
-                                to: widget.availablesRoutesEntity.route.toLocation
-                              );
-                              BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
-                              Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
-                            },
-                          )
-                        ],
-                      );
-                    }else{
-                      return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: request, documentId: widget.availablesRoutesEntity.documentId);
+                                PrincipalButton(
+                                  text: 'Negociar',
+                                  onPressed: ()async{
+                                    formKey.currentState.save();
+                                    //! Agregar modal de consulta
+                                    final user = await _session.get();
+                                    LocationEntity from = await LocationUtil.currentLocation();
+                                    DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+                                    InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
+                                      condition: InterprovincialRequestCondition.offer,
+                                      documentId: null,
+                                      passengerFcmToken: _prefs.tokenPush,
+                                      from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
+                                      to: param.distictTo.districtName,
+                                      passengerId: user.id,
+                                      fullNames: user.fullNames,
+                                      price: double.parse(amount),
+                                      seats: param.requiredSeats
+                                    );
+                                    String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
+                                    NegotiationEntity negotiation = NegotiationEntity(
+                                      serviceId: widget.availablesRoutesEntity.id,
+                                      passengerId: user.id,
+                                      cost: double.parse(amount),
+                                      seating: param.requiredSeats,
+                                      requestDocumentId: requestDocumentId,
+                                      from: from,
+                                      to: widget.availablesRoutesEntity.route.toLocation
+                                    );
+                                    BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
+                                    Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
+                                  },
+                                ),
+                                SizedBox(height: 40,)
+                              ],
+                            ),
+                          ],
+                        );
+                      }else{
+                        return contitional(interprovincialClientDataFirebase: interprovincialClientDataFirebase, request: request, documentId: widget.availablesRoutesEntity.documentId);
+                      }
                     }
+                    return Center(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 40,),
+                          CircularProgressIndicator(),
+                          SizedBox(height: 10,),
+                          Text('Cargando...')
+                        ],
+                      ),
+                    );
                   }
-                  return Container();
-                }
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -406,4 +350,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       passengerPhone: user.cellphone,
     )), (_) => false);
   }
+}
+enum ChagleSelecte{
+  meeting1, meeting2, meeting3
 }

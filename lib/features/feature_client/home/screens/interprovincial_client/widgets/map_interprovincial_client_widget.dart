@@ -1,3 +1,4 @@
+import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -41,6 +42,7 @@ class _MapInterprovincialClientWidgetState
   BitmapDescriptor currentPinLocationIcon;
   BitmapDescriptor fromPinLocationIcon;
   BitmapDescriptor toPinLocationIcon;
+  BitmapDescriptor circlePinLocationIcon;
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
   Position currentLocation;
   LocationEntity location = LocationEntity.initalPeruPosition();
@@ -51,12 +53,17 @@ class _MapInterprovincialClientWidgetState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      circlePinLocationIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/car2.png'));
       dynamic result = await Future.wait([
         LocationUtil.currentLocation(),
-        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png'),
-        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/gps_point_24.png'),
-        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_marker_32.png'),
+        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/ic_pick_48.png'),
+        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/gps_point_24.png'),
+        BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/ic_marker_32.png'),
+        // BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/circularadio.png'),
       ]);
+      print('..................');
+      print(circlePinLocationIcon);
+      print('..................');
       location = result[0];
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
@@ -64,7 +71,7 @@ class _MapInterprovincialClientWidgetState
       // _mapViewerUtil.changeToDarkMode;
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang, zoom: 16);
       // _updateMarkerCurrentPosition(location);
-      // _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
+      _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
       DataInterprovincialClientState _data =
           BlocProvider.of<InterprovincialClientBloc>(context).state;
       _addFromToMarkers(datan: _data);
@@ -76,7 +83,7 @@ class _MapInterprovincialClientWidgetState
     Marker marker = MapViewerUtil.generateMarker(
       latLng: _location.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
-      icon: currentPinLocationIcon,
+      icon: circlePinLocationIcon,
     );
     BlocProvider.of<InterprovincialClientLocationBloc>(context).add(
         UpdateInterprovincialClientLocationEvent(driverLocation: _location));
@@ -101,7 +108,7 @@ class _MapInterprovincialClientWidgetState
         Marker markerFrom = MapViewerUtil.generateMarker(
           latLng: from.latLang,
           nameMarkerId: 'FROM_POSITION_MARKER',
-          icon: currentPinLocationIcon,
+          icon: circlePinLocationIcon,
         );
         BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerFrom));
         setState(() {});

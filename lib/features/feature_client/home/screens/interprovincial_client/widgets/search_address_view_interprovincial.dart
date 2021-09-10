@@ -63,7 +63,6 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
       toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
     }
     super.initState();
-    // cx();
   }
 
   @override
@@ -72,14 +71,6 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
     toController?.dispose();
     super.dispose();
   }
-
-  // void cx(){
-  //   if (fromController.text == '') {
-  //   }else if (toController.text == ''){
-  //     inputFrom = false;
-  //     nodeTo.requestFocus();
-  //   }
-  // }
   void getLocationFromOrTo(LocationEntity newLocation ){
     if(inputFrom){
       fromController.text =  newLocation.streetName == '' ? newLocation.districtName +', ' + newLocation.provinceName  :newLocation.streetName + ', '+ newLocation.districtName + ', ' + newLocation.provinceName;

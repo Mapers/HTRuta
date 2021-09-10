@@ -14,6 +14,8 @@ class InterprovincialRouteInServiceEntity extends Equatable {
   final String driverName;
   final LocationEntity fromLocation;
   final LocationEntity toLocation;
+  final LocationEntity whereAboutstOne;
+  final LocationEntity whereAboutstTwo;
   final double cost;
   final double starts;
   final DateTime dateStart;
@@ -31,13 +33,15 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     this.driverImage,
     this.dateStart,
     this.status,
+    this.whereAboutstOne,
+    this.whereAboutstTwo,
   });
 
   Map<String, dynamic> get toMap => {
     'id': id,
     'name': name,
     'driver_phone':  driverPhone,
-    'driver_cellphone': driverCellphone,
+    'phone_number': driverCellphone,
     'driver_image': driverImage,
     'name_driver': driverName,
     'from': fromLocation.toMap,
@@ -45,6 +49,8 @@ class InterprovincialRouteInServiceEntity extends Equatable {
     'cost': cost,
     'starts': starts,
     'date_start': dateStart,
+    'whereabouts_one':whereAboutstTwo.toMap,
+    'whereabouts_two':whereAboutstOne.toMap,
   };
 
   factory InterprovincialRouteInServiceEntity.test(){
@@ -92,13 +98,15 @@ class InterprovincialRouteInServiceEntity extends Equatable {
       id: dataJson['id'],
       name: dataJson['name'],
       driverPhone: dataJson['driver_phone'],
-      driverCellphone: dataJson['driver_cellphone'],
+      driverCellphone: dataJson['phone_number'],
       driverImage: dataJson['driver_image'],
       driverName: dataJson['driver_name'],
       cost: double.parse(dataJson['cost']),
       fromLocation: LocationEntity.fromJson(dataJson['from']),
       toLocation: LocationEntity.fromJson(dataJson['to']),
       starts: starts,
+      whereAboutstOne: LocationEntity.fromJson(dataJson['whereabouts_one']),
+      whereAboutstTwo: LocationEntity.fromJson(dataJson['whereabouts_two'])
     );
   }
   factory InterprovincialRouteInServiceEntity.fromJsonRecovery(Map<String, dynamic> dataJson){
