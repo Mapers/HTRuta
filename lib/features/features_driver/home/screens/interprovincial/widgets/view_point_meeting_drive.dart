@@ -1,15 +1,17 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:HTRuta/core/utils/map_viewer_util.dart';
-import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/entities/location_entity.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:HTRuta/core/utils/helpers.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/core/utils/helpers.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/core/utils/map_viewer_util.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 class ViewPointMeetingDrive extends StatefulWidget {
-  final GeoPoint geoPoint;
-  ViewPointMeetingDrive({Key key, this.geoPoint,}) : super(key: key);
+  final LocationEntity whereAbouthOneLocation;
+  final LocationEntity whereAbouthTwoLocation;
+  final Function(LocationEntity) getnewPointMeeting;
+  final LocationEntity currentLocation;
+  ViewPointMeetingDrive({Key key, this.whereAbouthOneLocation, this.whereAbouthTwoLocation, this.currentLocation, this.getnewPointMeeting}) : super(key: key);
 
   @override
   _ViewWhereabouthState createState() => _ViewWhereabouthState();
@@ -19,56 +21,45 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
   Map<PolylineId, Polyline> polylines = {};
   Map<MarkerId, Marker> _markers = {};
   LocationEntity location = LocationEntity.initalPeruPosition();
-  BitmapDescriptor bitmapDescriptor;
+  LocationEntity locationWhereAbout = LocationEntity.initalPeruPosition();
+  BitmapDescriptor whereabouthOneIcon;
+  BitmapDescriptor whereabouthTwoIcon;
   LatLng coordinatesSelected;
   bool loading = true;
   bool positionHasChanged = false;
   String nameBoxWhaereabouthSelecter;
   GoogleMapController _mapController;
-  LocationEntity pointMeeting;
-
+  Placemark newPosition;
 
   @override
   void initState() {
     super.initState();
-    nameBoxWhaereabouthSelecter= '';
-    List<Placemark> placemarks;
-    pointMeeting = LocationEntity.initialWithLocation(latitude: widget.geoPoint.latitude, longitude: widget.geoPoint.latitude);
+    nameBoxWhaereabouthSelecter = widget.currentLocation.streetName == '' ? widget.currentLocation.districtName +', ' + widget.currentLocation.provinceName  :widget.currentLocation.streetName + ', '+ widget.currentLocation.districtName + ', ' + widget.currentLocation.provinceName;
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       location  = await LocationUtil.currentLocation();
-      do {
-          placemarks = await placemarkFromCoordinates(widget.geoPoint.latitude, widget.geoPoint.longitude);
-        } while (placemarks == null || placemarks.isEmpty);
-        Placemark newPosition = placemarks.first ;
-        pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
-      bitmapDescriptor = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/marker/whereabout1.png',width: 100));
-
-        setState(() { });
-    });
-      Marker markerPointMeeting = MapViewerUtil.generateMarker(
-        latLng: LatLng(widget.geoPoint.latitude , widget.geoPoint.latitude),
-        nameMarkerId: 'POINT_MEETING_POSITION_MARKER',
-        icon: bitmapDescriptor
+      whereabouthOneIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/marker/whereabout1.png',width: 70));
+      whereabouthTwoIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/marker/whereabout2.png',width: 70));
+      Marker markerWhereabouthOne = MapViewerUtil.generateMarker(
+        latLng: widget.whereAbouthOneLocation.latLang ,
+        nameMarkerId: 'WHEREABOUTHONE_POSITION_MARKER',
+        icon: whereabouthOneIcon
 
       );
-      print('..................');
-      print('dsfsd');
-      print('..................');
-      _markers[markerPointMeeting.markerId] = markerPointMeeting;
-      // nameBoxWhaereabouthSelecter = location.streetName == '' ? location.districtName +', ' + location.provinceName  : location.streetName + ', '+ location.districtName + ', ' + location.provinceName;
+      _markers[markerWhereabouthOne.markerId] = markerWhereabouthOne;
+    });
   }
   void updateOriginPointFromCoordinates({LatLng coordinates}) async {
     List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
     if (placemarks == null || placemarks.isEmpty) return;
     Placemark newPosition = placemarks[0];
-    pointMeeting = LocationEntity(
+    locationWhereAbout = LocationEntity(
       streetName: newPosition.thoroughfare,
       districtName: newPosition.locality,
       provinceName: newPosition.subAdministrativeArea ,
       regionName: newPosition.administrativeArea,
       latLang: coordinates
     );
-    nameBoxWhaereabouthSelecter = pointMeeting.streetName == '' ? pointMeeting.districtName +', ' + pointMeeting.provinceName  :pointMeeting.streetName + ', '+ pointMeeting.districtName + ', ' + pointMeeting.provinceName;
+    nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
     loading = false;
     if(!mounted) return;
     setState(() {});
@@ -76,10 +67,10 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
     _mapController.setMapStyle(null);
-    if(location.latLang == null){
-      updateOriginPointFromCoordinates( coordinates: location.latLang );
+    if(widget.currentLocation.latLang == null){
+      updateOriginPointFromCoordinates( coordinates: widget.currentLocation.latLang );
     }else{
-      updateOriginPointFromCoordinates( coordinates: location.latLang);
+      updateOriginPointFromCoordinates( coordinates: widget.currentLocation.latLang);
     }
   }
 
@@ -100,7 +91,7 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
             markers: Set<Marker>.of(_markers.values),
             compassEnabled: false,
             initialCameraPosition: CameraPosition(
-              target: location.latLang ,
+              target: widget.whereAbouthOneLocation.latLang ,
               zoom: 12,
             ),
             onCameraMove: ( cameraPosition ) {
@@ -160,6 +151,8 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
                     child: IconButton(
                       icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
                       onPressed: (){
+                        widget.getnewPointMeeting(locationWhereAbout);
+                        Navigator.of(context).pop();
                       },
                     ),
                   )
