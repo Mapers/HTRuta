@@ -51,6 +51,9 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
         icon: bitmapDescriptor
 
       );
+      print('..................');
+      print('dsfsd');
+      print('..................');
       _markers[markerPointMeeting.markerId] = markerPointMeeting;
       // nameBoxWhaereabouthSelecter = location.streetName == '' ? location.districtName +', ' + location.provinceName  : location.streetName + ', '+ location.districtName + ', ' + location.provinceName;
   }
