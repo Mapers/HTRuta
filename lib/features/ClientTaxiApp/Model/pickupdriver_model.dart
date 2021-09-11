@@ -51,7 +51,8 @@ class DriverRequest {
       this.vchModelo,
       this.vchMarca,
       this.token,
-      this.idChofer
+      this.idChofer,
+      this.urlDriver
   });
 
   String iIdUsuario;
@@ -71,6 +72,7 @@ class DriverRequest {
   String vchMarca;
   String token;
   String idChofer;
+  String urlDriver;
 
   factory DriverRequest.fromJson(Map<String, dynamic> json) => DriverRequest(
     iIdUsuario: json['iIdUsuario'],
@@ -90,6 +92,7 @@ class DriverRequest {
     vchMarca: json['vchMarca'],
     token: json['IdTokenChofer'],
     idChofer: json['iIdChofer'],
+    urlDriver: json['url_driver'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -108,6 +111,7 @@ class DriverRequest {
     'vchPlaca': vchPlaca,
     'vchModelo': vchModelo,
     'vchMarca': vchMarca,
+    'url_driver': urlDriver,
   };
   Future<double> get calculateDistance async{
     return await Geolocator.distanceBetween(double.parse(vchLatInicial), double.parse(vchLongInicial), double.parse(vchLatFinal), double.parse(vchLongFinal))/1000;

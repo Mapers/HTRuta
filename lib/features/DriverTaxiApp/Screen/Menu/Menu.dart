@@ -19,12 +19,19 @@ class MenuItems {
   MenuItems({this.icon, this.name});
 }
 
-class MenuDriverScreens extends StatelessWidget {
+class MenuDriverScreens extends StatefulWidget {
   final String activeScreenName;
-  final Session _session = Session();
-  final DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   MenuDriverScreens({this.activeScreenName});
+
+  @override
+  _MenuDriverScreensState createState() => _MenuDriverScreensState();
+}
+
+class _MenuDriverScreensState extends State<MenuDriverScreens> {
+  final Session _session = Session();
+
+  final DriverFirestoreService driverFirestoreService = DriverFirestoreService();
 
   void navigatorRemoveUntil(BuildContext context, String router){
     Navigator.of(context).pushNamedAndRemoveUntil('/$router', (Route<dynamic> route) => false);
@@ -53,8 +60,9 @@ class MenuDriverScreens extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileDriver()));
+                              onTap: () async {
+                                await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileDriver()));
+                                setState(() {});
                               },
                               child: Material(
                                 elevation: 5.0,
@@ -68,7 +76,9 @@ class MenuDriverScreens extends StatelessWidget {
                                     child: data.imageUrl != null  && data.imageUrl.isNotEmpty ? CachedNetworkImage(
                                       imageUrl: data.imageUrl,
                                       fit: BoxFit.cover,
-                                    ) : Container(),
+                                    ) : Image.asset(
+                                      'assets/image/empty_user_photo.png',
+                                    ),
                                   )
                                 ),
                               ),
@@ -132,7 +142,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
                             },
-                            isSelected: activeScreenName.compareTo('HOME') == 0,
+                            isSelected: widget.activeScreenName.compareTo('HOME') == 0,
                             icon: FontAwesomeIcons.home,
                             text: 'Inicio'
                           ),
@@ -141,7 +151,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'request_driver');
                             },
-                            isSelected: activeScreenName.compareTo('REQUEST') == 0,
+                            isSelected: widget.activeScreenName.compareTo('REQUEST') == 0,
                             icon: FontAwesomeIcons.firstOrder,
                             text: 'Solicitudes'
                           ),
@@ -150,7 +160,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'my_wallet_driver');
                             },
-                            isSelected: activeScreenName.compareTo('MY WALLET') == 0,
+                            isSelected: widget.activeScreenName.compareTo('MY WALLET') == 0,
                             icon: FontAwesomeIcons.wallet,
                             text: 'Mi billetera'
                           ),
@@ -159,7 +169,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'paymentMethods');
                             },
-                            isSelected: activeScreenName.compareTo('PAYMENTS') == 0,
+                            isSelected: widget.activeScreenName.compareTo('PAYMENTS') == 0,
                             icon: FontAwesomeIcons.creditCard,
                             text: 'Mis métodos de pago'
                           ),
@@ -168,7 +178,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'driverCupons');
                             },
-                            isSelected: activeScreenName.compareTo('CUPONS') == 0,
+                            isSelected: widget.activeScreenName.compareTo('CUPONS') == 0,
                             icon: FontAwesomeIcons.tags,
                             text: 'Mis cupones'
                           ),
@@ -179,7 +189,7 @@ class MenuDriverScreens extends StatelessWidget {
                                 onTap: () {
                                   Navigator.of(context).pushAndRemoveUntil(Routes.toRouterDrivePage(), (_) => false);
                                 },
-                                isSelected: activeScreenName.compareTo('Rutas') == 0,
+                                isSelected: widget.activeScreenName.compareTo('Rutas') == 0,
                                 icon: FontAwesomeIcons.mapMarkedAlt,
                                 text: 'Mis Rutas'
                               ) : Container();
@@ -190,7 +200,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'history_driver');
                             },
-                            isSelected: activeScreenName.compareTo('HISTORY') == 0,
+                            isSelected: widget.activeScreenName.compareTo('HISTORY') == 0,
                             icon: FontAwesomeIcons.history,
                             text: 'Historial'
                           ),
@@ -199,7 +209,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'notification_driver');
                             },
-                            isSelected: activeScreenName.compareTo('NOTIFICATIONS') == 0,
+                            isSelected: widget.activeScreenName.compareTo('NOTIFICATIONS') == 0,
                             icon: FontAwesomeIcons.bell,
                             text: 'Notificaciones'
                           ),
@@ -208,7 +218,7 @@ class MenuDriverScreens extends StatelessWidget {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'setting_driver');
                             },
-                            isSelected: activeScreenName.compareTo('SETTINGS') == 0,
+                            isSelected: widget.activeScreenName.compareTo('SETTINGS') == 0,
                             icon: FontAwesomeIcons.cogs,
                             text: 'Configuraciones'
                           ),

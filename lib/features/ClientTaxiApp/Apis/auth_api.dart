@@ -73,10 +73,8 @@ class AuthApi{
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
-      final token = await _prefs.tokenPush;
       final url = 'http://23.254.217.21:8000/api/auth/login';
       final response = await http.post(url,body: {'cellphone' : phoneNumber, 'code' : code, 'token': _prefs.tokenPush});
-      print(response.body);
       if(response.statusCode == 200){
         final responseUsuario = userModelFromJson(response.body);
         final usuario = responseUsuario.data;

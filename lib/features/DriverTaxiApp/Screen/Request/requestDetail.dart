@@ -170,6 +170,7 @@ class _RequestDetailState extends State<RequestDetail> {
       appBar: AppBar(
         title: Text('Detalle de pedidos', style: TextStyle(color: blackColor),
         ),
+        centerTitle: true,
         backgroundColor: whiteColor,
         elevation: 0.0,
         iconTheme: IconThemeData(color: blackColor),
@@ -213,11 +214,15 @@ class _RequestDetailState extends State<RequestDetail> {
                       Container(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
-                          child: CachedNetworkImage(
-                            imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                          child: widget.requestItem.urlUser != null && widget.requestItem.urlUser.isNotEmpty ? CachedNetworkImage(
+                            imageUrl: widget.requestItem.urlUser,
                             fit: BoxFit.cover,
                             width: 40.0,
                             height: 40.0,
+                          ) : Image.asset(
+                            'assets/image/empty_user_photo.png',
+                            width: 40,
+                            height: 40,
                           ),
                         ),
                       ),
@@ -280,15 +285,15 @@ class _RequestDetailState extends State<RequestDetail> {
                           ),
                         ),
                         Divider(),
-                        Container(
+                        widget.requestItem.comentario.isNotEmpty ? Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('note'.toUpperCase(),style: textGreyBold,),
+                              Text('comentario'.toUpperCase(),style: textGreyBold,),
                               Text(widget.requestItem.comentario,style: textStyle,),
                             ],
                           ),
-                        ),
+                        ) : Container(),
                       ],
                     )
                 ),
@@ -319,7 +324,7 @@ class _RequestDetailState extends State<RequestDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Detalle de facturación)'.toUpperCase(), style: textGreyBold,),
+                      Text('Detalle de facturación'.toUpperCase(), style: textGreyBold,),
                       Container(
                         padding: EdgeInsets.only(top: 8.0),
                         child:Row(

@@ -482,12 +482,15 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
             ),
             !travelInits ? Container(
               width: responsive.wp(100),
-              height: responsive.hp(30),
               color: Colors.black.withOpacity(0.4),
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+              margin: EdgeInsets.only(top: responsive.hp(15)),
+              padding: EdgeInsets.symmetric(
+                horizontal: responsive.wp(4),
+                vertical: responsive.hp(4)
+              ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  SizedBox(height: responsive.hp(15),),
                   Text('${pedidoProvider.requestDriver.vchNombres.split(' ')[0]} aceptó su pedido de S/${double.parse(pedidoProvider.requestDriver.mPrecio).toStringAsFixed(1)}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center),
                   aproxElement != null ? Text('Está a ${aproxElement.duration.text}', style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.w600, color: Colors.white),textAlign: TextAlign.center) : Container()
                 ],
@@ -538,9 +541,13 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
                       leading: Container(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50.0),
-                          child: CachedNetworkImage(
-                            imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                          child: pedidoProvider.requestDriver.urlDriver != null && pedidoProvider.requestDriver.urlDriver.isNotEmpty ? CachedNetworkImage(
+                            imageUrl: pedidoProvider.requestDriver.urlDriver,
                             fit: BoxFit.cover,
+                            width: responsive.wp(14),
+                            height: responsive.wp(14)
+                          ) : Image.asset(
+                            'assets/image/empty_user_photo.png',
                             width: responsive.wp(14),
                             height: responsive.wp(14)
                           ),

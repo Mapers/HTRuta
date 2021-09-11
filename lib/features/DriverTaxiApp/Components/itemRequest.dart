@@ -51,19 +51,25 @@ class ItemRequest extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  )
+                color: backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                )
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
-                      child: CachedNetworkImage(
+                      child: (avatar == null || avatar.isEmpty) ? 
+                      Image.asset(
+                        'assets/image/empty_user_photo.png',
+                        width: 50.0,
+                        height: 50.0,
+                      ):
+                      CachedNetworkImage(
                         imageUrl: avatar,
                         fit: BoxFit.cover,
                         width: 50.0,
@@ -85,33 +91,6 @@ class ItemRequest extends StatelessWidget {
                           style: textGrey,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        /* Container(
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                height: 25.0,
-                                padding: EdgeInsets.all(5.0),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: primaryColor
-                                ),
-                                child: Text('ApplePay',style: textBoldWhite,),
-                              ),
-                              SizedBox(width: 10),
-                              Container(
-                                height: 25.0,
-                                padding: EdgeInsets.all(5.0),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color: primaryColor
-                                ),
-                                child: Text('Descuento',style: textBoldWhite,),
-                              ),
-                            ],
-                          ),
-                        ), */
                       ],
                     ),
                   ),

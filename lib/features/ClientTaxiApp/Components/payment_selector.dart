@@ -33,8 +33,15 @@ class _PaymentSelectorState extends State<PaymentSelector> {
       if(paymentMethods == null){
         final data = await pickUpApi.getPaymentMethods();
         paymentMethods = getListaPaymentMethods(data);
-        savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
         Provider.of<UserProvider>(context, listen: false).userPaymentMethods = paymentMethods;
+        List<int> selectedPaymentMethods = [];
+        for(int i = 0; i < paymentMethods.length; i++){
+          selectedPaymentMethods.add(
+            int.parse(paymentMethods[i].iId)
+          );
+        }
+        List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
+        _prefs.setClientPaymentMethods = methodsToSave;
         if(mounted){
           setState(() {});
         }

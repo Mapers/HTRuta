@@ -324,9 +324,13 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                 Container(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                                    child: actualRequest.urlDriver != null && actualRequest.urlDriver.isNotEmpty ? CachedNetworkImage(
+                                      imageUrl: actualRequest.urlDriver,
                                       fit: BoxFit.cover,
+                                      width: responsive.wp(14),
+                                      height: responsive.wp(14)
+                                    ) : Image.asset(
+                                      'assets/image/empty_user_photo.png',
                                       width: responsive.wp(14),
                                       height: responsive.wp(14)
                                     ),

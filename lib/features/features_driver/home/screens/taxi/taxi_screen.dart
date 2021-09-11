@@ -35,7 +35,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
-
 class TaxiDriverServiceScreen extends StatefulWidget {
   final GlobalKey<ScaffoldState> parentScaffoldKey;
   TaxiDriverServiceScreen({@required this.parentScaffoldKey});
@@ -490,7 +489,6 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
     List<Widget> bodyContent = [
       _buildMapLayer(),
       CustomDropdownDriver(),
-      
       Positioned(
         top: 110,
         child: FlutterSwitch(
@@ -588,6 +586,12 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
         )
       ),
       // ButtonLayerWidget(parentScaffoldKey: widget.parentScaffoldKey, changeMapType: changeMapType),
+      /* Center(
+        child: Transform.translate(
+          offset: Offset(0, -40),
+          child: UserIndicator()
+        ),
+      ), */
       requestTaxi.isNotEmpty && !waitingForResponse ? Align(
         alignment: Alignment.bottomCenter,
         child: isShowDefault == false ?
@@ -641,7 +645,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
                 }
               },
               child: ItemRequest(
-                avatar: 'https://source.unsplash.com/1600x900/?portrait',
+                avatar: requestTaxi[index].urlUser,
                 userName: requestTaxi[index].vchNombres,
                 date: requestTaxi[index].dFecReg,
                 price: requestTaxi[index].mPrecio,

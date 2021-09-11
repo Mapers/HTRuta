@@ -316,10 +316,10 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
       itemCount: historyItems.length,
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-            onTap: () {
-              navigateToDetail(historyItems[index].iIdViaje);
-            },
-            child: historyItem(historyItems[index])
+          onTap: () {
+            navigateToDetail(historyItems[index].iIdViaje);
+          },
+          child: historyItem(historyItems[index])
         );
       }
     );

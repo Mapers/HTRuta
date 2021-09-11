@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
-import 'package:intl/intl.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
@@ -14,8 +14,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-
-const double _kPickerSheetHeight = 216.0;
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/select_address.dart';
 
 class EditProfile extends StatefulWidget {
   final UserSession userData;
@@ -39,6 +38,7 @@ class _EditProfileState extends State<EditProfile> {
   String newMName;
   String newPhone;
   String newEmail;
+  String newAddress;
   final session = Session();
   final _prefs = UserPreferences();
 
@@ -55,6 +55,7 @@ class _EditProfileState extends State<EditProfile> {
     photoUrl = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
     if(photoUrl == null){
       Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+      return;
     }
     print('La foto se subió correctamente');
   }
@@ -65,29 +66,6 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _image = image;
     });
-  }
-
-
-  Widget _buildBottomPicker(Widget picker) {
-    return Container(
-      height: _kPickerSheetHeight,
-      padding: const EdgeInsets.only(top: 6.0),
-      color: CupertinoColors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          color: CupertinoColors.black,
-          fontSize: 22.0,
-        ),
-        child: GestureDetector(
-          // Blocks taps from propagating to the modal sheet and popping.
-          onTap: () {},
-          child: SafeArea(
-            top: false,
-            child: picker,
-          ),
-        ),
-      ),
-    );
   }
 
   void showDemoActionSheet({BuildContext context, Widget child}) {
@@ -136,23 +114,6 @@ class _EditProfileState extends State<EditProfile> {
   void submit() async {
     final FormState form = formKey.currentState;
     form.save();
-    await session.set(
-      widget.userData.id,
-      widget.userData.dni,
-      newNames ?? widget.userData.names,
-      newFName ?? widget.userData.lastNameFather,
-      newMName ?? widget.userData.lastNameMother,
-      newPhone ?? widget.userData.cellphone,
-      widget.userData.email,
-      widget.userData.password,
-      photoUrl ?? widget.userData.imageUrl,//TODO: Completar los campos
-      selectedGender,
-      widget.userData.smsCode,
-      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
-      widget.userData.fechaRegistro,
-      widget.userData.direccion,
-      widget.userData.referencia,
-    );
     SaveProfileBody body = SaveProfileBody(
       iIdUsuario: widget.userData.id,
       nombres: newNames ?? widget.userData.names,
@@ -161,20 +122,57 @@ class _EditProfileState extends State<EditProfile> {
       fechaNacimiento: birthdaySelected,
       sexo: selectedGender,
       telefono: newPhone ?? widget.userData.cellphone,
-      celular: newPhone ?? widget.userData.cellphone
+      celular: newPhone ?? widget.userData.cellphone,
+      userAddress: newAddress
     );
     bool profileSavedSuccess = await pickupApi.saveProfile(body);
     print('resultado: ' + profileSavedSuccess.toString());
     if(!profileSavedSuccess){
       Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-    }else{
-      Navigator.pop(context, true);
-    } 
+      return;
+    }
+    await session.set(
+      widget.userData.id,
+      widget.userData.dni,
+      newNames ?? widget.userData.names,
+      newFName ?? widget.userData.lastNameFather,
+      newMName ?? widget.userData.lastNameMother,
+      newPhone ?? widget.userData.cellphone,
+      newEmail ?? widget.userData.email,
+      widget.userData.password,
+      photoUrl ?? widget.userData.imageUrl,
+      selectedGender,
+      widget.userData.smsCode,
+      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+      widget.userData.fechaRegistro,
+      newAddress,
+      widget.userData.referencia,
+    );
+    final driverData = await session.getDriverData();
+    await session.setDriverData(
+      newNames ?? widget.userData.names,
+      newFName ?? widget.userData.lastNameFather,
+      newMName ?? widget.userData.lastNameMother,
+      newPhone ?? widget.userData.cellphone,
+      newEmail ?? widget.userData.email,
+      widget.userData.dni,
+      selectedGender,
+      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+      widget.userData.fechaRegistro,
+      photoUrl ?? widget.userData.imageUrl,
+      widget.userData.smsCode,
+      newAddress,
+      widget.userData.referencia,
+      driverData.metodosPago,
+      driverData.saldo
+    );
+    Navigator.pop(context, true);
   }
 
   @override
   void initState() {
     super.initState();
+    newAddress = widget.userData.direccion;
     selectedGender = widget.userData.sexo;
     birthdaySelected = DateTimeExtension.dateFromString(widget.userData.fechaNacimiento);
     newEmail = widget.userData.email;
@@ -361,7 +359,7 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
-                              /* Container(
+                              Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
@@ -399,7 +397,7 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   ],
                                 ),
-                              ), */
+                              ),
                               Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -499,6 +497,38 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
+                              Container(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        padding: EdgeInsets.only(right: 10.0),
+                                        child: Text(
+                                          'Dirección',
+                                          style: textStyle,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child:  GestureDetector(
+                                        onTap: () async {
+                                          final Place placeSelected = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectAddress()));
+                                          if(placeSelected == null) return;
+                                          newAddress = placeSelected.name;
+                                          setState(() {});
+                                        },
+                                        child: InputDropdown(
+                                          valueText: reduceAddressLength(newAddress),
+                                          valueStyle: TextStyle(color: blackColor),
+                                        )
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -511,6 +541,11 @@ class _EditProfileState extends State<EditProfile> {
         )
       ),
     );
+  }
+  String reduceAddressLength(String address){
+    if(address == null) return '';
+    if(address.length < 30) return address;
+    return address.substring(0, 30) + '...';
   }
   Future<DateTime> selectDate(BuildContext context) async {  
     DateTime pickedDateTime = await showDatePicker(
