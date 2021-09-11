@@ -3,10 +3,12 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
+import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_local.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/meeting_drive_and_passenger_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/stateinput_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_driver_firestore.dart';
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
@@ -71,6 +73,10 @@ Future<void> init() async {
   getIt.registerFactory<RouteDriveBloc>(
     () => RouteDriveBloc(getIt())
   );
+  getIt.registerFactory<MeetingDriveAndPassengerBloc>(
+    () => MeetingDriveAndPassengerBloc(getIt())
+  );
+  
   getIt.registerFactory<StateinputBloc>(
     () => StateinputBloc()
   );
@@ -78,6 +84,9 @@ Future<void> init() async {
   //? Client
   getIt.registerLazySingleton<InterprovincialDriverLocationBloc>(
     () => InterprovincialDriverLocationBloc(interprovincialDataFirestore: getIt())
+  );
+  getIt.registerLazySingleton<InterprovincialClientLocalDataSoruce>(
+    () => InterprovincialClientLocalDataSoruce()
   );
   getIt.registerLazySingleton<InterprovincialClientRemoteDataSoruce>(
     () => InterprovincialClientRemoteDataSoruce(

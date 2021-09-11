@@ -10,6 +10,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/comments_drive_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_location_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/meeting_drive_and_passenger_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/stateinput_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
@@ -117,6 +118,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<StateinputBloc>(create: (_) => ij.getIt<StateinputBloc>()),
           BlocProvider<AvailablesRoutesBloc>(create: (_) => ij.getIt<AvailablesRoutesBloc>()),
           BlocProvider<CommentsDriveBloc>(create: (_) => ij.getIt<CommentsDriveBloc>()),
+          BlocProvider<MeetingDriveAndPassengerBloc>(create: (_) => ij.getIt<MeetingDriveAndPassengerBloc>()),
         ],
         child: MaterialApp(
           title: 'Taxi App',

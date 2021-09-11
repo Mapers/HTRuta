@@ -146,7 +146,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
             fcm_token: null,
             id: null,
             routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
-            status: interprovincialRouteInServiceEntity.status,
+            // status: interprovincialRouteInServiceEntity.status,
             vehicleSeatLayout: null
           );
         if( serviceInCourse.passengerDocumentId != null ){

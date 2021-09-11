@@ -22,6 +22,7 @@ class MapViewerUtil {
     @required LatLng currentLocation,
     bool drawCircle,
     double radiusCircle,
+    Function(LatLng) onCameraMove,
 
     double zoom = 16,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
@@ -40,6 +41,9 @@ class MapViewerUtil {
         mapToolbarEnabled: false,
         zoomControlsEnabled: false,
         mapType: MapType.normal,
+        onCameraMove: (val){
+          onCameraMove(val.target);
+        },
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
         // ignore: prefer_collection_literals
         circles: Set<Circle>.from([circular(currentLocation, visible: drawCircle,radiusCircle: radiusCircle)]),

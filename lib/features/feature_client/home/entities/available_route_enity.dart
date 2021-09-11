@@ -1,4 +1,3 @@
-import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/vehicle_seat_layout_enum.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
 import 'package:equatable/equatable.dart';
@@ -9,10 +8,11 @@ class AvailableRouteEntity extends Equatable{
   final int availableSeats;
   final String documentId;
   final VehicleSeatLayout vehicleSeatLayout; //? se usara cuando  se habilite tipos de movilidad
-  final InterprovincialStatus status;
+  final String status;
   final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   final String fcm_token;
+
 
 
   AvailableRouteEntity( {
@@ -32,7 +32,7 @@ class AvailableRouteEntity extends Equatable{
     'status': status,
     'rutas': route.toMap,
     'route_start_dateTime':routeStartDateTime,
-    'fcm_token':fcm_token
+
   };
 
   factory AvailableRouteEntity.fromJson(Map<String, dynamic> dataJson){
@@ -40,7 +40,7 @@ class AvailableRouteEntity extends Equatable{
       id: dataJson['id'].toString(),
       availableSeats: int.parse(dataJson['available_seats']) ,
       documentId: dataJson['document_id'],
-      status: toInterprovincialStatusFromString(dataJson['status']),
+      status: dataJson['status'],
       route: InterprovincialRouteInServiceEntity.fromJson(dataJson['rutas']),
       routeStartDateTime: DateTime.parse(dataJson['route_start_dateTime']),
       fcm_token: dataJson['fcm_token'],
