@@ -133,8 +133,6 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
     if(timeOfDay == null){
       return;
     }
-    print('..................');
-    print('..................');
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

@@ -61,9 +61,6 @@ class _MapInterprovincialClientWidgetState
         BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/ic_marker_32.png'),
         // BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 10),'assets/image/marker/circularadio.png'),
       ]);
-      print('..................');
-      print(circlePinLocationIcon);
-      print('..................');
       location = result[0];
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
