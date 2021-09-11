@@ -352,8 +352,6 @@ class PickupApi{
     }
   }
   Future<PaymentMethodsResponse> getPaymentMethods()async{
-    final _prefs = UserPreferences();
-    await _prefs.initPrefs();
     final url = '${Config.nuevaRutaApi}/formas-pago';
     try{
       final response = await http.post(

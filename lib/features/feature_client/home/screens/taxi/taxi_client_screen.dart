@@ -108,7 +108,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchDriverLocation();
-    Provider.of<ClientTaxiPlaceBloc>(context, listen: false).selectLocation(null);
+    
     Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
       // if(currentLocation == null) return;
       // double diferencia = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
@@ -126,6 +126,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
       currentLocation = Position(longitude: event.longitude, latitude: event.latitude);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async{
+      Provider.of<ClientTaxiPlaceBloc>(context, listen: false).selectLocation(null);
       await checkPermission();
       await _initLastKnownLocation();
       iconTaxi = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/taxi_marker.png');

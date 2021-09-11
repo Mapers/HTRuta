@@ -22,6 +22,7 @@ class TaxiModel {
   final String queryId;
   final String comentario;
   final String token;
+  final String userPhoto;
 
   TaxiModel({
     @required this.id,
@@ -44,6 +45,7 @@ class TaxiModel {
     @required this.queryId,
     @required this.comentario,
     @required this.token,
+    @required this.userPhoto,
   });
 
   factory TaxiModel.empty(){
@@ -67,7 +69,8 @@ class TaxiModel {
       queryId: '3',
       rejecteds: 'Rechazados :c',
       accepteds: 'Aceptados',
-      comentario: ''
+      comentario: '',
+      userPhoto: ''
     );
   }
 

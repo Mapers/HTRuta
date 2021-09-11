@@ -283,6 +283,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       userId: request.iIdUsuario,
                       comentario: request.comentario,
                       token: request.token,
+                      userPhoto: request.urlUser
                     );
                     return GestureDetector(
                       onTap: () {
@@ -332,30 +333,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
       )
     );
   }
-
-  // bool esRechazadoAceptado(String aceptados, String rechazados){
-  //   bool respuesta = false;
-  //   if(aceptados != null){
-  //     aceptados.split(',').forEach((element) {
-  //       if(element == choferId){
-  //         respuesta = true;
-  //         return;
-  //       }
-  //     });
-  //     return respuesta;
-  //   }else if(rechazados != null){
-  //     rechazados.split(',').forEach((element) {
-  //       if(element == choferId){
-  //         respuesta = true;
-  //         return;
-  //       }
-  //     });
-  //     return respuesta;
-  //   }else{
-  //     return respuesta;
-  //   }
-  // }
-
   Widget cardTaxi(TaxiModel taxi){
     final responsive = Responsive(context);
     Map requestActual = requestPast.where((element) => element['id'] == taxi.id).toList().first;
@@ -383,9 +360,13 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                   Container(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
-                      child: CachedNetworkImage(
-                        imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                      child: taxi.userPhoto != null && taxi.userPhoto.isNotEmpty ?  CachedNetworkImage(
+                        imageUrl: taxi.userPhoto,
                         fit: BoxFit.cover,
+                        width: 40,
+                        height: 40,
+                      ) : Image.asset(
+                        'assets/image/empty_user_photo.png',
                         width: 40,
                         height: 40,
                       ),
@@ -399,33 +380,6 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       children: <Widget>[
                         Text(taxi.names,style: textBoldBlack,),
                         Text(taxi.phone, style: textGrey,),
-                        // Container(
-                        //   child: Row(
-                        //     children: <Widget>[
-                        //       Container(
-                        //         height: 25,
-                        //         padding: EdgeInsets.all(5),
-                        //         alignment: Alignment.center,
-                        //         decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(10),
-                        //           color: primaryColor
-                        //         ),
-                        //         child: Text('ApplePay',style: textBoldWhite,),
-                        //       ),
-                        //       SizedBox(width: 10),
-                        //       Container(
-                        //         height: 25,
-                        //         padding: EdgeInsets.all(5),
-                        //         alignment: Alignment.center,
-                        //         decoration: BoxDecoration(
-                        //             borderRadius: BorderRadius.circular(10),
-                        //             color: primaryColor
-                        //         ),
-                        //         child: Text('Descuento',style: textBoldWhite,),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -477,16 +431,16 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     ),
                   ),
                   Divider(),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Comentario'.toUpperCase(),style: textGreyBold,),
-                          Text(taxi.comentario,style: textStyle,),
+                  taxi.comentario.isNotEmpty ? Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Comentario'.toUpperCase(),style: textGreyBold,),
+                        Text(taxi.comentario,style: textStyle,),
 
-                        ],
-                      ),
+                      ],
                     ),
+                  ) : Container(),
                 ],
               )
             ),

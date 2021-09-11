@@ -43,26 +43,28 @@ class _MenuScreensState extends State<MenuScreens> {
               if(snapshot.connectionState == ConnectionState.done){
                 if(snapshot.hasData){
                   final data = snapshot.data;
-                  return UserAccountsDrawerHeader(
-                    margin: EdgeInsets.all(0.0),
-                    accountName: Text(data.names, style: headingWhite,),
-                    // accountEmail: Text('100 puntos - miembro Gold'),
-                    accountEmail: Text(data.cellphone),
-                    currentAccountPicture: data.imageUrl.isNotEmpty ? CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: CachedNetworkImageProvider(
-                        data.imageUrl
-                      )
-                    ) : CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: AssetImage('assets/image/empty_user_photo.png')
-                    ),
-                    onDetailsPressed: () async {
+                  return InkWell(
+                    onTap: () async {
                       await Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
                       setState(() {});
                     },
+                    child: UserAccountsDrawerHeader(
+                      margin: EdgeInsets.all(0.0),
+                      accountName: Text(data.names, style: headingWhite,),
+                      // accountEmail: Text('100 puntos - miembro Gold'),
+                      accountEmail: Text(data.cellphone),
+                      currentAccountPicture: data.imageUrl.isNotEmpty ? CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: CachedNetworkImageProvider(
+                          data.imageUrl
+                        )
+                      ) : CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage('assets/image/empty_user_photo.png')
+                      ),
+                    ),
                   );
                 }else{
                   return Center(child: Text('Sin informacion del perfil'),);

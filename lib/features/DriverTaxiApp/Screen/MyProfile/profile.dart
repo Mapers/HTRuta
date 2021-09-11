@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/MyProfile/myProfile.dart';
@@ -78,10 +79,10 @@ class _ProfileDriverState extends State<ProfileDriver> {
                     child: CircleAvatar(
                       radius: 30,
                       backgroundColor: Colors.transparent,
-                      backgroundImage: driverData.imageUrl != null ?  CachedNetworkImageProvider(
+                      backgroundImage: driverData.imageUrl != null && driverData.imageUrl.isNotEmpty ?  CachedNetworkImageProvider(
                         driverData.imageUrl,
-                      ) : CachedNetworkImageProvider(
-                        'https://source.unsplash.com/1600x900/?portrait',
+                      ) : AssetImage(
+                        'assets/image/empty_user_photo.png',
                       )
                     ),
                   ),
@@ -165,7 +166,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Celular',style: textStyle,),
+                    Text('Número de celular',style: textStyle,),
                     Text(driverData.phone ?? '', style: textGrey,)
                   ],
                 ),
@@ -182,8 +183,8 @@ class _ProfileDriverState extends State<ProfileDriver> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Email',style: textStyle,),
-                    Text(driverData.email ?? '',style: textGrey,)
+                    Text('Dirección',style: textStyle,),
+                    Text(driverData.direccion ?? '', style: textGrey,)
                   ],
                 ),
               ),
@@ -200,7 +201,7 @@ class _ProfileDriverState extends State<ProfileDriver> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text('Fecha de nacimiento',style: textStyle,),
-                    Text(driverData?.fechaNacimiento, style: textGrey,)
+                    Text(driverData.fechaNacimiento != null && driverData.fechaNacimiento.isNotEmpty ? DateTimeExtension.changeDateFormat(driverData.fechaNacimiento): '' , style: textGrey,)
                   ],
                 ),
               ),

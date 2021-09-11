@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -204,6 +205,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: <Widget>[
                         Text('DNI',style: textStyle,),
                         Text('${userData.dni}',style: textGrey,)
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Dirección',style: textStyle,),
+                        Text('${userData.direccion}',style: textGrey,)
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      border: Border(
+                        bottom: BorderSide(width: 1.0,color: appTheme?.backgroundColor)
+                      )
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text('Fecha de nacimiento',style: textStyle,),
+                        Text(userData.fechaNacimiento != null && userData.fechaNacimiento.isNotEmpty ? DateTimeExtension.changeDateFormat(userData.fechaNacimiento): '' ,style: textGrey,)
                       ],
                     ),
                   ),

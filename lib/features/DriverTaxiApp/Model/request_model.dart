@@ -27,7 +27,8 @@ class RequestModel {
       this.aceptados,
       this.idSolicitud,
       this.comentario,
-      this.token
+      this.token,
+      this.urlUser
   });
 
   String id;
@@ -50,6 +51,7 @@ class RequestModel {
   String idSolicitud;
   String comentario;
   String token;
+  String urlUser;
 
   factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
       id: json['Id'],
@@ -72,6 +74,7 @@ class RequestModel {
       idSolicitud: json['IdSolicitud'],
       comentario: json['Comentario'] ?? '',
       token: json['IdTokenCliente'] ?? '',
+      urlUser: json['url_user'] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -92,7 +95,8 @@ class RequestModel {
       'vchNombreFinal': vchNombreFinal,
       'rechazados': rechazados,
       'aceptados': aceptados,
-      'IdSolicitud' : idSolicitud
+      'IdSolicitud' : idSolicitud,
+      'url_user' : urlUser,
   };
 }
 

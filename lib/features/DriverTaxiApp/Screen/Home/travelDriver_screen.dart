@@ -127,7 +127,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
         // Navigator.of(context).pushReplacementNamed(AppRoute.requestDriverScreen);
       }
     });
-    Geolocator.getPositionStream().listen((event) async{
+    Geolocator.getPositionStream(distanceFilter: 15).listen((event) async{
       if(currentLocation  == null) return;
       final pedidoProvider = Provider.of<PedidoProvider>(context,listen: false);
       double diferencia1 = await Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, event.latitude, event.longitude);
@@ -333,7 +333,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
       body: Stack(
         children: <Widget>[
           buildContent(context),
-          /* isArriving ? Positioned(
+          isArriving ? Positioned(
             top: 100,
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -341,16 +341,7 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Center(child: Text('Se encuentra próximo al punto de destino', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
             ),
-          ) : Container(), */
-          Positioned(
-            top: 100,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white.withOpacity(0.2),
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Center(child: Text('Se encuentra próximo al punto de destino', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-            ),
-          ),
+          ) : Container(),
           Positioned(
             bottom: 0,
             child: Container(
@@ -487,13 +478,19 @@ class _TravelDriverScreenState extends State<TravelDriverScreen> with WidgetsBin
                   Divider(color: Colors.grey,),
                   ListTile(
                     leading: Container(
-                      child: ClipRRect(
+                    child: ClipRRect(
                         borderRadius: BorderRadius.circular(50.0),
-                        child: CachedNetworkImage(
-                          imageUrl: 'https://source.unsplash.com/1600x900/?portrait',
+                        child: (pedidoProvider.request.urlUser == null || pedidoProvider.request.urlUser.isEmpty) ? 
+                        Image.asset(
+                          'assets/image/empty_user_photo.png',
+                          width: 50.0,
+                          height: 50.0,
+                        ):
+                        CachedNetworkImage(
+                          imageUrl: pedidoProvider.request.urlUser,
                           fit: BoxFit.cover,
-                          width: responsive.wp(14),
-                          height: responsive.wp(14)
+                          width: 50.0,
+                          height: 50.0,
                         ),
                       ),
                     ),

@@ -13,8 +13,8 @@ import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-const double _kPickerSheetHeight = 216.0;
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/select_address.dart';
 
 class MyProfile extends StatefulWidget {
   final DriverSession driverSession;
@@ -32,6 +32,7 @@ class _MyProfileState extends State<MyProfile> {
   DateTime date = DateTime.now();
   final session = Session();
   DriverSession driverSession;
+  DateTime birthdaySelected;
   final pickupApi = PickupApi();
   final _prefs = UserPreferences();
   var _image;
@@ -41,6 +42,7 @@ class _MyProfileState extends State<MyProfile> {
   String newPhone;
   String newEmail;
   String photoUrl;
+  String newAddress;
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
@@ -48,13 +50,15 @@ class _MyProfileState extends State<MyProfile> {
     setState(() {
       _image = gallery;
     });
+    if(gallery == null) return;
     List<int> imageBytes = gallery.readAsBytesSync();
-    print(imageBytes);
     String base64Image = base64Encode(imageBytes);
-    photoUrl = await pickupApi.uploadPhoto(_prefs.idChoferReal, base64Image);
+    photoUrl = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
     if(photoUrl == null){
       Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+      return;
     }
+    print('La foto se subió correctamente');
   }
 
   Future cameraImage() async {
@@ -64,29 +68,6 @@ class _MyProfileState extends State<MyProfile> {
     setState(() {
       _image = image;
     });
-  }
-
-
-  Widget _buildBottomPicker(Widget picker) {
-    return Container(
-      height: _kPickerSheetHeight,
-      padding: const EdgeInsets.only(top: 6.0),
-      color: CupertinoColors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          color: CupertinoColors.black,
-          fontSize: 22.0,
-        ),
-        child: GestureDetector(
-          // Blocks taps from propagating to the modal sheet and popping.
-          onTap: () {},
-          child: SafeArea(
-            top: false,
-            child: picker,
-          ),
-        ),
-      ),
-    );
   }
 
   void showDemoActionSheet({BuildContext context, Widget child}) {
@@ -104,30 +85,30 @@ class _MyProfileState extends State<MyProfile> {
     showDemoActionSheet(
       context: context,
       child: CupertinoActionSheet(
-          title: const Text('Seleccionar Camara'),
-          actions: <Widget>[
-            CupertinoActionSheetAction(
-              child: const Text('Camara'),
-              onPressed: () {
-                Navigator.pop(context, 'Camera');
-                cameraImage();
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: const Text('Libreria de fotos'),
-              onPressed: () {
-                Navigator.pop(context, 'Photo Library');
-                getImageLibrary();
-              },
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
-            isDefaultAction: true,
+        title: const Text('Seleccionar Camara'),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: const Text('Camara'),
             onPressed: () {
-              Navigator.pop(context, 'Cancel');
+              Navigator.pop(context, 'Camera');
+              cameraImage();
             },
-          )
+          ),
+          CupertinoActionSheetAction(
+            child: const Text('Libreria de fotos'),
+            onPressed: () {
+              Navigator.pop(context, 'Photo Library');
+              getImageLibrary();
+            },
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: const Text('Cancelar'),
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(context, 'Cancel');
+          },
+        )
       ),
     );
   }
@@ -135,52 +116,71 @@ class _MyProfileState extends State<MyProfile> {
   void submit() async {
     final FormState form = formKey.currentState;
     form.save();
-    await session.setDriverData(
-      newNames ?? widget.driverSession.name,
-      newFName ?? widget.driverSession.pName,
-      newMName ?? widget.driverSession.mName,
-      newPhone ?? widget.driverSession.phone,
-      newEmail ?? widget.driverSession.email,
-      widget.driverSession.dni,
-      selectedGender,
-      DateTimeExtension.parseDateEnglish(date.day, date.month, date.year),
-      widget.driverSession.fechaRegistro,
-      '',
-      widget.driverSession.smsCode,
-      widget.driverSession.direccion,
-      widget.driverSession.referencia,
-      widget.driverSession.metodosPago,
-      widget.driverSession.saldo
-    );
     SaveProfileBody body = SaveProfileBody(
-      iIdUsuario: _prefs.idChoferReal,
+      iIdUsuario: _prefs.idUsuario,
       nombres: newNames ?? widget.driverSession.mName,
       apellidoPaterno: newFName ?? widget.driverSession.pName,
       apellidoMaterno: newMName ?? widget.driverSession.mName,
       fechaNacimiento: date ?? DateTime.now(),
       sexo: selectedGender,
       telefono: newPhone ?? widget.driverSession.phone,
-      celular: newPhone ?? widget.driverSession.phone
+      celular: newPhone ?? widget.driverSession.phone,
+      userAddress: newAddress
     );
     bool profileSavedSuccess = await pickupApi.saveProfile(body);
-    print('resultado: ' + profileSavedSuccess.toString());
     if(!profileSavedSuccess){
       Dialogs.alert(context,title: 'Error', message: 'Ocurrió un error, volver a intentarlo');
-    }else{
-      Navigator.pop(context, true);
+      return;
     }
+    final userData = await session.get();
+    await session.set(
+      userData.id,
+      userData.dni,
+      newNames ?? userData.names,
+      newFName ?? userData.lastNameFather,
+      newMName ?? userData.lastNameMother,
+      newPhone ?? userData.cellphone,
+      newEmail ?? userData.email,
+      userData.password,
+      photoUrl ?? userData.imageUrl,
+      selectedGender,
+      userData.smsCode,
+      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+      userData.fechaRegistro,
+      newAddress,
+      userData.referencia,
+    );
+    await session.setDriverData(
+      newNames ?? widget.driverSession.mName,
+      newFName ?? widget.driverSession.pName,
+      newMName ?? widget.driverSession.mName,
+      newPhone ?? widget.driverSession.phone,
+      newEmail ?? widget.driverSession.email,
+      widget.driverSession.dni,
+      selectedGender,
+      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+      widget.driverSession.fechaRegistro,
+      photoUrl ?? widget.driverSession.imageUrl,
+      widget.driverSession.smsCode,
+      newAddress,
+      widget.driverSession.referencia,
+      widget.driverSession.metodosPago,
+      widget.driverSession.saldo
+    );
+    Navigator.pop(context, true);
   }
 
   @override
   void initState() {
     selectedGender = widget.driverSession.sexo;
-    print(widget.driverSession.fechaNacimiento);
+    newEmail = widget.driverSession.email;
+    newAddress = widget.driverSession.direccion;
     date = DateTime(
       int.parse(widget.driverSession.fechaNacimiento.split('-')[0]),
       int.parse(widget.driverSession.fechaNacimiento.split('-')[1]),
       int.parse(widget.driverSession.fechaNacimiento.split('-')[2].substring(0,2)),
     );
-    print(widget.driverSession.fechaNacimiento);
+    birthdaySelected = DateTimeExtension.dateFromString(widget.driverSession.fechaNacimiento);
     super.initState();
   }
 
@@ -225,31 +225,9 @@ class _MyProfileState extends State<MyProfile> {
                       borderRadius: BorderRadius.circular(50.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100.0),
-                        child: _image == null
-                          ? GestureDetector(
+                        child: GestureDetector(
+                          child: createUserPhoto(),
                           onTap: (){selectCamera();},
-                          child: Container(
-                            height: 80.0,
-                            width: 80.0,
-                            color: primaryColor,
-                            child: Hero(
-                              tag: 'avatar_profile',
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: CachedNetworkImageProvider(
-                                  'https://source.unsplash.com/300x300/?portrait',
-                                )
-                              ),
-                            ),
-                          )
-                        ): GestureDetector(
-                          onTap: () {selectCamera();},
-                          child: Container(
-                            height: 80.0,
-                            width: 80.0,
-                            child: Image.file(_image,fit: BoxFit.cover, height: 800.0,width: 80.0,),
-                          )
                         )
                       ),
                     ),
@@ -263,6 +241,7 @@ class _MyProfileState extends State<MyProfile> {
                           TextFormField(
                             initialValue: widget.driverSession.name,
                             style: textStyle,
+                            enabled: false,
                             decoration: InputDecoration(
                               fillColor: whiteColor,
                               labelStyle: textStyle,
@@ -279,6 +258,7 @@ class _MyProfileState extends State<MyProfile> {
                           ),
                           TextFormField(
                             style: textStyle,
+                            enabled: false,
                             initialValue: widget.driverSession.pName,
                             decoration: InputDecoration(
                               fillColor: whiteColor,
@@ -296,6 +276,7 @@ class _MyProfileState extends State<MyProfile> {
                           ),
                           TextFormField(
                             style: textStyle,
+                            enabled: false,
                             initialValue: widget.driverSession.mName,
                             decoration: InputDecoration(
                               fillColor: whiteColor,
@@ -342,6 +323,7 @@ class _MyProfileState extends State<MyProfile> {
                             child: TextFormField(
                               initialValue: widget.driverSession.phone,
                               style: textStyle,
+                              enabled: false,
                               keyboardType: TextInputType.phone,
                               decoration: InputDecoration(
                                 fillColor: whiteColor,
@@ -382,8 +364,6 @@ class _MyProfileState extends State<MyProfile> {
                               initialValue: widget.driverSession.email,
                               keyboardType: TextInputType.emailAddress,
                               style: textStyle,
-                              enabled: false,
-                              readOnly: true,
                               decoration: InputDecoration(
                                 fillColor: whiteColor,
                                 labelStyle: textStyle,
@@ -395,15 +375,15 @@ class _MyProfileState extends State<MyProfile> {
                                   )
                                 )
                               ),
-                              /* onChanged: (String _email) {
+                              onChanged: (String _email) {
                                 newEmail = _email;
-                              }, */
+                              },
                             ),
                           )
                         ],
                       ),
                     ),
-                    Container(
+                    /* Container(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
@@ -447,7 +427,7 @@ class _MyProfileState extends State<MyProfile> {
                           )
                         ],
                       ),
-                    ),
+                    ), */
                     Container(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -465,8 +445,8 @@ class _MyProfileState extends State<MyProfile> {
                           Expanded(
                             flex: 4,
                             child:  GestureDetector(
-                              onTap: () {
-                                showCupertinoModalPopup<void>(
+                              onTap: () async {
+                                /* showCupertinoModalPopup<void>(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return _buildBottomPicker(
@@ -481,10 +461,51 @@ class _MyProfileState extends State<MyProfile> {
                                       ),
                                     );
                                   },
-                                );
+                                ); */
+                                final selectedDate = await selectDate(context);
+                                if(selectedDate != null){
+                                  if(selectedDate.isAfter(DateTime.now())){
+                                    Dialogs.alert(context,title: 'Error', message: 'Seleccione una fecha anterior a la actual');
+                                  }else{
+                                    birthdaySelected = selectedDate;
+                                    setState(() {});
+                                  }
+                                }
                               },
                               child: InputDropdown(
-                                valueText: date.toString().substring(0, 10),
+                                valueText: DateTimeExtension.parseDateSpanishV2(birthdaySelected),
+                                valueStyle: TextStyle(color: blackColor),
+                              )
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Text(
+                                'Dirección',
+                                style: textStyle,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child:  GestureDetector(
+                              onTap: () async {
+                                final Place placeSelected = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectAddress()));
+                                if(placeSelected == null) return;
+                                newAddress = placeSelected.name;
+                                setState(() {});
+                              },
+                              child: InputDropdown(
+                                valueText: reduceAddressLength(newAddress),
                                 valueStyle: TextStyle(color: blackColor),
                               )
                             ),
@@ -517,5 +538,53 @@ class _MyProfileState extends State<MyProfile> {
         ),
       )
     );
+  }
+  String reduceAddressLength(String address){
+    if(address == null) return '';
+    if(address.length < 30) return address;
+    return address.substring(0, 30) + '...';
+  }
+  Future<DateTime> selectDate(BuildContext context) async {  
+    DateTime pickedDateTime = await showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), 
+      firstDate: DateTime(1900), 
+      lastDate: DateTime(2100),
+      locale: Locale('es','ES'),
+    );
+    return pickedDateTime;
+  }
+  Widget createUserPhoto(){
+    if(widget.driverSession.imageUrl.isEmpty || widget.driverSession.imageUrl == null){
+      if(_image == null){
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: AssetImage('assets/image/empty_user_photo.png')
+        );
+      }else{
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: FileImage(_image),
+        );
+      }
+    }else{
+      if(_image == null){
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: CachedNetworkImageProvider(
+             widget.driverSession.imageUrl,
+          )
+        );
+      }else{
+        return CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.transparent,
+          backgroundImage: FileImage(_image),
+        );
+      }
+    }
   }
 }
