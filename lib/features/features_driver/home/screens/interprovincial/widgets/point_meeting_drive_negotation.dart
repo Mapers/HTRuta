@@ -2,11 +2,15 @@ import 'package:HTRuta/app/widgets/poin_meeting_client_await.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/point_meeting_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/poin_meeting_drive.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/view_point_meeting_drive.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/injection_container.dart' as ij;
 
 class PointMeetingDriveNegotation extends StatefulWidget {
   final InterprovincialRequestEntity interprovincialRequest;
@@ -55,7 +59,7 @@ class _PointMeetingDriveState extends State<PointMeetingDriveNegotation> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PointMeetingClient(geoPoint: changePointMeeting ? geoPointMeeting : widget.interprovincialRequest.pointMeeting,icon: Icons.location_on,),
+        PointMeetingDrive(geoPoint: widget.interprovincialRequest.pointMeeting,icon: Icons.location_on,),
         ElevatedButton(
           child: Text('Cambiar punto de encuentro'),
           onPressed: (){

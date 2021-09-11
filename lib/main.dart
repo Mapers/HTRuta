@@ -15,6 +15,7 @@ import 'package:HTRuta/features/feature_client/home/screens/interprovincial_clie
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/point_meeting_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -119,6 +120,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<AvailablesRoutesBloc>(create: (_) => ij.getIt<AvailablesRoutesBloc>()),
           BlocProvider<CommentsDriveBloc>(create: (_) => ij.getIt<CommentsDriveBloc>()),
           BlocProvider<MeetingDriveAndPassengerBloc>(create: (_) => ij.getIt<MeetingDriveAndPassengerBloc>()),
+          BlocProvider<PointMeetingDriveBloc>(create: (_) => ij.getIt<PointMeetingDriveBloc>()),
+          
         ],
         child: MaterialApp(
           title: 'Taxi App',

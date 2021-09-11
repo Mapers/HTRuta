@@ -3,7 +3,9 @@ import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/point_meeting_drive_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 class ViewPointMeetingDrive extends StatefulWidget {
@@ -151,7 +153,7 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
                     child: IconButton(
                       icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
                       onPressed: (){
-                        widget.getnewPointMeeting(locationWhereAbout);
+                        BlocProvider.of<PointMeetingDriveBloc>(context).add(EditPointMeetingDriveEvent( pointMeeting: locationWhereAbout));
                         Navigator.of(context).pop();
                       },
                     ),
