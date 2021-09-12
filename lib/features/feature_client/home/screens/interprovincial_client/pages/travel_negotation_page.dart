@@ -237,10 +237,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     );
   }
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId} ){
-    print('###################');
-    print(request.pointMeeting.latitude);
-    print(request.pointMeeting.longitude);
-    print('###################');
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
         return Center(

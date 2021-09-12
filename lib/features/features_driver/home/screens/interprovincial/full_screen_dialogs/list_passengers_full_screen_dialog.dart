@@ -70,6 +70,7 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
@@ -99,50 +100,53 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
               ],
             ),
             SizedBox(height: 5),
-            Row(
-              children: [
-                Icon(Icons.trip_origin),
-                SizedBox(width: 5),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(passenger.currentLocation?.streetName ?? 'Sin mapear', style: TextStyle(fontSize: 13)),
-                      Text(passenger.currentLocation?.addressAdministrative ?? 'Esperando información...', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
-                      // Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
-                    ],
-                  ),
-                ),
-              ],
+            // Row(
+            //   children: [
+            //     Icon(Icons.trip_origin),
+            //     SizedBox(width: 5),
+            //     Expanded(
+            //       flex: 2,
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Text(passenger.currentLocation?.streetName ?? 'Sin mapear', style: TextStyle(fontSize: 13)),
+            //           Text(passenger.currentLocation?.addressAdministrative ?? 'Esperando información...', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+            //         ],
+            //       ),
+            //     ),
+            //     Expanded(
+            //       flex: 1,
+            //       child: Column(
+            //         children: [
+            //           // Text(passenger.distanceInMinutes.toTimeString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+              child: Text(passenger.distanceInMeters.toDistanceString(), style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: Colors.black54)),
             ),
             CardInformationLocation(location: passenger.currentLocation,icon: Icons.trip_origin, iconColor: Colors.amber,),
             SizedBox(height: 5),
-                CardInformationLocation(location: passenger.toLocation,icon: Icons.location_on,iconColor: Colors.red,),
+            CardInformationLocation(location: passenger.toLocation,icon: Icons.location_on,iconColor: Colors.red,),
             SizedBox(height: 5),
-            Row(
-              children: [
-                Icon(Icons.person_pin_circle_outlined, color: Colors.black45),
-                SizedBox(width: 5),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
-                      Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
-                    ],
-                  ),
-                )
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Icon(Icons.person_pin_circle_outlined, color: Colors.black45),
+            //     SizedBox(width: 5),
+            //     Expanded(
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Text(passenger.toLocation.streetName, style: TextStyle(fontSize: 13)),
+            //           Text(passenger.toLocation.addressAdministrative, style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54, fontSize: 12)),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
             SizedBox(height: 5),
             Row(
               children: [

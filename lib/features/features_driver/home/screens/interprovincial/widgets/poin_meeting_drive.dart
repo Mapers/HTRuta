@@ -28,7 +28,6 @@ class _PointMeetingDriveState extends State<PointMeetingDrive> {
         } while (placemarks == null || placemarks.isEmpty);
         Placemark newPosition = placemarks.first ;
         pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
-        
         BlocProvider.of<PointMeetingDriveBloc>(context).add(AddPointMeetingDriveEvent( pointMeeting: pointMeeting));
     });
     super.initState();
