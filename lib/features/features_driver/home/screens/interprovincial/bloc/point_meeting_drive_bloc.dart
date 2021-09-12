@@ -16,6 +16,7 @@ class PointMeetingDriveBloc extends Bloc<PointMeetingDriveEvent, PointMeetingDri
     PointMeetingDriveEvent event,
   ) async* {
     if(event is AddPointMeetingDriveEvent){
+      yield PointMeetingDriveInitial();
       yield DataPointMeetingDriveSatete(pointMeeting:event.pointMeeting );
     }else if(event is EditPointMeetingDriveEvent){
       yield PointMeetingDriveInitial();

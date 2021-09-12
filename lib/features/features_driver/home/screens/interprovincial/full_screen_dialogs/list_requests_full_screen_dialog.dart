@@ -7,8 +7,10 @@ import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial
 import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial_data_remote.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_request_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/point_meeting_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/widgets/point_meeting_drive_negotation.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -225,8 +227,10 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               }
               Navigator.of(ctx).pop();
               _loadingFullScreen.show(context, label: 'Enviando contraoferta...');
+              DataPointMeetingDriveSatete param = BlocProvider.of<PointMeetingDriveBloc>(context).state;
+              GeoPoint newPointMeetingp = GeoPoint( param.pointMeeting.latLang.latitude, param.pointMeeting.latLang.longitude);
               await Future.wait([
-                interprovincialDataDriverFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice),
+                interprovincialDataDriverFirestore.sendCounterOfferInRequest(documentId: widget.documentId, request: interprovincialRequest, newPrice: newPrice,newPointMeetingp: newPointMeetingp ),
                 interprovincialDriverDataRemote.sendCounterOffertInRequest(cost: newPrice, passengerId: interprovincialRequest.passengerId, serviceId: widget.serviceId)
               ]);
               _loadingFullScreen.close();

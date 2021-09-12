@@ -157,12 +157,13 @@ class InterprovincialDataDriverFirestore{
     }
   }
 
-  Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice}) async{
+  Future<bool> sendCounterOfferInRequest({@required String documentId, @required InterprovincialRequestEntity request, @required double newPrice, @required GeoPoint newPointMeetingp}) async{
     try {
       DocumentReference dr = firestore.collection('interprovincial_in_service').doc(documentId);
       await dr.collection('requests').doc(request.documentId).update({
         'condition': getStringInterprovincialRequestCondition(InterprovincialRequestCondition.counterOffer),
-        'price': newPrice
+        'price': newPrice,
+        'pointMeeting': newPointMeetingp
       });
       pushMessage.sendPushMessage(
         token: request.passengerFcmToken, // Token del dispositivo del chofer
