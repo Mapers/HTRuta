@@ -234,6 +234,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
                 interprovincialDriverDataRemote.sendCounterOffertInRequest(cost: newPrice, passengerId: interprovincialRequest.passengerId, serviceId: widget.serviceId)
               ]);
               _loadingFullScreen.close();
+              setState(() {});
             },
           )
         ],

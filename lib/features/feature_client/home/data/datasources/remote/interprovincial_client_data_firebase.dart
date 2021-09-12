@@ -85,14 +85,11 @@ class InterprovincialClientDataFirebase {
     return ds.exists;
   }
 
-  Future<bool> seePassengerStatus({@required String documentId, @required String passengerDocumentId}) async{
+  Future<PassengerEntity> seePassengerStatus({@required String documentId, @required String passengerDocumentId}) async{
     DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
     PassengerEntity passengerEntity = PassengerEntity.fromDocumentSnapshot( dsp);
-
-    if( passengerEntity.status ==  PassengerStatus.deleted){
-      return true;
-    }
-    return false;
+    return passengerEntity;
+    
   }
 
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{

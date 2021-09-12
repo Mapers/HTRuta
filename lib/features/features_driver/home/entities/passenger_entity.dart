@@ -67,7 +67,8 @@ class PassengerEntity extends Equatable {
         streetName: dataJson['to_street_name'],
         latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
       ),
-      status: getPassengerStatusFromString(dataJson['status'])
+      status: getPassengerStatusFromString(dataJson['status']),
+      pointMeeting: dataJson['pointMeeting'],
     );
   }
 

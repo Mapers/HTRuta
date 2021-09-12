@@ -10,6 +10,7 @@ import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/feature_client/home/data/datasources/remote/interprovincial_client_data_firebase.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
+import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
             nameMarkerId: 'DRIVE_POSITION_MARKER',
             icon: result[2],
             onTap: (){
+              print('object');
               //! Ver info del conductor
             }
           );
@@ -104,8 +106,14 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
     _markers[markerPassenger.markerId] = markerPassenger;
     double distanceInMeters = LocationUtil.calculateDistanceInMeters(currenActual.latLang, _driverLocation.latLang);
     interprovincialClientDataFirebase.updateCurrentPosition(documentId: widget.documentId, passengerPosition: currenActual, passengerDocumentId: widget.passengerDocumentId, distanceInMeters: distanceInMeters, passengerPhone: widget.passengerPhone);
-    bool passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
-    if(passengerStatus){
+    PassengerEntity passengerStatus = await interprovincialClientDataFirebase.seePassengerStatus(documentId: widget.documentId, passengerDocumentId: widget.passengerDocumentId);
+    Marker pointMeeting = MapViewerUtil.generateMarker(
+      latLng: LatLng(passengerStatus.pointMeeting.latitude , passengerStatus.pointMeeting.longitude),
+      nameMarkerId: 'POINT_MEETING_MARKER',
+      icon: currentPinLocationIcon
+    );
+    _markers[pointMeeting.markerId] = pointMeeting;
+    if(passengerStatus.status ==  PassengerStatus.deleted){
       Navigator.of(context).pushAndRemoveUntil(Routes.toQualificationClientPage(  documentId:widget.documentId ,passengerId:widget.passengerDocumentId ,availablesRoutesEntity: widget.availablesRoutesEntity ) , (_) => false);
     }
   }
