@@ -20,6 +20,10 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
   void initState() {
     pointMeeting = LocationEntity.initialWithLocation(latitude: widget.geoPoint.latitude , longitude: widget.geoPoint.longitude );
     List<Placemark> placemarks;
+    print('..................');
+    print(widget.geoPoint.latitude);
+    print(widget.geoPoint.longitude);
+    print('..................');
     WidgetsBinding.instance.addPostFrameCallback((_) async {
         do {
           placemarks = await placemarkFromCoordinates(widget.geoPoint.latitude, widget.geoPoint.longitude);
@@ -28,6 +32,10 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
         pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
         setState(() {
         });
+        print('###################');
+        print('Entre perro');
+        print(pointMeeting.toMap );
+        print('###################');
     });
     super.initState();
   }

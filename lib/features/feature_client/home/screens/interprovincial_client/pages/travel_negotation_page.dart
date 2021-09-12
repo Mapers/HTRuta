@@ -237,6 +237,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     );
   }
   Widget contitional({InterprovincialClientDataFirebase interprovincialClientDataFirebase, InterprovincialRequestEntity request, String documentId} ){
+    print('###################');
+    print(request.pointMeeting.latitude);
+    print(request.pointMeeting.longitude);
+    print('###################');
     switch (request.condition) {
       case InterprovincialRequestCondition.rejected:
         return Center(
@@ -298,6 +302,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       case InterprovincialRequestCondition.counterOffer:
           return Column(
             children: [
+              PointMeetingClient(geoPoint: request.pointMeeting),
+              SizedBox(height: 10,),
               Text('S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10,),
               Row(
