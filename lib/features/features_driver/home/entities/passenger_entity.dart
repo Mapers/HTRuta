@@ -18,6 +18,7 @@ class PassengerEntity extends Equatable {
   final int distanceInMinutes;
   final double distanceInMeters;
   final PassengerStatus status;
+  final GeoPoint pointMeeting;
 
   PassengerEntity({
     @required this.id,
@@ -32,7 +33,8 @@ class PassengerEntity extends Equatable {
     @required this.distanceInMeters,
     @required this.status,
     @required this.cellPhone,
-    this.currentLocation
+    this.currentLocation,
+    this.pointMeeting
   });
 
   factory PassengerEntity.fromJsonFirestore(Map<String, dynamic> dataJson){
@@ -65,7 +67,8 @@ class PassengerEntity extends Equatable {
         streetName: dataJson['to_street_name'],
         latLang: LatLng(dataJson['to_location'].latitude, dataJson['to_location'].longitude)
       ),
-      status: getPassengerStatusFromString(dataJson['status'])
+      status: getPassengerStatusFromString(dataJson['status']),
+      pointMeeting: dataJson['pointMeeting'],
     );
   }
 
@@ -125,7 +128,8 @@ class PassengerEntity extends Equatable {
       'to_province_name': toLocation.provinceName,
       'to_region_name': toLocation.regionName,
       'to_street_name': toLocation.streetName,
-      'status': getPassengerStatusFromEnum(status)
+      'status': getPassengerStatusFromEnum(status),
+      'pointMeeting':pointMeeting
     };
     if(currentLocation != null){
       struct['current_location'] = GeoPoint(currentLocation.latLang.latitude, currentLocation.latLang.longitude);
@@ -142,7 +146,7 @@ class PassengerEntity extends Equatable {
     return toLocation.streetName + ' - ' + toLocation.districtName + ' - ' + toLocation.provinceName + ' - ' + toLocation.regionName;
   }
 
-  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters, PassengerStatus status}){
+  PassengerEntity copyWith({ String id, String documentId, String fullNames, LocationEntity currentLocation, LocationEntity toLocation, String fcmToken, int seats, double price, String urlImage, String distanceInMinutes, String distanceInMeters, PassengerStatus status, GeoPoint pointMeeting}){
     return PassengerEntity(
       id: id ?? this.id,
       documentId: documentId ?? this.documentId,
@@ -155,7 +159,8 @@ class PassengerEntity extends Equatable {
       urlImage: urlImage ?? this.urlImage,
       distanceInMinutes: distanceInMinutes ?? this.distanceInMinutes,
       distanceInMeters: distanceInMeters ?? this.distanceInMeters,
-      status: status ?? this.status
+      status: status ?? this.status,
+      pointMeeting: pointMeeting ?? this.pointMeeting
     );
   }
 

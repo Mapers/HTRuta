@@ -22,7 +22,7 @@ class InterprovincialDataFirestore{
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(snapshotService.data());
 
       PassengerEntity passenger = await serviceDataRemote.getPassengerById(interprovincialLocationDriver.serviceId, request.passengerId, request.passengerFcmToken);
-      passenger = passenger.copyWith(price: request.price, status: PassengerStatus.actived, seats: request.seats);
+      passenger = passenger.copyWith(price: request.price, status: PassengerStatus.actived, seats: request.seats,pointMeeting: request.pointMeeting );
 
       DocumentReference drPassenger = await refService.collection('passengers').add(passenger.toFirestore);
       passenger = passenger.copyWith(documentId: drPassenger.id);

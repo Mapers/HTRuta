@@ -1,4 +1,8 @@
+import 'package:HTRuta/entities/location_entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 class InterprovincialRequestEntity extends Equatable {
@@ -10,6 +14,7 @@ class InterprovincialRequestEntity extends Equatable {
   final int seats;
   final double price;
   final InterprovincialRequestCondition condition;
+  final GeoPoint pointMeeting;
   final String passengerFcmToken;
 
   InterprovincialRequestEntity({
@@ -22,6 +27,7 @@ class InterprovincialRequestEntity extends Equatable {
     @required this.to,
     @required this.condition,
     @required this.passengerFcmToken,
+    @required this.pointMeeting,
   });
 
   factory InterprovincialRequestEntity.fromJsonLocal(Map<String, dynamic> dataJson){
@@ -34,7 +40,8 @@ class InterprovincialRequestEntity extends Equatable {
       from: dataJson['from'],
       to: dataJson['to'],
       condition: getInterprovincialRequestConditionFromString(dataJson['condition']),
-      passengerFcmToken: dataJson['passenger_fcm_token']
+      passengerFcmToken: dataJson['passenger_fcm_token'],
+      pointMeeting: dataJson['pointMeeting']
     );
   }
 
@@ -46,7 +53,8 @@ class InterprovincialRequestEntity extends Equatable {
     'passenger_id': passengerId,
     'price': price,
     'condition': getStringInterprovincialRequestCondition(condition),
-    'passenger_fcm_token': passengerFcmToken
+    'passenger_fcm_token': passengerFcmToken,
+    'pointMeeting': pointMeeting
   };
 
   factory InterprovincialRequestEntity.mock(){
@@ -59,11 +67,12 @@ class InterprovincialRequestEntity extends Equatable {
       seats: 12,
       price: 55.99,
       condition: InterprovincialRequestCondition.offer,
-      passengerFcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL'
+      passengerFcmToken: 'dr3TmNBFSxixWmx5vc2p_Z:APA91bFTY9z3Bp442nsWKlaeaeKaq4TsjKc6XlnBUeqWrUnNY7ZvTazP4Fx3Jvj5MRsdkZiMoE7a3dJKv-yYq_9hx6_8qmT8ryWB0kJ5FnRAzjdKPDHp93ysfkqOcQ4SuCp98m14aiiL',
+      // pointMeeting: pointMeeting
     );
   }
 
-  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, int passengerId, double price, InterprovincialRequestCondition condition, String passengerFcmToken}){
+  InterprovincialRequestEntity copyWith({String fullNames, String from, String to, int seats, int passengerId, double price, InterprovincialRequestCondition condition, String passengerFcmToken,GeoPoint pointMeeting}){
     return InterprovincialRequestEntity(
       documentId: documentId,
       passengerId: passengerId ?? this.passengerId,
@@ -74,6 +83,7 @@ class InterprovincialRequestEntity extends Equatable {
       to: to ?? this.to,
       condition: condition ?? this.condition,
       passengerFcmToken: passengerFcmToken ?? this.passengerFcmToken,
+      pointMeeting: pointMeeting ?? this.pointMeeting
     );
   }
 

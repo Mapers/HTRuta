@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
@@ -56,6 +58,16 @@ class LocationEntity extends Equatable {
       zoom: 14
     );
   }
+  factory LocationEntity.fillIn({@required Placemark placemark,@required LatLng latLng }){
+    return LocationEntity(
+      latLang: latLng,
+      streetName: placemark.thoroughfare ,
+      districtName: placemark.locality ,
+      provinceName: placemark.subAdministrativeArea ,
+      regionName: placemark.administrativeArea ,
+      zoom: 14
+    );
+  }
 
   LocationEntity copyWith({LatLng latLang, double zoom, String streetName, String districtName, String provinceName, String regionName}){
     return LocationEntity(
@@ -72,6 +84,7 @@ class LocationEntity extends Equatable {
     provinceName: provinceName?.replaceAll('Provincia de ', ''),
     regionName: provinceName?.replaceAll('Gobierno Regional de ', '')
   );
+
 
   Map<String, dynamic> get toMap => {
     'district_name': districtName,

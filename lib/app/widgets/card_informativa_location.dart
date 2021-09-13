@@ -20,14 +20,16 @@ class CardInformationLocation extends StatelessWidget {
           children: [
             Icon(icon, color: iconColor),
             SizedBox(width: 5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LocationComplement(title: 'Región: ',subTitle: location.regionName,),
-                LocationComplement(title: 'Provincia: ',subTitle: location.provinceName,),
-                LocationComplement(title: 'Distrito: ',subTitle: location.districtName,),
-                LocationComplement(title: 'Calle: ',subTitle: location.streetName,),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LocationComplement(title: 'Región: ',subTitle: location.regionName,),
+                  LocationComplement(title: 'Provincia: ',subTitle: location.provinceName,),
+                  LocationComplement(title: 'Distrito: ',subTitle: location.districtName,),
+                  LocationComplement(title: 'Calle: ',subTitle: location.streetName,),
+                ],
+              ),
             )
           ],
         ),
@@ -46,9 +48,11 @@ class LocationComplement extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold)),
-        Container(
-          width: 200,
-          child: Text(subTitle, style: TextStyle(color: Colors.black87, fontSize: 14))
+        Expanded(
+          child: Container(
+            width: 200,
+            child: Text(subTitle, style: TextStyle(color: Colors.black87, fontSize: 14))
+          ),
         ),
       ],
     );

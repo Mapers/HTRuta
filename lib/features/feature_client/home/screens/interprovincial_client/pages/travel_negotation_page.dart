@@ -1,4 +1,4 @@
-import 'package:HTRuta/app/widgets/metting_drive_and_passenger.dart';
+import 'package:HTRuta/app/widgets/poin_meeting_client_await.dart';
 import 'package:HTRuta/features/feature_client/home/entities/meetin_drive_and_passenger_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/meeting_drive_and_passenger_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/information_drive_negotation.dart';
@@ -15,6 +15,7 @@ import 'package:HTRuta/features/feature_client/home/entities/negotiation_entity.
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
@@ -99,11 +100,11 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
+                InformationDriveNegotation(availablesRoutesEntity: widget.availablesRoutesEntity ,),
                 StreamBuilder<List<InterprovincialRequestEntity>>(
                   stream: interprovincialClientDataFirebase.getStreamContraoferta(documentId: widget.availablesRoutesEntity.documentId),
                   builder: (ctx, asyncSnapshot){
                     if(asyncSnapshot.connectionState == ConnectionState.active){
-                      print( asyncSnapshot.data );
                       List<InterprovincialRequestEntity>  ds = asyncSnapshot.data;
                       for (InterprovincialRequestEntity item in ds) {
                         if(item.passengerFcmToken ==  _prefs.tokenPush){
@@ -116,7 +117,6 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                InformationDriveNegotation(availablesRoutesEntity: widget.availablesRoutesEntity ,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -147,6 +147,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: TextFormField(
+                                            keyboardType: TextInputType.number,
                                             onSaved: (val)=> amount = val,
                                             controller: amountController,
                                             decoration: InputDecoration(
@@ -174,6 +175,13 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                     final user = await _session.get();
                                     LocationEntity from = await LocationUtil.currentLocation();
                                     DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+                                    DataMeetingDriveAndPassengerState paramPointMetting = BlocProvider.of<MeetingDriveAndPassengerBloc>(context).state;
+                                    LocationEntity poinMeeting;
+                                    for (MeetingDriveAndPassengerEntity item in paramPointMetting.meetingPoints) {
+                                      if(item.isSelect){
+                                        poinMeeting = item.pointMeeting;
+                                      }
+                                    }
                                     InterprovincialRequestEntity interprovincialRequest = InterprovincialRequestEntity(
                                       condition: InterprovincialRequestCondition.offer,
                                       documentId: null,
@@ -183,7 +191,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                       passengerId: user.id,
                                       fullNames: user.fullNames,
                                       price: double.parse(amount),
-                                      seats: param.requiredSeats
+                                      seats: param.requiredSeats,
+                                      pointMeeting: GeoPoint(poinMeeting.latLang.latitude, poinMeeting.latLang.longitude)
                                     );
                                     String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
                                     NegotiationEntity negotiation = NegotiationEntity(
@@ -258,6 +267,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
           return Center(
             child: Column(
               children: [
+                PointMeetingClient(geoPoint: request.pointMeeting),
+                SizedBox(height: 10,),
                 Text('S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
                 SizedBox(height: 10,),
                 Text('Esperado respuesta del interprovicial', style: TextStyle( fontWeight: FontWeight.bold,color:Colors.grey ),),
@@ -287,6 +298,8 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       case InterprovincialRequestCondition.counterOffer:
           return Column(
             children: [
+              PointMeetingClient(geoPoint: request.pointMeeting),
+              SizedBox(height: 10,),
               Text('S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10,),
               Row(
