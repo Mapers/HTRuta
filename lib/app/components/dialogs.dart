@@ -128,6 +128,29 @@ class Dialogs{
       },
     );
   }
+  static void openPrompDialog({BuildContext context, VoidCallback onCancel, VoidCallback onClose}) {
+    final responsive = Responsive(context);
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: ListTile(
+            leading: CircularProgressIndicator(),
+            title: Text('Esperando\nconfirmación',style: TextStyle(fontSize: responsive.ip(1.6)),),
+          ),
+          actions: [
+            TextButton(
+              onPressed: onCancel,
+              child: Text('Cancelar')
+            )
+          ],
+        );
+      },
+    ).whenComplete(() => {
+      onClose()
+    });
+  }
 
   static void openLoadingDialogWithText(BuildContext context,String message) {
     final responsive = Responsive(context);

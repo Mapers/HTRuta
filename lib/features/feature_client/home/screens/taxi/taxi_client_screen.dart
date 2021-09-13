@@ -49,15 +49,11 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   var _scaffoldKey =  GlobalKey<ScaffoldState>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   DriverFirestoreService driverFirestoreService = DriverFirestoreService();
-
   CircleId selectedCircle;
-  int _markerIdCounter = 0;
-  BitmapDescriptor _markerIcon;
   GoogleMapController _mapController;
   BitmapDescriptor markerIcon;
   String _placemark = '';
   GoogleMapController mapController;
-  CameraPosition _position;
   bool checkPlatform = Platform.isIOS;
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
@@ -680,6 +676,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
                         toAddress: widget?.placeBloc?.locationSelect,
                         unidad: distanceOptionSelected['unidad'],
                         distancia: distanceOptionSelected['distancia'],
+                        currentLocation: currentLocation,
                         onTapFrom: () async {
                           final bool ready = await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SearchAddressScreen(

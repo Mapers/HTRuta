@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:HTRuta/models/minutes_response.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -38,7 +39,8 @@ import 'package:HTRuta/app/navigation/routes.dart';
 
 class DirectionsView extends StatefulWidget {
   final ClientTaxiPlaceBloc placeBloc;
-  DirectionsView({this.placeBloc});
+  List<String> tokensEnviados;
+  DirectionsView({this.placeBloc, this.tokensEnviados});
 
   @override
   _DirectionsViewState createState() => _DirectionsViewState();
@@ -72,35 +74,15 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   final pickUpApi = PickupApi();
   List<DriverRequest> requestTaxi = [];
   List<Map> driversData = [];
+  List<String> tokensRechazados = [];
+  List<String> tokensCancelados = [];
   PushNotificationProvider pushProvider;
   PedidoProvider pedidoProvider;
-  bool nightMode = false;
   Position currentLocation;
-  
-
-  Future<String> _getFileData(String path) async {
-    return await rootBundle.loadString(path);
-  }
-  void _setMapStyle(String mapStyle) {
-    setState(() {
-      nightMode = true;
-      _mapController.setMapStyle(mapStyle);
-    });
-  }
-  void changeMapType(int id, String fileName){
-    if (fileName == null) {
-      setState(() {
-        nightMode = false;
-        _mapController.setMapStyle(null);
-      });
-    } else {
-      _getFileData(fileName)?.then(_setMapStyle);
-    }
-  }
   
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-    changeMapType(3, 'assets/style/dark_mode.json');
+    _mapController.setMapStyle(null);
   }
   @override
   void dispose() {
@@ -111,7 +93,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      _mapController.setMapStyle('[]');
+      _mapController.setMapStyle(null);
     }
   }
   @override
@@ -123,12 +105,14 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       String newOffer = data['newOffer'] ?? '0';
       String newReffuse = data['newReffuse'] ?? '0';
       String idChofer = data['idChofer'] ?? '0';
+      String token = data['token'] ?? '0';
       if (!mounted) return;
       if(newOffer == '1'){
         _prefs.setNotificacionUsuario = 'Solicitudes,Tiene una nueva oferta de conductor';
         await loadOffers();
       }
       if(newReffuse == '1'){
+        tokensCancelados.add(token);
         _prefs.setNotificacionUsuario = 'Solicitudes,El conductor canceló su solicitud';
         await pickUpApi.cancelTravelUser(pedidoProvider.idSolicitud, idChofer);
         await loadOffers();
@@ -187,7 +171,6 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
       markerId: markerIdTo,
       position: LatLng(widget?.placeBloc?.locationSelect?.lat, widget?.placeBloc?.locationSelect?.lng),
       infoWindow: InfoWindow(title: widget?.placeBloc?.locationSelect?.name, snippet: widget?.placeBloc?.locationSelect?.formattedAddress),
-      // ignore: deprecated_member_use
       // ignore: deprecated_member_use
       icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png'),
       onTap: () {
@@ -274,11 +257,12 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
         buildContent(context),
         Positioned(
           top: responsive.hp(15),
-          left: responsive.wp(17),
           child: Container(
-            color: Colors.grey.withOpacity(0.05),
-            child: Text('Ofreciendo su tarifa, espere', style: TextStyle(fontSize: responsive.ip(2.2),fontWeight: FontWeight.w600, color: Colors.white))
-            )
+            width: responsive.wp(100),
+            padding: EdgeInsets.symmetric(vertical: responsive.hp(5)),
+            color: Colors.black.withOpacity(0.4),
+            child: Center(child: Text('Ofreciendo su tarifa, espere', style: TextStyle(fontSize: responsive.ip(2.2),fontWeight: FontWeight.w600, color: Colors.white)))
+          )
         ),
         Positioned(
           top: responsive.hp(25),
@@ -309,7 +293,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                         data = element;
                       }
                     });
-                    // final GeoPoint driverLocation = driversData[index]['posicion'];
+                    final GeoPoint driverLocation = driversData[index]['posicion'];
                     return Card(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -353,7 +337,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                   ],
                                 ),
                                 Spacer(),
-                                /* Column(
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                     Text('S/${double.parse(actualRequest.mPrecio)}',style: TextStyle(fontSize: responsive.ip(3))),
@@ -397,7 +381,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                     ),
                                     // Text('3 min.',style: TextStyle(fontSize: responsive.ip(2))),
                                   ],
-                                ) */
+                                )
                               ],
                             ),
                             Row(
@@ -423,6 +407,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                             Map<String, String> data = {
                                               'newCancelSol' : '1',
                                             };
+                                            tokensRechazados.add(actualRequest.token);
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Negación', description: 'El usuario rechazó su oferta', data: data);
                                             setState(() {
                                               isLoading = false;
@@ -455,6 +440,8 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               isLoading = true;
                                             });
                                             await pickUpApi.prepareTravel(pedidoProvider.idSolicitud);
+                                            final dataRechazados = driversData.where((element) => element['id'] != actualRequest.idChofer).toList();
+                                            final List<String> tokenRechazados = List<String>.from(dataRechazados.map((e) => e['fcm_token']).toList());
                                             String idViaje = await pickUpApi.acceptDriverRequest(pedidoProvider.idSolicitud, actualRequest.idChofer);
                                             if(idViaje == null){
                                               Dialogs.alert(context, title: 'Error', message: 'No se pudo aceptar la solicitud');
@@ -466,7 +453,13 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               'newConfirm' : '1',
                                               'idSolicitud': pedidoProvider.idSolicitud,
                                             };
+                                            Map<String, String> dataRefuse = {
+                                              'newCancelSol' : '1',
+                                            };
                                             pushMessage.sendPushMessage(token: actualRequest.token, title: 'Confirmación', description: 'El usuario aceptó su oferta', data: data);
+                                            if(tokenRechazados.isNotEmpty){
+                                              pushMessage.sendPushMessageBroad(tokens: tokenRechazados, title: 'Negación', description: 'El usuario rechazó su oferta', data: dataRefuse);
+                                            }
                                             setState(() {
                                               isLoading = false;
                                             });
@@ -521,12 +514,12 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                           Map<String, String> data = {
                             'newCancelSol' : '1',
                           };
-                          DriverFirestoreService driverFirestoreService = DriverFirestoreService();
-                          List<String> tokens = await driverFirestoreService.getDrivers();
-                          pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                          List<String> listaTokensTemp = List<String>.from(widget.tokensEnviados.where((element) => !tokensRechazados.contains(element)).toList()); 
+                          List<String> listaTokensFinal = List<String>.from(listaTokensTemp.where((element) => !tokensCancelados.contains(element)).toList()); 
+                          if(listaTokensFinal.isNotEmpty){
+                            pushMessage.sendPushMessageBroad(tokens: listaTokensFinal, title: 'Cancelación', description: 'El usuario ha cancelado el viaje', data: data);
+                          }
                           Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
-                          // BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
-                          // Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(serviceInCourse: serviceInCourse), (_) => false);
                         }else{
                           Navigator.pop(context);
                           Dialogs.alert(context,title: 'Error', message: 'No se pudo cancelar su viaje, vuelva intentarlo');

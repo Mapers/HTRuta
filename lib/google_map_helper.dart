@@ -156,4 +156,14 @@ class GMapViewHelper {
       ),
     );
   }
+  void cameraMoveToMyLocation({@required GoogleMapController mapController, LatLng location}){
+    mapController?.animateCamera(
+      CameraUpdate?.newCameraPosition(
+        CameraPosition(
+          target: location,
+          zoom: 17.0,
+        ),
+      ),
+    );
+  }
 }

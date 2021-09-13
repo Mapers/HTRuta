@@ -13,10 +13,10 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/request_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Repository/driver_firestore_service.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 
 class SelectAddress extends StatefulWidget {
   final Place fromAddress,toAddress;
@@ -25,6 +25,7 @@ class SelectAddress extends StatefulWidget {
   final VoidCallback onTapTo;
   final int distancia;
   final String unidad;
+  final Position currentLocation;
   SelectAddress({
     this.fromAddress,
     this.toAddress,
@@ -32,7 +33,8 @@ class SelectAddress extends StatefulWidget {
     this.onTapFrom,
     this.onTapTo,
     this.distancia,
-    this.unidad
+    this.unidad,
+    this.currentLocation
   });
 
   @override
@@ -260,7 +262,13 @@ class _SelectAddressState extends State<SelectAddress> {
                       };
                       _prefs.setNotificacionUsuario = 'Solicitudes,Ha realizado una nueva solicitud';
                       DriverFirestoreService driverFirestoreService = DriverFirestoreService();
-                      List<String> tokens = await driverFirestoreService.getDrivers();
+                      double targetDistance = 0;
+                      if(widget.unidad == 'M'){
+                        targetDistance = widget.distancia.toDouble();
+                      }else{
+                        targetDistance = widget.distancia * 1000.0;
+                      }
+                      List<String> tokens = await driverFirestoreService.getDriversFiltered(widget.currentLocation, targetDistance);
                       pushMessage.sendPushMessageBroad(tokens: tokens, title: 'Solicitud de viaje', description: 'Nueva o actualización de solicitud', data: data, displayNotification: false);
                       Navigator.pop(context);
                       if(viaje.success){
@@ -268,7 +276,9 @@ class _SelectAddressState extends State<SelectAddress> {
                         pedidoProvider.request = RequestModel(id: viaje.data[0].idSolicitud,iIdUsuario: dataUsuario.id,dFecReg: '',iTipoViaje: '1',mPrecio: precio,vchDni: dataUsuario.dni,vchCelular: dataUsuario.cellphone,vchCorreo: dataUsuario.email,vchLatInicial: widget.fromAddress.lat.toString(),vchLatFinal: widget.toAddress.lat.toString(),vchLongInicial: widget.fromAddress.lng.toString(),vchLongFinal: widget.toAddress.lng.toString(),vchNombreInicial: widget.fromAddress.name.toString(),vchNombreFinal: widget.toAddress.name.toString(),vchNombres: '${dataUsuario.names} ${dataUsuario.lastNameFather} ${dataUsuario.lastNameMother}');
                         pedidoProvider.precio = double.parse(precio);
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => DirectionScreen())
+                          builder: (context) => DirectionScreen(
+                            tokens
+                          ))
                         );
                       }
                     }else{

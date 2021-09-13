@@ -226,6 +226,7 @@ class _MenuDriverScreensState extends State<MenuDriverScreens> {
                             onTap: () async{
                               final _prefs = UserPreferences();
                               await _session.clear();
+                              _prefs.setDrivingState = false;
                               driverFirestoreService.updateDriverAvalability(false, _prefs.idChofer);
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'login');
@@ -250,6 +251,9 @@ class _MenuDriverScreensState extends State<MenuDriverScreens> {
           SizedBox(height: 20.0,),
           FlatButton(
             onPressed: (){
+              final _prefs = UserPreferences();
+              _prefs.setDrivingState = false;
+              driverFirestoreService.updateDriverAvalability(false, _prefs.idChofer);
               Navigator.pop(context);
               Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
             },

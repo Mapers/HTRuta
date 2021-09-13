@@ -56,7 +56,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
   @override
   Widget build(BuildContext context) {
     widthDropdown = MediaQuery.of(context).size.width * 0.6;
-    if(paymentMethods == null){
+    if(paymentMethods == null || savedPaymentMethods == null){
       return Container();
     }
     List<String> paymentsLocally = _prefs.getClientPaymentMethods;

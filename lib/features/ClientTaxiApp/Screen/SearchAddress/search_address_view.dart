@@ -179,7 +179,7 @@ class _SearchAddressViewState extends State<SearchAddressView> {
                   Navigator.pop(context, true);
                 }
               },
-              color: (widget.placeBloc.formLocation != null && widget.placeBloc.locationSelect != null ) ? Theme.of(context).primaryColor : Theme.of(context).primaryColor.withOpacity(0.6),
+              color: (widget.placeBloc.formLocation != null && widget.placeBloc.locationSelect != null ) ? Theme.of(context).primaryColor : Theme.of(context).primaryColor.withOpacity(0.8),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               child: const Text(
                 'Confirmar',

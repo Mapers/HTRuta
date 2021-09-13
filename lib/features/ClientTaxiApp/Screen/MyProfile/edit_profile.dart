@@ -359,7 +359,7 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
-                              Container(
+                              /* Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
@@ -397,7 +397,7 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   ],
                                 ),
-                              ),
+                              ), */
                               Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,

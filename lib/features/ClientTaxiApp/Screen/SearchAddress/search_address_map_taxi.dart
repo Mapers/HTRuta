@@ -118,7 +118,10 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapTaxi> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  showAddressName(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: showAddressName(),
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       color: primaryColor,
@@ -144,7 +147,11 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapTaxi> {
   }
   Widget showAddressName(){
     if(loading){
-      return CircularProgressIndicator();
+      return Row(
+        children: [
+          CircularProgressIndicator()
+        ],
+      );
     }else{
       if(widget.fromLocation){
         if(widget.placeBloc.formLocation != null){
