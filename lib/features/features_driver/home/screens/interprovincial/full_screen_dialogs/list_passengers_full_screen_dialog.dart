@@ -94,6 +94,8 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
                 IconButton(
                   icon: Icon(Icons.map,color: Colors.orange,),
                   onPressed: (){
+                    print(passenger.pointMeeting.latitude);
+                    print(passenger.pointMeeting.latitude);
                     //? Codigo dari
                   }
                 ),
