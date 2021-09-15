@@ -1,3 +1,4 @@
+import 'package:HTRuta/app/widgets/calculate_total.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
 import 'package:HTRuta/app/widgets/poin_meeting_client_await.dart';
 import 'package:HTRuta/data/remote/interprovincial_remote_firestore.dart';
@@ -111,6 +112,10 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
           child: Text('Puntos de encuentro', style: TextStyle(fontWeight: FontWeight.bold ),),
         ),
         PointMeetingClient(geoPoint: interprovincialRequest.pointMeeting,icon: Icons.location_on,),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: CalculateTotal(price: interprovincialRequest.price  ,seating: interprovincialRequest.seats ,),
+        ),
         getActionButtons(index, interprovincialRequest)
       ],
     );

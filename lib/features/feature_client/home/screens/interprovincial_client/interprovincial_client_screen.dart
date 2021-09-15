@@ -190,13 +190,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                             )
                         ),
                       ),
-                      //! borrar cuando lo del circulo sea descratado
-                      // Center(
-                      //   child: Transform.translate(
-                      //     offset: Offset(0, -40),
-                      //     child: DragwerCircleFrom()
-                      //   ),
-                      // )
                     ],
                   );
                 } else if( state.status == InterprovincialClientStatus.availablesInterprovincial ){
