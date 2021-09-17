@@ -134,7 +134,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                 IconButton(
                                   icon: Icon(Icons.push_pin ),
                                   onPressed: (){
-                                    Navigator.of(context).push( MaterialPageRoute(builder: (context) => ViewWhereabouth(whereAbouthOneLocation: whereAbouthOneLocation,whereAbouthTwoLocation: whereAbouthTwoLocation, currentLocation: location,)));
+                                    Navigator.of(context).push( MaterialPageRoute(builder: (context) => ViewWhereabouth(whereAbouthOneLocation: widget.availablesRoutesEntity.route.whereAboutstOne,whereAbouthTwoLocation: widget.availablesRoutesEntity.route.whereAboutstTwo, currentLocation: location,)));
                                   }
                                 )
                               ],

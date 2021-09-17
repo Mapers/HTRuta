@@ -58,7 +58,8 @@ class InterprovincialClientRemoteDataSoruce {
         'passenger_id': negotiationEntity.passengerId,
         'request_document_id':  negotiationEntity.requestDocumentId ,
         'from':  negotiationEntity.from.toMap ,
-        'to':  negotiationEntity.to.toMap ,
+        'to':  negotiationEntity.to.toMap,
+        
       }
     );
   }

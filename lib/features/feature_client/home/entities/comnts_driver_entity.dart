@@ -30,7 +30,7 @@ class CommentsDriverEntity extends Equatable{
       passenger_name: dataJson['passenger_name'],
       registered_at: DateTime.parse( dataJson['registered_at'] ),
       comment: dataJson['comment'],
-      imgUrl: dataJson['url_imge'],
+      imgUrl: dataJson['imgPersona'],
       start: starts
     );
   }
