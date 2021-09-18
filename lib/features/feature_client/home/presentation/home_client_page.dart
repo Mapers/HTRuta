@@ -33,7 +33,7 @@ class _HomeClientPageState extends State<HomeClientPage> {
                 case TypeServiceEnum.taxi:
                   return HomeScreens(parentScaffoldKey: _scaffoldKey);
                 case TypeServiceEnum.interprovincial:
-                  return InterprovincialClientScreen();
+                  return InterprovincialClientScreen(rejected: widget.rejected ,);
                 default:
                   return Text('Service not found!');
               }

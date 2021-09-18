@@ -4,18 +4,15 @@ import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/SearchAddress/search_address_screen.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/stateinput_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/availables_routes_page.dart';
-import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/drawer_circle_from.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/map_interprovincial_client_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/positioned_choose_route_widget.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/search_address_screen_interprovincial.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/select_address_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:HTRuta/injection_container.dart' as ij;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -72,7 +69,20 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         changeStateCircle();
         DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
         seat = param.requiredSeats;
+        getfrom(param.distictfrom);
+        fromAddress = Place(
+          formattedAddress: param.distictfrom.districtName,
+          name: param.distictfrom.streetName == '' ? param.distictfrom.districtName +', ' + param.distictfrom.provinceName  :param.distictfrom.streetName + ', '+ param.distictfrom.districtName + ', ' + param.distictfrom.provinceName,
+          lat: param.distictfrom.latLang.latitude,
+          lng: param.distictfrom.latLang.longitude,
+        );
         getTo( param.distictTo);
+        toAddress = Place(
+          formattedAddress: param.distictTo.districtName,
+          name: param.distictTo.streetName == '' ? param.distictTo.districtName +', ' + param.distictTo.provinceName  :param.distictTo.streetName + ', '+ param.distictTo.districtName + ', ' + param.distictTo.provinceName,
+          lat: param.distictTo.latLang.latitude,
+          lng: param.distictTo.latLang.longitude,
+        );
         BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
       }
@@ -190,13 +200,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                             )
                         ),
                       ),
-                      //! borrar cuando lo del circulo sea descratado
-                      // Center(
-                      //   child: Transform.translate(
-                      //     offset: Offset(0, -40),
-                      //     child: DragwerCircleFrom()
-                      //   ),
-                      // )
                     ],
                   );
                 } else if( state.status == InterprovincialClientStatus.availablesInterprovincial ){

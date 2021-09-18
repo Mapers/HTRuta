@@ -71,6 +71,16 @@ class Estructure extends StatelessWidget {
       children: [
         Row(
           children: [
+            commentsDriver.imgUrl ==null?
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.network(
+                  'https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-icono-de-perfil-de-avatar-predeterminado-para-hombre-marcador-de-posición-de-foto-gris-vector-de-ilu.jpg?ver=6',
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+              ),
+            ):
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Image.network(
@@ -111,11 +121,7 @@ class Estructure extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text( commentsDriver.comment ,style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic ),),
         ),
-        Container(
-          color: Colors.grey,
-          width: double.infinity,
-          height: 1,
-        )
+        Divider()
       ],
     );
   }

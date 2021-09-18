@@ -28,27 +28,40 @@ class _PointMeetingState extends State<PointMeeting> {
         if(param.meetingPoints.isEmpty){
           return Center(child: Text('sin data'),);
         }
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: param.meetingPoints.length ,
-          itemBuilder: (context, index) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                  child: Text('Punto de encuentro '+ param.meetingPoints[index].id.toString(), style: TextStyle(fontStyle: FontStyle.italic ),),
-                ),
-                MettingDriveAndPassenger(
-                  icon: Icons.push_pin,
-                  location: param.meetingPoints[index].pointMeeting,
-                  isSelecter: param.meetingPoints[index].isSelect,
-                  onTap: () => BlocProvider.of<MeetingDriveAndPassengerBloc>(context).add(ChangleMeetingDriveAndPassengerEvent(meetingPoint: param.meetingPoints[index]))
-                ),
-              ],
-            );
-          },
+        return Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: param.meetingPoints.length ,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                      child: Text('Punto de encuentro '+ param.meetingPoints[index].id.toString(), style: TextStyle(fontStyle: FontStyle.italic ),),
+                    ),
+                    MettingDriveAndPassenger(
+                      icon: Icons.push_pin,
+                      location: param.meetingPoints[index].pointMeeting,
+                      isSelecter: param.meetingPoints[index].isSelect,
+                      onTap: () => BlocProvider.of<MeetingDriveAndPassengerBloc>(context).add(ChangleMeetingDriveAndPassengerEvent(meetingPoint: param.meetingPoints[index]))
+                    ),
+                  ],
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text('Total a pagar: ', style: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic ),),
+                  Text(param.amountTotal.toStringAsFixed(2)),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );

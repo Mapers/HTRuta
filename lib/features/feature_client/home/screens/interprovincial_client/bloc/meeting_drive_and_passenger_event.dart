@@ -7,7 +7,8 @@ abstract class MeetingDriveAndPassengerEvent extends Equatable {
   List<Object> get props => [];
 }
 class GetMeetingDriveAndPassengerEvent extends MeetingDriveAndPassengerEvent {
-  GetMeetingDriveAndPassengerEvent();
+  final double amountTotal;
+  GetMeetingDriveAndPassengerEvent({@required this.amountTotal});
   @override
   List<Object> get props => [];
 }
@@ -30,4 +31,23 @@ class EditMeetingDriveAndPassengerEvent extends MeetingDriveAndPassengerEvent {
   @override
   List<Object> get props => [meetingPoint];
 }
+class AddAmoutTotalMeetingDriveAndPassengerEvent extends MeetingDriveAndPassengerEvent {
+  final double amoutTotal;
+  AddAmoutTotalMeetingDriveAndPassengerEvent({this.amoutTotal});
+  @override
+  List<Object> get props => [amoutTotal];
+}
+class SubtractAmoutTotalMeetingDriveAndPassengerEvent extends MeetingDriveAndPassengerEvent {
+  final double amoutTotal;
+  SubtractAmoutTotalMeetingDriveAndPassengerEvent({this.amoutTotal});
+  @override
+  List<Object> get props => [amoutTotal];
+}
+class ChangeForInputAmoutTotalMeetingDriveAndPassengerEvent extends MeetingDriveAndPassengerEvent {
+  final double amoutTotal;
+  ChangeForInputAmoutTotalMeetingDriveAndPassengerEvent({this.amoutTotal});
+  @override
+  List<Object> get props => [amoutTotal];
+}
+
 

@@ -9,9 +9,10 @@ abstract class MeetingDriveAndPassengerState extends Equatable {
 class  LoadingMeetingDriveAndPassenger extends MeetingDriveAndPassengerState {}
 
 class DataMeetingDriveAndPassengerState extends MeetingDriveAndPassengerState {
+  final double amountTotal;
   final List<MeetingDriveAndPassengerEntity> meetingPoints;
-  DataMeetingDriveAndPassengerState({this.meetingPoints});
+  DataMeetingDriveAndPassengerState({@required this.meetingPoints,@required this.amountTotal});
   @override
-  List<Object> get props => [meetingPoints];
+  List<Object> get props => [meetingPoints, amountTotal];
 }
 

@@ -45,8 +45,8 @@ class _ViewWhereabouthState extends State<ViewWhereabouth> {
         latLng: widget.whereAbouthOneLocation.latLang ,
         nameMarkerId: 'WHEREABOUTHONE_POSITION_MARKER',
         icon: whereabouthOneIcon
-
       );
+
       _markers[markerWhereabouthOne.markerId] = markerWhereabouthOne;
 
 
