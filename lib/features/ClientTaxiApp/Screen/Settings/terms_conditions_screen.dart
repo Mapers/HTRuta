@@ -36,7 +36,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
       ),
       body: WebView(
         key: _key,
-        initialUrl: 'https://flutter.dev/tos',
+        initialUrl: 'http://miruta.pe/privacypolicy.htm',
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           if(!initilized){

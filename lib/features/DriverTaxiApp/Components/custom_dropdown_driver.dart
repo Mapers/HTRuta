@@ -1,8 +1,10 @@
   
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/enums/type_service_enum.dart';
 import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class CustomDropdownDriver extends StatefulWidget {
 
@@ -117,10 +119,11 @@ class _CustomDropdownDriverState extends State<CustomDropdownDriver> {
 class DropDown extends StatelessWidget {
   final double itemHeight;
   final Function(TypeServiceEnum) onItemSelected;
-  const DropDown({Key key, this.itemHeight, this.onItemSelected}) : super(key: key);
-
+  DropDown({Key key, this.itemHeight, this.onItemSelected}) : super(key: key);
+  AppServicesProvider appServicesProvider;
   @override
   Widget build(BuildContext context) {
+    appServicesProvider = Provider.of<AppServicesProvider>(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -149,22 +152,52 @@ class DropDown extends StatelessWidget {
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.all(0),
-              children: <Widget>[
-                ...TypeServiceEnum.values.map((e) => DropDownItem(
-                    item: e,
-                    text: getTextByTypeServiceEnum(e),
-                    route: getRouteByTypeServiceEnum(e),
-                    iconData: Icons.add_circle_outline,
-                    isSelected: false,
-                    onTap: (TypeServiceEnum value) => onItemSelected(value)
-                  ),
-                ).toList(),
-              ],
+              children: loadOptions()
             ),
           ),
         ),
       ],
     );
+  }
+  List<Widget> loadOptions(){
+    List<Widget> values = [];
+    if(appServicesProvider.taxiAvailable){
+      values.add(
+        DropDownItem(
+          item: TypeServiceEnum.taxi,
+          text: getTextByTypeServiceEnum(TypeServiceEnum.taxi),
+          route: getRouteByTypeServiceEnum(TypeServiceEnum.taxi),
+          iconData: Icons.add_circle_outline,
+          isSelected: false,
+          onTap: (TypeServiceEnum value) => onItemSelected(value)
+        )
+      );
+    } 
+    if(appServicesProvider.interprovincialAvailable){
+      values.add(
+        DropDownItem(
+          item: TypeServiceEnum.interprovincial,
+          text: getTextByTypeServiceEnum(TypeServiceEnum.interprovincial),
+          route: getRouteByTypeServiceEnum(TypeServiceEnum.interprovincial),
+          iconData: Icons.add_circle_outline,
+          isSelected: false,
+          onTap: (TypeServiceEnum value) => onItemSelected(value)
+        )
+      );
+    } 
+    if(appServicesProvider.heavyLoadAvailable){
+      values.add(
+        DropDownItem(
+          item: TypeServiceEnum.cargo,
+          text: getTextByTypeServiceEnum(TypeServiceEnum.cargo),
+          route: getRouteByTypeServiceEnum(TypeServiceEnum.cargo),
+          iconData: Icons.add_circle_outline,
+          isSelected: false,
+          onTap: (TypeServiceEnum value) => onItemSelected(value)
+        )
+      );
+    } 
+    return values;
   }
 }
 

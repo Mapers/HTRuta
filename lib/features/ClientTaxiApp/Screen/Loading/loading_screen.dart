@@ -1,3 +1,5 @@
+import 'package:HTRuta/enums/type_service_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,6 +21,7 @@ import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_s
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
+import 'package:provider/provider.dart';
 
 class LoadingScreen extends StatefulWidget {
 
@@ -122,12 +125,12 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
     ServiceDataRemote serviceDataRemote = getIt<ServiceDataRemote>();
     ServiceInCourseEntity serviceInCourse = await serviceDataRemote.getServiceInCourse();
     final data = await _session.get();
+    loadService();
     if(serviceInCourse == null){
       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoadingScreen()));
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       return;
     }
-
     if(serviceInCourse.entityType == TypeEntityEnum.driver){
       BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: serviceInCourse.serviceType));
       Navigator.of(context).pushAndRemoveUntil(Routes.toHomeDriverPage(serviceInCourse: serviceInCourse), (_) => false);
@@ -163,6 +166,21 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
           Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage( availablesRoutesEntity: availableRouteEntity, ), (_) => false);
         }
       }
+    }
+  }
+  void loadService(){
+    final appServicesProvider = Provider.of<AppServicesProvider>(context, listen: false);
+    if(appServicesProvider.taxiAvailable){
+      BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.taxi));
+      return;
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.interprovincial));
+      return;
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: TypeServiceEnum.cargo));
+      return;
     }
   }
 }

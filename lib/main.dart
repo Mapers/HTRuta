@@ -1,5 +1,6 @@
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
@@ -104,6 +105,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ClientTaxiPlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
+        ChangeNotifierProvider(create: (_) => AppServicesProvider(),),
         ChangeNotifierProvider(create: (_) => AvailabilityProvider(),),
         ChangeNotifierProvider(create: (_) => UserProvider(),),
       ],
@@ -124,7 +126,7 @@ class _MyAppState extends State<MyApp> {
           
         ],
         child: MaterialApp(
-          title: 'Taxi App',
+          title: 'Mi Ruta',
           theme: appTheme,
           localizationsDelegates: const [
             GlobalWidgetsLocalizations.delegate,

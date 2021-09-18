@@ -3,9 +3,11 @@ import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Menu/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:provider/provider.dart';
 import 'detail.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,7 +27,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   final _prefs = UserPreferences();
   List<HistoryItem> historyItemsLoaded;
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  AppServicesProvider appServicesProvider;
   void navigateToDetail(String id) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
   }
@@ -33,9 +35,9 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    appServicesProvider = Provider.of<AppServicesProvider>(context);
     return DefaultTabController(
-      length: 3,
+      length: appServicesProvider.countServices(),
       initialIndex: 0,
       child: Scaffold(
         key: _scaffoldKey,
@@ -113,62 +115,14 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
               Container(
                 color: primaryColor,
                 child: TabBar(
-                  tabs: [ 
-                    Tab(child: Text('TAXI', style: TextStyle(color: Colors.white,fontSize: 11),),),
-                    Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: Colors.white,fontSize: 10),)),
-                    Tab(child: Text('CARGA', style: TextStyle(color: Colors.white,fontSize: 11),))
-                  ],
+                  tabs: loadTabs(),
                   indicatorColor: Color(0xFF6734BA),
                 ),
               ),
               Expanded(
                 child: Scrollbar(
                   child: TabBarView(
-                    children: [
-                      historyItemsLoaded == null ? FutureBuilder(
-                        future: pickupApi.getHistoricalRequest(_prefs.idChoferReal, selectedDate.toString().substring(0,10)),
-                        builder: (context, snapshot) {
-                          if(snapshot.hasError) return Center(child: Text('No hay data'));
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
-                            case ConnectionState.none: return Center(child: CircularProgressIndicator());
-                            case ConnectionState.active: {
-                              historyItemsLoaded =  snapshot.data;
-                              return historyTaxisList(historyItemsLoaded);
-                            }
-                            case ConnectionState.done: {
-                              historyItemsLoaded =  snapshot.data;
-                              return historyTaxisList(historyItemsLoaded);
-                            }
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      ) : historyTaxisList(historyItemsLoaded),
-                      ListView.builder(
-                        shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  navigateToDetail(index.toString());
-                                },
-                                child: historyItem2()
-                            );
-                          }
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  navigateToDetail(index.toString());
-                                },
-                                child: historyItem3()
-                            );
-                          }
-                      ),
-                    ]
+                    children: loadServices()
                   ),
                 ),
               ),
@@ -177,6 +131,78 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
         )
       )
     );
+  }
+  List<Tab> loadTabs(){
+    List<Tab> tabs = [];
+    if(appServicesProvider.taxiAvailable){
+      tabs.add(Tab(text: 'TAXI'));
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      tabs.add(Tab(text: 'INTERPROVINCIAL'));
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      tabs.add(Tab(text: 'CARGA'));
+    }
+    return tabs;
+  }
+  List<Widget> loadServices(){
+    List<Widget> services = [];
+    if(appServicesProvider.taxiAvailable){
+      services.add(
+        historyItemsLoaded == null ? FutureBuilder(
+          future: pickupApi.getHistoricalRequest(_prefs.idChoferReal, selectedDate.toString().substring(0,10)),
+          builder: (context, snapshot) {
+            if(snapshot.hasError) return Center(child: Text('No hay data'));
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+              case ConnectionState.none: return Center(child: CircularProgressIndicator());
+              case ConnectionState.active: {
+                historyItemsLoaded =  snapshot.data;
+                return historyTaxisList(historyItemsLoaded);
+              }
+              case ConnectionState.done: {
+                historyItemsLoaded =  snapshot.data;
+                return historyTaxisList(historyItemsLoaded);
+              }
+            }
+            return Center(child: CircularProgressIndicator());
+          }
+        ) : historyTaxisList(historyItemsLoaded),
+      );
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      services.add(
+        ListView.builder(
+          shrinkWrap: true,
+            itemCount: 5,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                  onTap: () {
+                    navigateToDetail(index.toString());
+                  },
+                  child: historyItem2()
+              );
+            }
+        ),
+      );
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      services.add(
+        ListView.builder(
+          shrinkWrap: true,
+            itemCount: 5,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                  onTap: () {
+                    navigateToDetail(index.toString());
+                  },
+                  child: historyItem3()
+              );
+            }
+        ),
+      );
+    }
+    return services;
   }
   Widget gainResumeEmpty(Size screenSize){
     return Container(

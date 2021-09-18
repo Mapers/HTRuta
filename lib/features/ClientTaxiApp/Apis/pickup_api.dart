@@ -136,17 +136,6 @@ class PickupApi{
       return false;
     }
   }
-
-  Future<bool> acceptTravelFinish(String idSolicitud, String idChofer)async{
-    final url = '${Config.nuevaRutaApi}/actualizar-viaje';
-    try{
-      final response = await http.post(url,body: {'idSolicitud' : idSolicitud, 'idchoferUsuario': idChofer} );
-      final responseData = requestDataFromJson(response.body);
-      return responseData.success;
-    } catch(error){
-      throw ServerException(message: 'Ocurrió un error con el servidor');
-    }
-  }
   Future<String> acceptDriverRequest(String idSolicitud, String idChofer)async{
     final url = '${Config.nuevaRutaApi}/actualizar-viaje';
     try{

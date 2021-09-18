@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
@@ -50,6 +51,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       final data = await _session.get();
       // await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);
+      final appServicesProvider = Provider.of<AppServicesProvider>(context,listen: false);
+      await appServicesProvider.loadAppServices();
       // final availabilityProvider = Provider.of<AvailabilityProvider>(context,listen: false);
       if(data != null){
         if(data.smsCode != null || data.smsCode != ''){

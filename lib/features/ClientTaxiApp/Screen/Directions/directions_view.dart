@@ -440,7 +440,7 @@ class _DirectionsViewState extends State<DirectionsView> with WidgetsBindingObse
                                               isLoading = true;
                                             });
                                             await pickUpApi.prepareTravel(pedidoProvider.idSolicitud);
-                                            final dataRechazados = driversData.where((element) => element['id'] != actualRequest.idChofer).toList();
+                                            final dataRechazados = driversData.where((element) => element['id'] != actualRequest.iIdUsuario).toList();
                                             final List<String> tokenRechazados = List<String>.from(dataRechazados.map((e) => e['fcm_token']).toList());
                                             String idViaje = await pickUpApi.acceptDriverRequest(pedidoProvider.idSolicitud, actualRequest.idChofer);
                                             if(idViaje == null){

@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
@@ -6,6 +7,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/historical_model.dart';
+import 'package:provider/provider.dart';
 import 'detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -19,7 +21,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   final _prefs = UserPreferences();
   final pickupApi = PickupApi();
   List<HistoryItem> historyItemsLoaded;
-
+  AppServicesProvider appServicesProvider;
   void navigateToDetail(String id) async {
     bool newComment = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => HistoryDetail(id: id,)));
     if(newComment != null && newComment){
@@ -31,8 +33,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    appServicesProvider = Provider.of<AppServicesProvider>(context);
     return DefaultTabController(
-      length: 2,
+      length: appServicesProvider.countServices(),
       initialIndex: 0,
       child: Scaffold(
         key: _scaffoldKey,
@@ -44,10 +47,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           bottom: TabBar(
             labelColor: primaryColor,
             indicatorColor: primaryColor,
-            tabs: [
-              Tab(text: 'Servicio taxi',),
-              Tab(text: 'Interprovincial',)
-            ]
+            tabs: loadTabs()
           ),
           leading: IconButton(
             icon: Icon(Icons.menu),
@@ -57,50 +57,77 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
         drawer: MenuScreens(activeScreenName: screenName),
-          body: TabBarView(
-            children:[
-              NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll) {
-                overScroll.disallowGlow();
-                return false;
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: createFutureList()
-              ),
-            ),
-            NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll) {
-                overScroll.disallowGlow();
-                return false;
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: ListView.separated(
-                    itemCount: 5,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                    separatorBuilder:(_,int i){
-                      return Divider();
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationListView(
-                        index: index,
-                        child: GestureDetector(
-                          onTap: () {
-                            navigateToDetail(index.toString());
-                          },
-                          child: interprovincialHistory()
-                        )
-                      );
-                    }
-                ),
-              ),
-            ),
-            ] 
+        body: TabBarView(
+          children: loadServices()
+        ),
+      )
+    );
+  }
+  List<Tab> loadTabs(){
+    List<Tab> tabs = [];
+    if(appServicesProvider.taxiAvailable){
+      tabs.add(Tab(text: 'Servicio taxi'));
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      tabs.add(Tab(text: 'Servicio interprovincial'));
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      tabs.add(Tab(text: 'Servicio carga pesada'));
+    }
+    return tabs;
+  }
+  List<Widget> loadServices(){
+    List<Widget> services = [];
+    if(appServicesProvider.taxiAvailable){
+      services.add(
+        NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll) {
+            overScroll.disallowGlow();
+            return false;
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: createFutureList()
           ),
         )
-    );
+      );
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      services.add(
+        NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overScroll) {
+            overScroll.disallowGlow();
+            return false;
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: ListView.separated(
+                itemCount: 5,
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                separatorBuilder:(_,int i){
+                  return Divider();
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return AnimationListView(
+                    index: index,
+                    child: GestureDetector(
+                      onTap: () {
+                        navigateToDetail(index.toString());
+                      },
+                      child: interprovincialHistory()
+                    )
+                  );
+                }
+            ),
+          ),
+        )
+      );
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      services.add(Center(child: Text('Servicio no disponible')));
+    }
+    return services;
   }
   Widget createFutureList(){
     return historyItemsLoaded == null ? FutureBuilder(

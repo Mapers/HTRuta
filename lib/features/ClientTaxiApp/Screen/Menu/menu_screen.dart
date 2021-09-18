@@ -2,14 +2,19 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/enums/type_service_enum.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
+import 'package:HTRuta/features/features_driver/home/presentations/bloc/driver_service_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/MyProfile/profile.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class MenuItems {
   String name;
@@ -225,6 +230,7 @@ class _MenuScreensState extends State<MenuScreens> {
                     );
                   }
                 }else{
+                  loadService();
                   Navigator.pop(context);
                   Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
                 }
@@ -252,7 +258,21 @@ class _MenuScreensState extends State<MenuScreens> {
       ),
     );
   }
-
+  void loadService(){
+    final appServicesProvider = Provider.of<AppServicesProvider>(context, listen: false);
+    if(appServicesProvider.taxiAvailable){
+      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: TypeServiceEnum.taxi));
+      return;
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: TypeServiceEnum.interprovincial));
+      return;
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      BlocProvider.of<DriverServiceBloc>(context).add(ChangeDriverServiceEvent(type: TypeServiceEnum.cargo));
+      return;
+    }
+  }
   Widget getItemMenu({@required IconData icon, @required String text, @required Function onTap, @required bool isSelected}){
     return ListTile(
       onTap: onTap,

@@ -6,6 +6,7 @@ import 'package:HTRuta/core/push_message/push_message.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Provider/app_services_provider.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Provider/pedido_provider.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/interprovincial_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/taxi_model.dart';
@@ -47,7 +48,8 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   String lastUserToken;
   PushNotificationProvider pushProvider;
   List<String> acceptedTravels = [];
-
+  AppServicesProvider appServicesProvider;
+  
   void navigateToDetail(RequestModel requestItem) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => RequestDetail(requestItem: requestItem,)));
   }
@@ -223,9 +225,9 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    
+    appServicesProvider = Provider.of<AppServicesProvider>(context);
     return DefaultTabController(
-      length: 3,
+      length: appServicesProvider.countServices(),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -239,11 +241,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
           iconTheme: IconThemeData(color: blackColor),
           bottom: TabBar(
             indicatorColor: primaryColor,
-            tabs: [
-            Tab(child: Text('TAXI', style: TextStyle(color: primaryColor,fontSize: 11),),),
-            Tab(child: Text('INTERPROVINCIAL', style: TextStyle(color: primaryColor,fontSize: 10),)),
-            Tab(child: Text('CARGA', style: TextStyle(color: primaryColor,fontSize: 11),))
-          ]),
+            tabs: loadTabs()),
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
@@ -253,85 +251,113 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
         ),
         drawer: MenuDriverScreens(activeScreenName: screenName),
         body: TabBarView(
-          children: [
-            Container(
-              child: Scrollbar(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: requestTaxi.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    RequestModel request = requestTaxi[index];
-                    TaxiModel taxiModel = TaxiModel(
-                      accepteds: request.aceptados,
-                      dni: request.vchDni,
-                      email: request.vchCorreo,
-                      finalLat: double.parse(request.vchLatFinal),
-                      finalLong: double.parse(request.vchLongFinal),
-                      finalname: request.vchNombreFinal,
-                      id: request.id,
-                      initialLat: double.parse(request.vchLatInicial),
-                      initialLong: double.parse(request.vchLongInicial),
-                      names: request.vchNombres,
-                      phone: request.vchCelular,
-                      price: double.parse(request.mPrecio),
-                      queryId: request.idSolicitud,
-                      registeredAt: DateTime.now(),
-                      // registeredAt: DateTime.parse(request.dFecReg),
-                      rejecteds: request.rechazados,
-                      startName: request.vchNombreInicial,
-                      typeTravel: request.iTipoViaje,
-                      userId: request.iIdUsuario,
-                      comentario: request.comentario,
-                      token: request.token,
-                      userPhoto: request.urlUser
-                    );
-                    return GestureDetector(
-                      onTap: () {
-                        navigateToDetail(request);
-                      },
-                      child: cardTaxi(taxiModel)
-                    );
-                  }
-                ),
-              )
-            ),
-            Container(
-              child: Scrollbar(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        navigateToDetail(requestTaxi[index]);
-                      },
-                      child: cardInterprovincial(InterprovincialModel.empty())
-                    );
-                  }
-                ),
-              )
-            ),
-            Container(
-              child: Scrollbar(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(),
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        navigateToDetail(requestTaxi[index]);
-                      },
-                      child: historyItemCarga()
-                    );
-                  }
-                ),
-              )
-            ),
-          ]
+          children: loadServices()
         )
       )
     );
+  }
+  List<Tab> loadTabs(){
+    List<Tab> tabs = [];
+    if(appServicesProvider.taxiAvailable){
+      tabs.add(Tab(text: 'TAXI'));
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      tabs.add(Tab(text: 'INTERPROVINCIAL'));
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      tabs.add(Tab(text: 'CARGA'));
+    }
+    return tabs;
+  }
+  List<Widget> loadServices(){
+    List<Widget> services = [];
+    if(appServicesProvider.taxiAvailable){
+      services.add(
+        Container(
+          child: Scrollbar(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: requestTaxi.length,
+              itemBuilder: (BuildContext context, int index) {
+                RequestModel request = requestTaxi[index];
+                TaxiModel taxiModel = TaxiModel(
+                  accepteds: request.aceptados,
+                  dni: request.vchDni,
+                  email: request.vchCorreo,
+                  finalLat: double.parse(request.vchLatFinal),
+                  finalLong: double.parse(request.vchLongFinal),
+                  finalname: request.vchNombreFinal,
+                  id: request.id,
+                  initialLat: double.parse(request.vchLatInicial),
+                  initialLong: double.parse(request.vchLongInicial),
+                  names: request.vchNombres,
+                  phone: request.vchCelular,
+                  price: double.parse(request.mPrecio),
+                  queryId: request.idSolicitud,
+                  registeredAt: DateTime.now(),
+                  // registeredAt: DateTime.parse(request.dFecReg),
+                  rejecteds: request.rechazados,
+                  startName: request.vchNombreInicial,
+                  typeTravel: request.iTipoViaje,
+                  userId: request.iIdUsuario,
+                  comentario: request.comentario,
+                  token: request.token,
+                  userPhoto: request.urlUser
+                );
+                return GestureDetector(
+                  onTap: () {
+                    navigateToDetail(request);
+                  },
+                  child: cardTaxi(taxiModel)
+                );
+              }
+            ),
+          )
+        ),
+      );
+    }
+    if(appServicesProvider.interprovincialAvailable){
+      services.add(
+        Container(
+          child: Scrollbar(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    navigateToDetail(requestTaxi[index]);
+                  },
+                  child: cardInterprovincial(InterprovincialModel.empty())
+                );
+              }
+            ),
+          )
+        )
+      );
+    }
+    if(appServicesProvider.heavyLoadAvailable){
+      services.add(
+        Container(
+          child: Scrollbar(
+            child: ListView.separated(
+              separatorBuilder: (context, index) => Divider(),
+              shrinkWrap: true,
+              itemCount: 10,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    navigateToDetail(requestTaxi[index]);
+                  },
+                  child: historyItemCarga()
+                );
+              }
+            ),
+          )
+        ),
+      );
+    }
+    return services;
   }
   Widget cardTaxi(TaxiModel taxi){
     final responsive = Responsive(context);
