@@ -18,7 +18,7 @@ class PaymentSelector extends StatefulWidget {
 class _PaymentSelectorState extends State<PaymentSelector> {
   final pickUpApi = PickupApi();
   List<PaymentMethodClient> paymentMethods;
-  List<bool> savedPaymentMethods;
+  List<bool> savedPaymentMethods = [];
   PaymentMethodClient selectedPaymentMethod;
   final _prefs = UserPreferences();
   double widthDropdown;
@@ -34,7 +34,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
         final data = await pickUpApi.getPaymentMethods();
         paymentMethods = getListaPaymentMethods(data);
         Provider.of<UserProvider>(context, listen: false).userPaymentMethods = paymentMethods;
-        List<int> selectedPaymentMethods = [];
+        /* List<int> selectedPaymentMethods = [];
         for(int i = 0; i < paymentMethods.length; i++){
           selectedPaymentMethods.add(
             int.parse(paymentMethods[i].iId)
@@ -42,11 +42,18 @@ class _PaymentSelectorState extends State<PaymentSelector> {
         }
         List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
         _prefs.setClientPaymentMethods = methodsToSave;
+        for(int i = 0; i < methodsToSave.length; i++){
+          if(methodsToSave.contains(paymentMethods[i].iId)){
+            savedPaymentMethods[i] = true;
+          }
+        } */
         if(mounted){
           setState(() {});
         }
       }else{
-        savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
+        if(mounted){
+          setState(() {});
+        }
       }
     }catch(e){
       print(e);
@@ -56,9 +63,10 @@ class _PaymentSelectorState extends State<PaymentSelector> {
   @override
   Widget build(BuildContext context) {
     widthDropdown = MediaQuery.of(context).size.width * 0.6;
-    if(paymentMethods == null || savedPaymentMethods == null){
+    if(paymentMethods == null){
       return Container();
     }
+    savedPaymentMethods = List.generate(paymentMethods.length, (index) => false);
     List<String> paymentsLocally = _prefs.getClientPaymentMethods;
     for(int i = 0; i < paymentMethods.length; i++){
       if(paymentsLocally.contains(paymentMethods[i].iId)){
@@ -116,7 +124,7 @@ class _PaymentSelectorState extends State<PaymentSelector> {
                         );
                       }).toList();
                     },
-                    value: selectedPaymentMethod.nNombre,
+                    value: selectedPaymentMethod?.nNombre,
                     onChanged: (String newValue) async {
                       selectedPaymentMethod = data.where((element) => element.nNombre == newValue).toList().first;
                       setState(() {});

@@ -32,10 +32,10 @@ class RegistroConductorApi{
     throw ServerException(message: 'Ocurrió un error con el servidor');
   }
 
-  Future<DataEstadoChofer> obtenerEstadoChofer(String dni) async{
+  Future<DataEstadoChofer> obtenerEstadoChofer(String idChofer) async{
     try{
       final url = '${Config.apiHost}/api_getestadochofer.php';
-      final response = await http.post(url,body: {'dni' : dni});
+      final response = await http.post(url,body: {'iIdChofer': idChofer});
       final responseUsuario = estadoChoferFromJson(response.body);
       if(responseUsuario.success){
         return responseUsuario.data[0];
@@ -52,7 +52,7 @@ class RegistroConductorApi{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final url = '${Config.apiHost}/api_getDocumentosRechazados.php';
-      final response = await http.post(url,body: {'id' : _prefs.idChofer});
+      final response = await http.post(url,body: {'id' : _prefs.idChoferReal});
       final responseUsuario = documentoRechazadoFromJson(response.body);
       if(responseUsuario.success){
         final _prefs = UserPreferences();

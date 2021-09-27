@@ -64,17 +64,18 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
           switch(snapshot.connectionState){
             case ConnectionState.waiting: return Center(child: CircularProgressIndicator(strokeWidth: 2 ) );
             case ConnectionState.none: return Center(child: CircularProgressIndicator(strokeWidth: 2 ) );
-            case ConnectionState.active: {
+            case ConnectionState.active: 
+            case ConnectionState.done:{
               final String result = snapshot.data as String; 
               if(result.isEmpty){
-                return const Center(child: CircularProgressIndicator(strokeWidth: 2 ) );
-              }
-              return createContent();
-            }
-            case ConnectionState.done: {
-              final String result = snapshot.data as String; 
-              if(result.isEmpty){
-                return const Center(child: CircularProgressIndicator(strokeWidth: 2 ) );
+                return Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/loading.png'),
+                      fit: BoxFit.fitWidth
+                    )
+                  ),
+                );
               }
               return createContent();
             }

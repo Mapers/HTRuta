@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         curve: Curves.easeInOutCubic
       )
     );
-    _controller = VideoPlayerController.asset('assets/splash_video.mp4')
+    _controller = VideoPlayerController.asset('assets/intro-miruta.mp4')
       ..initialize().then((_) {
         setState(() {});
         _controller.play();
@@ -142,13 +142,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 height: _controller.value.size?.height ?? 0,
                 child: _controller.value.initialized ? 
                   VideoPlayer(_controller):
-                  Image.asset(
-                    'assets/first_frame.jpg',
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: Color(0xFFFFD428)
                   )
               ),
             ),
           ),
-          AnimatedBuilder(
+          /* AnimatedBuilder(
             animation: animationController,
             builder: (BuildContext context, Widget child){
               return Transform.rotate(
@@ -166,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 )
               );
             }
-          )
+          ) */
         ],
       )
     );

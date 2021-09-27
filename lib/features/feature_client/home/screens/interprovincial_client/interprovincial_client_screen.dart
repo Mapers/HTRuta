@@ -179,7 +179,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         left: 20,
                         right: 20,
                         child: Container(
-                            height: 230,
                             child: SelectAddressWidget(
                               fromAddress: fromAddress,
                               toAddress: toAddress,

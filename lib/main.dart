@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
           
         ],
         child: MaterialApp(
-          title: 'Mi Ruta',
+          title: 'MiRuta',
           theme: appTheme,
           localizationsDelegates: const [
             GlobalWidgetsLocalizations.delegate,

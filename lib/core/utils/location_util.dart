@@ -29,7 +29,7 @@ class LocationUtil {
   StreamSubscription subscription;
 
   void initListener({@required Function(LocationEntity) listen}){
-    subscription = Geolocator.getPositionStream().listen((location) async{
+    subscription = Geolocator.getPositionStream(distanceFilter: 15).listen((location) async{
       List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
       LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
 

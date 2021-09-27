@@ -45,12 +45,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:597486390604:android:6a6ae26174ccc8ed6793e9",
+        "mobilesdk_app_id": "1:597486390604:android:014f1669553c9ca76793e9",
         "android_client_info": {
-          "package_name": "com.paquete.push_local"
+          "package_name": "com.hadtech.mirutaapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "597486390604-28j61pb0ju9d69o0t29mbor18joadqig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hadtech.mirutaapp",
+            "certificate_hash": "8a3ff9c854274561f827998e60c11ae909dc1518"
+          }
+        },
         {
           "client_id": "597486390604-12mm9s97pu9agtruk302ulupcad08sfr.apps.googleusercontent.com",
           "client_type": 3

@@ -1,4 +1,4 @@
-package com.example.flutter_map_booking;
+package com.hadtech.mirutaapp;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;

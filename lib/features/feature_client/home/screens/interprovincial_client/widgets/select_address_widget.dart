@@ -202,10 +202,13 @@ class _SelectAddressState extends State<SelectAddressWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                PaymentSelector(
-                  onSelected: (List<int> selectedPaymentMethods){
-                    paymentMethodsSelected = selectedPaymentMethods;
-                  },
+                Container(
+                  height: 70,
+                  child: PaymentSelector(
+                    onSelected: (List<int> selectedPaymentMethods){
+                      paymentMethodsSelected = selectedPaymentMethods;
+                    },
+                  ),
                 ),
                 Select<int>(
                   value: initialSeat,
@@ -229,14 +232,12 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                 )
               ],
             ),
-            Expanded(
-              child: FlatButton(
-                onPressed: widget.onSearch ,
-                child: Text('Buscar interprovincial', style: TextStyle(color: Colors.white,fontSize: 14),),
-                color: primaryColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                padding: EdgeInsets.symmetric(horizontal: 80),
-              )
+            FlatButton(
+              onPressed: widget.onSearch ,
+              child: Text('Buscar interprovincial', style: TextStyle(color: Colors.white,fontSize: 14),),
+              color: primaryColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              padding: EdgeInsets.symmetric(horizontal: 80),
             )
           ],
         ),

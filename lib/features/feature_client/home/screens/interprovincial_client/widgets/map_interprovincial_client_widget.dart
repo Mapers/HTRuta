@@ -71,7 +71,7 @@ class _MapInterprovincialClientWidgetState
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
       DataInterprovincialClientState _data =
           BlocProvider.of<InterprovincialClientBloc>(context).state;
-      _addFromToMarkers(datan: _data);
+      // _addFromToMarkers(datan: _data);
     });
   }
 
@@ -89,7 +89,7 @@ class _MapInterprovincialClientWidgetState
     });
   }
 
-  void _addFromToMarkers({DataInterprovincialClientState datan,LatLng pos, bool isSelectedFromOrTo}) async {
+  void _addFromToMarkers({DataInterprovincialClientState datan,LatLng pos, bool isSelectedFromOrTo = false}) async {
     if (isSelectedFromOrTo) {
       if (pos != null) {
         List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude, pos.longitude);
@@ -143,7 +143,7 @@ class _MapInterprovincialClientWidgetState
   @override
   Widget build(BuildContext context) {
     return BlocListener<InterprovincialClientBloc, InterprovincialClientState>(
-      listener: (ctx, state) => _addFromToMarkers(datan: state),
+      listener: (ctx, state) => _addFromToMarkers(datan: state,),
       child: _buildMapLayer(),
     );
   }

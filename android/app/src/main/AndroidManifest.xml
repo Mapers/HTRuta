@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_map_booking">
+    package="com.hadtech.mirutaapp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -12,7 +12,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Mi Ruta"
+        android:label="MiRuta"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="false"
         android:usesCleartextTraffic="true"

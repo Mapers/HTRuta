@@ -207,9 +207,7 @@ class _MenuScreensState extends State<MenuScreens> {
           FlatButton(
             onPressed: () async {
               if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
-                final session = Session();
-                final data = await session.get();
-                final estado = await registroConductorApi.obtenerEstadoChofer(data.dni);
+                final estado = await registroConductorApi.obtenerEstadoChofer(_prefs.idChoferReal);
                 if(estado.iEstado != 'Aprobado'){
                   if(estado.iEstado == 'Rechazado'){
                     Dialogs.confirm(context,title: 'Alerta', message: 'Su solicitud ha sido rechazada \n ¿Desea enviar los documentos que se solicitan?'

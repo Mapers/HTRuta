@@ -41,9 +41,9 @@ class MapViewerUtil {
         mapToolbarEnabled: false,
         zoomControlsEnabled: false,
         mapType: MapType.normal,
-        onCameraMove: (val){
-          onCameraMove(val.target);
-        },
+        /* onCameraMove: (val){
+          return onCameraMove(val.target);
+        }, */
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
         // ignore: prefer_collection_literals
         circles: Set<Circle>.from([circular(currentLocation, visible: drawCircle,radiusCircle: radiusCircle)]),
