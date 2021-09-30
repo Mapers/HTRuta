@@ -21,7 +21,7 @@ class MapInterprovincialDriverWidget extends StatefulWidget {
   _MapInterprovincialDriverWidgetState createState() => _MapInterprovincialDriverWidgetState();
 }
 
-class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDriverWidget> {
+class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDriverWidget> with WidgetsBindingObserver {
   LocationUtil _locationUtil = LocationUtil();
 
   BitmapDescriptor currentPinLocationIcon;
@@ -48,7 +48,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
       currentPinLocationIcon = result[1];
       fromPinLocationIcon = result[2];
       toPinLocationIcon = result[3];
-      _mapViewerUtil.changeToDarkMode;
+      // _mapViewerUtil.changeToDarkMode;
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang);
       _updateMarkerCurrentPosition(location);
       _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
@@ -139,7 +139,16 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   void dispose() { 
     _locationUtil.disposeListener();
     subscriptionPassengers?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapViewerUtil.changeMapType(1, null);
+    }
   }
 
   @override

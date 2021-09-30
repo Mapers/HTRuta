@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/form_page.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -159,9 +160,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                   ListsMenu(
-                    title: 'Contactanos',
-                    onPress: (){
-
+                    title: 'Contáctanos',
+                    onPress: () async {
+                      final UserSession data = await _session.get();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => FormPage(email: data.email, name: data.names)));
                     },
                   ),
                 ],

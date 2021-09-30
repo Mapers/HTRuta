@@ -176,7 +176,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   },
                 ),
                 ListsMenu(
-                  title: 'Contactanos',
+                  title: 'Contáctanos',
                   icon: Icons.help,
                   backgroundIcon: primaryColor,
                   onPress: (){

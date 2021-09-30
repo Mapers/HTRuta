@@ -136,6 +136,9 @@ extension DateTimeExtension on DateTime {
   }
   static DateTime dateFromString(String value){
     if(value.isEmpty) return null;
+    if(value.length >= 10){
+      value = value.substring(0, 10);
+    }
     List<String> times = value.split('-');
     if(times.length != 3) return null;
     DateTime newDate = DateTime(

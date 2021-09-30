@@ -206,7 +206,9 @@ class _MenuScreensState extends State<MenuScreens> {
           SizedBox(height: 20.0),
           FlatButton(
             onPressed: () async {
-              if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
+              Navigator.pop(context);
+                  Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
+              /* if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
                 final estado = await registroConductorApi.obtenerEstadoChofer(_prefs.idChoferReal);
                 if(estado.iEstado != 'Aprobado'){
                   if(estado.iEstado == 'Rechazado'){
@@ -244,7 +246,7 @@ class _MenuScreensState extends State<MenuScreens> {
 
                   }
                 );
-              }
+              } */
             }, 
             child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

@@ -173,7 +173,7 @@ class _MenuDriverScreensState extends State<MenuDriverScreens> {
                             icon: FontAwesomeIcons.creditCard,
                             text: 'Mis métodos de pago'
                           ),
-                          getItemMenu(
+                          /* getItemMenu(
                             onTap: () {
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'driverCupons');
@@ -181,7 +181,7 @@ class _MenuDriverScreensState extends State<MenuDriverScreens> {
                             isSelected: widget.activeScreenName.compareTo('CUPONS') == 0,
                             icon: FontAwesomeIcons.tags,
                             text: 'Mis cupones'
-                          ),
+                          ), */
                           BlocBuilder<DriverServiceBloc, DriverServiceState>(
                             builder: (ctx, state){
                               DataDriverServiceState data = state;

@@ -52,7 +52,7 @@ class _EditProfileState extends State<EditProfile> {
     List<int> imageBytes = gallery.readAsBytesSync();
     print(imageBytes);
     String base64Image = base64Encode(imageBytes);
-    photoUrl = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
+    photoUrl = await pickupApi.uploadPhoto(widget.userData.id, base64Image);
     if(photoUrl == null){
       Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
       return;
@@ -123,7 +123,8 @@ class _EditProfileState extends State<EditProfile> {
       sexo: selectedGender,
       telefono: newPhone ?? widget.userData.cellphone,
       celular: newPhone ?? widget.userData.cellphone,
-      userAddress: newAddress
+      userAddress: newAddress,
+      correo: newEmail ?? widget.userData.email
     );
     bool profileSavedSuccess = await pickupApi.saveProfile(body);
     print('resultado: ' + profileSavedSuccess.toString());
@@ -138,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
       newFName ?? widget.userData.lastNameFather,
       newMName ?? widget.userData.lastNameMother,
       newPhone ?? widget.userData.cellphone,
-      newEmail ?? widget.userData.email,
+      newEmail,
       widget.userData.password,
       photoUrl ?? widget.userData.imageUrl,
       selectedGender,
@@ -149,23 +150,43 @@ class _EditProfileState extends State<EditProfile> {
       widget.userData.referencia,
     );
     final driverData = await session.getDriverData();
-    await session.setDriverData(
-      newNames ?? widget.userData.names,
-      newFName ?? widget.userData.lastNameFather,
-      newMName ?? widget.userData.lastNameMother,
-      newPhone ?? widget.userData.cellphone,
-      newEmail ?? widget.userData.email,
-      widget.userData.dni,
-      selectedGender,
-      DateTimeExtension.parseDateEnglishV2(birthdaySelected),
-      widget.userData.fechaRegistro,
-      photoUrl ?? widget.userData.imageUrl,
-      widget.userData.smsCode,
-      newAddress,
-      widget.userData.referencia,
-      driverData.metodosPago,
-      driverData.saldo
-    );
+    if(driverData != null){
+      await session.setDriverData(
+        newNames ?? widget.userData.names,
+        newFName ?? widget.userData.lastNameFather,
+        newMName ?? widget.userData.lastNameMother,
+        newPhone ?? widget.userData.cellphone,
+        newEmail,
+        widget.userData.dni,
+        selectedGender,
+        DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+        widget.userData.fechaRegistro,
+        photoUrl ?? widget.userData.imageUrl,
+        widget.userData.smsCode,
+        newAddress,
+        widget.userData.referencia,
+        driverData.metodosPago,
+        driverData.saldo
+      );
+    }else{
+      await session.setDriverData(
+        newNames ?? widget.userData.names,
+        newFName ?? widget.userData.lastNameFather,
+        newMName ?? widget.userData.lastNameMother,
+        newPhone ?? widget.userData.cellphone,
+        newEmail,
+        widget.userData.dni,
+        selectedGender,
+        DateTimeExtension.parseDateEnglishV2(birthdaySelected),
+        widget.userData.fechaRegistro,
+        photoUrl ?? widget.userData.imageUrl,
+        widget.userData.smsCode,
+        newAddress,
+        widget.userData.referencia,
+        '',
+        0
+      );
+    }
     Navigator.pop(context, true);
   }
 
@@ -359,7 +380,7 @@ class _EditProfileState extends State<EditProfile> {
                                   ],
                                 ),
                               ),
-                              /* Container(
+                              Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
@@ -397,7 +418,7 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   ],
                                 ),
-                              ), */
+                              ),
                               Container(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,

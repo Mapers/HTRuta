@@ -36,7 +36,7 @@ class MapInterprovincialClientWidget extends StatefulWidget {
 }
 
 class _MapInterprovincialClientWidgetState
-    extends State<MapInterprovincialClientWidget> {
+    extends State<MapInterprovincialClientWidget> with WidgetsBindingObserver {
   LocationUtil _locationUtil = LocationUtil();
 
   BitmapDescriptor currentPinLocationIcon;
@@ -137,7 +137,16 @@ class _MapInterprovincialClientWidgetState
   @override
   void dispose() {
     _locationUtil.disposeListener();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapViewerUtil.changeMapType(1, null);
+    }
   }
 
   @override

@@ -18,7 +18,8 @@ class SaveProfileBody {
       this.sexo,
       this.telefono,
       this.celular,
-      this.userAddress
+      this.userAddress,
+      this.correo
     });
 
     String iIdUsuario;
@@ -30,6 +31,7 @@ class SaveProfileBody {
     String telefono;
     String celular;
     String userAddress;
+    String correo;
 
     factory SaveProfileBody.fromJson(Map<String, dynamic> json) => SaveProfileBody(
         iIdUsuario: json['iIdUsuario'],
@@ -40,7 +42,8 @@ class SaveProfileBody {
         sexo: json['sexo'],
         telefono: json['telefono'],
         celular: json['celular'],
-        userAddress: json['user_address']
+        userAddress: json['user_address'],
+        correo: json['correo']
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,6 +55,7 @@ class SaveProfileBody {
         'sexo': sexo,
         'telefono': telefono,
         'celular': celular,
-        'user_address': userAddress
+        'user_address': userAddress,
+        'correo': correo,
     };
 }
