@@ -121,7 +121,6 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                           return;
                         }
                         Dialogs.openLoadingDialog(context);
-                        
                         final isOk = await authApi.loginUserSMS(widget.numeroTelefono, controller.value.text);
                         Navigator.pop(context);
                         if(isOk){

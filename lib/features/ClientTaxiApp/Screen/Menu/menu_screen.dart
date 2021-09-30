@@ -185,6 +185,7 @@ class _MenuScreensState extends State<MenuScreens> {
                               isSelected: false,
                               onTap: () async {
                                 await _session.clear();
+                                _prefs.idChoferReal = '0';
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamed(AppRoute.loginScreen);
                               },
@@ -206,9 +207,7 @@ class _MenuScreensState extends State<MenuScreens> {
           SizedBox(height: 20.0),
           FlatButton(
             onPressed: () async {
-              Navigator.pop(context);
-                  Navigator.pushAndRemoveUntil(context, Routes.toHomeDriverPage(), (_) => false);
-              /* if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
+              if(_prefs.idChoferReal != '0' && _prefs.idChoferReal != ''){
                 final estado = await registroConductorApi.obtenerEstadoChofer(_prefs.idChoferReal);
                 if(estado.iEstado != 'Aprobado'){
                   if(estado.iEstado == 'Rechazado'){
@@ -246,7 +245,7 @@ class _MenuScreensState extends State<MenuScreens> {
 
                   }
                 );
-              } */
+              }
             }, 
             child: Text('Modo Conductor',style: TextStyle(color: Colors.white),),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

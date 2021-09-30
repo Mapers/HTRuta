@@ -102,7 +102,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: ListView.separated(
-                itemCount: 5,
+                itemCount: 0,
                 shrinkWrap: true,
                 padding: EdgeInsets.only(left: 10.0, right: 10.0),
                 separatorBuilder:(_,int i){

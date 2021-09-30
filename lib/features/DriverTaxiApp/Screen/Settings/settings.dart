@@ -164,7 +164,7 @@ class _SettingsDriverScreenState extends State<SettingsDriverScreen> {
                   icon: Icons.share,
                   backgroundIcon: primaryColor,
                   onPress: (){
-                    Share.share('Te invito a descargar esta aplicación https://google.com');
+                    Share.share('Te invito a descargar esta aplicación https://play.google.com/store/apps/details?id=com.hadtech.mirutaapp');
                   },
                 ),
                 ListsMenu(

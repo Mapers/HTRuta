@@ -39,7 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           },
         ),
       ),
-      drawer:MenuScreens(activeScreenName: screenName),
+      drawer: MenuScreens(activeScreenName: screenName),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overScroll) {
           overScroll.disallowGlow();
@@ -125,12 +125,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                     },
                   ), */
-                  ListsMenu(
+                  /* ListsMenu(
                     title: 'Reseñas',
                     onPress: (){
 
                     },
-                  ),
+                  ), */
                   /* ListsMenu(
                     title: 'Invitar amigos',
                     onPress: (){
@@ -150,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListsMenu(
                     title: 'Compartir aplicación',
                     onPress: (){
-                      Share.share('Te invito a descargar esta aplicación https://google.com');
+                      Share.share('Te invito a descargar esta aplicación https://play.google.com/store/apps/details?id=com.hadtech.mirutaapp');
                     },
                   ),
                   ListsMenu(

@@ -34,7 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       final isValid = formKey.currentState.validate();
       if(isValid){
+        Dialogs.openLoadingDialog(context);
         final String sent = await authApi.getVerificationCode(_phoneNumber);
+        Navigator.pop(context);
         if(sent != 'S'){
           if(sent == 'N'){
             Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');

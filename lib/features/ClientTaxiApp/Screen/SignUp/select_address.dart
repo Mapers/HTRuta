@@ -12,13 +12,14 @@ class SelectAddress extends StatefulWidget {
   _SelectAddressState createState() => _SelectAddressState();
 }
 class _SelectAddressState extends State<SelectAddress> {
-  final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Position _lastKnownPosition;
   GoogleMapController _mapController;
   bool checkPlatform = Platform.isIOS;
   Position myCurrentPosition;
   bool positionHasChanged = false;
   Place placeSelected;
+  LatLng coordinatesSelected;
+  bool loading = true;
   
   Future<void> _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
@@ -47,20 +48,9 @@ class _SelectAddressState extends State<SelectAddress> {
       lat: coordinates.latitude,
       lng: coordinates.longitude
     );
-    final MarkerId markerId = MarkerId('origin');
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(coordinates.latitude, coordinates.longitude),
-      draggable: true,
-      onDragEnd: (LatLng newPosition){
-      },
-      // ignore: deprecated_member_use
-      icon: checkPlatform ? BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_48.png') : BitmapDescriptor.fromAsset('assets/image/marker/ic_pick_96.png'),
-    );
+    loading = false;
     if(!mounted) return;
-    setState(() {
-      _markers[markerId] = marker;
-    });
+    setState(() {});
   }
   
   @override
@@ -94,29 +84,33 @@ class _SelectAddressState extends State<SelectAddress> {
           children: [
             GoogleMap(
               zoomControlsEnabled: false,
-              markers: Set<Marker>.of(_markers.values),
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               compassEnabled: false,
               initialCameraPosition: CameraPosition(
-                target: LatLng(_lastKnownPosition?.latitude ?? 0.0, _lastKnownPosition?.longitude ?? 0.0),
+                target: LatLng(_lastKnownPosition?.latitude ?? -12.055716, _lastKnownPosition?.longitude ?? -77.061331),
                 zoom: 12.0,
               ),
-              onTap: (LatLng newPosition){
-                updateOriginPointFromCoordinates(newPosition);
+              onCameraMove: ( cameraPosition ) {
+                coordinatesSelected = cameraPosition.target;
+              },
+              onCameraMoveStarted: (){
+                setState(() {
+                  loading = true;
+                });
+              },
+              onCameraIdle: (){
+                if(coordinatesSelected == null){
+                  return;
+                }
+                updateOriginPointFromCoordinates(coordinatesSelected);
               },
             ),
-            Positioned(
-              top: 0,
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-                padding: EdgeInsets.symmetric(
-                  vertical: mqHeigth(context, 2),
-                  horizontal: mqWidth(context, 5)
-                ),
-                width: MediaQuery.of(context).size.width,
-                child: const Text('Seleccione un punto en el mapa y luego presione en el botón amarrillo para confirmar', style: TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            Center(
+              child: Transform.translate(
+                offset: Offset(0, -25),
+                child: Icon( Icons.location_on, size: 50, color: Theme.of(context).primaryColor)
               ),
             ),
             Positioned(
@@ -144,6 +138,11 @@ class _SelectAddressState extends State<SelectAddress> {
                       child: Row(
                         children: [
                           Text('Mi dirección: '),
+                          loading ? Row(
+                            children: [
+                              CircularProgressIndicator()
+                            ],
+                          ) : 
                           Flexible(child: Text(placeSelected != null ? placeSelected.name : '', overflow: TextOverflow.ellipsis,)), 
                         ],
                       )

@@ -227,6 +227,7 @@ class _MenuDriverScreensState extends State<MenuDriverScreens> {
                               final _prefs = UserPreferences();
                               await _session.clear();
                               _prefs.setDrivingState = false;
+                              _prefs.idChoferReal = '0';
                               driverFirestoreService.updateDriverAvalability(false, _prefs.idChofer);
                               Navigator.pop(context);
                               navigatorRemoveUntil(context,'login');
