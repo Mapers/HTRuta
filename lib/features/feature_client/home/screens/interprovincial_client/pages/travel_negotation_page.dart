@@ -108,7 +108,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                 InformationDriveNegotation(availablesRoutesEntity: widget.availablesRoutesEntity ,),
                 Row(
                   children: [
-                    Text('Numero de asientes solicitdos: ', style: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic ),),
+                    Text('Número de asientos solicitados: ', style: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic ),),
                     Text(seating.toString()),
                   ],
                 ),
@@ -318,6 +318,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
           );
         break;
       case InterprovincialRequestCondition.counterOffer:
+          double amountTotal = request.price * request.seats;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -325,7 +326,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
               SizedBox(height: 10,),
               Text('Precio por pasajero: S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
-              CalculateTotal(price: request.price ,seating: request.seats ,),
+              Text('Monto total a pagar : S/. '+ amountTotal.toStringAsFixed(2) ,style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center ,

@@ -34,29 +34,34 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Icon(widget.icon, color: widget.iconColor),
-            SizedBox(width: 5),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LocationComplement(title: 'Región: ',subTitle: pointMeeting.regionName,),
-                  LocationComplement(title: 'Provincia: ',subTitle: pointMeeting.provinceName,),
-                  LocationComplement(title: 'Distrito: ',subTitle: pointMeeting.districtName,),
-                  LocationComplement(title: 'Calle: ',subTitle: pointMeeting.streetName,),
-                ],
-              ),
-            )
-          ],
+    return InkWell(
+      onTap: (){
+        print('Claro que yes');
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Icon(widget.icon, color: widget.iconColor),
+              SizedBox(width: 5),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LocationComplement(title: 'Región: ',subTitle: pointMeeting.regionName,),
+                    LocationComplement(title: 'Provincia: ',subTitle: pointMeeting.provinceName,),
+                    LocationComplement(title: 'Distrito: ',subTitle: pointMeeting.districtName,),
+                    LocationComplement(title: 'Calle: ',subTitle: pointMeeting.streetName,),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

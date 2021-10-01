@@ -128,7 +128,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
       confirmText: 'Aceptar',
       cancelText: 'Cancelar',
       initialTime: TimeOfDay.now(),
-      initialEntryMode: TimePickerEntryMode.input,
+      // initialEntryMode: TimePickerEntryMode.input,
     );
     if(timeOfDay == null){
       return;
