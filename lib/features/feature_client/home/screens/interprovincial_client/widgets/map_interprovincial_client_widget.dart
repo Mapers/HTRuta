@@ -82,6 +82,7 @@ class _MapInterprovincialClientWidgetState
       nameMarkerId: 'CURRENT_POSITION_MARKER',
       icon: circlePinLocationIcon,
     );
+    if(context == null) return;
     BlocProvider.of<InterprovincialClientLocationBloc>(context).add(
         UpdateInterprovincialClientLocationEvent(driverLocation: _location));
     setState(() {

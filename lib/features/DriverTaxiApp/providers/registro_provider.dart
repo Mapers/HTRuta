@@ -15,6 +15,8 @@ class RegistroProvider with ChangeNotifier{
   String _fotoAtencedente = '';
   String _fotoSoat = '';
   String _licencia = '';
+  String _email = '';
+  DateTime _birthDay;
 
   int _index = 0;
   String _titulo = '';
@@ -53,6 +55,12 @@ class RegistroProvider with ChangeNotifier{
     _placa = value;
     notifyListeners();
   }
+  String get email => _email;
+
+  set email(String value){
+    _email = value;
+    notifyListeners();
+  }
 
   String get fotoPerfil => _fotoPerfil;
 
@@ -79,6 +87,13 @@ class RegistroProvider with ChangeNotifier{
 
   set fotoLicenciaTrasera(String value){
     _fotoLicenciaTrasera = value;
+    notifyListeners();
+  }
+  
+  DateTime get birthDay => _birthDay;
+
+  set birthDay(DateTime birthDay){
+    _birthDay = birthDay;
     notifyListeners();
   }
 

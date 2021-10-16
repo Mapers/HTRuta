@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:HTRuta/config.dart';
@@ -518,5 +519,15 @@ class PickupApi{
     final response = await http.get(url);
     final listPlace = Place.parseLocationList(json.decode(response.body));
     return listPlace;
+  }
+  Future<String> uploadImage(File file, String userId) async {
+    try{
+      List<int> imageBytes = file.readAsBytesSync();
+      String base64Image = base64Encode(imageBytes);
+      final String photoUrl = await uploadPhoto(userId, base64Image);
+      return photoUrl;
+    }catch(e){
+      return null;
+    }
   }
 }

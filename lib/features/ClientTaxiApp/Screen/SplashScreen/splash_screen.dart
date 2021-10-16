@@ -10,7 +10,9 @@ import 'package:HTRuta/features/ClientTaxiApp/Provider/onboarding_provider.dart'
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -48,6 +50,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       });
     animationController.forward();
     Timer( Duration(seconds: 3), () async{
+      final _prefsInstance = await SharedPreferences.getInstance();
+      if (_prefsInstance.getBool('first_run') ?? true) {
+        FlutterSecureStorage storage = FlutterSecureStorage();
+        await storage.deleteAll();
+        _prefsInstance.setBool('first_run', false);
+      }
       final data = await _session.get();
       // await _prefs.initPrefs();
       final providerOnBoarding = Provider.of<OnBoardingProvider>(context,listen: false);

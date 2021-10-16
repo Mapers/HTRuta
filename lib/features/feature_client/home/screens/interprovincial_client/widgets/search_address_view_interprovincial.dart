@@ -108,7 +108,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                 onTap: () async {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => SearchAddressMapInteprovicnial(
                       placeBloc: widget.placeBloc,
-                      fromLocation: true,
+                      fromLocation: inputFrom,
                       initialPosition:  inputFrom ? from.latLang : to.latLang,
                       myCurrentPosition: widget.currentPosition,
                       getLocationFromOrTo: getLocationFromOrTo,

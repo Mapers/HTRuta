@@ -42,7 +42,9 @@ class _PhoneVerificationState extends State<PhoneVerification> {
           timer?.cancel();
           cancel = true;
         }
-        setState(() {});
+        if(mounted){
+          setState(() {});
+        }
       }
     );
     super.initState();
@@ -159,10 +161,14 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                                   timer?.cancel();
                                   cancel = true;
                                 }
-                                setState(() {});
+                                if(mounted){
+                                  setState(() {});
+                                }
                                 }
                               );
-                              setState(() {});
+                              if(mounted){
+                                setState(() {});
+                              }
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,

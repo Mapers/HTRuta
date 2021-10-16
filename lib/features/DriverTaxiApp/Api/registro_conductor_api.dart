@@ -52,7 +52,7 @@ class RegistroConductorApi{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
       final url = '${Config.apiHost}/api_getDocumentosRechazados.php';
-      final response = await http.post(url,body: {'id' : _prefs.idChoferReal});
+      final response = await http.post(url,body: {'id' : _prefs.idUsuario});
       final responseUsuario = documentoRechazadoFromJson(response.body);
       if(responseUsuario.success){
         final _prefs = UserPreferences();

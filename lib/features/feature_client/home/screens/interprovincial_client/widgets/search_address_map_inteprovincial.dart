@@ -137,7 +137,7 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> {
                           districtName: newPosition.locality,
                           provinceName: newPosition.subAdministrativeArea ,
                           regionName: newPosition.administrativeArea ,
-                          latLang: coordinatesSelected
+                          latLang: widget.fromLocation ? LatLng(widget.placeBloc.formLocation.lat, widget.placeBloc.formLocation.lng): LatLng(widget.placeBloc.locationSelect.lat, widget.placeBloc.locationSelect.lng),
                         );
                         widget.getLocationFromOrTo(newLocartion);
                         Navigator.of(context).pop();

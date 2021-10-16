@@ -51,7 +51,8 @@ dependencies:
   equatable: ^1.2.6
   device_info: ^0.4.2+9
   shared_preferences: ^0.5.12+4
-  image_cropper: ^1.2.3
+  # image_cropper: ^1.2.3
+  # images_picker: ^0.0.9
   pusher_websocket_flutter: ^0.2.0
 
   firebase_auth: ^0.18.4+1
@@ -71,7 +72,9 @@ dependencies:
   flutter_cache_manager: ^2.1.2
   share: ^0.6.5+4
   vibration: ^1.7.3
-  
+  camera: ^0.7.0+4
+  # file_picker: ^2.1.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

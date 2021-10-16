@@ -14,7 +14,7 @@ import 'package:http/http.dart';
 
 class AuthApi{
 
-  Future<bool> registerUser(BuildContext context, {String dni,String nombre,String apellidoPaterno, String apellidoMaterno,String fechaNacimiento, String sexo, String direccion, String referencia, String celular, String correo, String password, String tipoDispositivo,String marca, String nombreDispositivo, String imei, String token, String code}) async{
+  Future<bool> registerUser(BuildContext context, {String dni, String nombre, String apellidoPaterno, String apellidoMaterno, String fechaNacimiento, String sexo, String direccion, String referencia, String celular, String correo, String password, String tipoDispositivo,String marca, String nombreDispositivo, String imei, String token, String code}) async{
     final url = '${Config.apiHost}/api_setRegistroUsuario.php?Dni=$dni&Nombre=$nombre&ApellidoP=$apellidoPaterno&ApellidoM=$apellidoMaterno&FecNac=$fechaNacimiento&Sexo=$sexo&Dirección=$direccion&Referencia=$referencia&Telefono=''&Celular=$celular&Correo=$correo&Password=$password&iTipoDispositivo=$tipoDispositivo&iMarca=$marca&vchNombreD=$nombreDispositivo&Imei=$imei&TokenD=$token&codeVerification=$code';
     Response response;
     try{
@@ -25,15 +25,15 @@ class AuthApi{
     }
     Map<String,dynamic> usuarioResponse = json.decode(response.body);
     if(usuarioResponse == null || !usuarioResponse['success']) return false;
-    final urlLogin = '${Config.apiHost}/api_getLoginUsuario.php?email=$correo&clave=$password&tipo=1';
+    final urlLogin = '${Config.nuevaRutaApi}/App/obtenerLogin';
     Response responseGet;
     try{
-      responseGet = await http.post(urlLogin,body: {'email' : correo, 'clave' : password, 'tipo' : '1'});
+      responseGet = await http.post(urlLogin, body: {'dni' : dni, 'token' : token});
     }catch(e){
       print(e);
       return false;
     }
-    final responseLogin = userModelRegisterFromJson(responseGet.body);
+    final responseLogin = userModelFromJson(responseGet.body);
     final usuario = responseLogin.data;
     final session = Session();
     await session.set(usuario.iIdUsuario.toString(),dni, nombre, apellidoPaterno, apellidoMaterno, celular,correo, password, usuario.urlImage, usuario.sexo, code, usuario.fechaNacimiento, usuario.fechaRegistroUsuario, usuario.direccion, usuario.referencia);//TODO: Poner el valor real

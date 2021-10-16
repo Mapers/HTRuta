@@ -3,15 +3,18 @@ import 'dart:io';
 
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
-import 'package:HTRuta/app/navigation/routes.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Camera/take_picture_page.dart';
+// import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/registro_conductor_api.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/enviar_documentacion_response.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/documento_rechazado_model.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_cropper/image_cropper.dart';
+// import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 
@@ -31,8 +34,10 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
 
   @override
   void initState() { 
-    documentos = registroConductorApi.obtenerDocumentosRechazados();
     super.initState();
+    documentos = registroConductorApi.obtenerDocumentosRechazados();
+    Permission.camera.request();
+    Permission.photos.request();
   }
 
   Future<void> buscarImagen(int index) {
@@ -65,14 +70,28 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
   }
 
   Future cameraImage(int index) async {
-    try{
+     try{
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      imagenes[index] = File(imagePath);
+      setState(() {});
+      Navigator.of(context).pop();
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
+    /* try{
       // ignore: deprecated_member_use
       var image = await ImagePicker.pickImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
       // await _cropImage(index);
       setState(() {});
       Navigator.of(context).pop();
-    }catch(_){}
+    }catch(_){} */
   }
 
   Future _openGallery(int index) async {
@@ -84,12 +103,15 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       base64Data[index] = await obtenerBase64(imagenes[index]);
       setState(() {});
       Navigator.of(context).pop();
-    } catch (_) {}
+    } catch (e) {
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
   }
 
   bool recortado = false;
 
-  Future<Null> _cropImage(int index) async {
+  /* Future<Null> _cropImage(int index) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imagenes[index].path,
       aspectRatioPresets: [ CropAspectRatioPreset.square ],
@@ -106,7 +128,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
         recortado = true;
       });
     }
-  }
+  } */
 
   Future<String> obtenerBase64(File fileImage)async{
     String base64Image;

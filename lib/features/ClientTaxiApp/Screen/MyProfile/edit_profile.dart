@@ -1,20 +1,22 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Camera/take_picture_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/inputDropdown.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/save_profile_body.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/select_address.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EditProfile extends StatefulWidget {
   final UserSession userData;
@@ -32,7 +34,7 @@ class _EditProfileState extends State<EditProfile> {
   String photoUrl;
   DateTime birthdaySelected;
   final pickupApi = PickupApi();
-  var _image;
+  File _image;
   String newNames;
   String newFName;
   String newMName;
@@ -40,32 +42,51 @@ class _EditProfileState extends State<EditProfile> {
   String newEmail;
   String newAddress;
   final session = Session();
-  final _prefs = UserPreferences();
 
   Future getImageLibrary() async {
     // ignore: deprecated_member_use
-    var gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
+    /* File gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
     setState(() {
       _image = gallery;
-    });
-    if(gallery == null) return;
-    List<int> imageBytes = gallery.readAsBytesSync();
-    print(imageBytes);
-    String base64Image = base64Encode(imageBytes);
-    photoUrl = await pickupApi.uploadPhoto(widget.userData.id, base64Image);
-    if(photoUrl == null){
-      Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
-      return;
+    }); */
+    try{
+      // FileWrapper gallery = await getImage();
+      // ignore: deprecated_member_use
+      File gallery = await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 700);
+      if(gallery == null) return;
+      _image = gallery;
+      setState(() {});
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
     }
-    print('La foto se subió correctamente');
   }
+  
 
   Future cameraImage() async {
+    /* final List<Media> images = await ImagesPicker.openCamera(
+      pickType: PickType.video,
+      maxTime: 15, // record video max time
+    ); */
+    // final image = images.first.path;
     // ignore: deprecated_member_use
-    var image = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
+    /* var image = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
     setState(() {
       _image = image;
-    });
+    }); */
+    try{
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      _image = File(imagePath);
+      setState(() {});
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
   }
 
   void showDemoActionSheet({BuildContext context, Widget child}) {
@@ -112,6 +133,16 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void submit() async {
+    Dialogs.openLoadingDialog(context);
+    if(_image != null){
+      final url = await pickupApi.uploadImage(_image, widget.userData.id);
+      if(url == null){
+        Navigator.pop(context);
+        Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+        return;
+      }
+      photoUrl = url;
+    }
     final FormState form = formKey.currentState;
     form.save();
     SaveProfileBody body = SaveProfileBody(
@@ -187,6 +218,7 @@ class _EditProfileState extends State<EditProfile> {
         0
       );
     }
+    Navigator.pop(context);
     Navigator.pop(context, true);
   }
 
@@ -197,6 +229,8 @@ class _EditProfileState extends State<EditProfile> {
     selectedGender = widget.userData.sexo;
     birthdaySelected = DateTimeExtension.dateFromString(widget.userData.fechaNacimiento);
     newEmail = widget.userData.email;
+    Permission.camera.request();
+    Permission.photos.request();
   }
   @override
   Widget build(BuildContext context) {
@@ -483,22 +517,6 @@ class _EditProfileState extends State<EditProfile> {
                                       flex: 4,
                                       child:  GestureDetector(
                                         onTap: () async {
-                                          /* showCupertinoModalPopup<void>(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return _buildBottomPicker(
-                                                CupertinoDatePicker(
-                                                  mode: CupertinoDatePickerMode.date,
-                                                  initialDateTime: date,
-                                                  onDateTimeChanged: (DateTime newDateTime) {
-                                                    setState(() {
-                                                      date = newDateTime;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ); */
                                           final selectedDate = await selectDate(context);
                                           if(selectedDate != null){
                                             if(selectedDate.isAfter(DateTime.now())){

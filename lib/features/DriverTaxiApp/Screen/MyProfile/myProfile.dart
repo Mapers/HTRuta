@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Camera/take_picture_page.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Components/ink_well_custom.dart';
@@ -15,6 +18,7 @@ import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/select_address.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MyProfile extends StatefulWidget {
   final DriverSession driverSession;
@@ -45,29 +49,47 @@ class _MyProfileState extends State<MyProfile> {
   String newAddress;
 
   Future getImageLibrary() async {
-    // ignore: deprecated_member_use
-    var gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
-    setState(() {
-      _image = gallery;
-    });
-    if(gallery == null) return;
+    try{
+      // ignore: deprecated_member_use
+      var gallery = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 700);
+      setState(() {
+        _image = gallery;
+      });
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
+    /* if(gallery == null) return;
     List<int> imageBytes = gallery.readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
     photoUrl = await pickupApi.uploadPhoto(_prefs.idUsuario, base64Image);
     if(photoUrl == null){
       Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
       return;
-    }
-    print('La foto se subió correctamente');
+    } */
+    // print('La foto se subió correctamente');
   }
 
   Future cameraImage() async {
     // ignore: deprecated_member_use
-    var pickImage = ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
+    try{
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      _image = File(imagePath);
+      setState(() {});
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
+    /* var pickImage = ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 700);
     var image = await pickImage;
     setState(() {
       _image = image;
-    });
+    }); */
   }
 
   void showDemoActionSheet({BuildContext context, Widget child}) {
@@ -114,6 +136,16 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   void submit() async {
+    Dialogs.openLoadingDialog(context);
+    if(_image != null){
+      final url = await pickupApi.uploadImage(_image, _prefs.idUsuario);
+      if(url == null){
+        Navigator.pop(context);
+        Dialogs.alert(context,title: 'Error', message: 'No se pudo subir la foto');
+        return;
+      }
+      photoUrl = url;
+    }
     final FormState form = formKey.currentState;
     form.save();
     SaveProfileBody body = SaveProfileBody(
@@ -167,11 +199,13 @@ class _MyProfileState extends State<MyProfile> {
       widget.driverSession.metodosPago,
       widget.driverSession.saldo
     );
+    Navigator.pop(context);
     Navigator.pop(context, true);
   }
 
   @override
   void initState() {
+    super.initState();
     selectedGender = widget.driverSession.sexo;
     newEmail = widget.driverSession.email;
     newAddress = widget.driverSession.direccion;
@@ -181,7 +215,8 @@ class _MyProfileState extends State<MyProfile> {
       int.parse(widget.driverSession.fechaNacimiento.split('-')[2].substring(0,2)),
     );
     birthdaySelected = DateTimeExtension.dateFromString(widget.driverSession.fechaNacimiento);
-    super.initState();
+    Permission.camera.request();
+    Permission.photos.request();
   }
 
   @override

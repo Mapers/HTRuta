@@ -6,7 +6,9 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/Camera/take_picture_page.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/responsive.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
@@ -15,10 +17,12 @@ import 'package:HTRuta/features/DriverTaxiApp/Model/color_carro_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/marca_carro_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Model/modelo_carro_model.dart';
 import 'package:HTRuta/features/DriverTaxiApp/providers/registro_provider.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 
@@ -29,10 +33,17 @@ class RegisterDriverPage extends StatefulWidget {
 
 class _RegisterDriverPageState extends State<RegisterDriverPage> {
   PageController _pageController = PageController(initialPage: 0);
+  String newEmail = '';
 
   void onAddButtonTapped(int index) {
     _pageController.animateToPage(index,
         duration: Duration(milliseconds: 500), curve: Curves.ease);
+  }
+  @override
+  void initState() {
+    super.initState();
+    Permission.camera.request();
+    Permission.photos.request();
   }
 
   @override
@@ -174,7 +185,7 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                   dynamic datosUsuario = await _session.get();
                   final _prefs = UserPreferences();
                   Dialogs.openLoadingDialog(context);
-                  final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, datosUsuario.fechaNacimiento, datosUsuario.sexo, datosUsuario.direccion, datosUsuario.referencia, datosUsuario.cellphone,  datosUsuario.cellphone, datosUsuario.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
+                  final respuesta = await registroConductor.registrarChofer(datosUsuario.dni, datosUsuario.names, datosUsuario.lastNameFather, datosUsuario.lastNameMother, provider.birthDay == null ?  datosUsuario.fechaNacimiento : DateTimeExtension.parseDateEnglishV2(provider.birthDay), datosUsuario.sexo, datosUsuario.direccion, datosUsuario.referencia, datosUsuario.cellphone,  datosUsuario.cellphone, provider.email, datosUsuario.password, '', '', '', '', _prefs.tokenPush, provider.placa, provider.dataModelo.iIdModelo.toString(),'4','2018', '1', provider.fotoSoat??'', provider.fotoPerfil??'', provider.fotoAuto??'', provider.fotoAtencedente??'', provider.fotoLicenciaFrente??'');
                   await authApi.loginUserSMS(datosUsuario.cellphone, datosUsuario.smsCode);
                   Navigator.pop(context);
                   if(respuesta){
@@ -184,7 +195,6 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                   }else{
                     Dialogs.alert(context,title: 'Error', message: 'No se enviaron los datos, intentelo otra vez');
                   }
-
                 }catch(error){
                   Navigator.pop(context);
                   Dialogs.alert(context, title: 'Error', message: 'Ocurrio un error,vuelva a intentarlo');
@@ -195,7 +205,8 @@ class _OctavaPaginaState extends State<OctavaPagina> {
                 style: TextStyle(color: Colors.white),
               ),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(responsive.wp(10))),
+                borderRadius: BorderRadius.circular(responsive.wp(10))
+              ),
             ),
           ),
         ],
@@ -254,7 +265,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
   }
 
   Future cameraImage(int index) async {
-    try{
+    /* try{
       var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imagenes[index] = File(image.path);
 
@@ -262,7 +273,22 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       setState(() {});
       Navigator.of(context).pop();
 
-    }catch(_){}
+    }catch(_){} */
+    try{
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      imagenes[index] = File(imagePath);
+      setState(() {});
+      base64Data[index] = await obtenerBase64(imagenes[index]);
+      Navigator.of(context).pop();
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
   }
 
   Future _openGallery(int index) async {
@@ -392,15 +418,13 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
                 color: primaryColor,
                 onPressed: () async{
                   try{
-                    bool noValido = false;
+                    bool valido = true;
                     for(int i = 0;i< base64Data.length;i++){
                       if(base64Data[i] == null){
-                        noValido = true;
-                        return;
+                        valido = false;
                       }
                     }
-
-                    if(!noValido){
+                    if(valido){
                       final provider = Provider.of<RegistroProvider>(context,listen: false);
                       provider.fotoLicenciaFrente = base64Data[0];
                       provider.fotoLicenciaTrasera = base64Data[1];
@@ -647,12 +671,26 @@ class _SextaPaginaState extends State<SextaPagina> {
 
   Future cameraImage() async {
     try{
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      imageFile = File(imagePath);
+      setState(() {});
+      Navigator.of(context).pop();
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
+    /* try{
       var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
       imageFile = File(image.path);
       // await _cropImage();
       setState(() {});
       Navigator.of(context).pop();
-    }catch(_){}
+    }catch(_){} */
   }
 
   void _openGallery() async {
@@ -827,76 +865,74 @@ class _QuintaPaginaState extends State<QuintaPagina> {
     datosUsuario = _session.get();
   }
 
+  Future<DateTime> selectDate(BuildContext context) async {  
+    DateTime pickedDateTime = await showDatePicker(
+      context: context, 
+      initialDate: DateTime.now(), 
+      firstDate: DateTime(1900), 
+      lastDate: DateTime(2100),
+      locale: Locale('es','ES'),
+    );
+    return pickedDateTime;
+  }
+
   Future<void> buscarImagen() {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Añadir una nueva foto'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Text('Seleccionar foto'),
-                    onTap: () async {
-                      await _openGallery();
-                    },
-                  ),
-                  Padding(padding: EdgeInsets.all(8.0)),
-                  GestureDetector(
-                    child: Text('Tomar una foto'),
-                    onTap: () async{
-                      await cameraImage();
-                    },
-                  )
-                ],
-              ),
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Añadir una nueva foto'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Seleccionar foto'),
+                  onTap: () async {
+                    await _openGallery();
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                GestureDetector(
+                  child: Text('Tomar una foto'),
+                  onTap: () async{
+                    await cameraImage();
+                  },
+                )
+              ],
             ),
-          );
-        });
+          ),
+        );
+      }
+    );
   }
 
   Future cameraImage() async {
     try{
-      var image = await picker.getImage(source: ImageSource.camera,maxHeight: 664, maxWidth: 1268);
-      imageFile = File(image.path);
-      // await _cropImage();
+      final List<CameraDescription> cameras = await availableCameras();
+      if(cameras.isEmpty){
+        throw Exception();
+      }
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      if(imagePath == null) return;
+      imageFile = File(imagePath);
       setState(() {});
-    }catch(_){}
+      Navigator.pop(context);
+    }catch(e){
+      print(e);
+      Dialogs.alert(context,title: 'Error', message: 'No se pudo obtener la imagen, inténtelo nuevamente');
+    }
   }
 
   Future _openGallery() async {
     try {
       var picture = await picker.getImage(source: ImageSource.gallery, maxHeight: 664, maxWidth: 1268);
       imageFile = File(picture.path);
-      // await _cropImage();
       setState(() {});
       Navigator.of(context).pop();
     } catch (_) {}
   }
 
   bool recortado = false;
-
-  /* Future<Null> _cropImage() async {
-    File croppedFile = await ImageCropper.cropImage(
-      sourcePath: imageFile.path,
-      aspectRatioPresets: [ CropAspectRatioPreset.square ],
-      androidUiSettings: AndroidUiSettings(
-        toolbarTitle: 'Recortar',
-        initAspectRatio: CropAspectRatioPreset.square,
-        lockAspectRatio: true
-      ),
-      iosUiSettings: IOSUiSettings(title: 'Cropper')
-    );
-    if (croppedFile != null) {
-      imageFile = croppedFile;
-      setState(() {
-        recortado = true;
-      });
-    }
-  } */
-
-
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
@@ -939,9 +975,9 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                             Text('Nombre', style: TextStyle(fontSize: responsive.ip(2)),),
                             SizedBox(height: responsive.hp(1),),
                             TextFormField(
+                              enabled: false,
                               initialValue: data.names ?? '',
                               keyboardType: TextInputType.text,
-                              //validator: validations.validateName,
                               decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
@@ -954,6 +990,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                           Text('Apellido Paterno', style: TextStyle(fontSize: responsive.ip(2)),),
                             SizedBox(height: responsive.hp(1),),
                             TextFormField(
+                              enabled: false,
                               initialValue: data.lastNameFather ?? '',
                               keyboardType: TextInputType.text,
                               //validator: validations.validateName,
@@ -969,6 +1006,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                           Text('Apellido Materno', style: TextStyle(fontSize: responsive.ip(2)),),
                             SizedBox(height: responsive.hp(1),),
                             TextFormField(
+                              enabled: false,
                               initialValue: data.lastNameMother ?? '',
                               keyboardType: TextInputType.text,
                               //validator: validations.validateMobile,
@@ -984,9 +1022,9 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                           Text('Documento de indentidad', style: TextStyle(fontSize: responsive.ip(2)),),
                             SizedBox(height: responsive.hp(1),),
                             TextFormField(
+                              enabled: false,
                               initialValue: data.dni ?? '',
                               keyboardType: TextInputType.phone,
-                              //validator: validations.validateName,
                               decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
@@ -1031,7 +1069,6 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                                   ),
                                   color:  sexo == 2 ? primaryColor : Colors.white,
                                   padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-
                                 ),
                               )
                             ],
@@ -1040,24 +1077,37 @@ class _QuintaPaginaState extends State<QuintaPagina> {
                           Text('Fecha de Nacimiento', style: TextStyle(fontSize: responsive.ip(2)),),
                             SizedBox(height: responsive.hp(1),),
                             OutlineButton(
-                              onPressed: (){},
-                              child: Text(data.fechaNacimiento, textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
-                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)),
+                              onPressed: () async {
+                                final selectedDate = await selectDate(context);
+                                  if(selectedDate != null){
+                                    if(selectedDate.isAfter(DateTime.now())){
+                                      Dialogs.alert(context,title: 'Error', message: 'Seleccione una fecha anterior a la actual');
+                                    }else{
+                                      Provider.of<RegistroProvider>(context, listen: false).birthDay = selectedDate;
+                                      setState(() {});
+                                    }
+                                  }
+                              },
+                              child: Text(providerRegistro.birthDay == null ?  data.fechaNacimiento : DateTimeExtension.parseDateSpanishV2(providerRegistro.birthDay), textAlign: TextAlign.left,style: TextStyle(color: Colors.black54),),
+                              padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(35)
+                            ),
                           ),
                           SizedBox(height: responsive.hp(2),),
                           Text('Email', style: TextStyle(fontSize: responsive.ip(2)),),
-                            SizedBox(height: responsive.hp(1),),
-                            TextFormField(
-                              initialValue: data.email ?? '',
-                              keyboardType: TextInputType.emailAddress,
-                              //validator: validations.validateEmail,
-                              decoration: InputDecoration(
+                          SizedBox(height: responsive.hp(1),),
+                          TextFormField(
+                            initialValue: data.email ?? '',
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand')
-                            )
+                              hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
+                            ),
+                            onChanged: (String newValue){
+                              Provider.of<RegistroProvider>(context, listen: false).email = newValue;
+                            },
                           ),
                           SizedBox(height: responsive.hp(10),),
                           ],
