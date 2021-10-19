@@ -2,7 +2,9 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
+import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/phone_verification.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
@@ -24,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final authApi = AuthApi();
   bool _isFetching = false;
   bool obscure = true;
+  final _prefs = UserPreferences();
 
   void _submit() async{
     try{
@@ -34,8 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       final isValid = formKey.currentState.validate();
       if(isValid){
-        Dialogs.openLoadingDialog(context);
-        final String sent = await authApi.getVerificationCode(_phoneNumber);
+        String tokenFirebase = _prefs.tokenPush;
+        int code = generateRandomCode();
+        authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
+        /* final String sent = await authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
         Navigator.pop(context);
         if(sent != 'S'){
           if(sent == 'N'){
@@ -45,8 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
             return;
           }
-        }
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(numeroTelefono: _phoneNumber)));
+        } */
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(numeroTelefono: _phoneNumber, verificationCode: code.toString())));
       }
     } on ServerException catch (error){
       Navigator.pop(context);

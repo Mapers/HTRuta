@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/core/push_message/push_notification.dart';
+import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/app_router.dart';
@@ -10,7 +13,8 @@ import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class PhoneVerification extends StatefulWidget {
   final String numeroTelefono;
-  PhoneVerification({this.numeroTelefono});
+  String verificationCode;
+  PhoneVerification({this.numeroTelefono, this.verificationCode});
   @override
   _PhoneVerificationState createState() => _PhoneVerificationState();
 }
@@ -26,6 +30,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
   bool cancel = false;
   int _start = 60;
   Timer timer;
+  final _prefs = UserPreferences();
+  PushNotificationProvider pushProvider = PushNotificationProvider();
 
   @override
   void dispose() { 
@@ -47,6 +53,12 @@ class _PhoneVerificationState extends State<PhoneVerification> {
         }
       }
     );
+    pushProvider.mensajes.listen((argumento) async{
+      final String code = argumento['data']['code'] as String;
+      if(code != null){
+        controller.text = code;
+      }
+    });
     super.initState();
   }
 
@@ -122,8 +134,11 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         if(controller.value.text.length != 6){
                           return;
                         }
+                        if(controller.value.text != widget.verificationCode){
+                          return;
+                        }
                         Dialogs.openLoadingDialog(context);
-                        final isOk = await authApi.loginUserSMS(widget.numeroTelefono, controller.value.text);
+                        final isOk = await authApi.loginUserNotification(widget.numeroTelefono);
                         Navigator.pop(context);
                         if(isOk){
                           Navigator.pushNamedAndRemoveUntil(context, AppRoute.splashScreen, (route) => false);
@@ -141,8 +156,11 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                           cancel ?  
                           InkWell(
                             onTap: () async {
-                              final String sent = await authApi.getVerificationCode(widget.numeroTelefono);
-                              if(sent != 'S'){
+                              String tokenFirebase = _prefs.tokenPush;
+                              int code = generateRandomCode();
+                              widget.verificationCode = code.toString();
+                              authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
+                              /* if(sent != 'S'){
                                 if(sent == 'N'){
                                   Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
                                   return;
@@ -150,7 +168,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                                   Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
                                   return;
                                 }
-                              }
+                              } */
                               const oneSec = Duration(seconds: 1);
                               _start = 60;
                               cancel = false;

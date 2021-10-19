@@ -97,7 +97,35 @@ class AuthApi{
     }catch(e){
       return false;
     }
-    
+  }
+  Future<bool> loginUserNotification(String phoneNumber) async{
+    try{
+      final _prefs = UserPreferences();
+      await _prefs.initPrefs();
+      final url = 'http://23.254.217.21:8000/api/auth/loginDos';
+      final response = await http.post(url,body: {'cellphone' : phoneNumber, 'token': _prefs.tokenPush});
+      if(response.statusCode == 200){
+        final responseUsuario = userModelFromJson(response.body);
+        final usuario = responseUsuario.data;
+        final session = Session();
+        _prefs.idUsuario = usuario.iIdUsuario.toString();
+        await session.set(usuario.iIdUsuario.toString(),usuario.vchDni, usuario.vchNombres, usuario.vchApellidoP, usuario.vchApellidoM, usuario.vchCelular,usuario.vchCorreo, usuario.vchPassword, usuario.urlImage, usuario.sexo, '123456', usuario.fechaNacimiento, usuario.fechaRegistroUsuario, usuario.direccion, usuario.referencia);
+        if(responseUsuario.data.iIdChofer != 0){
+          final url = '${Config.nuevaRutaApi}/chofer/obtener-informacion-personal?choferId=${responseUsuario.data.iIdChofer}';
+          final response = await http.get(url);
+          DriverDataResponse driverDataResponse = driverDataResponseFromJson(response.body);
+          await session.setDriverData(responseUsuario.data.vchNombres, responseUsuario.data.vchApellidoP, responseUsuario.data.vchApellidoM, responseUsuario.data.vchCelular, responseUsuario.data.vchCorreo, responseUsuario.data.vchDni, driverDataResponse.data.sexo, driverDataResponse.data.fechaNacimiento.toString(), driverDataResponse.data.fechaRegistro.toString(), driverDataResponse.data.urlImage, '123456', usuario.direccion, usuario.referencia, driverDataResponse.data.metodosPago, driverDataResponse.data.saldo);
+          _prefs.idChofer = responseUsuario.data.iIdUsuario.toString();
+          _prefs.idChoferReal = responseUsuario.data.iIdChofer.toString();
+        }else{
+          _prefs.idChoferReal = '0';
+        }
+        return true;
+      }
+      throw ServerException(message: 'Ocurrió un error con el servidor');  
+    }catch(e){
+      return false;
+    }
   }
   Future<String> getVerificationCode(String phoneNumber) async {
     try{
@@ -115,7 +143,17 @@ class AuthApi{
       print(e);
       return 'E';
     }
-    
+  }
+  Future<bool> getVerificationCodeNotification(String token, String code) async {
+    try{
+      final response = await http.post('http://23.254.217.21:8000/api/auth/send-code-user/sms', body: {'tokenF' : token, 'code': code});
+      if(response.statusCode == 200){
+        return true;
+      }
+      return false;
+    }catch(e){
+      return false;
+    }
   }
   Future<String> getVerificationCodeRegister(String phoneNumber) async {
     try{

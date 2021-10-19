@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/components/qualification_widget.dart';
 import 'package:HTRuta/app/widgets/card_informativa_location.dart';
 import 'package:HTRuta/app/widgets/loading_fullscreen.dart';
@@ -11,6 +14,7 @@ import 'package:HTRuta/features/features_driver/home/data/remote/interprovincial
 import 'package:HTRuta/features/features_driver/home/entities/passenger_entity.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:HTRuta/injection_container.dart';
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -93,9 +97,21 @@ class _ListPassengersFullScreenDialogState extends State<ListPassengersFullScree
                 ),
                 IconButton(
                   icon: Icon(Icons.map,color: Colors.orange,),
-                  onPressed: (){
-                    print(passenger.pointMeeting.latitude);
-                    print(passenger.pointMeeting.latitude);
+                  onPressed: () async {
+                    if(passenger == null || passenger.pointMeeting == null){
+                      Dialogs.alert(context, title: 'Lo sentimos', message: 'No es posible abrir la navegación');
+                      return;
+                    }
+                    if(!Platform.isAndroid){
+                      Dialogs.alert(context, title: 'Lo sentimos', message: 'Actualmente la navegación solo está habilitada para dispositivos Android');
+                      return;
+                    }
+                    AndroidIntent intent = AndroidIntent(
+                      action: 'action_view',
+                      data: Uri.encodeFull('google.navigation:q=${passenger.pointMeeting.latitude},${passenger.pointMeeting.longitude}'),
+                      package: 'com.hadtech.mirutaapp',
+                    );
+                    await intent.launch();
                     //? Codigo dari
                   }
                 ),
