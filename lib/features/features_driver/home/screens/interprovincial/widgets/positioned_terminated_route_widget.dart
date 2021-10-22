@@ -15,15 +15,21 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
       builder: (context, locationState) {
-        if(locationState is DataInterprovincialDriverLocationState){
-          InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
-          if(serviceState is DataInterprovincialDriverState){
-            final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
-            if(status.contains(serviceState.status) && locationState.location != null){
-              int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
-              double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
-              if(distance <= 3 || diferenceDays >= 2){
-                return Positioned(
+              
+        // if(locationState is DataInterprovincialDriverLocationState){
+        //   InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+        //   if(serviceState is DataInterprovincialDriverState){
+        //     final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
+        //     if(status.contains(serviceState.status) && locationState.location != null){
+        //       // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
+        //       // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
+        //       // if(distance <= 3 || diferenceDays >= 2){
+        //       //   return 
+        //       // }
+        //     }
+        //   }
+        // }
+        return Positioned(
                   bottom: bottom,
                   left: 80,
                   right: 80,
@@ -32,11 +38,6 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
                     onPressed: () => showQuestionTerminatedService(context)
                   )
                 );
-              }
-            }
-          }
-        }
-        return Container();
       },
     );
   }
