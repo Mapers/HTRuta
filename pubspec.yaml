@@ -75,6 +75,7 @@ dependencies:
   camera: ^0.7.0+4
   # file_picker: ^2.1.7
   android_intent_plus: ^0.4.2
+  sms_autofill: ^1.3.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -6,6 +8,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step3.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class SignUpStep2 extends StatefulWidget {
   final String numeroTelefono;
@@ -15,15 +18,54 @@ class SignUpStep2 extends StatefulWidget {
   _SignUpStep2State createState() => _SignUpStep2State();
 }
 
-class _SignUpStep2State extends State<SignUpStep2> {
+class _SignUpStep2State extends State<SignUpStep2> with CodeAutoFill {
   TextEditingController controller = TextEditingController();
   String thisText = '';
   int pinLength = 6;
+  String otpCode;
 
   bool hasError = false;
   String errorMessage;
   final authApi = AuthApi();
+  
+  Timer timer;
+  bool cancelTimer = false;
+  int _start = 60;
+  
+  @override
+  void codeUpdated() {
+    setState(() {
+      otpCode = code;
+      if(otpCode != null){
+        controller.text = code;
+      }
+    });
+  }
 
+  @override
+  void initState() {
+    listenForCode();
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(oneSec, (Timer t){
+      _start -= 1;
+      if(_start <= 0){
+        _start = 0;
+        timer?.cancel();
+        cancelTimer = true;
+      }
+      if(mounted){
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() { 
+    controller?.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -106,14 +148,47 @@ class _SignUpStep2State extends State<SignUpStep2> {
                       child:Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          cancelTimer ?  
                           InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child:Text('No recibí un código',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                decoration: TextDecoration.underline
-                              ),
+                            onTap: () async {
+                              authApi.getVerificationCodeRegister(widget.numeroTelefono);
+                              const oneSec = Duration(seconds: 1);
+                              _start = 60;
+                              cancelTimer = false;
+                              timer = Timer.periodic(oneSec, (Timer t){
+                                _start -= 1;
+                                if(_start <= 0){
+                                  _start = 0;
+                                  timer?.cancel();
+                                  cancelTimer = true;
+                                }
+                                if(mounted){
+                                  setState(() {});
+                                }
+                                }
+                              );
+                              if(mounted){
+                                setState(() {});
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Reenviar código',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    decoration: TextDecoration.underline
+                                  )
+                                )
+                              ],
                             ),
+                          ) :
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('Reenviar código en $_start seg', style: TextStyle(fontSize: 16, color: Colors.grey))
+                            ],
                           ),
                         ],
                       )

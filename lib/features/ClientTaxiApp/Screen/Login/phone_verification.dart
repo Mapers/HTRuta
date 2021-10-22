@@ -3,34 +3,34 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/push_message/push_notification.dart';
-import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class PhoneVerification extends StatefulWidget {
   final String numeroTelefono;
-  String verificationCode;
-  PhoneVerification({this.numeroTelefono, this.verificationCode});
+  PhoneVerification({this.numeroTelefono});
   @override
   _PhoneVerificationState createState() => _PhoneVerificationState();
 }
 
-class _PhoneVerificationState extends State<PhoneVerification> {
+class _PhoneVerificationState extends State<PhoneVerification> with CodeAutoFill {
   TextEditingController controller = TextEditingController();
   String thisText = '';
   int pinLength = 6;
+  String otpCode;
+  String signature;
+
 
   bool hasError = false;
   String errorMessage;
   final authApi = AuthApi();
-  bool cancel = false;
+  bool cancelTimer = false;
   int _start = 60;
   Timer timer;
-  final _prefs = UserPreferences();
   PushNotificationProvider pushProvider = PushNotificationProvider();
 
   @override
@@ -38,27 +38,33 @@ class _PhoneVerificationState extends State<PhoneVerification> {
     controller?.dispose();
     super.dispose();
   }
+
+  @override
+  void codeUpdated() {
+    setState(() {
+      otpCode = code;
+      if(otpCode != null){
+        controller.text = code;
+      }
+    });
+  }
+
   @override
   void initState() {
+    listenForCode();
     const oneSec = Duration(seconds: 1);
     timer = Timer.periodic(oneSec, (Timer t){
         _start -= 1;
         if(_start <= 0){
           _start = 0;
           timer?.cancel();
-          cancel = true;
+          cancelTimer = true;
         }
         if(mounted){
           setState(() {});
         }
       }
     );
-    pushProvider.mensajes.listen((argumento) async{
-      final String code = argumento['data']['code'] as String;
-      if(code != null){
-        controller.text = code;
-      }
-    });
     super.initState();
   }
 
@@ -134,11 +140,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         if(controller.value.text.length != 6){
                           return;
                         }
-                        if(controller.value.text != widget.verificationCode){
-                          return;
-                        }
                         Dialogs.openLoadingDialog(context);
-                        final isOk = await authApi.loginUserNotification(widget.numeroTelefono);
+                        final isOk = await authApi.loginUserSMS(widget.numeroTelefono, controller.value.text);
                         Navigator.pop(context);
                         if(isOk){
                           Navigator.pushNamedAndRemoveUntil(context, AppRoute.splashScreen, (route) => false);
@@ -149,66 +152,63 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     ),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          cancel ?  
-                          InkWell(
-                            onTap: () async {
-                              String tokenFirebase = _prefs.tokenPush;
-                              int code = generateRandomCode();
-                              widget.verificationCode = code.toString();
-                              authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
-                              /* if(sent != 'S'){
-                                if(sent == 'N'){
-                                  Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
-                                  return;
-                                }else{
-                                  Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
-                                  return;
-                                }
-                              } */
-                              const oneSec = Duration(seconds: 1);
-                              _start = 60;
-                              cancel = false;
-                              timer = Timer.periodic(oneSec, (Timer t){
-                                _start -= 1;
-                                if(_start <= 0){
-                                  _start = 0;
-                                  timer?.cancel();
-                                  cancel = true;
-                                }
-                                if(mounted){
-                                  setState(() {});
-                                }
-                                }
-                              );
+                    padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        cancelTimer ?  
+                        InkWell(
+                          onTap: () async {
+                            final String sent = await authApi.getVerificationCode(widget.numeroTelefono);
+                            if(sent != 'S'){
+                              if(sent == 'N'){
+                                Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
+                                return;
+                              }else{
+                                Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
+                                return;
+                              }
+                            }
+                            const oneSec = Duration(seconds: 1);
+                            _start = 60;
+                            cancelTimer = false;
+                            timer = Timer.periodic(oneSec, (Timer t){
+                              _start -= 1;
+                              if(_start <= 0){
+                                _start = 0;
+                                timer?.cancel();
+                                cancelTimer = true;
+                              }
                               if(mounted){
                                 setState(() {});
                               }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Reenviar código',
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.underline
-                                  )
-                                )
-                              ],
-                            ),
-                          ):
-                          Row(
+                              }
+                            );
+                            if(mounted){
+                              setState(() {});
+                            }
+                          },
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text('Reenviar código en $_start seg', style: TextStyle(fontSize: 16, color: Colors.grey))
+                              Text(
+                                'Reenviar código',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  decoration: TextDecoration.underline
+                                )
+                              )
                             ],
                           ),
-                        ],
-                      )
+                        ):
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('Reenviar código en $_start seg', style: TextStyle(fontSize: 16, color: Colors.grey))
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ]
               ),

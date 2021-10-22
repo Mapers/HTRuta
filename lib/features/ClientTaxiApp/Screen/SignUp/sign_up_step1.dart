@@ -115,6 +115,7 @@ class SignUpStep1 extends StatelessWidget {
                             Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
                             return;
                           }
+                          Navigator.pop(context);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpStep2(numeroTelefono: _phoneNumber, validationCode: codeSent)));
                         }
                       ),

@@ -2,15 +2,14 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/core/error/exceptions.dart';
-import 'package:HTRuta/core/utils/helpers.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/phone_verification.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
 import 'package:HTRuta/app_router.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,23 +25,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final authApi = AuthApi();
   bool _isFetching = false;
   bool obscure = true;
-  final _prefs = UserPreferences();
+  String signature = '';
 
   void _submit() async{
     try{
       if(_isFetching) return;
+      Dialogs.openLoadingDialog(context);
       if(int.tryParse(_phoneNumber) == null){
+        Navigator.pop(context);
         Dialogs.alert(context,title: 'Atención', message: 'Ingresé un número de teléfono numérico');
         return;  
       }
       final isValid = formKey.currentState.validate();
       if(isValid){
-        String tokenFirebase = _prefs.tokenPush;
-        int code = generateRandomCode();
-        authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
-        /* final String sent = await authApi.getVerificationCodeNotification(tokenFirebase, code.toString());
-        Navigator.pop(context);
+        final String sent = await authApi.getVerificationCode(_phoneNumber);
         if(sent != 'S'){
+          Navigator.pop(context);
           if(sent == 'N'){
             Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
             return;
@@ -50,13 +48,28 @@ class _LoginScreenState extends State<LoginScreen> {
             Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
             return;
           }
-        } */
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(numeroTelefono: _phoneNumber, verificationCode: code.toString())));
+        }
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(numeroTelefono: _phoneNumber)));
+      }else{
+        Navigator.pop(context);
+        Dialogs.alert(context,title: 'Atención', message: 'Escriba un número de teléfono válido');
       }
     } on ServerException catch (error){
       Navigator.pop(context);
       Dialogs.alert(context,title: 'Error', message: error.message);
     }
+  }
+
+  Future<void> getSignature() async {
+    signature = await SmsAutoFill().getAppSignature;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getSignature();
+    super.initState();
   }
 
   @override
@@ -111,7 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           elevation: 5,
                           child: Container(
                             width: MediaQuery.of(context).size.width - 20,
-                            height: MediaQuery.of(context).size.height * 0.3,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20)
@@ -150,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Quicksand'),
                                           )
                                         ),
+                                        Container(height: 10),
                                       ],
                                     ),
                                     ButtonTheme(
@@ -186,6 +199,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         )
                       ),
+                      Container(
+                        height: 100,
+                      ),
+                      Text(
+                        signature, style: TextStyle(color: Colors.blue[50])
+                      )
                       /* InkWell(
                         onTap: () => Navigator.of(context).pushNamed(AppRoute.registerDriverScreen),
                         child: Text('Registrarse como conductor',style: textStyleActive,),

@@ -345,22 +345,23 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
                 children: <Widget>[
                   Text('Número de licencia de conducir', style: TextStyle(fontSize: responsive.ip(2)),),
                   SizedBox(height: responsive.hp(2),),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    onChanged: (value){
-                      setState(() {
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: responsive.wp(15)),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value){
                         licencia = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      },
+                      decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+                      hintText: 'Ingrese licencia',
+                      hintStyle: TextStyle(
+                        color: Colors.grey, fontFamily: 'Quicksand'),
+                      )
                     ),
-                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    hintText: 'Ingrese licencia',
-                    hintStyle: TextStyle(
-                      color: Colors.grey, fontFamily: 'Quicksand'),
-                    )
                   ),
                   SizedBox(height: responsive.hp(2),),
                   Column(
@@ -424,19 +425,20 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
                         valido = false;
                       }
                     }
-                    if(valido){
+                    if(licencia.isEmpty){
+                      Dialogs.alert(context, title: 'Atención', message: 'Debe ingresar numero de licencia');
+                    }else if (!valido){
+                      Dialogs.alert(context, title: 'Atención', message: 'Debe subir todas las fotos para proceder a enviar la información');
+                    }else{
                       final provider = Provider.of<RegistroProvider>(context,listen: false);
                       provider.fotoLicenciaFrente = base64Data[0];
                       provider.fotoLicenciaTrasera = base64Data[1];
                       provider.fotoAtencedente = base64Data[2];
                       provider.fotoSoat = base64Data[3];
+                      provider.licencia = licencia;
                       providerRegistro.index = 7;
                       providerRegistro.titulo = 'Confirmacion';
                       widget.onAddButtonTapped(providerRegistro.index);
-                    }else if(licencia.isEmpty){
-                      Dialogs.alert(context, title: 'Error', message: 'Debe ingresar numero de licencia');
-                    }else{
-                      Dialogs.alert(context, title: 'Error', message: 'Debe subir todas las fotos para proceder a enviar la información');
                     }
                   }catch(error){
                     Navigator.pop(context);
