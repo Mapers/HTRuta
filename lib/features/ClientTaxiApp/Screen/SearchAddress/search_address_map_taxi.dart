@@ -1,5 +1,4 @@
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:geolocator/geolocator.dart';

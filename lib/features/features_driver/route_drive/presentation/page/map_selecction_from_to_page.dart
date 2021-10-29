@@ -45,7 +45,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     cleanFrom();
     cleanTo();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _mapViewerUtil.changeToDarkMode;
+      _mapViewerUtil.changeMapType();
     });
     super.initState();
   }

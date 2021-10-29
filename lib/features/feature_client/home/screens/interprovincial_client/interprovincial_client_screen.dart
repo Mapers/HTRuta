@@ -179,24 +179,24 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         left: 20,
                         right: 20,
                         child: Container(
-                            child: SelectAddressWidget(
-                              fromAddress: fromAddress,
-                              toAddress: toAddress,
-                              onSearch: onSearch,
-                              getSeating: getSeating,
-                              onTapTo: (val){
-                                Navigator.of(context).push( MaterialPageRoute( builder: (context) =>
-                                  SearchAddressScreenInterprovincial(
-                                    getTo: getTo,
-                                    getfrom: getfrom,
-                                    fromSelect: fromLocation,
-                                    toSelect: toLocation,
-                                    isSelect: val,
-                                    currentLocation: Position(longitude: location.latLang.longitude,latitude: location.latLang.latitude)
-                                  ),
-                                    fullscreenDialog: true ));
-                              },
-                            )
+                          child: SelectAddressWidget(
+                            fromAddress: fromAddress,
+                            toAddress: toAddress,
+                            onSearch: onSearch,
+                            getSeating: getSeating,
+                            onTapTo: (val){
+                              Navigator.of(context).push( MaterialPageRoute( builder: (context) =>
+                                SearchAddressScreenInterprovincial(
+                                  getTo: getTo,
+                                  getfrom: getfrom,
+                                  fromSelect: fromLocation,
+                                  toSelect: toLocation,
+                                  isSelect: val,
+                                  currentLocation: Position(longitude: location.latLang.longitude,latitude: location.latLang.latitude)
+                                ),
+                                  fullscreenDialog: true ));
+                            },
+                          )
                         ),
                       ),
                     ],

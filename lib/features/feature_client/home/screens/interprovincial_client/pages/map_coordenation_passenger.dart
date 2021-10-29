@@ -46,7 +46,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   @override
   void initState() {
     currenActual = widget.currentLocation;
-    element = AproxElement(distance: null, duration: null, status: null);
+    AproxElement element;
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       element = await pickUpApi.calculateMinutes( currenActual.latLang.latitude , currenActual.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude);
       dynamic result = await Future.wait([
@@ -56,7 +56,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
         BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_marker_32.png'),
       ]);
       openLoadingDialog(context);
-      _mapViewerUtil.changeToDarkMode;
+      _mapViewerUtil.changeMapType();
       Polyline polyline = await _mapViewerUtil.generatePolyline('ROUTE_FROM_TO', widget.availablesRoutesEntity.route.fromLocation, widget.availablesRoutesEntity.route.toLocation);
       Navigator.of(context).pop();
       polylines[polyline.polylineId] = polyline;
@@ -97,7 +97,6 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   }
   void _updateMarkerCurrentPosition(LocationEntity _driverLocation) async{
     element = await pickUpApi.calculateMinutes( currenActual.latLang.latitude , currenActual.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude);
-    print(element.distance.text);
     Marker markerPassenger = MapViewerUtil.generateMarker(
       latLng: currenActual.latLang,
       nameMarkerId: 'CURRENT_POSITION_MARKER',
@@ -192,11 +191,11 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Llegarás a tu destino en '+ element.duration.text +' aproximadamente. Recuerda acercarte a tu ruta, tambien puede llamar al conductor.',
+                  element != null ? Text(
+                    'Llegarás a tu destino en '+ element.duration?.text +' aproximadamente. Recuerda acercarte a tu ruta, tambien puede llamar al conductor.',
                     style: TextStyle(color: Colors.black54, fontStyle: FontStyle.italic, ),
                     textAlign: TextAlign.justify,
-                  ),
+                  ) : Container(),
                 ],
               ),
             ),

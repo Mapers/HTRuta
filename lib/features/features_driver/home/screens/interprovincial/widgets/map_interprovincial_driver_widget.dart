@@ -147,7 +147,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      _mapViewerUtil.changeMapType(1, null);
+      _mapViewerUtil.changeMapType();
     }
   }
 

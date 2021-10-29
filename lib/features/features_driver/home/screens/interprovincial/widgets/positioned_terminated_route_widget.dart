@@ -1,6 +1,3 @@
-import 'package:HTRuta/core/utils/location_util.dart';
-import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
-import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_location_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:flutter/material.dart';

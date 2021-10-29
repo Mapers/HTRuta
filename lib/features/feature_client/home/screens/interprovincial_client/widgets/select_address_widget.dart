@@ -60,7 +60,8 @@ class _SelectAddressState extends State<SelectAddressWidget> {
     return Card(
       elevation: 5,
       child: Container(
-        padding: EdgeInsets.only(top: 10,bottom: 10),
+        height: mqHeigth(context, 42),
+        padding: EdgeInsets.only(top: 20, bottom: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -70,17 +71,20 @@ class _SelectAddressState extends State<SelectAddressWidget> {
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.my_location),
-                      Container(
-                        height: 40,
-                        width: 1.0,
-                        color: Colors.grey,
-                      ),
-                      Icon(Icons.location_on,color: redColor,)
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.my_location),
+                        Container(
+                          height: 50,
+                          width: 1.0,
+                          color: Colors.grey,
+                        ),
+                        Icon(Icons.location_on,color: redColor,)
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -122,10 +126,11 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                             children: <Widget>[
                               Text('Recoger',
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 14,
                                   color: Colors.grey
                                 ),
                               ),
+                              Container(height: 5),
                               Text(
                                 widget.fromAddress != null ? widget.fromAddress.name : 'Selecionar origen',
                                 overflow: TextOverflow.ellipsis,
@@ -136,11 +141,18 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.only(
+                          top: 5, 
+                          bottom: 5,
+                          right: 20
+                        ),
                         child: Container(
                           height: isSelectFrom ? 2 :0.5,
                           color: isSelectFrom ? Colors.amber : Colors.grey,
                         ),
+                      ),
+                      Container(
+                        height: 20,
                       ),
                       GestureDetector(
                         onTap: (){
@@ -167,6 +179,7 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                           }
                         },
                         child: Container(
+                          width: mqWidth(context, 60),
                           color: Colors.white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -174,10 +187,11 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                             children: <Widget>[
                               Text('Destino',
                                 style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey
+                                  fontSize: 14,
+                                  color: Colors.grey
                                 ),
                               ),
+                              Container(height: 5),
                               Text(
                                 widget.toAddress != null ? widget.toAddress.name : 'Selecionar destino ',
                                 overflow: TextOverflow.ellipsis,
@@ -188,11 +202,18 @@ class _SelectAddressState extends State<SelectAddressWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.only(
+                          top: 5, 
+                          bottom: 5,
+                          right: 20
+                        ),
                         child: Container(
                           height: isSelectTo ? 2 :0.5,
                           color: isSelectTo ? Colors.amber : Colors.grey,
                         ),
+                      ),
+                      Container(
+                        height: 20,
                       ),
                     ],
                   ),
@@ -201,34 +222,41 @@ class _SelectAddressState extends State<SelectAddressWidget> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  height: 70,
-                  child: PaymentSelector(
-                    onSelected: (List<int> selectedPaymentMethods){
-                      paymentMethodsSelected = selectedPaymentMethods;
-                    },
+                  height: 90,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: PaymentSelector(
+                      onSelected: (List<int> selectedPaymentMethods){
+                        paymentMethodsSelected = selectedPaymentMethods;
+                      },
+                    ),
                   ),
                 ),
-                Select<int>(
-                  value: initialSeat,
-                  // placeholderIsSelected: true,
-                  showPlaceholder: false,
-                  items:seating.map((item) => DropdownMenuItem(
-                    child: Center(child: Row(
-                      children: [
-                        Text(item.toString(),style: TextStyle(fontSize: 15 ,color: Colors.black87),),
-                        SizedBox(width: 5,),
-                        Icon(Icons.airline_seat_recline_normal ,size: 15,color: Colors.black87,)
-                      ],
-                    )),
-                    value: item
-                  )).toList(),
-                  onChanged: (val){
-                    initialSeat = val;
-                    widget.getSeating(initialSeat);
-                      setState((){});
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Select<int>(
+                    value: initialSeat,
+                    // placeholderIsSelected: true,
+                    showPlaceholder: false,
+                    items:seating.map((item) => DropdownMenuItem(
+                      child: Center(child: Row(
+                        children: [
+                          Text(item.toString(),style: TextStyle(fontSize: 15 ,color: Colors.black87),),
+                          SizedBox(width: 5,),
+                          Icon(Icons.airline_seat_recline_normal ,size: 15,color: Colors.black87,)
+                        ],
+                      )),
+                      value: item
+                    )).toList(),
+                    onChanged: (val){
+                      initialSeat = val;
+                      widget.getSeating(initialSeat);
+                        setState((){});
+                    },
+                  ),
                 )
               ],
             ),

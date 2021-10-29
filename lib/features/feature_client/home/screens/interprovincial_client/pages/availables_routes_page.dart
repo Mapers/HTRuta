@@ -1,4 +1,3 @@
-import 'package:HTRuta/features/feature_client/home/entities/province_district_client_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/cards_availables_routes.dart';
 import 'package:flutter/material.dart';
 

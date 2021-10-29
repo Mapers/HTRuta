@@ -1,4 +1,3 @@
-import 'package:HTRuta/entities/location_entity.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/models/minutes_response.dart';
 import 'package:flutter/material.dart';
