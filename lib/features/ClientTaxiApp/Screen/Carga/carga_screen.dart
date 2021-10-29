@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/animation_list_view.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Menu/menu_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 
 
 class CargaPage extends StatefulWidget {
@@ -15,19 +14,14 @@ class CargaPage extends StatefulWidget {
 
 class _CargaPageState extends State<CargaPage> {
   final String screenName = 'CARGA';
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
-
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
-      child: SideMenu(
-      key: _sideMenuKey,
-      background: primaryColor,
-      menu: MenuScreens(activeScreenName: screenName),
-      type: SideMenuType.slideNRotate, // check above images
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Carga'),
           bottom: TabBar(tabs: [
@@ -38,11 +32,7 @@ class _CargaPageState extends State<CargaPage> {
           leading: IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {
-              final _state = _sideMenuKey.currentState;
-              if (_state.isOpened)
-                _state.closeSideMenu(); // close side menu
-              else
-                _state.openSideMenu();// open side menu
+              _scaffoldKey.currentState.openDrawer();
             },
           ),
         ),
@@ -60,7 +50,6 @@ class _CargaPageState extends State<CargaPage> {
           ),
         )
       )
-      ),
     );
   }
 

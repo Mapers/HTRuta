@@ -1,4 +1,4 @@
-import 'package:HTRuta/app/colors.dart';
+/* import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -351,3 +351,4 @@ class _HomeScreen2State extends State<HomeScreen2> {
     );
   }
 }
+ */

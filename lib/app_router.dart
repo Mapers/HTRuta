@@ -3,7 +3,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/screens/cancella
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Directions/screens/chat_screen/chat_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/History/driver_detail.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/History/history_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home2.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/home_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Home/travel_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Login/login.dart';
@@ -93,8 +92,8 @@ class AppRoute {
         return PageViewTransition(builder: (_) => PhoneVerification());
       case homeScreen:
         return PageViewTransition(builder: (_) => HomeScreens());
-      case homeScreen2:
-        return PageViewTransition(builder: (_) => HomeScreen2());
+      // case homeScreen2:
+      //   return PageViewTransition(builder: (_) => HomeScreen2());
       case signUpScreen:
         return PageViewTransition(builder: (_) => SignUpStep1());
       case notificationScreen:

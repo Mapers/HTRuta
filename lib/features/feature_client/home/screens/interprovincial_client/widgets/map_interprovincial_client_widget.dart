@@ -52,6 +52,7 @@ class _MapInterprovincialClientWidgetState
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       circlePinLocationIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/car2.png'));
       dynamic result = await Future.wait([

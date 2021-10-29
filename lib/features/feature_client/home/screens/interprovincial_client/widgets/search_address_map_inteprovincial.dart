@@ -19,7 +19,7 @@ class SearchAddressMapInteprovicnial extends StatefulWidget {
   _SearchAddressMapTaxiState createState() => _SearchAddressMapTaxiState();
 }
 
-class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> {
+class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> with WidgetsBindingObserver {
 
   LatLng coordinatesSelected;
   bool loading = true;
@@ -58,6 +58,24 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> {
     loading = false;
     if(!mounted) return;
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapController?.setMapStyle(null);
+    }
   }
 
   @override

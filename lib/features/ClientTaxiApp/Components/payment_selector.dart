@@ -92,107 +92,115 @@ class _PaymentSelectorState extends State<PaymentSelector> {
         ),
         Container(
           width: widthDropdown,
-          child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              buttonColor: Colors.white,
-              highlightColor: Colors.white,
-              alignedDropdown: true,
-              child: DropdownButton<String>(
-                autofocus: true,
-                hint: Text('Método de pago'),
-                selectedItemBuilder: (BuildContext context) {
-                  List<Widget> widgetItems = [];
-                  for(int i = 0; i < data.length; i++){
-                    if(savedPaymentMethods[i]){
-                      widgetItems.add(
-                        Container(
-                          margin: EdgeInsets.only(right: 5),
-                          child: Image.network(
-                            data[i].rRuta,
-                            width: 25,
-                            height: 25,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                buttonColor: Colors.white,
+                highlightColor: Colors.white,
+                alignedDropdown: true,
+                child: DropdownButton<String>(
+                  autofocus: true,
+                  hint: Text('Método de pago'),
+                  selectedItemBuilder: (BuildContext context) {
+                    List<Widget> widgetItems = [];
+                    for(int i = 0; i < data.length; i++){
+                      if(savedPaymentMethods[i]){
+                        widgetItems.add(
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 5),
+                                child: Image.network(
+                                  data[i].rRuta,
+                                  width: 25,
+                                  height: 25,
+                                ),
+                              ),
+                              Container(child: Text(data[i]?.nNombre), margin: EdgeInsets.only(right: 5))
+                            ],
+                          )
+                        );
+                      }
+                    }
+                    return data.map<Widget>((PaymentMethodClient item) {
+                      return Row(
+                        children: widgetItems,
+                      );
+                    }).toList();
+                  },
+                  value: selectedPaymentMethod?.nNombre,
+                  onChanged: (String newValue) async {
+                    selectedPaymentMethod = data.where((element) => element.nNombre == newValue).toList().first;
+                    setState(() {});
+                    List<PaymentMethodClient> selectedPaymentMethods = [];
+                    for(int i = 0; i < data.length; i++){
+                      if(savedPaymentMethods[i]){
+                        selectedPaymentMethods.add(
+                          data[i]//.iId
+                        );
+                      }
+                    }
+                    List<String> methodsToSave = selectedPaymentMethods.map((e) => e.iId.toString()).toList();
+                    List<int> methodsToSaveInt = selectedPaymentMethods.map((e) => int.parse(e.iId)).toList();
+                    Provider.of<UserProvider>(context, listen: false).userPaymentMethods = selectedPaymentMethods;
+                    _prefs.setClientPaymentMethods = methodsToSave;
+                    return widget.onSelected(methodsToSaveInt);
+                  },
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black
+                  ),
+                  items: data.map((PaymentMethodClient paymentMethod) {
+                    int index = data.indexOf(paymentMethod);
+                    return DropdownMenuItem<String>(
+                      value: paymentMethod.nNombre,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.network(
+                                paymentMethod.rRuta,
+                                width: 25,
+                                height: 25,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text(paymentMethod.nNombre)
+                              ),
+                            ],
                           ),
-                        )
-                      );
-                    }
-                  }
-                  return data.map<Widget>((PaymentMethodClient item) {
-                    return Row(
-                      children: widgetItems
-                    );
-                  }).toList();
-                },
-                value: selectedPaymentMethod?.nNombre,
-                onChanged: (String newValue) async {
-                  selectedPaymentMethod = data.where((element) => element.nNombre == newValue).toList().first;
-                  setState(() {});
-                  List<PaymentMethodClient> selectedPaymentMethods = [];
-                  for(int i = 0; i < data.length; i++){
-                    if(savedPaymentMethods[i]){
-                      selectedPaymentMethods.add(
-                        data[i]//.iId
-                      );
-                    }
-                  }
-                  List<String> methodsToSave = selectedPaymentMethods.map((e) => e.iId.toString()).toList();
-                  List<int> methodsToSaveInt = selectedPaymentMethods.map((e) => int.parse(e.iId)).toList();
-                  Provider.of<UserProvider>(context, listen: false).userPaymentMethods = selectedPaymentMethods;
-                  _prefs.setClientPaymentMethods = methodsToSave;
-                  return widget.onSelected(methodsToSaveInt);
-                },
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black
-                ),
-                items: data.map((PaymentMethodClient paymentMethod) {
-                  int index = data.indexOf(paymentMethod);
-                  return DropdownMenuItem<String>(
-                    value: paymentMethod.nNombre,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Image.network(
-                              paymentMethod.rRuta,
-                              width: 25,
-                              height: 25,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Text(paymentMethod.nNombre)
-                            ),
-                          ],
-                        ),
-                        StatefulBuilder(
-                          builder: (BuildContext context, StateSetter stateSetter) {
-                            return Checkbox(
-                              value: savedPaymentMethods[index],
-                              onChanged: (bool newValue){
-                                savedPaymentMethods[index] = newValue;
-                                List<int> selectedPaymentMethods = [];
-                                for(int i = 0; i < data.length; i++){
-                                  if(savedPaymentMethods[i]){
-                                    selectedPaymentMethods.add(
-                                      int.parse(data[i].iId)
-                                    );
+                          StatefulBuilder(
+                            builder: (BuildContext context, StateSetter stateSetter) {
+                              return Checkbox(
+                                value: savedPaymentMethods[index],
+                                onChanged: (bool newValue){
+                                  savedPaymentMethods[index] = newValue;
+                                  List<int> selectedPaymentMethods = [];
+                                  for(int i = 0; i < data.length; i++){
+                                    if(savedPaymentMethods[i]){
+                                      selectedPaymentMethods.add(
+                                        int.parse(data[i].iId)
+                                      );
+                                    }
                                   }
-                                }
-                                List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
-                                _prefs.setClientPaymentMethods = methodsToSave;
-                                stateSetter(() {
-                                });
-                                setState(() {});
-                              },
-                            );
-                          }
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                                  List<String> methodsToSave = selectedPaymentMethods.map((e) => e.toString()).toList();
+                                  _prefs.setClientPaymentMethods = methodsToSave;
+                                  stateSetter(() {
+                                  });
+                                  setState(() {});
+                                },
+                              );
+                            }
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                )
               )
-            )
+            ),
           ),
         )
       ],

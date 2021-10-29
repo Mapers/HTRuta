@@ -31,7 +31,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shrink_sidemenu/shrink_sidemenu.dart';
 import 'package:HTRuta/google_map_helper.dart';
 import 'package:HTRuta/core/map_network/map_network.dart';
 import 'package:HTRuta/models/direction_model.dart';
@@ -58,7 +57,6 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
   bool nightMode = false;
   VoidCallback showPersBottomSheetCallBack;
   List<MapTypeModel> sampleData =  <MapTypeModel>[];
-  final GlobalKey<SideMenuState> _sideMenuKey = GlobalKey<SideMenuState>();
   List<Map<String, dynamic>> listDistance = [{'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500},{'id': 2, 'title': '1 km', 'unidad': 'km', 'distancia': 1},{'id':3,'title': '3 km', 'unidad': 'km', 'distancia': 3},{'id':4,'title': '5 km', 'unidad': 'km', 'distancia': 5}, {'id':5,'title': '15 km', 'unidad': 'km', 'distancia': 15}];
   Map<String, dynamic> distanceOptionSelected = {'id': 1, 'title': '500 m', 'unidad': 'M', 'distancia': 500};
   String selectedDistance = '1';
@@ -760,11 +758,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
               child: IconButton(
                 icon: Icon(Icons.menu,size: 20.0,color: blackColor),
                 onPressed: (){
-                  final _state = _sideMenuKey.currentState;
-                  if (_state.isOpened)
-                    _state.closeSideMenu(); // close side menu
-                  else
-                    _state.openSideMenu();// open side menu
+                  _scaffoldKey.currentState.openDrawer();
                 }
               ),
             )
