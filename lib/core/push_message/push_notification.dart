@@ -61,10 +61,10 @@ class PushNotificationProvider{
   }
 
   void _displayNotification(dynamic info, BackgroundMessageHandler backgroundMessageHandler){
-    dynamic data = info['data'];
-    if(data['display_notification'] == 'true'){
-      backgroundMessageHandler(info);
-    }
+    // dynamic data = info['data'];
+    backgroundMessageHandler(info);
+    /* if(data['display_notification'] == 'true'){
+    } */
   }
 
   void dispose(){
