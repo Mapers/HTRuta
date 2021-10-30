@@ -20,7 +20,7 @@ class OnWhereaboutsWidget extends StatelessWidget {
       children: [
         PositionedInfoRouteWidget(route: route, routeStartDateTime: routeStartDateTime),
         PositionedActionsSideWidget(documentId: documentId, serviceId: route.id,),
-        PositionedTerminatedRouteWidget(bottom: 130),
+        PositionedTerminatedRouteWidget(bottom: 20),
         PositionedSeatManagerWidget(
           child: RaisedButton.icon(
             icon: Icon(Icons.directions_bus_outlined, color: Colors.white),

@@ -38,7 +38,7 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
               //   return 
               // }
               return Positioned(
-                bottom: bottom,
+                bottom: 120,
                 left: 80,
                 right: 80,
                 child: RaisedButton(

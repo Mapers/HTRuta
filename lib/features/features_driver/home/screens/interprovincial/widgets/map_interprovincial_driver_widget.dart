@@ -37,6 +37,7 @@ class _MapInterprovincialDriverWidgetState extends State<MapInterprovincialDrive
   @override
   void initState() { 
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List<dynamic> result = await Future.wait([
         LocationUtil.currentLocation(),

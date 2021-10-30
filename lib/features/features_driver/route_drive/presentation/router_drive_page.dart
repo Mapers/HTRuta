@@ -61,7 +61,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
           RouteDriveInitial  param = state;
           if (param.routerDrives.isEmpty) {
             return Center(
-              child: Text('- Sin datos -'),
+              child: Text('- No hay rutas creadas -'),
             );
           }
           return Padding(

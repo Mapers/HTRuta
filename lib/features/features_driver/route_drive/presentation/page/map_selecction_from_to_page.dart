@@ -39,6 +39,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   BitmapDescriptor currentPinLocationIcon;
   BitmapDescriptor fromPinLocationIcon;
   BitmapDescriptor toPinLocationIcon;
+  LatLng coordinatesSelected;
 
   @override
   void initState() {
@@ -49,9 +50,11 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     });
     super.initState();
   }
-  void _addFromToMarkers({LatLng pos, bool inputSelecter}) async{
+  void _addFromToMarkers({LatLng pos}) async{
     try {
       if(inputSelecter){
+        inputSelecter = false;
+        setState(() {});
         // ignore: missing_required_param
         from =  LocationEntity( latLang: pos)  ;
         openLoadingDialog(context);
@@ -78,6 +81,8 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           appearMesage();
         }
       } else {
+        inputSelecter = true;
+        setState(() {});
         // ignore: missing_required_param
         to = LocationEntity(latLang:pos);
         openLoadingDialog(context);
@@ -139,8 +144,8 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         key: formKey,
         child: Stack(
           children: [
-            MapViewWidget(context),
-            BackWidget(context),
+            mapViewWidget(context),
+            backWidget(context),
             InputMapSelecction(
               isRequired: true,
               controller: fromController,
@@ -170,16 +175,22 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
               district: whereaboutsTo.districtName == '' ? '' :whereaboutsTo.districtName,
             ),
             messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
-            SaveButtonWidget(context),
+            saveButtonWidget(context),
+            Center(
+              child: Transform.translate(
+                offset: Offset(0, -25),
+                child: Icon( Icons.location_on, size: 50, color: Theme.of(context).primaryColor)
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Positioned SaveButtonWidget(BuildContext context) {
+  Widget saveButtonWidget(BuildContext context) {
     return Positioned(
-      top: 500,
+      bottom: 100,
       right: 15,
       left: 15,
       child: PrincipalButton(text: 'Guardar',onPressed: (){
@@ -199,7 +210,7 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
     );
   }
 
-  SizedBox MapViewWidget(BuildContext context) {
+  Widget mapViewWidget(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       child: _mapViewerUtil.build(
@@ -207,19 +218,33 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         currentLocation: LatLng(widget.la, widget.lo),
         markers: _markers,
         polyLines: polylines,
+        myLocationEnabled: false,
         zoom: 16,
-        onTap: (pos){
+        onCameraMove: ( cameraPosition ) {
+          coordinatesSelected = cameraPosition.target;
+        },
+        onCameraIdle: (){
+          if(coordinatesSelected == null){
+            return;
+          }
+          if(inputSelecter){
+            _addFromToMarkers(  pos: coordinatesSelected);
+          }else{
+            _addFromToMarkers( pos: coordinatesSelected);
+          }
+        },
+        /* onTap: (pos){
           if(inputSelecter){
             _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
           }else{
             _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
           }
-        }
+        } */
       )
     );
   }
 
-  Positioned BackWidget(BuildContext context) {
+  Widget backWidget(BuildContext context) {
     return Positioned(
       top: 30,
       left: 15,

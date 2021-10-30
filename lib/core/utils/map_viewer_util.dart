@@ -21,8 +21,10 @@ class MapViewerUtil {
     @required LatLng currentLocation,
     bool drawCircle,
     double radiusCircle,
-    Function(LatLng) onCameraMove,
-
+    Function(CameraPosition) onCameraMove,
+    Function() onCameraMoveStarted,
+    Function() onCameraIdle,
+    bool myLocationEnabled = true,
     double zoom = 16,
     Map<PolylineId, Polyline> polyLines = const <PolylineId, Polyline>{},
     ArgumentCallback<LatLng> onTap,
@@ -34,15 +36,15 @@ class MapViewerUtil {
         onTap: onTap,
         markers: Set<Marker>.of(markers.values),
         polylines: Set<Polyline>.of(polyLines.values),
-        myLocationEnabled: true,
+        myLocationEnabled: myLocationEnabled,
         myLocationButtonEnabled: false,
         indoorViewEnabled: false,
         mapToolbarEnabled: false,
         zoomControlsEnabled: false,
         mapType: MapType.normal,
-        /* onCameraMove: (val){
-          return onCameraMove(val.target);
-        }, */
+        onCameraMoveStarted: onCameraMoveStarted,
+        onCameraIdle: onCameraIdle,
+        onCameraMove: onCameraMove,
         initialCameraPosition: _getCurrentPosition(currentLocation, zoom: zoom),
         // ignore: prefer_collection_literals
         circles: Set<Circle>.from([circular(currentLocation, visible: drawCircle,radiusCircle: radiusCircle)]),
