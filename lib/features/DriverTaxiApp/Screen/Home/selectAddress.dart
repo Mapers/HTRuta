@@ -50,25 +50,29 @@ class _SelectAddressState extends State<SelectAddress> {
     setState(() {
       _currentPosition = position;
     });
-    List<Placemark> placemarks = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
-    if (placemarks != null && placemarks.isNotEmpty) {
-      final Placemark pos = placemarks[0];
-      setState(() {
-        _placemark = pos.name + ', ' + pos.thoroughfare;
-        currentLocationName = _placemark;
-      });
-    }
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
+      if (placemarks != null && placemarks.isNotEmpty) {
+        final Placemark pos = placemarks[0];
+        setState(() {
+          _placemark = pos.name + ', ' + pos.thoroughfare;
+          currentLocationName = _placemark;
+        });
+      }
+    }catch(_){}
   }
 
   void getLocationName(double lat, double lng) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-    if (placemarks != null && placemarks.isNotEmpty) {
-      final Placemark pos = placemarks[0];
-      setState(() {
-        _placemark = pos.name + ', ' + pos.thoroughfare;
-        newLocationName = _placemark;
-      });
-    }
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      if (placemarks != null && placemarks.isNotEmpty) {
+        final Placemark pos = placemarks[0];
+        setState(() {
+          _placemark = pos.name + ', ' + pos.thoroughfare;
+          newLocationName = _placemark;
+        });
+      }
+    }catch(_){}
   }
 
   void _onMapCreated(GoogleMapController controller) async {

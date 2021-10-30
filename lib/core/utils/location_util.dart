@@ -10,39 +10,55 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class LocationUtil {
 
   static Future<LocationEntity> currentLocation() async {
-    Position currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    try{
+      Position currentLoc = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
-    LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude);
+      LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: currentLoc.latitude, longitude: currentLoc.longitude);
 
-    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-    if (placemarks != null && placemarks.isNotEmpty) {
-      Placemark pos = placemarks.first;
-      locationEntity = locationEntity.copyWith(
-        streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
-        districtName: pos.locality,
-        provinceName: pos.subAdministrativeArea
+      List<Placemark> placemarks = await placemarkFromCoordinates(currentLoc?.latitude, currentLoc?.longitude);
+      if (placemarks != null && placemarks.isNotEmpty) {
+        Placemark pos = placemarks.first;
+        locationEntity = locationEntity.copyWith(
+          streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
+          districtName: pos.locality,
+          provinceName: pos.subAdministrativeArea
+        );
+      }
+      return locationEntity;
+    }catch(_){
+      Position currentLoc = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      return LocationEntity(
+        streetName: '',
+        districtName: '',
+        provinceName: '',
+        regionName: '',
+        latLang: LatLng(currentLoc?.latitude, currentLoc?.longitude)
       );
     }
-    return locationEntity;
   }
 
   StreamSubscription subscription;
 
   void initListener({@required Function(LocationEntity) listen}){
     subscription = Geolocator.getPositionStream(distanceFilter: 15).listen((location) async{
-      List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
-      LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
+      try{
+        List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
+        LocationEntity locationEntity = LocationEntity.initialWithLocation(latitude: location.latitude, longitude: location.longitude);
 
-      if (placemarks != null && placemarks.isNotEmpty) {
-        Placemark pos = placemarks.first;
-        locationEntity = locationEntity.copyWith(
-          streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
-          districtName: pos.locality,
-          provinceName: pos.subAdministrativeArea,
-          regionName: pos.administrativeArea
-        );
+        if (placemarks != null && placemarks.isNotEmpty) {
+          Placemark pos = placemarks.first;
+          locationEntity = locationEntity.copyWith(
+            streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
+            districtName: pos.locality,
+            provinceName: pos.subAdministrativeArea,
+            regionName: pos.administrativeArea
+          );
+        }
+        listen(locationEntity.formatNames);
+
+      }catch(e){
+        print(e);
       }
-      listen(locationEntity.formatNames);
     });
   }
 

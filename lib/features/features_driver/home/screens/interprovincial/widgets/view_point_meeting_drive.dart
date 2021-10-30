@@ -39,6 +39,7 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
     nameBoxWhaereabouthSelecter = widget.currentLocation.streetName == '' ? widget.currentLocation.districtName +', ' + widget.currentLocation.provinceName  :widget.currentLocation.streetName + ', '+ widget.currentLocation.districtName + ', ' + widget.currentLocation.provinceName;
     WidgetsBinding.instance.addPostFrameCallback((_) async{
       location  = await LocationUtil.currentLocation();
+      if(location == null) return;
       whereabouthOneIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/marker/whereabout1.png',width: 70));
       whereabouthTwoIcon = await BitmapDescriptor.fromBytes(await assetToBytes('assets/image/marker/whereabout2.png',width: 70));
       Marker markerWhereabouthOne = MapViewerUtil.generateMarker(
@@ -51,20 +52,22 @@ class _ViewWhereabouthState extends State<ViewPointMeetingDrive> {
     });
   }
   void updateOriginPointFromCoordinates({LatLng coordinates}) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    Placemark newPosition = placemarks[0];
-    locationWhereAbout = LocationEntity(
-      streetName: newPosition.thoroughfare,
-      districtName: newPosition.locality,
-      provinceName: newPosition.subAdministrativeArea ,
-      regionName: newPosition.administrativeArea,
-      latLang: coordinates
-    );
-    nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
-    loading = false;
-    if(!mounted) return;
-    setState(() {});
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      Placemark newPosition = placemarks[0];
+      locationWhereAbout = LocationEntity(
+        streetName: newPosition.thoroughfare,
+        districtName: newPosition.locality,
+        provinceName: newPosition.subAdministrativeArea ,
+        regionName: newPosition.administrativeArea,
+        latLang: coordinates
+      );
+      nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
+      loading = false;
+      if(!mounted) return;
+      setState(() {});
+    }catch(_){}
   }
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;

@@ -23,12 +23,14 @@ class _PointMeetingDriveState extends State<PointMeetingDrive> {
     pointMeeting = LocationEntity.initialWithLocation(latitude: widget.geoPoint.latitude , longitude: widget.geoPoint.longitude );
     List<Placemark> placemarks;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try{
         do {
           placemarks = await placemarkFromCoordinates(widget.geoPoint.latitude, widget.geoPoint.longitude);
         } while (placemarks == null || placemarks.isEmpty);
         Placemark newPosition = placemarks.first ;
         pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
         BlocProvider.of<PointMeetingDriveBloc>(context).add(AddPointMeetingDriveEvent( pointMeeting: pointMeeting));
+      }catch(_){}
     });
     super.initState();
   }

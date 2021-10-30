@@ -351,17 +351,18 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   /// Get current location
   Future<void> _initCurrentLocation() async {
     currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-
-      List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        setState(() {
-        });
-        // widget?.placeBloc?.getCurrentLocation(Place(
-        //     formattedAddress: '',
-        //     lat: currentLocation?.latitude,
-        //     lng: currentLocation?.longitude
-        // ));
-      }
+      try{
+        List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+        if (placemarks != null && placemarks.isNotEmpty) {
+          setState(() {
+          });
+          // widget?.placeBloc?.getCurrentLocation(Place(
+          //     formattedAddress: '',
+          //     lat: currentLocation?.latitude,
+          //     lng: currentLocation?.longitude
+          // ));
+        }
+      }catch(_){}
     if(currentLocation != null){
       moveCameraToMyLocation();
     }
@@ -381,14 +382,16 @@ class _TravelScreenState extends State<TravelScreen> with WidgetsBindingObserver
   /// Get current location name
   void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
-      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        // widget?.placeBloc?.getCurrentLocation(Place(
-        //   formattedAddress: '',
-        //   lat: lat,
-        //   lng: lng
-        // ));
-      }
+      try{
+        List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+        if (placemarks != null && placemarks.isNotEmpty) {
+          // widget?.placeBloc?.getCurrentLocation(Place(
+          //   formattedAddress: '',
+          //   lat: lat,
+          //   lng: lng
+          // ));
+        }
+      }catch(_){}
     }
   }
 

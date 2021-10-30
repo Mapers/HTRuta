@@ -77,9 +77,10 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   }
 
   void getWhereAboutLocation( {LatLng latlong, String title,bool isSelect,int id })async{
-    List<Placemark> whereAbouthOne = await placemarkFromCoordinates(latlong.latitude,latlong.longitude);
-    Placemark placemark = whereAbouthOne.first;
-    LocationEntity location = LocationEntity(
+    try{
+      List<Placemark> whereAbouthOne = await placemarkFromCoordinates(latlong.latitude,latlong.longitude);
+      Placemark placemark = whereAbouthOne.first;
+      LocationEntity location = LocationEntity(
         streetName: placemark.thoroughfare ,
         districtName: placemark.locality ,
         provinceName: placemark.subAdministrativeArea ,
@@ -88,6 +89,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
       );
       MeetingDriveAndPassengerEntity mettingpon = MeetingDriveAndPassengerEntity(id: id, pointMeeting: location, isSelect: isSelect);
       BlocProvider.of<MeetingDriveAndPassengerBloc>(context).add( AddMeetingDriveAndPassengerEvent(meetingPoint: mettingpon ));
+    }catch(_){}
 
   }
 
@@ -192,6 +194,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                 //! Agregar modal de consulta
                                 final user = await _session.get();
                                 LocationEntity from = await LocationUtil.currentLocation();
+                                if(from == null) return; 
                                 DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
                                 DataMeetingDriveAndPassengerState paramPointMetting = BlocProvider.of<MeetingDriveAndPassengerBloc>(context).state;
                                 LocationEntity poinMeeting;
@@ -379,6 +382,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     final user = await _session.get();
     String passengerDocumentId =  await interprovincialClientDataFirebase.deleteRequest(request: request, documentId: documentId, notificationLaunch: false);
     LocationEntity currentlocation =  await LocationUtil.currentLocation();
+    if(currentlocation == null) return;
     Navigator.of(context).pop();
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> MapCoordenationDrivePage(
       widget.availablesRoutesEntity.documentId,

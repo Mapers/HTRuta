@@ -28,17 +28,19 @@ class _PointMeetingDriveState extends State<PointMeetingDriveNegotation> {
     GeoPoint geoPoint = widget.interprovincialRequest.pointMeeting;
     LatLng latLng =  LatLng(geoPoint.latitude , geoPoint.longitude);
     WidgetsBinding.instance.addPostFrameCallback((_) async{
-      location  = await LocationUtil.currentLocation();
-      List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude,latLng.longitude);
-      if (placemarks == null || placemarks.isEmpty) return;
-      Placemark newPosition = placemarks.first;
-      pointMeeting = LocationEntity(
-        streetName: newPosition.thoroughfare,
-        districtName: newPosition.locality,
-        provinceName: newPosition.subAdministrativeArea ,
-        regionName: newPosition.administrativeArea,
-        latLang: latLng
-      );
+      try{
+        location  = await LocationUtil.currentLocation();
+        List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude,latLng.longitude);
+        if (placemarks == null || placemarks.isEmpty) return;
+        Placemark newPosition = placemarks.first;
+        pointMeeting = LocationEntity(
+          streetName: newPosition.thoroughfare,
+          districtName: newPosition.locality,
+          provinceName: newPosition.subAdministrativeArea ,
+          regionName: newPosition.administrativeArea,
+          latLang: latLng
+        );
+      }catch(_){}
     });
     super.initState();
   }

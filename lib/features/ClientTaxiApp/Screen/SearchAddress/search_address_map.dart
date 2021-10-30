@@ -29,23 +29,25 @@ class _SearchAddressMapState extends State<SearchAddressMap> {
     }
   }
   void updateOriginPointFromCoordinates(LatLng coordinates) async {
-    widget?.placeBloc?.selectLocation(null);
-    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    final Placemark newPosition = placemarks[0];
-    LocationEntity to  = LocationEntity( latLang: coordinates ,districtName: newPosition.locality ,provinceName: newPosition.subAdministrativeArea, regionName: newPosition.administrativeArea,streetName: newPosition.thoroughfare);
-    if(widget.getTo != null){
-      widget.getTo(to);
-    }
-    widget?.placeBloc?.selectLocation(Place(
-      name: newPosition.name + ', ' + newPosition.thoroughfare,
-      formattedAddress: '',
-      lat: coordinates.latitude,
-      lng: coordinates.longitude
-    ));
-    loading = false;
-    if(!mounted) return;
-    setState(() {});
+    try{
+      widget?.placeBloc?.selectLocation(null);
+      List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      final Placemark newPosition = placemarks[0];
+      LocationEntity to  = LocationEntity( latLang: coordinates ,districtName: newPosition.locality ,provinceName: newPosition.subAdministrativeArea, regionName: newPosition.administrativeArea,streetName: newPosition.thoroughfare);
+      if(widget.getTo != null){
+        widget.getTo(to);
+      }
+      widget?.placeBloc?.selectLocation(Place(
+        name: newPosition.name + ', ' + newPosition.thoroughfare,
+        formattedAddress: '',
+        lat: coordinates.latitude,
+        lng: coordinates.longitude
+      ));
+      loading = false;
+      if(!mounted) return;
+      setState(() {});
+    }catch(_){}
   }
 
   @override

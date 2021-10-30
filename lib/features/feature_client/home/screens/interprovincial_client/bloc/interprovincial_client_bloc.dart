@@ -47,21 +47,23 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
         status: InterprovincialClientStatus.availablesInterprovincial
       );
     }else if(event is DestinationInterprovincialClientEvent){
-      List<Placemark> placemarkFrom = await placemarkFromCoordinates(event.to.latitude,event.to.longitude );
-      Placemark placemark = placemarkFrom.first;
-      yield DataInterprovincialClientState();
-      yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.searchInterprovincial,
-        interprovincialRoute: InterprovincialRouteInServiceEntity.onlyLocation(
-          LocationEntity(
-            latLang: LatLng(event.to.latitude, event.to.longitude ),
-            regionName: placemark.administrativeArea,
-            provinceName: placemark.subAdministrativeArea,
-            districtName: placemark.locality ,
-            streetName: placemark.thoroughfare
+      try{
+        List<Placemark> placemarkFrom = await placemarkFromCoordinates(event.to.latitude,event.to.longitude );
+        Placemark placemark = placemarkFrom.first;
+        yield DataInterprovincialClientState();
+        yield DataInterprovincialClientState.initial().copyWith(
+          status: InterprovincialClientStatus.searchInterprovincial,
+          interprovincialRoute: InterprovincialRouteInServiceEntity.onlyLocation(
+            LocationEntity(
+              latLang: LatLng(event.to.latitude, event.to.longitude ),
+              regionName: placemark.administrativeArea,
+              provinceName: placemark.subAdministrativeArea,
+              districtName: placemark.locality ,
+              streetName: placemark.thoroughfare
+            )
           )
-        )
-      );
+        );
+      }catch(_){}
     }else if(event is SendDataSolicitudInterprovincialClientEvent){
       await interprovincialClientRemote.sendRequest(negotiationEntity: event.negotiationEntity);
     }else if(event is AcceptDataSolicitudInterprovincialClientEvent){

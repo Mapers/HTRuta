@@ -131,43 +131,47 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                       subtitle: Text(widget?.placeBloc?.listPlace[index].formattedAddress),
                       onTap: () async {
                         if(inputFrom){
-                          widget.placeBloc.selectFromLocation(widget?.placeBloc?.listPlace[index]);
-                          Place fromPalce = widget?.placeBloc?.listPlace[index];
-                          List<Placemark> placemarks = await placemarkFromCoordinates(fromPalce.lat, fromPalce.lng);
-                          if (placemarks == null || placemarks.isEmpty) return;
-                          Placemark newPosition = placemarks[0];
-                          from = LocationEntity(
-                            streetName: newPosition.thoroughfare,
-                            districtName: newPosition.locality,
-                            provinceName: newPosition.subAdministrativeArea,
-                            regionName: newPosition.administrativeArea,
-                            latLang: LatLng(fromPalce.lat,fromPalce.lng)
-                          );
-                          fromController.text = from.streetName == '' ? from.districtName +', ' + from.provinceName  :from.streetName + ', '+ from.districtName + ', ' + from.provinceName;
-                          widget.placeBloc.clearPlacesList();
-                          if(toController.text.isEmpty){
-                            nodeTo.requestFocus();
-                            inputFrom = false;
-                          }
+                          try{
+                            widget.placeBloc.selectFromLocation(widget?.placeBloc?.listPlace[index]);
+                            Place fromPalce = widget?.placeBloc?.listPlace[index];
+                            List<Placemark> placemarks = await placemarkFromCoordinates(fromPalce.lat, fromPalce.lng);
+                            if (placemarks == null || placemarks.isEmpty) return;
+                            Placemark newPosition = placemarks[0];
+                            from = LocationEntity(
+                              streetName: newPosition.thoroughfare,
+                              districtName: newPosition.locality,
+                              provinceName: newPosition.subAdministrativeArea,
+                              regionName: newPosition.administrativeArea,
+                              latLang: LatLng(fromPalce.lat,fromPalce.lng)
+                            );
+                            fromController.text = from.streetName == '' ? from.districtName +', ' + from.provinceName  :from.streetName + ', '+ from.districtName + ', ' + from.provinceName;
+                            widget.placeBloc.clearPlacesList();
+                            if(toController.text.isEmpty){
+                              nodeTo.requestFocus();
+                              inputFrom = false;
+                            }
+                          }catch(_){}
                         }else {
-                          widget.placeBloc.selectLocation(widget?.placeBloc?.listPlace[index]);
-                          Place toPalce = widget?.placeBloc?.listPlace[index];
-                          List<Placemark> placemarks = await placemarkFromCoordinates(toPalce.lat, toPalce.lng);
-                          if (placemarks == null || placemarks.isEmpty) return;
-                          Placemark newPosition = placemarks[0];
-                          to = LocationEntity(
-                            streetName: newPosition.thoroughfare,
-                            districtName: newPosition.locality,
-                            provinceName: newPosition.subAdministrativeArea,
-                            regionName: newPosition.administrativeArea,
-                            latLang: LatLng(toPalce.lat,toPalce.lng)
-                          );
-                          toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
-                          widget.placeBloc.clearPlacesList();
-                          if(fromController.text.isEmpty){
-                            nodeFrom.requestFocus();
-                            inputFrom = true;
-                          }
+                          try{
+                            widget.placeBloc.selectLocation(widget?.placeBloc?.listPlace[index]);
+                            Place toPalce = widget?.placeBloc?.listPlace[index];
+                            List<Placemark> placemarks = await placemarkFromCoordinates(toPalce.lat, toPalce.lng);
+                            if (placemarks == null || placemarks.isEmpty) return;
+                            Placemark newPosition = placemarks[0];
+                            to = LocationEntity(
+                              streetName: newPosition.thoroughfare,
+                              districtName: newPosition.locality,
+                              provinceName: newPosition.subAdministrativeArea,
+                              regionName: newPosition.administrativeArea,
+                              latLang: LatLng(toPalce.lat,toPalce.lng)
+                            );
+                            toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
+                            widget.placeBloc.clearPlacesList();
+                            if(fromController.text.isEmpty){
+                              nodeFrom.requestFocus();
+                              inputFrom = true;
+                            }
+                          }catch(_){}
                         }
                       },
                     );

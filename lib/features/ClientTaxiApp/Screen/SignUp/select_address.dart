@@ -39,18 +39,20 @@ class _SelectAddressState extends State<SelectAddress> {
   }
 
   Future<void> updateOriginPointFromCoordinates(LatLng coordinates) async {
-    final List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    final Placemark newPosition = placemarks[0];
-    placeSelected = Place(
-      name: '${newPosition.name}, ${newPosition.thoroughfare}',
-      formattedAddress: '',
-      lat: coordinates.latitude,
-      lng: coordinates.longitude
-    );
-    loading = false;
-    if(!mounted) return;
-    setState(() {});
+    try{
+      final List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      final Placemark newPosition = placemarks[0];
+      placeSelected = Place(
+        name: '${newPosition.name}, ${newPosition.thoroughfare}',
+        formattedAddress: '',
+        lat: coordinates.latitude,
+        lng: coordinates.longitude
+      );
+      loading = false;
+      if(!mounted) return;
+      setState(() {});
+    }catch(_){}
   }
   
   @override

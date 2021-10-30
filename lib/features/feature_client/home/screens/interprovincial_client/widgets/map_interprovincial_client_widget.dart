@@ -69,7 +69,12 @@ class _MapInterprovincialClientWidgetState
       // _mapViewerUtil.changeToDarkMode;
       _mapViewerUtil.cameraMoveLatLngZoom(location.latLang, zoom: 16);
       // _updateMarkerCurrentPosition(location);
-      _locationUtil.initListener(listen: (_location) => _updateMarkerCurrentPosition(_location));
+      _locationUtil.initListener(listen: (_location){
+        _updateMarkerCurrentPosition(_location);
+        if(mounted){
+          _mapViewerUtil.cameraMoveLatLngZoom(LatLng(_location.latLang.latitude, _location.latLang.longitude));
+        }
+      });
       DataInterprovincialClientState _data =
           BlocProvider.of<InterprovincialClientBloc>(context).state;
       // _addFromToMarkers(datan: _data);
@@ -94,44 +99,48 @@ class _MapInterprovincialClientWidgetState
   void _addFromToMarkers({DataInterprovincialClientState datan,LatLng pos, bool isSelectedFromOrTo = false}) async {
     if (isSelectedFromOrTo) {
       if (pos != null) {
-        List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-        Placemark placemark = placemarkFrom.first;
-        LocationEntity from = LocationEntity(
+        try{
+          List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+          Placemark placemark = placemarkFrom.first;
+          LocationEntity from = LocationEntity(
+                  latLang: LatLng(pos.latitude, pos.longitude),
+                  regionName: placemark.administrativeArea,
+                  provinceName: placemark.subAdministrativeArea,
+                  districtName: placemark.locality,
+                  streetName: placemark.thoroughfare)
+              .formatNames;
+
+          Marker markerFrom = MapViewerUtil.generateMarker(
+            latLng: from.latLang,
+            nameMarkerId: 'FROM_POSITION_MARKER',
+            icon: circlePinLocationIcon,
+          );
+          BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerFrom));
+          setState(() {});
+          widget.pickUpInput(from);
+        }catch(_){}
+      }
+    } else {
+      if (pos != null) {
+        try{
+          List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+          Placemark placemark = placemarkFrom.first;
+          LocationEntity to = LocationEntity(
                 latLang: LatLng(pos.latitude, pos.longitude),
                 regionName: placemark.administrativeArea,
                 provinceName: placemark.subAdministrativeArea,
                 districtName: placemark.locality,
                 streetName: placemark.thoroughfare)
             .formatNames;
-
-        Marker markerFrom = MapViewerUtil.generateMarker(
-          latLng: from.latLang,
-          nameMarkerId: 'FROM_POSITION_MARKER',
-          icon: circlePinLocationIcon,
-        );
-        BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerFrom));
-        setState(() {});
-        widget.pickUpInput(from);
-      }
-    } else {
-      if (pos != null) {
-        List<Placemark> placemarkFrom = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-        Placemark placemark = placemarkFrom.first;
-        LocationEntity to = LocationEntity(
-              latLang: LatLng(pos.latitude, pos.longitude),
-              regionName: placemark.administrativeArea,
-              provinceName: placemark.subAdministrativeArea,
-              districtName: placemark.locality,
-              streetName: placemark.thoroughfare)
-          .formatNames;
-        Marker markerTo = MapViewerUtil.generateMarker(
-          latLng: to.latLang,
-          nameMarkerId: 'TO_POSITION_MARKER',
-          icon: currentPinLocationIcon,
-        );
-        BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerTo));
-        setState(() {});
-        widget.destinationInput(to);
+          Marker markerTo = MapViewerUtil.generateMarker(
+            latLng: to.latLang,
+            nameMarkerId: 'TO_POSITION_MARKER',
+            icon: currentPinLocationIcon,
+          );
+          BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerTo));
+          setState(() {});
+          widget.destinationInput(to);
+        }catch(_){}
       }
     }
   }

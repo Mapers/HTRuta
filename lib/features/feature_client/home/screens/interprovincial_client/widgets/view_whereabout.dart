@@ -59,20 +59,22 @@ class _ViewWhereabouthState extends State<ViewWhereabouth> {
     });
   }
   void updateOriginPointFromCoordinates({LatLng coordinates}) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    Placemark newPosition = placemarks[0];
-    locationWhereAbout = LocationEntity(
-      streetName: newPosition.thoroughfare,
-      districtName: newPosition.locality,
-      provinceName: newPosition.subAdministrativeArea ,
-      regionName: newPosition.administrativeArea,
-      latLang: coordinates
-    );
-    nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
-    loading = false;
-    if(!mounted) return;
-    setState(() {});
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      Placemark newPosition = placemarks[0];
+      locationWhereAbout = LocationEntity(
+        streetName: newPosition.thoroughfare,
+        districtName: newPosition.locality,
+        provinceName: newPosition.subAdministrativeArea ,
+        regionName: newPosition.administrativeArea,
+        latLang: coordinates
+      );
+      nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
+      loading = false;
+      if(!mounted) return;
+      setState(() {});
+    }catch(_){}
   }
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;

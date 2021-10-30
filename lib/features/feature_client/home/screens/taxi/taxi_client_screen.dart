@@ -211,9 +211,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
           lng: currentLocation?.longitude
         ));
       }
-    }catch(e){
-
-    } 
+    }catch(_){} 
     if(currentLocation != null){
       moveCameraToMyLocation();
     }
@@ -335,9 +333,7 @@ class _TaxiClientScreenState extends State<TaxiClientScreen> with WidgetsBinding
         lat: coordinates.latitude,
         lng: coordinates.longitude
       ));
-    }catch(e){
-
-    }
+    }catch(_){}
     /* MarkerId markerId = MarkerId('origin');
     Marker marker = Marker(
       markerId: markerId,

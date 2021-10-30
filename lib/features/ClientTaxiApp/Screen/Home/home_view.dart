@@ -100,24 +100,26 @@ class _HomeViewState extends State<HomeView> {
 
   /// Get current location
   Future<void> _initCurrentLocation() async {
-    await Geolocator.isLocationServiceEnabled();
-    currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
-    if (placemarks != null && placemarks.isNotEmpty) {
-      final Placemark pos = placemarks[0];
-      setState(() {
-        _placemark = pos.name + ', ' + pos.thoroughfare;
-      });
-      widget?.placeBloc?.getCurrentLocation(Place(
-          name: _placemark,
-          formattedAddress: '',
-          lat: currentLocation?.latitude,
-          lng: currentLocation?.longitude
-      ));
-    }
-    if(currentLocation != null){
-      moveCameraToMyLocation();
-    }
+    try{
+      await Geolocator.isLocationServiceEnabled();
+      currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      List<Placemark> placemarks = await placemarkFromCoordinates(currentLocation?.latitude, currentLocation?.longitude);
+      if (placemarks != null && placemarks.isNotEmpty) {
+        final Placemark pos = placemarks[0];
+        setState(() {
+          _placemark = pos.name + ', ' + pos.thoroughfare;
+        });
+        widget?.placeBloc?.getCurrentLocation(Place(
+            name: _placemark,
+            formattedAddress: '',
+            lat: currentLocation?.latitude,
+            lng: currentLocation?.longitude
+        ));
+      }
+      if(currentLocation != null){
+        moveCameraToMyLocation();
+      }
+    }catch(_){}
   }
 
   void moveCameraToMyLocation(){
@@ -134,17 +136,19 @@ class _HomeViewState extends State<HomeView> {
   /// Get current location name
   void getLocationName(double lat, double lng) async {
     if(lat != null && lng != null) {
-      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-      if (placemarks != null && placemarks.isNotEmpty) {
-        final Placemark pos = placemarks[0];
-          _placemark = pos.name + ', ' + pos.thoroughfare;
-        widget?.placeBloc?.getCurrentLocation(Place(
-          name: _placemark,
-          formattedAddress: '',
-          lat: lat,
-          lng: lng
-        ));
-      }
+      try{
+        List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+        if (placemarks != null && placemarks.isNotEmpty) {
+          final Placemark pos = placemarks[0];
+            _placemark = pos.name + ', ' + pos.thoroughfare;
+          widget?.placeBloc?.getCurrentLocation(Place(
+            name: _placemark,
+            formattedAddress: '',
+            lat: lat,
+            lng: lng
+          ));
+        }
+      }catch(_){}
     }
   }
 

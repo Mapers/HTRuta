@@ -21,13 +21,17 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
     pointMeeting = LocationEntity.initialWithLocation(latitude: widget.geoPoint.latitude , longitude: widget.geoPoint.longitude );
     List<Placemark> placemarks;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-        do {
-          placemarks = await placemarkFromCoordinates(widget.geoPoint.latitude, widget.geoPoint.longitude);
-        } while (placemarks == null || placemarks.isEmpty);
-        Placemark newPosition = placemarks.first ;
-        pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
-        setState(() {
-        });
+        try{
+          do {
+            placemarks = await placemarkFromCoordinates(widget.geoPoint.latitude, widget.geoPoint.longitude);
+          } while (placemarks == null || placemarks.isEmpty);
+          Placemark newPosition = placemarks.first ;
+          pointMeeting = LocationEntity.fillIn(placemark: newPosition, latLng: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude));
+          setState(() {
+          });
+        }catch(e){
+          print(e);
+        }
     });
     super.initState();
   }

@@ -34,27 +34,29 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapTaxi> {
     }
   }
   void updateOriginPointFromCoordinates(LatLng coordinates) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
-    if (placemarks == null || placemarks.isEmpty) return;
-    final Placemark newPosition = placemarks[0];
-    if(widget.fromLocation){
-      widget?.placeBloc?.selectFromLocation(Place(
-        name: newPosition.name + ', ' + newPosition.thoroughfare,
-        formattedAddress: '',
-        lat: coordinates.latitude,
-        lng: coordinates.longitude
-      ));
-    }else{
-      widget?.placeBloc?.selectLocation(Place(
-        name: newPosition.name + ', ' + newPosition.thoroughfare,
-        formattedAddress: '',
-        lat: coordinates.latitude,
-        lng: coordinates.longitude
-      ));
-    }
-    loading = false;
-    if(!mounted) return;
-    setState(() {});
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
+      if (placemarks == null || placemarks.isEmpty) return;
+      final Placemark newPosition = placemarks[0];
+      if(widget.fromLocation){
+        widget?.placeBloc?.selectFromLocation(Place(
+          name: newPosition.name + ', ' + newPosition.thoroughfare,
+          formattedAddress: '',
+          lat: coordinates.latitude,
+          lng: coordinates.longitude
+        ));
+      }else{
+        widget?.placeBloc?.selectLocation(Place(
+          name: newPosition.name + ', ' + newPosition.thoroughfare,
+          formattedAddress: '',
+          lat: coordinates.latitude,
+          lng: coordinates.longitude
+        ));
+      }
+      loading = false;
+      if(!mounted) return;
+      setState(() {});
+    }catch(_){}
   }
 
   @override
