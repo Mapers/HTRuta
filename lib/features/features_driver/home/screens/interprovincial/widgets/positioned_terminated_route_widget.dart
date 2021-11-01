@@ -30,7 +30,7 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
         if(locationState is DataInterprovincialDriverLocationState){
           InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
           if(serviceState is DataInterprovincialDriverState){
-            final status = [InterprovincialStatus.inRoute];
+            final status = [InterprovincialStatus.inRoute, InterprovincialStatus.onWhereabouts];
             if(status.contains(serviceState.status) && locationState.location != null){
               // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
               // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);

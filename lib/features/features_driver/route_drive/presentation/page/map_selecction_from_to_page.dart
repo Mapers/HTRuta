@@ -53,8 +53,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
   void _addFromToMarkers({LatLng pos}) async{
     try {
       if(inputSelecter){
-        inputSelecter = false;
-        setState(() {});
         // ignore: missing_required_param
         from =  LocationEntity( latLang: pos)  ;
         openLoadingDialog(context);
@@ -62,6 +60,10 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         Placemark placemark = placemarkFrom.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          if(toController.text.isEmpty){
+            inputSelecter = false;
+            setState(() {});
+          }
           whereaboutsFrom = LocationEntity(
             latLang: from.latLang,
             regionName: placemark.administrativeArea,
@@ -81,8 +83,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
           appearMesage();
         }
       } else {
-        inputSelecter = true;
-        setState(() {});
         // ignore: missing_required_param
         to = LocationEntity(latLang:pos);
         openLoadingDialog(context);
@@ -90,6 +90,10 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         Placemark placemark = placemarkTo.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          if(fromController.text.isEmpty){
+            inputSelecter = true;
+            setState(() {});
+          }
           whereaboutsTo = LocationEntity(
             latLang: to.latLang,
             regionName: placemark.administrativeArea,

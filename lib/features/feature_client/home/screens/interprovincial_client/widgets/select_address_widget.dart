@@ -60,7 +60,6 @@ class _SelectAddressState extends State<SelectAddressWidget> {
     return Card(
       elevation: 5,
       child: Container(
-        height: mqHeigth(context, 42),
         padding: EdgeInsets.only(top: 20, bottom: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

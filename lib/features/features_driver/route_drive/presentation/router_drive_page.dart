@@ -37,7 +37,7 @@ class _RouterDrivePageState extends State<RouterDrivePage> {
             _scaffoldKey.currentState.openDrawer();
           },
         ),
-        centerTitle: false,
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {

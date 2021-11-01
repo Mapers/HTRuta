@@ -61,7 +61,6 @@ class RouterDriveRemoteDataSoruce {
     ResponseHttp result = await requestHttp.post(
       Config.nuevaRutaApi + '/interprovincial/driver/routes/delete',
       data: {
-        'user_id': _prefs.idChofer,
         'id': interprovincialRoute.id,
       }
     );
