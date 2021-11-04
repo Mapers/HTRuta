@@ -10,12 +10,13 @@ abstract class InterprovincialDriverState extends Equatable {
 class DataInterprovincialDriverState extends InterprovincialDriverState {
   final String loadingMessage;
   final int availableSeats;
+  final int limitSeats;
   final String documentId;
   final String serviceId;
   final InterprovincialStatus status;
   final InterprovincialRouteInServiceEntity routeService;
   final DateTime routeStartDateTime;
-  DataInterprovincialDriverState({@required this.routeService, @required this.documentId, @required this.status, @required this.serviceId, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats});
+  DataInterprovincialDriverState({@required this.routeService, @required this.documentId, @required this.status, @required this.serviceId, this.loadingMessage, @required this.routeStartDateTime, @required this.availableSeats, this.limitSeats});
 
   factory DataInterprovincialDriverState.initial({String loadingMessage}){
     return DataInterprovincialDriverState(
@@ -25,15 +26,17 @@ class DataInterprovincialDriverState extends InterprovincialDriverState {
       serviceId: null,
       routeStartDateTime: null,
       availableSeats: null,
+      limitSeats: null,
       loadingMessage: loadingMessage ?? 'Cargando'
     );
   }
 
-  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, String serviceId, InterprovincialStatus status, InterprovincialRouteInServiceEntity routeService, DateTime routeStartDateTime, int availableSeats}){
+  DataInterprovincialDriverState copyWith({String loadingMessage, String documentId, String serviceId, InterprovincialStatus status, InterprovincialRouteInServiceEntity routeService, DateTime routeStartDateTime, int availableSeats, int limitSeats}){
     return DataInterprovincialDriverState(
       loadingMessage: loadingMessage ?? this.loadingMessage,
       documentId: documentId ?? this.documentId,
       status: status ?? this.status,
+      limitSeats: limitSeats ?? this.limitSeats,
       serviceId: serviceId ?? this.serviceId,
       routeService: routeService ?? this.routeService,
       routeStartDateTime: routeStartDateTime ?? this.routeStartDateTime,

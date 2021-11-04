@@ -50,6 +50,9 @@ class _PositionedSeatManagerWidgetState extends State<PositionedSeatManagerWidge
                         },
                       )
                     ) : Container(),
+                    data.status == InterprovincialStatus.inRoute && data.availableSeats < data.limitSeats ? Container(
+                      width: 120,
+                    ): Container(),
                     Container(
                       width: 55,
                       height: 55,
@@ -76,8 +79,20 @@ class _PositionedSeatManagerWidgetState extends State<PositionedSeatManagerWidge
                           child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 11)),
                         ),
                         onPressed: (){
-                          //! Se requiere tener el maximo de total de asientos
                           BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailableSeatInterprovincialDriverEvent(maxSeats: 60));
+                        },
+                      )
+                    ) : Container(),
+                    data.status == InterprovincialStatus.inRoute && data.availableSeats < data.limitSeats ? SizedBox(
+                      width: 120,
+                      child: OutlineButton.icon(
+                        icon: Icon(Icons.exposure_plus_1),
+                        label: Expanded(
+                          child: Text('Liberar asiento', style: TextStyle(color: Colors.black54, fontSize: 11)),
+                        ),
+                        onPressed: (){
+                          //! Se requiere tener el maximo de total de asientos
+                          BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailableSeatInterprovincialDriverEvent(maxSeats: data.limitSeats));
                         },
                       )
                     ) : Container(),

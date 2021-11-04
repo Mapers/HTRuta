@@ -93,7 +93,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
       try {
         yield data.copyWith(loadingMessage: 'Iniciando ruta', status: InterprovincialStatus.loading);
         await Future.wait([
-          interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.inRoute),
+          interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.inRoute, limitSeats: data.availableSeats),
           interprovincialDriverDataRemote.changeToInRoute(serviceId: data.serviceId)
         ]);
         yield data.copyWith(
@@ -101,7 +101,7 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
         );
       } on ServerException catch (e) {
         Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);
-        interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.onWhereabouts);
+        interprovincialDataFirestore.changeToStartRouteInService(documentId: data.documentId, status: InterprovincialStatus.onWhereabouts, limitSeats: data.availableSeats);
         yield data;
       }
     }else if(event is PlusOneAvailableSeatInterprovincialDriverEvent){

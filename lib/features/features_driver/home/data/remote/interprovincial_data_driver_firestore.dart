@@ -55,6 +55,7 @@ class InterprovincialDataDriverFirestore{
       final data = ds.data();
       return DataInterprovincialDriverState(
         availableSeats: data['available_seats'],
+        limitSeats: data['limit_seats'],
         documentId: ds.id,
         serviceId: data['service_id'],
         status: toInterprovincialStatusFromString(data['status']),
@@ -83,11 +84,13 @@ class InterprovincialDataDriverFirestore{
 
   Future<bool> changeToStartRouteInService({
     @required String documentId,
-    @required InterprovincialStatus status
+    @required InterprovincialStatus status,
+    @required int limitSeats
   }) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId).update({
-        'status': toStringFirebaseInterprovincialStatus(status)
+        'status': toStringFirebaseInterprovincialStatus(status),
+        'limit_seats': limitSeats
       });
       return true;
     } catch (_) {
