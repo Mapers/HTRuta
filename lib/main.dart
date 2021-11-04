@@ -18,6 +18,7 @@ import 'package:HTRuta/features/features_driver/home/screens/interprovincial/blo
 import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_service_bloc.dart';
 import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/point_meeting_drive_bloc.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/driver_place_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -103,6 +104,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => RegistroProvider()),
         ChangeNotifierProvider(create: (_) => ClientTaxiPlaceBloc()),
+        ChangeNotifierProvider(create: (_) => DriverTaxiPlaceBloc()),
         ChangeNotifierProvider(create: (_) => PedidoProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
         ChangeNotifierProvider(create: (_) => AppServicesProvider(),),

@@ -180,12 +180,6 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
             ),
             messageController? PositionedDarkCardWidget(top: 240,text: 'No se encontrol ninguna calle por favor selecione otro punto'):Container(),
             saveButtonWidget(context),
-            Center(
-              child: Transform.translate(
-                offset: Offset(0, -25),
-                child: Icon( Icons.location_on, size: 50, color: Theme.of(context).primaryColor)
-              ),
-            ),
           ],
         ),
       ),
@@ -224,26 +218,13 @@ class _SelecctioFromToMapPageState extends State<MapSelecctionFromToMapPage> {
         polyLines: polylines,
         myLocationEnabled: false,
         zoom: 16,
-        onCameraMove: ( cameraPosition ) {
-          coordinatesSelected = cameraPosition.target;
-        },
-        onCameraIdle: (){
-          if(coordinatesSelected == null){
-            return;
-          }
+        onTap: (pos){
           if(inputSelecter){
-            _addFromToMarkers(  pos: coordinatesSelected);
+            _addFromToMarkers(  pos:pos );
           }else{
-            _addFromToMarkers( pos: coordinatesSelected);
+            _addFromToMarkers( pos:pos );
           }
-        },
-        /* onTap: (pos){
-          if(inputSelecter){
-            _addFromToMarkers(  pos:pos,inputSelecter:inputSelecter );
-          }else{
-            _addFromToMarkers( pos:pos, inputSelecter:inputSelecter );
-          }
-        } */
+        }
       )
     );
   }

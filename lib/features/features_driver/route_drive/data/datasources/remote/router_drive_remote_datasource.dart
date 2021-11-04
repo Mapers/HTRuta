@@ -14,7 +14,7 @@ class RouterDriveRemoteDataSoruce {
     await _prefs.initPrefs();
     ResponseHttp result = await requestHttp.post(Config.nuevaRutaApi + '/interprovincial/driver/get-routes',
       data: {
-        'user_id': _prefs.idChofer,
+        'user_id': _prefs.idChoferReal,
       }
     );
     if(result.success) return InterprovincialRouteEntity.fromListJson(result.data);

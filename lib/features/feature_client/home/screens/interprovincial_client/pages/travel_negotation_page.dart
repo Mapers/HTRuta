@@ -286,7 +286,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              PointMeetingClient(geoPoint: request.pointMeeting),
+              PointMeetingClient(geoPoint: request.pointMeeting, currentLocation: location),
               SizedBox(height: 10,),
               Text('Precio por pasajero: S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),

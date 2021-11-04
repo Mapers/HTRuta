@@ -4,11 +4,13 @@ import 'package:HTRuta/features/features_driver/route_drive/domain/entities/inte
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
 import 'package:HTRuta/app/components/principal_input.dart';
 import 'package:HTRuta/app/components/principal_button.dart';
-import 'package:HTRuta/features/features_driver/route_drive/presentation/page/map_selecction_from_to_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/page/route_search_address_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/driver_place_bloc.dart';
 
 class FormRouterDrivePage extends StatefulWidget {
   final InterprovincialRouteEntity routeDrive;
@@ -48,6 +50,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -67,9 +70,30 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       enabled: false,
                       onTap: () async {
                         final geoposition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
+                        if(widget.routeDrive != null){
+                          var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
+                          bloc.selectFromLocation(widget.routeDrive.from);
+                          bloc.selectToLocation(widget.routeDrive.to);
+                        }
+                        final bool ready = await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RouteSearchAddressScreen(
+                            currentLocation: geoposition,
+                            from: true,
+                          ),
+                          fullscreenDialog: true,
+                        ));
+                        var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
+                        if(ready != null && ready){
+                          getFromAndTo(InterprovincialRouteEntity(
+                            from: bloc.fromLocation,
+                            to: bloc.toLocation,
+                            cost: null,
+                            name: null
+                          ));
+                        }
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
-                      hinText: 'Seleccionar ruta',
+                      hinText: 'Seleccionar origen-destino',
                     ),
                     PrincipalInput(
                       controller: nameConroller,
@@ -207,6 +231,9 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                       BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive:  newRouterDrive));
                       Navigator.of(context).pop();
                     }
+                    var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
+                    bloc.selectFromLocation(widget.routeDrive.from);
+                    bloc.selectToLocation(widget.routeDrive.to);
                   },
                   text: widget.statAddEdit?'Crear ruta':'Actualizar ruta',
                   color: primaryColor,

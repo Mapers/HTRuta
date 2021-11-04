@@ -122,7 +122,7 @@ class GMapViewHelper {
     @required LatLng fromLocation,
     @required LatLng toLocation,
     @required GoogleMapController mapController,
-
+    double zoom = 120
   }) async {
     var _latFrom = fromLocation.latitude;
     var _lngFrom = fromLocation.longitude;
@@ -152,7 +152,7 @@ class GMapViewHelper {
           southwest: LatLng(sLat, sLng),
           northeast: LatLng(nLat, nLng),
         ),
-        120.0,
+        zoom,
       ),
     );
   }

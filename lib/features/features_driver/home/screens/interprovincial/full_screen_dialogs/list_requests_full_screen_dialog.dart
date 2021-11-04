@@ -15,6 +15,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
+import 'package:HTRuta/entities/location_entity.dart';
 
 class ListRequestsFullScreenDialog extends StatefulWidget {
   final String documentId;
@@ -32,7 +34,18 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
   InterprovincialDataDriverFirestore interprovincialDataDriverFirestore = getIt<InterprovincialDataDriverFirestore>();
   InterprovincialDataFirestore interprovincialDataFirestore = getIt<InterprovincialDataFirestore>();
   LoadingFullScreen _loadingFullScreen = LoadingFullScreen();
+  LocationEntity location = LocationEntity.initalPeruPosition();
 
+  @override
+  void initState() {
+    super.initState();
+    getPosition();
+  }
+
+  Future<void> getPosition() async {
+    location = await LocationUtil.currentLocation();
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +66,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               separatorBuilder: (ctx, i) => Divider(),
               itemCount: interprovincialRequests.length,
               padding: EdgeInsets.all(15),
-              itemBuilder: (ctx, i) => getItem(i, interprovincialRequests[i])
+              itemBuilder: (ctx, i) => getItem(i, interprovincialRequests[i], interprovincialRequests.length)
             );
           }
           return Container();
@@ -62,7 +75,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
     );
   }
 
-  Widget getItem(int index, InterprovincialRequestEntity interprovincialRequest){
+  Widget getItem(int index, InterprovincialRequestEntity interprovincialRequest, int requestsNumber){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -111,17 +124,22 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
           padding: const EdgeInsets.all(8),
           child: Text('Puntos de encuentro', style: TextStyle(fontWeight: FontWeight.bold ),),
         ),
-        PointMeetingClient(geoPoint: interprovincialRequest.pointMeeting,icon: Icons.location_on,),
+        PointMeetingClient(
+          geoPoint: interprovincialRequest.pointMeeting,
+          icon: Icons.location_on,
+          withMap: true,
+          currentLocation: location,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: CalculateTotal(price: interprovincialRequest.price  ,seating: interprovincialRequest.seats ,),
         ),
-        getActionButtons(index, interprovincialRequest)
+        getActionButtons(index, interprovincialRequest, requestsNumber)
       ],
     );
   }
 
-  Widget getActionButtons(int index, InterprovincialRequestEntity interprovincialRequest){
+  Widget getActionButtons(int index, InterprovincialRequestEntity interprovincialRequest, int requestsNumber){
     if(interprovincialRequest.condition == InterprovincialRequestCondition.offer){
       return ButtonBar(
         children:  [
@@ -130,7 +148,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
             child: Text('Contraofertar'),
           ),
           RaisedButton(
-            onPressed: () => showAcceptOfferDialog(index, interprovincialRequest),
+            onPressed: () => showAcceptOfferDialog(index, interprovincialRequest, requestsNumber),
             child: Text('Aceptar'),
           )
         ]
@@ -247,7 +265,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
     );
   }
 
-  void showAcceptOfferDialog(int index, InterprovincialRequestEntity interprovincialRequest){
+  void showAcceptOfferDialog(int index, InterprovincialRequestEntity interprovincialRequest, int requestsNumber){
     DataInterprovincialDriverState data = BlocProvider.of<InterprovincialDriverBloc>(context).state;
     if(data.availableSeats < interprovincialRequest.seats){
       showDialogCantNotAccept();
@@ -275,6 +293,9 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
                 BlocProvider.of<InterprovincialDriverBloc>(context).add(SetLocalAvailabelSeatInterprovincialDriverEvent(newSeats: onAcceptedRequest.availableSeats));
               }else{
                 _loadingFullScreen.close();
+              }
+              if(requestsNumber == 1){
+                Navigator.pop(context);
               }
             },
           )

@@ -17,7 +17,7 @@ class MapViewerUtil {
 
   Widget build({
     @required double height,
-    @required Map<MarkerId, Marker> markers,
+    Map<MarkerId, Marker> markers,
     @required LatLng currentLocation,
     bool drawCircle,
     double radiusCircle,
