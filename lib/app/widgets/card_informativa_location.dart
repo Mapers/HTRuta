@@ -24,10 +24,10 @@ class CardInformationLocation extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LocationComplement(title: 'Región: ',subTitle: location.regionName,),
-                  LocationComplement(title: 'Provincia: ',subTitle: location.provinceName,),
-                  LocationComplement(title: 'Distrito: ',subTitle: location.districtName,),
-                  LocationComplement(title: 'Calle: ',subTitle: location.streetName,),
+                  LocationComplement(title: 'Región: ',subTitle: location != null ?  location.regionName : ''),
+                  LocationComplement(title: 'Provincia: ',subTitle:location != null ?  location.provinceName : ''),
+                  LocationComplement(title: 'Distrito: ',subTitle:location != null ?  location.districtName : ''),
+                  LocationComplement(title: 'Calle: ',subTitle:location != null ?  location.streetName : ''),
                 ],
               ),
             )

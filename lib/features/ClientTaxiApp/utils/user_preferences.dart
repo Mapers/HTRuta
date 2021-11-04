@@ -100,7 +100,7 @@ class UserPreferences{
     _prefs.setString('clientTaxiDriverRequest', clientTaxiDriverRequest);
   }
 
-  List<String> get getClientPaymentMethods => _prefs.getStringList('clientPayments') ?? [];
+  List<String> get getClientPaymentMethods => _prefs.getStringList('clientPayments') ?? ['1'];
   
   set setClientPaymentMethods(List<String> values) {
     _prefs.setStringList('clientPayments', values);

@@ -14,7 +14,8 @@ class SearchAddressScreenInterprovincial extends StatefulWidget {
   final Position currentLocation;
   final bool from;
   final bool isSelect;
-  SearchAddressScreenInterprovincial({this.getTo, this.currentLocation, this.from = false, this.getfrom, this.fromSelect, this.toSelect, this.isSelect});
+  final LocationEntity defaultLocation;
+  SearchAddressScreenInterprovincial({this.getTo, this.currentLocation, this.from = false, this.getfrom, this.fromSelect, this.toSelect, this.isSelect, this.defaultLocation});
   @override
   _SearchAddressScreenState createState() => _SearchAddressScreenState();
 }

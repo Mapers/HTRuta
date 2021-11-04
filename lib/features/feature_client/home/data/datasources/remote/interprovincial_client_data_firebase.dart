@@ -95,17 +95,19 @@ class InterprovincialClientDataFirebase {
   Future<DataNecessaryRetrieve> getDataNecessaryRetrieve({@required String documentId, @required String passengerDocumentId }) async{
     DocumentSnapshot dsp = await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerDocumentId).get();
     DocumentSnapshot dss = await firestore.collection('interprovincial_in_service').doc(documentId).get();
-    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'], serviceId: dss.data()['service_id']);
+    DataNecessaryRetrieve dataNecessaryRetrieve = DataNecessaryRetrieve(negotiatedPrice: dsp.data()['price'], serviceId: dss.data()['service_id'], status: dss.data()['status']);
     return dataNecessaryRetrieve;
   }
 }
 class DataNecessaryRetrieve extends Equatable {
   final double negotiatedPrice;
   final String serviceId;
+  final String status; 
 
   DataNecessaryRetrieve({
     @required this.negotiatedPrice,
     @required this.serviceId,
+    this.status,
   });
   @override
   List<Object> get props => [];

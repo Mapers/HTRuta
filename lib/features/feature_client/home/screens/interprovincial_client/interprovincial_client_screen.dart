@@ -2,6 +2,7 @@ import 'package:HTRuta/app/widgets/loading_positioned.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/core/utils/map_viewer_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/custom_dropdown_client.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/availables_routes_bloc.dart';
@@ -16,8 +17,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final bool rejected;
@@ -62,6 +65,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_)async{
       location = await LocationUtil.currentLocation();
+      // setCurrentPosition(location);
       currentPinLocationIcon = await BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png');
       BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
       if(widget.rejected){
@@ -85,6 +89,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         );
         BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
+      }else{
+        getfrom(location);
       }
     });
   }
@@ -146,6 +152,18 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         seating: seat,
         paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList())
       );
+  }
+
+  void setCurrentPosition(LocationEntity location) async {
+    try{
+      Place fromPlace = Place(
+        lat: location.latLang.latitude,
+        lng: location.latLang.longitude,
+        name: location.streetName ?? '',
+        formattedAddress: location.streetName ?? '',
+      );
+      Provider.of<ClientTaxiPlaceBloc>(context, listen: false).selectFromLocation(fromPlace);
+    }catch(_){}
   }
 
   @override

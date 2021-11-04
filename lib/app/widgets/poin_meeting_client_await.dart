@@ -69,7 +69,7 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
                     LocationComplement(title: 'Provincia: ',subTitle: pointMeeting.provinceName,),
                     LocationComplement(title: 'Distrito: ',subTitle: pointMeeting.districtName,),
                     LocationComplement(title: 'Calle: ',subTitle: pointMeeting.streetName,),
-                    Row(
+                    widget.withMap ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
@@ -80,7 +80,7 @@ class _PointMeetingClientState extends State<PointMeetingClient> {
                           },
                         ),
                       ],
-                    ),
+                    ) : Container(),
                     mapVisible && widget.withMap ? OriginMap(
                       to: LocationEntity(
                         latLang: LatLng(widget.geoPoint.latitude, widget.geoPoint.longitude),

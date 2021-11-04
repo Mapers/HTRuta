@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/GPSPage/access_gps_page.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'dart:async';
-
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/entities/location_entity.dart';
@@ -150,7 +150,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
             fcm_token: null,
             id: null,
             routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
-            // status: interprovincialRouteInServiceEntity.status,
+            status: toInterprovincialStatusFromString(dataNecessaryRetrieve.status),
             vehicleSeatLayout: null
           );
         if( serviceInCourse.passengerDocumentId != null ){

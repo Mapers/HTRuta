@@ -32,7 +32,7 @@ class MapCoordenationDrivePage extends StatefulWidget {
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
 }
 
-class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
+class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> with WidgetsBindingObserver{
   MapViewerUtil _mapViewerUtil = MapViewerUtil();
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> polylines = {};
@@ -45,6 +45,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   StreamSubscription subscription;
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     currenActual = widget.currentLocation;
     AproxElement element;
     WidgetsBinding.instance.addPostFrameCallback((_)async {
@@ -121,11 +122,19 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> {
   void dispose() {
     _locationUtil.disposeListener();
     subscription?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
   
   Future<void> makePhoneCall(String url) async {
       await launch(url);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _mapViewerUtil.changeMapType();
+    }
   }
 
   @override
@@ -279,7 +288,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    widget.availablesRoutesEntity.status != InterprovincialStatus.onWhereabouts ? 'En paradero':'En ruta',
+                    widget.availablesRoutesEntity.status == InterprovincialStatus.inRoute ? 'En ruta' : 'En paradero',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                     textAlign: TextAlign.center,
                   ),

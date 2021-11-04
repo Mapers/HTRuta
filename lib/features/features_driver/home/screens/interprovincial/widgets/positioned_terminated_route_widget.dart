@@ -11,51 +11,56 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
-      builder: (context, locationState) {
-              
-        /* if(locationState is DataInterprovincialDriverLocationState){
-          InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
-          if(serviceState is DataInterprovincialDriverState){
-            final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
-            if(status.contains(serviceState.status) && locationState.location != null){
-              // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
-              // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
-              // if(distance <= 3 || diferenceDays >= 2){
-              //   return 
-              // }
-            }
-          }
-        } */
-        if(locationState is DataInterprovincialDriverLocationState){
-          InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
-          if(serviceState is DataInterprovincialDriverState){
-            final status = [InterprovincialStatus.inRoute, InterprovincialStatus.onWhereabouts];
-            if(status.contains(serviceState.status) && locationState.location != null){
-              // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
-              // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
-              // if(distance <= 3 || diferenceDays >= 2){
-              //   return 
-              // }
-              return Positioned(
-                bottom: 120,
-                left: 80,
-                right: 80,
-                child: RaisedButton(
-                  child: Text('Culminar ruta'),
-                  onPressed: () => showQuestionTerminatedService(context)
-                )
-              );
+    return BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
+      builder: (ctx, state){
+        DataInterprovincialDriverState data = state;
+        return BlocBuilder<InterprovincialDriverLocationBloc, InterprovincialDriverLocationState>(
+          builder: (context, locationState) {
+                  
+            /* if(locationState is DataInterprovincialDriverLocationState){
+              InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+              if(serviceState is DataInterprovincialDriverState){
+                final status = [InterprovincialStatus.onWhereabouts, InterprovincialStatus.inRoute];
+                if(status.contains(serviceState.status) && locationState.location != null){
+                  // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
+                  // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
+                  // if(distance <= 3 || diferenceDays >= 2){
+                  //   return 
+                  // }
+                }
+              }
+            } */
+            if(locationState is DataInterprovincialDriverLocationState){
+              InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
+              if(serviceState is DataInterprovincialDriverState){
+                final status = [InterprovincialStatus.inRoute, InterprovincialStatus.onWhereabouts];
+                if(status.contains(serviceState.status) && locationState.location != null && data.availableSeats == data.limitSeats){
+                  // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
+                  // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
+                  // if(distance <= 3 || diferenceDays >= 2){
+                  //   return 
+                  // }
+                  return Positioned(
+                    bottom: 120,
+                    left: 80,
+                    right: 80,
+                    child: RaisedButton(
+                      child: Text('Culminar ruta'),
+                      onPressed: () => showQuestionTerminatedService(context)
+                    )
+                  );
+                }else{
+                  return Container();
+                }
+              }else{
+                return Container();
+              }
             }else{
               return Container();
             }
-          }else{
-            return Container();
-          }
-        }else{
-          return Container();
-        }
-      },
+          },
+        );
+      }
     );
   }
 
