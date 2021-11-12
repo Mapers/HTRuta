@@ -79,7 +79,7 @@ class _EditProfileState extends State<EditProfile> {
       if(cameras.isEmpty){
         throw Exception();
       }
-      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(cameras: cameras)));
       if(imagePath == null) return;
       _image = File(imagePath);
       setState(() {});

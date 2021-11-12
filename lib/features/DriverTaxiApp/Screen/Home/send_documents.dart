@@ -75,7 +75,7 @@ class _SendDocumentPageState extends State<SendDocumentPage> {
       if(cameras.isEmpty){
         throw Exception();
       }
-      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(cameras: cameras)));
       if(imagePath == null) return;
       imagenes[index] = File(imagePath);
       setState(() {});

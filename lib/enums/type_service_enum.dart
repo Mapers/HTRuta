@@ -18,7 +18,7 @@ String getRouteByTypeServiceEnum(TypeServiceEnum type){
     case TypeServiceEnum.taxi:
       return 'assets/image/taxi_option.png';
     case TypeServiceEnum.interprovincial:
-      return 'assets/image/bus_option.png';
+      return 'assets/image/suv.png';
     case TypeServiceEnum.cargo:
       return 'assets/image/camion_option.png';
   }

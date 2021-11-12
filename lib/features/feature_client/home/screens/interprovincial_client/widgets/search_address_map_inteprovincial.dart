@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/entities/location_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
@@ -41,16 +42,23 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> w
       List<Placemark> placemarks = await placemarkFromCoordinates(coordinates.latitude, coordinates.longitude);
       if (placemarks == null || placemarks.isEmpty) return;
       newPosition = placemarks[0];
+      final locationEntity = LocationEntity(
+        streetName: newPosition.thoroughfare,
+        districtName: newPosition.locality,
+        provinceName: newPosition.subAdministrativeArea,
+        regionName: newPosition.administrativeArea,
+        latLang: LatLng(coordinates.latitude, coordinates.longitude)
+      );
       if(widget.fromLocation){
         widget?.placeBloc?.selectFromLocation(Place(
-          name: newPosition.name + ', ' + newPosition.thoroughfare,
+          name: locationEntity.streetName == '' ? locationEntity.districtName +', ' + locationEntity.provinceName + ', ' + locationEntity.regionName  :locationEntity.streetName + ', '+ locationEntity.districtName + ', ' + locationEntity.provinceName,
           formattedAddress: '',
           lat: coordinates.latitude,
           lng: coordinates.longitude
         ));
       }else{
         widget?.placeBloc?.selectLocation(Place(
-          name: newPosition.name + ', ' + newPosition.thoroughfare,
+          name: locationEntity.streetName == '' ? locationEntity.districtName +', ' + locationEntity.provinceName + ', ' + locationEntity.regionName  :locationEntity.streetName + ', '+ locationEntity.districtName + ', ' + locationEntity.provinceName,
           formattedAddress: '',
           lat: coordinates.latitude,
           lng: coordinates.longitude
@@ -178,13 +186,19 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> w
     }else{
       if(widget.fromLocation){
         if(widget.placeBloc.formLocation != null){
-          return Text(widget.placeBloc.formLocation.name);
+          return Container(
+            width: mqWidth(context, 60),
+            child: Text(widget.placeBloc.formLocation.name)
+          );
         }else{
           return Text('Dirección de partida');
         }
       }else{
         if(widget.placeBloc.locationSelect != null){
-          return Text(widget.placeBloc.locationSelect.name);
+          return Container(
+            width: mqWidth(context, 60),
+            child: Text(widget.placeBloc.locationSelect.name)
+          );
         }else{
           return Text('Dirección de llegada');
         }

@@ -1,10 +1,13 @@
+import 'dart:io';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step4.dart';
 import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/app_router.dart';
+import 'package:device_info/device_info.dart';
+import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 
 class SignUpStep3 extends StatefulWidget {
   final String phoneNumber;
@@ -26,6 +29,7 @@ class _SignUpStep3State extends State<SignUpStep3> {
 
   final authApi = AuthApi();
   bool lookingData = false;
+  final _prefs = UserPreferences();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
   final TextEditingController motherNameController = TextEditingController();
@@ -318,19 +322,54 @@ class _SignUpStep3State extends State<SignUpStep3> {
                                   color: primaryColor,
                                   icon:  Text(''),
                                   label:  Text('Continuar', style: headingWhite,),
-                                  onPressed: () => {
+                                  onPressed: () async {
                                     if(formKey.currentState.validate()){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => 
-                                        SignUpStep4(
-                                          phoneNumber: widget.phoneNumber,
-                                          documentNumber: documentNumber, 
-                                          names: names, 
-                                          fatherName: fatherName, 
-                                          motherName: motherName, 
-                                          gender: genderSelected,
-                                          validationCode: widget.validationCode 
-                                        ))
-                                      )
+                                      final deviceInfo = DeviceInfoPlugin();
+                                      int dispositivo = 1;
+                                      String marca='';
+                                      String nombreDispositivo = '';
+                                      String imei = '';
+                                      if(Platform.isAndroid){
+                                        dispositivo = 2;
+                                        AndroidDeviceInfo info = await deviceInfo.androidInfo;
+                                        marca = info.model;
+                                        nombreDispositivo = info.device;
+                                        imei = info.androidId;
+                                      }else if (Platform.isIOS){
+                                        dispositivo = 1;
+                                        IosDeviceInfo info = await deviceInfo.iosInfo;
+                                        marca = info.model;
+                                        nombreDispositivo = info.name;
+                                        imei = info.identifierForVendor;
+                                      }
+                                      final token = await _prefs.tokenPush;
+                                      Dialogs.openLoadingDialog(context);
+                                      final isOk = await authApi.registerUser(
+                                        context,
+                                        dni: documentNumber,
+                                        nombre: names,
+                                        apellidoPaterno: fatherName,
+                                        apellidoMaterno: motherName,
+                                        celular: widget.phoneNumber,
+                                        correo: '',
+                                        password: '',
+                                        direccion: '',
+                                        fechaNacimiento: '',
+                                        referencia: '',
+                                        tipoDispositivo: dispositivo.toString(),
+                                        imei: imei,
+                                        marca: marca,
+                                        nombreDispositivo: nombreDispositivo,
+                                        token: token, 
+                                        sexo: genderSelected == 'Masculino' ? '1' : '2',
+                                        code: widget.validationCode
+                                      );
+                                      Navigator.pop(context);
+                                      if(isOk){
+                                        Navigator.pushNamedAndRemoveUntil(context, AppRoute.splashScreen, (route) => false);
+                                      }else{
+                                        Dialogs.alert(context,title: 'Error', message: 'No se pudo registrarlo');
+                                      }
                                     }
                                   }
                                 ),

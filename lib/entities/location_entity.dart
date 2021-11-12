@@ -86,12 +86,12 @@ class LocationEntity extends Equatable {
 
 
   Map<String, dynamic> get toMap => {
-    'district_name': districtName,
+    'district_name': districtName ?? '',
     'latitude': latLang.latitude,
     'longitude': latLang.longitude,
-    'province_name': provinceName,
-    'region_name': regionName,
-    'street_name': streetName,
+    'province_name': provinceName ?? '',
+    'region_name': regionName ?? '',
+    'street_name': streetName ?? '',
     'zoom': zoom
   };
 

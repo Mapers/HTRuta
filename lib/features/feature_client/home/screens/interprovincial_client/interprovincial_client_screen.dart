@@ -64,8 +64,9 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     );
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_)async{
-      location = await LocationUtil.currentLocation();
+      final newLocation = await LocationUtil.currentLocation();
       // setCurrentPosition(location);
+      location = newLocation;
       currentPinLocationIcon = await BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png');
       BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
       if(widget.rejected){
@@ -90,7 +91,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
       }else{
-        getfrom(location);
+        getfrom(newLocation);
       }
     });
   }
@@ -137,7 +138,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
   void onSearch() async {
     if(toLocation.districtName == ''){
       Fluttertoast.showToast(
-        msg: 'Seleccione su destino',
+        msg: 'No se pudo ubicar el distrito del destino seleccionado, pruebe con otro punto',
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
       );

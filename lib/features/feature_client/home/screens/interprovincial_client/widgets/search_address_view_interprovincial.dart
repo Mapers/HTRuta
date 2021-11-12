@@ -55,11 +55,10 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
     }
     from = widget.fromSelect;
     to = widget.toSelect;
-    if(from.latLang == null){
-      fromController.text = '';
-      toController.text = '';
-    }else{
+    if(from.latLang != null){
       fromController.text = from.streetName == '' ? from.districtName +', ' + from.provinceName  :from.streetName + ', '+ from.districtName + ', ' + from.provinceName;
+    }
+    if(to.latLang != null){
       toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
     }
     super.initState();
@@ -165,7 +164,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               regionName: newPosition.administrativeArea,
                               latLang: LatLng(toPalce.lat,toPalce.lng)
                             );
-                            toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
+                            toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName + ', ' + to.regionName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
                             widget.placeBloc.clearPlacesList();
                             if(fromController.text.isEmpty){
                               nodeFrom.requestFocus();

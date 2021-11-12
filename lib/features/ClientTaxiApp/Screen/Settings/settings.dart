@@ -2,7 +2,6 @@ import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/form_page.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/DriverTaxiApp/Screen/Navigation/navigation_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -120,38 +119,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
                     }
                   ),
-                  /* ListsMenu(
-                    title: '100 Puntos * Miembro',
-                    onPress: (){
-
-                    },
-                  ), */
-                  /* ListsMenu(
-                    title: 'Reseñas',
-                    onPress: (){
-
-                    },
-                  ), */
-                  /* ListsMenu(
-                    title: 'Invitar amigos',
-                    onPress: (){
-                      Navigator.of(context).push(MaterialPageRoute<Null>(
-                          builder: (BuildContext context) {
-                            return InviteFriends();
-                          },
-                          fullscreenDialog: true));
-                    },
-                  ), */
                   ListsMenu(
                     title: 'Notificaciones',
                     onPress: (){
                       Navigator.of(context).pushNamed(AppRoute.notificationScreen);
-                    },
-                  ),
-                  ListsMenu(
-                    title: 'Notificaciones',
-                    onPress: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (contet) => NavigationPage()));
                     },
                   ),
                   ListsMenu(

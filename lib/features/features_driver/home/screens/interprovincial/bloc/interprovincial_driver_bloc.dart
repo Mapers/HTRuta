@@ -97,7 +97,8 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           interprovincialDriverDataRemote.changeToInRoute(serviceId: data.serviceId)
         ]);
         yield data.copyWith(
-          status: InterprovincialStatus.inRoute
+          status: InterprovincialStatus.inRoute,
+          limitSeats: data.availableSeats
         );
       } on ServerException catch (e) {
         Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);

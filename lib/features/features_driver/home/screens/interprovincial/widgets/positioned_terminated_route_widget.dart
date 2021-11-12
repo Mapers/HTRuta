@@ -33,8 +33,9 @@ class PositionedTerminatedRouteWidget extends StatelessWidget {
             if(locationState is DataInterprovincialDriverLocationState){
               InterprovincialDriverState serviceState = BlocProvider.of<InterprovincialDriverBloc>(context).state;
               if(serviceState is DataInterprovincialDriverState){
-                final status = [InterprovincialStatus.inRoute, InterprovincialStatus.onWhereabouts];
-                if(status.contains(serviceState.status) && locationState.location != null && data.availableSeats == data.limitSeats){
+                // final status = [InterprovincialStatus.inRoute, InterprovincialStatus.onWhereabouts];
+                if((locationState.location != null && serviceState.status == InterprovincialStatus.onWhereabouts) || (serviceState.status == InterprovincialStatus.inRoute && data.availableSeats == data.limitSeats)){ 
+                // if(status.contains(serviceState.status) && locationState.location != null || data.availableSeats == data.limitSeats){
                   // int diferenceDays = serviceState.routeStartDateTime.calculateDifferenceInDays();
                   // double distance = LocationUtil.calculateDistanceInKilometers(serviceState.routeService.toLocation.latLang, locationState.location.latLang);
                   // if(distance <= 3 || diferenceDays >= 2){

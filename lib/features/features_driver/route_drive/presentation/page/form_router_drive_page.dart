@@ -1,4 +1,5 @@
 import 'package:HTRuta/app/colors.dart';
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/components/input_button.dart';
 import 'package:HTRuta/features/features_driver/route_drive/domain/entities/interprovincial_route_entity.dart';
 import 'package:HTRuta/features/features_driver/route_drive/presentation/bloc/route_drive_bloc.dart';
@@ -211,6 +212,18 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                 child: PrincipalButton(
                   onPressed: (){
                     formKey.currentState.save();
+                    if(costConroller.text == ''){
+                      Dialogs.alert(context, title: 'Atención', message: 'Escriba un precio');
+                      return;
+                    }
+                    if(nameConroller.text == ''){
+                      Dialogs.alert(context, title: 'Atención', message: 'Escriba un nombre');
+                      return;
+                    }
+                    if(double.tryParse(costConroller.text) == null){
+                      Dialogs.alert(context, title: 'Atención', message: 'Escriba un precio válido');
+                      return;
+                    }
                     if( widget.statAddEdit){
                       InterprovincialRouteEntity routerDrive = InterprovincialRouteEntity(
                         name: name,

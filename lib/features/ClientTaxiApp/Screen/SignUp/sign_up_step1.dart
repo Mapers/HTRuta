@@ -6,9 +6,24 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step2.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 
-class SignUpStep1 extends StatelessWidget {
+class SignUpStep1 extends StatefulWidget {
+  String phoneFromSignIn = '';
+  SignUpStep1({this.phoneFromSignIn = ''});
+
+  @override
+  _SignUpStep1State createState() => _SignUpStep1State();
+}
+
+class _SignUpStep1State extends State<SignUpStep1> {
   String _phoneNumber = '';
+
   final authApi = AuthApi();
+
+  @override
+  void initState() {
+    super.initState();
+    _phoneNumber = widget.phoneFromSignIn;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +82,7 @@ class SignUpStep1 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           TextFormField(
+                            initialValue: widget.phoneFromSignIn,
                             keyboardType: TextInputType.phone,
                             validator: (value){
                               if(value.length != 9){

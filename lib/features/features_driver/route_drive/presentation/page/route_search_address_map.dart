@@ -27,6 +27,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
   LocationEntity from;
   LocationEntity to;
   bool messageController = false;
+  bool error = false;
 
   void _onMapCreated(GoogleMapController controller) async {
     _mapController = controller;
@@ -49,6 +50,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
         Placemark placemark = placemarkFrom.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          error = false;
           widget?.placeBloc?.selectFromLocation(LocationEntity(
             latLang: from.latLang,
             regionName: placemark.administrativeArea,
@@ -57,6 +59,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
             streetName: placemark.thoroughfare,
           ));
         }else{
+          error = true;
           appearMesage();
         }
       }else{
@@ -66,6 +69,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
         Placemark placemark = placemarkFrom.first;
         Navigator.of(context).pop();
         if(placemark.thoroughfare != '' && placemark.thoroughfare != 'Unnamed Road'){
+          error = false; 
           widget?.placeBloc?.selectToLocation(LocationEntity(
             latLang: to.latLang,
             regionName: placemark.administrativeArea,
@@ -74,6 +78,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
             streetName: placemark.thoroughfare,
           ));
         }else{
+          error = true;
           appearMesage();
         }
       }
@@ -87,7 +92,9 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
     setState(() {});
     await Future.delayed(Duration(seconds: 4));
     messageController = false;
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
@@ -156,7 +163,7 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: primaryColor,
+                      color: error ? primaryColor.withOpacity(0.6): primaryColor,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(10),
                         bottomRight: Radius.circular(10),
@@ -165,7 +172,9 @@ class _RouteSearchAddressMapState extends State<RouteSearchAddressMap> {
                     child: IconButton(
                       icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
                       onPressed: (){
-                        Navigator.pop(context, true);
+                        if(!error){
+                          Navigator.pop(context, true);
+                        }
                       },
                     ),
                   )

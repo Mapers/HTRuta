@@ -98,7 +98,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
     InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Negociacion del viaje'),
+        title: Text('Negociación del viaje'),
       ),
       body: Form(
         key: formKey,

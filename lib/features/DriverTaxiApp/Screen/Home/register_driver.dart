@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:flutter/services.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
@@ -42,8 +42,9 @@ class _RegisterDriverPageState extends State<RegisterDriverPage> {
   @override
   void initState() {
     super.initState();
-    Permission.camera.request();
-    Permission.photos.request();
+    Permission.camera.request().then((value){
+      Permission.photos.request();
+    });
   }
 
   @override
@@ -279,7 +280,7 @@ class _SeptimaPaginaState extends State<SeptimaPagina> {
       if(cameras.isEmpty){
         throw Exception();
       }
-      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(cameras: cameras)));
       if(imagePath == null) return;
       imagenes[index] = File(imagePath);
       setState(() {});
@@ -677,7 +678,7 @@ class _SextaPaginaState extends State<SextaPagina> {
       if(cameras.isEmpty){
         throw Exception();
       }
-      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(cameras: cameras)));
       if(imagePath == null) return;
       imageFile = File(imagePath);
       setState(() {});
@@ -914,7 +915,7 @@ class _QuintaPaginaState extends State<QuintaPagina> {
       if(cameras.isEmpty){
         throw Exception();
       }
-      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(camera: cameras.first)));
+      String imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context) => TakePicturePage(cameras: cameras)));
       if(imagePath == null) return;
       imageFile = File(imagePath);
       setState(() {});
@@ -1233,7 +1234,10 @@ class _CuartaPaginaState extends State<CuartaPagina> {
                       height: resposive.hp(2),
                     ),
                     TextFormField(
-                        keyboardType: TextInputType.emailAddress,
+                        inputFormatters: [
+                          PlacaInputFormatter()
+                        ],
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           setState(() {
                             placa = value;
@@ -1288,6 +1292,50 @@ class _CuartaPaginaState extends State<CuartaPagina> {
           )
         ],
       ),
+    );
+  }
+  bool validatePlacaFormat(String placa){
+    final  validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
+    String firstPart = placa.substring(0, 3);
+    String secondPart = placa.substring(3, 6);
+    if(!(validCharacters.hasMatch(firstPart))){
+      return false;
+    }
+    if(int.tryParse(secondPart) == null){
+      return false;
+    }
+    return true;
+  }
+}
+
+class PlacaInputFormatter extends TextInputFormatter {
+  final  validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String newText = '';
+    int newLength = newValue.text.length;
+    if(newLength == 0){
+      newText = newValue.text.toUpperCase();
+    }else if(newLength < 4){
+      if(validCharacters.hasMatch(newValue.text) || int.tryParse(newValue.text) != null){
+        newText = newValue.text.toUpperCase();
+      }else{
+        newText = oldValue.text.toUpperCase();
+      }
+    }else if (newLength > 3 && newLength < 7){
+      final partial = newValue.text.substring(3, newValue.text.length);
+      if(int.tryParse(partial) != null){
+        newText = newValue.text.toUpperCase();
+      }else{
+        newText = oldValue.text.toUpperCase();
+      }
+    }else{
+      newText = oldValue.text.toUpperCase();
+    }
+    return TextEditingValue(
+      text: newText.toString(),
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }

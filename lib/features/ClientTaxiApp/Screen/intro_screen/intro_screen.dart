@@ -1,4 +1,4 @@
-import 'dart:convert';
+/* import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:HTRuta/app/colors.dart';
@@ -162,3 +162,4 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     );
   }
 }
+ */

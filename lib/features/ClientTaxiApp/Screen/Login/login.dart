@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Components/validations.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step1.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -42,7 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if(sent != 'S'){
           Navigator.pop(context);
           if(sent == 'N'){
-            Dialogs.alert(context,title: 'Lo sentimos', message: 'No se encuentra registrado');
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpStep1(phoneFromSignIn: _phoneNumber)));
+            
             return;
           }else{
             Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');
@@ -205,47 +207,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         signature, style: TextStyle(color: Colors.blue[50])
                       )
-                      /* InkWell(
-                        onTap: () => Navigator.of(context).pushNamed(AppRoute.registerDriverScreen),
-                        child: Text('Registrarse como conductor',style: textStyleActive,),
-                      ), */
-                      /* Container(
-                          padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text('O',style: textGrey,),
-                              SizedBox(height: 15,),                
-                              FlatButton(
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                color: Color(0xFFFE4231),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                onPressed: (){}, 
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Icon(FontAwesomeIcons.google,color: Colors.white,),
-                                    Text('Iniciar sesión con Google',style: TextStyle(color: Colors.white),)
-                                  ],
-                                )
-                              ),
-                              SizedBox(height: 20,),
-                              /* FlatButton(
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                color: Color(0xFF3D599F),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                                onPressed: (){}, 
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Icon(FontAwesomeIcons.facebook,color: Colors.white,),
-                                    Text('Iniciar sesión con Facebook',style: TextStyle(color: Colors.white),)
-                                  ],
-                                )
-                              ), */
-                            ],
-                          )
-                      ), */
                     ],
                   )
                 ),

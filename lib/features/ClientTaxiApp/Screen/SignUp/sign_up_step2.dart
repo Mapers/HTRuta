@@ -68,7 +68,7 @@ class _SignUpStep2State extends State<SignUpStep2> with CodeAutoFill {
   
   @override
   Widget build(BuildContext context) {
-
+    print(widget.numeroTelefono);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

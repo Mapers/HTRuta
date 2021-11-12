@@ -17,7 +17,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/settings.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Settings/terms_conditions_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step1.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/SplashScreen/splash_screen.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/intro_screen/intro_screen.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/History/history.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/register_driver.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Screen/Home/send_documents.dart';
@@ -46,7 +45,6 @@ class AppRoute {
   static const String loginScreen = '/login';
   static const String signUpScreen = '/signup';
   static const String forgotPassword = '/forgotPassword';
-  static const String introScreen = '/intro';
   static const String phoneVerificationScreen = '/PhoneVerification';
   static const String newsLetter = '/newsLetter';
   static const String homeScreen = '/home';
@@ -86,8 +84,6 @@ class AppRoute {
         return PageViewTransition(builder: (_) => SplashScreen());
       case loginScreen:
         return PageViewTransition(builder: (_) => LoginScreen());
-      case introScreen:
-        return PageViewTransition(builder: (_) => IntroScreen());
       case phoneVerificationScreen:
         return PageViewTransition(builder: (_) => PhoneVerification());
       case homeScreen:
