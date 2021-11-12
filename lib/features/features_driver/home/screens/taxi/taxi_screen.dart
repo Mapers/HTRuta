@@ -570,7 +570,7 @@ class _TaxiDriverServiceScreenState extends State<TaxiDriverServiceScreen> with 
           userImage: 'https://source.unsplash.com/1600x900/?portrait',
           userName: 'Naomi Cespedes',
           level: 'Level basico',
-          totalEarned: 'S/. 250.00',
+          totalEarned: 'PEN 250.00',
           hoursOnline: 10.5,
           totalDistance: '22Km',
           totalJob: 8,

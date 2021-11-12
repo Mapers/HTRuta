@@ -414,7 +414,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text('S/.${taxi.price.toStringAsFixed(2)}',style: textBoldBlack,),
+                        Text('PEN${taxi.price.toStringAsFixed(2)}',style: textBoldBlack,),
                         FutureBuilder<double>(
                           future: taxi.calculateDistance,
                           builder: (context, snapshot) {
@@ -754,7 +754,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('S/. ' + interprovincial.price.toStringAsFixed(2),style: textBoldBlack,),
+                          Text('PEN ' + interprovincial.price.toStringAsFixed(2),style: textBoldBlack,),
                           Text('160.2 Km',style: textGrey,),
                         ],
                       ),

@@ -429,7 +429,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // Text(item.mPrecio,style: textBoldBlack,),
-                          // Text('S/.250.0',style: textBoldBlack,),
+                          // Text('PEN250.0',style: textBoldBlack,),
                           Text('${(double.parse(item.distanciaMeters)/1000).toStringAsFixed(1)} km',style: textGrey,),
                         ],
                       ),
@@ -548,7 +548,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('S/.250.0',style: textBoldBlack,),
+                          Text('PEN250.0',style: textBoldBlack,),
                           Text('152.2 Km',style: textGrey,),
                         ],
                       ),
@@ -667,7 +667,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('S/.250.0',style: textBoldBlack,),
+                          Text('PEN250.0',style: textBoldBlack,),
                           Text('2.2 Km',style: textGrey,),
                         ],
                       ),

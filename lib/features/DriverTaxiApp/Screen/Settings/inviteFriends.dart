@@ -52,11 +52,11 @@ class _InviteFriendsState extends State<InviteFriends> {
               child: Text('Invite a un amigo',style: headingBlack,),
             ),
             Container(
-              child: Text('Puedes ganar S/.150 en un dia',style: textStyleHeading18Black,),
+              child: Text('Puedes ganar PEN150 en un dia',style: textStyleHeading18Black,),
             ),
             Container(
               padding: EdgeInsets.only(bottom: 20.0,top: 20.0),
-              child: Text('Cuando su amigo se registre con su código de referencia, puede recibir hasta S/.150 por día.',
+              child: Text('Cuando su amigo se registre con su código de referencia, puede recibir hasta PEN150 por día.',
                 style: textStyle,
                 textAlign: TextAlign.center,
               ),

@@ -18,7 +18,7 @@ class _CalculateTotalState extends State<CalculateTotal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('Monto total a pagar : S/. '+ amountTotal.toStringAsFixed(2) ,style: TextStyle(fontWeight: FontWeight.bold),),
+      child: Text('Monto total a pagar : PEN '+ amountTotal.toStringAsFixed(2) ,style: TextStyle(fontWeight: FontWeight.bold),),
     );
   }
 }

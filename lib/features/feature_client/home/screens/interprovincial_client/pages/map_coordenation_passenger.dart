@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:HTRuta/app/colors.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
@@ -213,23 +213,59 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
         widget.availablesRoutesEntity.route.driverCellphone== null? Container(): Positioned(
           bottom: 200,
           right: 11,
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            color: green1,
-            child: InkWell(
-              onTap: ()async{
-                await launch('tel:+51'+widget.availablesRoutesEntity.route.driverCellphone );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                child: Row(
-                  children: [
-                    Icon(Icons.call, color: Colors.white,),
-                    Text('Llamar al conductor', style: TextStyle( color: Colors.white), ),
-                  ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  color: Colors.white,
+                  child: InkWell(
+                    onTap: ()async{
+                      var url = 'whatsapp://send?phone=51${widget.availablesRoutesEntity.route.driverCellphone}&text=Hola';
+                      if(await  canLaunch(url)){
+                        launch(url);
+                      }else{
+                        Dialogs.alert(context, title: 'Lo sentimos', message: 'Esta funcionalidad no está disponible en tu dispositivo');
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/image/whatsapp.png',
+                            width: 30,
+                            height: 30,
+                          ),
+                          Container(width: 5),
+                          Text('Enviar mensaje', style: TextStyle( color: Colors.green), ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Card(
+                clipBehavior: Clip.antiAlias,
+                color: green1,
+                child: InkWell(
+                  onTap: ()async{
+                    await launch('tel:+51'+widget.availablesRoutesEntity.route.driverCellphone );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                    child: Row(
+                      children: [
+                        Icon(Icons.call, color: Colors.white,),
+                        Text('Llamar al conductor', style: TextStyle( color: Colors.white), ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
           )
         ),
         Positioned(
@@ -274,7 +310,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                   )
                 ),
                 SizedBox(width: 10),
-                Text('S/.' + widget.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('PEN' + widget.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
             Row(

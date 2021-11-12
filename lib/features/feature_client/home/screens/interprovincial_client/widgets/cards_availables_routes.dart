@@ -1,6 +1,7 @@
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app/widgets/card_informativa_location.dart';
+import 'package:HTRuta/app/widgets/origin_map.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Apis/pickup_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
@@ -115,6 +116,8 @@ class CardAvailiblesRoutes extends StatefulWidget {
 
 class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
   final pickUpApi = PickupApi();
+  AproxElement elementLoaded;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CommentsDriveBloc>(
@@ -140,7 +143,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                     )),
                     SizedBox(width: 10),
                     Text(
-                      'S/.' + widget.availablesRoutesEntity.route.cost.toStringAsFixed(2),
+                      'PEN ' + widget.availablesRoutesEntity.route.cost.toStringAsFixed(2),
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 18,
@@ -240,7 +243,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                     )
                   ],
                 ),
-                FutureBuilder(
+                elementLoaded == null ? FutureBuilder(
                   future: pickUpApi.calculateMinutes( widget.availablesRoutesEntity.route.fromLocation.latLang.latitude, widget.availablesRoutesEntity.route.fromLocation.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude),
                   builder: (BuildContext context, AsyncSnapshot snapshot){
                     if(snapshot.hasError) return Container();
@@ -248,59 +251,74 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                       case ConnectionState.waiting: return Container();
                       case ConnectionState.none: return Container();
                       case ConnectionState.active: {
-                        final AproxElement element = snapshot.data;
-                        return Column(
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset('assets/image/tracking.png',width: 22,height: 22,),
-                                SizedBox(width: 8,),
-                                Text(element.distance.text),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
-                                SizedBox(width: 8,),
-                                Text(element.duration.text),
-                              ],
-                            ),
-                          ]
-                        );
+                        elementLoaded = snapshot.data;
+                        return durationWidget(elementLoaded);
                       }
                       case ConnectionState.done: {
-                        final AproxElement element = snapshot.data;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset('assets/image/tracking.png',width: 22,height: 22,),
-                                  SizedBox(width: 8,),
-                                  Text(element.distance.text),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
-                                  SizedBox(width: 8,),
-                                  Text(element.duration.text),
-                                ],
-                              ),
-                            ]
-                          ),
-                        );
+                        elementLoaded = snapshot.data;
+                        return durationWidget(elementLoaded);
                       }
                     }
                     return Container();
                   }
+                ) : durationWidget(elementLoaded),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: (){
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              child: AlertDialog(
+                                content: OriginMap(
+                                  from: widget.availablesRoutesEntity.route.fromLocation,
+                                  to: widget.availablesRoutesEntity.route.toLocation,
+                                ),
+                              ),
+                            );
+                          }
+                        );
+                      },
+                      child: Text('Ver ruta', style: TextStyle(color: Colors.green)),
+                    ),
+                  ],
                 )
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+  Widget durationWidget(AproxElement element){
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 7, 
+        right: 7, 
+        top: 4
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Image.asset('assets/image/tracking.png',width: 22,height: 22,),
+              SizedBox(width: 8,),
+              Text(element.distance.text),
+            ],
+          ),
+          Row(
+            children: [
+              Image.asset('assets/image/pngwing.png',width: 22,height: 22,),
+              SizedBox(width: 8,),
+              Text(element.duration.text),
+            ],
+          ),
+        ]
       ),
     );
   }

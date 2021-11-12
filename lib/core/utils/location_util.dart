@@ -19,7 +19,7 @@ class LocationUtil {
       if (placemarks != null && placemarks.isNotEmpty) {
         Placemark pos = placemarks.first;
         locationEntity = locationEntity.copyWith(
-          streetName: pos.thoroughfare + (pos.subThoroughfare?.toString()),
+          streetName: pos.thoroughfare + ' ' + (pos.subThoroughfare?.toString()),
           districtName: pos.locality,
           provinceName: pos.subAdministrativeArea
         );

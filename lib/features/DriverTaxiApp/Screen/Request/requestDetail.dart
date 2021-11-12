@@ -242,7 +242,7 @@ class _RequestDetailState extends State<RequestDetail> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}',style: textBoldBlack,),
+                            Text('PEN${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}',style: textBoldBlack,),
                             FutureBuilder<double>(
                             future: calcularDistancia(widget.requestItem),
                             builder: (context, snapshot) {
@@ -331,7 +331,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                            Text('Tarifa de taxi', style: textStyle,),
-                           Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textBoldBlack,),
+                           Text('PEN${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textBoldBlack,),
                           ],
                         ),
                       ),
@@ -341,7 +341,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Impuestos', style: textStyle,),
-                            Text('S/.0.00', style: textBoldBlack,),
+                            Text('PEN0.00', style: textBoldBlack,),
                           ],
                         ),
                       ), */
@@ -351,7 +351,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Descuento', style: textStyle,),
-                            Text('- S/.0.00', style: textBoldBlack,),
+                            Text('- PEN0.00', style: textBoldBlack,),
                           ],
                         ),
                       ), */
@@ -366,7 +366,7 @@ class _RequestDetailState extends State<RequestDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('Ganancia total', style: textStyleHeading18Black,),
-                            Text('S/.${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textStyleHeading18Black,),
+                            Text('PEN${double.parse(widget.requestItem.mPrecio).toStringAsFixed(2)}', style: textStyleHeading18Black,),
                           ],
                         ),
                       ),

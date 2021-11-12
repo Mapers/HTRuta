@@ -288,7 +288,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
             children: [
               PointMeetingClient(geoPoint: request.pointMeeting, currentLocation: location),
               SizedBox(height: 10,),
-              Text('Precio por pasajero: S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('Precio por pasajero: PEN '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
               CalculateTotal(price: request.price ,seating: request.seats ,),
               SizedBox(height: 10,),
@@ -327,9 +327,9 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
             children: [
               PointMeetingClient(geoPoint: request.pointMeeting),
               SizedBox(height: 10,),
-              Text('Precio por pasajero: S/. '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('Precio por pasajero: PEN '+ request.price.toStringAsFixed(2),style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
-              Text('Monto total a pagar : S/. '+ amountTotal.toStringAsFixed(2) ,style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('Monto total a pagar : PEN '+ amountTotal.toStringAsFixed(2) ,style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center ,

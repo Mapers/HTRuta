@@ -87,7 +87,7 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               child: Text(interprovincialRequest.fullNames),
             ),
             SizedBox(width: 15),
-            Text('S/. ' +interprovincialRequest.price.toStringAsFixed(2), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 16)),
+            Text('PEN ' +interprovincialRequest.price.toStringAsFixed(2), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 16)),
             SizedBox(width: 15),
             interprovincialRequest.condition == InterprovincialRequestCondition.offer ? IconButton(
               tooltip: 'Rechazar solicitud',
