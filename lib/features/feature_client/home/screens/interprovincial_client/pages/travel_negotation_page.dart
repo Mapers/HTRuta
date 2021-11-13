@@ -45,7 +45,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
   Session _session = Session();
   final _prefs = UserPreferences();
   final pickUpApi = PickupApi();
-  AproxElement element;
+  // AproxElement element;
   LocationEntity location = LocationEntity.initalPeruPosition();
   LocationEntity whereAbouthOneLocation, whereAbouthTwoLocation, whereAbouthTheeLocation ;
   TextEditingController amountController = TextEditingController();

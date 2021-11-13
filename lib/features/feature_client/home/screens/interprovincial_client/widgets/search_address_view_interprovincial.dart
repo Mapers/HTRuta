@@ -11,6 +11,7 @@ import 'package:HTRuta/features/ClientTaxiApp/Blocs/place_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
 
 class SearchAddressViewInterprovincial extends StatefulWidget {
   final Function(LocationEntity) getTo;
@@ -37,7 +38,6 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
   String toLocation;
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
-
   Timer _timer;
 
   bool lookingDirections = false;
@@ -136,6 +136,9 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                             List<Placemark> placemarks = await placemarkFromCoordinates(fromPalce.lat, fromPalce.lng);
                             if (placemarks == null || placemarks.isEmpty) return;
                             Placemark newPosition = placemarks[0];
+                            if(placemarks.length > 1 && newPosition.locality == ''){
+                              newPosition = placemarks[1];
+                            }
                             from = LocationEntity(
                               streetName: newPosition.thoroughfare,
                               districtName: newPosition.locality,
@@ -143,7 +146,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               regionName: newPosition.administrativeArea,
                               latLang: LatLng(fromPalce.lat,fromPalce.lng)
                             );
-                            fromController.text = from.streetName == '' ? from.districtName +', ' + from.provinceName  :from.streetName + ', '+ from.districtName + ', ' + from.provinceName;
+                            fromController.text = LocationUtil.getFullAddressName(to);
                             widget.placeBloc.clearPlacesList();
                             if(toController.text.isEmpty){
                               nodeTo.requestFocus();
@@ -157,6 +160,9 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                             List<Placemark> placemarks = await placemarkFromCoordinates(toPalce.lat, toPalce.lng);
                             if (placemarks == null || placemarks.isEmpty) return;
                             Placemark newPosition = placemarks[0];
+                            if(placemarks.length > 1 && newPosition.locality == ''){
+                              newPosition = placemarks[1];
+                            }
                             to = LocationEntity(
                               streetName: newPosition.thoroughfare,
                               districtName: newPosition.locality,
@@ -164,7 +170,8 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               regionName: newPosition.administrativeArea,
                               latLang: LatLng(toPalce.lat,toPalce.lng)
                             );
-                            toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName + ', ' + to.regionName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
+                            toController.text = LocationUtil.getFullAddressName(to); 
+                            // to.streetName == '' ? to.districtName +', ' + to.provinceName + ', ' + to.regionName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
                             widget.placeBloc.clearPlacesList();
                             if(fromController.text.isEmpty){
                               nodeFrom.requestFocus();
@@ -195,9 +202,6 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                 widget.getFrom(from);
                 widget.getTo(to);
                 Navigator.of(context).pop();
-                // if(widget.placeBloc.formLocation != null && widget.placeBloc.locationSelect != null ){
-                //   Navigator.pop(context, true);
-                // }
               },
               color: (widget.placeBloc.formLocation != null && widget.placeBloc.locationSelect != null ) ? Theme.of(context).primaryColor : Theme.of(context).primaryColor.withOpacity(0.6),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

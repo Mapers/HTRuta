@@ -15,12 +15,12 @@ class SelectServiceWidget extends StatefulWidget {
 
 class _SelectServiceWidgetState extends State<SelectServiceWidget> {
   List<Map<String, dynamic>> listService = [
-    {'id': '0','name' : 'Estandar','price' : 'PEN6 - PEN7','time' : '3 min', 'image': 'assets/image/icon_taxi/1.png'},
-    {'id': '1','name' : 'Fash Taxi','price' : 'PEN8 - PEN10','time' : '2 min', 'image': 'assets/image/icon_taxi/2.png'},
-    {'id': '2','name' : 'Moto','price' : 'PEN3 - PEN5','time' : '5 min', 'image': 'assets/image/icon_taxi/3.png'},
-    {'id': '3','name' : 'Van','price' : 'PEN9 - PEN11','time' : '5 min', 'image': 'assets/image/icon_taxi/4.png'},
-    {'id': '4','name' : 'Taxi Vip','price' : 'PEN20','time' : '7-10 min', 'image': 'assets/image/icon_taxi/5.png'},
-    {'id': '5','name' : 'Taxi Vip 7','price' : 'PEN25','time' : '7-10 min', 'image': 'assets/image/icon_taxi/6.png'},
+    {'id': '0','name' : 'Estandar','price' : 'PEN 6 - PEN 7','time' : '3 min', 'image': 'assets/image/icon_taxi/1.png'},
+    {'id': '1','name' : 'Fash Taxi','price' : 'PEN 8 - PEN 10','time' : '2 min', 'image': 'assets/image/icon_taxi/2.png'},
+    {'id': '2','name' : 'Moto','price' : 'PEN 3 - PEN 5','time' : '5 min', 'image': 'assets/image/icon_taxi/3.png'},
+    {'id': '3','name' : 'Van','price' : 'PEN 9 - PEN 11','time' : '5 min', 'image': 'assets/image/icon_taxi/4.png'},
+    {'id': '4','name' : 'Taxi Vip','price' : 'PEN 20','time' : '7-10 min', 'image': 'assets/image/icon_taxi/5.png'},
+    {'id': '5','name' : 'Taxi Vip 7','price' : 'PEN 25','time' : '7-10 min', 'image': 'assets/image/icon_taxi/6.png'},
   ];
 
   @override

@@ -13,6 +13,7 @@ class AvailableRouteEntity extends Equatable{
   final InterprovincialRouteInServiceEntity route;
   final DateTime routeStartDateTime;
   final String fcm_token;
+  final String serviceId;
 
   AvailableRouteEntity( {
     @required this.id,
@@ -23,6 +24,7 @@ class AvailableRouteEntity extends Equatable{
     @required this.route,
     @required this.routeStartDateTime,
     @required this.fcm_token,
+    this.serviceId,
   });
   Map<String, dynamic> get toMap => {
     'id': id,
@@ -31,7 +33,7 @@ class AvailableRouteEntity extends Equatable{
     'status': status,
     'rutas': route.toMap,
     'route_start_dateTime':routeStartDateTime,
-
+    'service_id': serviceId
   };
 
   factory AvailableRouteEntity.fromJson(Map<String, dynamic> dataJson){
@@ -47,6 +49,7 @@ class AvailableRouteEntity extends Equatable{
       route: InterprovincialRouteInServiceEntity.fromJson(dataJson['rutas']),
       routeStartDateTime: DateTime.parse(dataJson['route_start_dateTime']),
       fcm_token: dataJson['fcm_token'],
+      serviceId: dataJson['serviceId'],
     );
   }
   static List<AvailableRouteEntity> fromListJson(List<dynamic> listJson){

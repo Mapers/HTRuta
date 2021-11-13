@@ -64,7 +64,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_)async{
       final newLocation = await LocationUtil.currentLocation();
-      // setCurrentPosition(location);
       location = newLocation;
       currentPinLocationIcon = await BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png');
       BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
@@ -76,19 +75,20 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
         getfrom(param.distictfrom);
         fromAddress = Place(
           formattedAddress: param.distictfrom.districtName,
-          name: param.distictfrom.streetName == '' ? param.distictfrom.districtName +', ' + param.distictfrom.provinceName  :param.distictfrom.streetName + ', '+ param.distictfrom.districtName + ', ' + param.distictfrom.provinceName,
+          name: LocationUtil.getFullAddressName(param.distictfrom),
           lat: param.distictfrom.latLang.latitude,
           lng: param.distictfrom.latLang.longitude,
         );
         getTo( param.distictTo);
         toAddress = Place(
           formattedAddress: param.distictTo.districtName,
-          name: param.distictTo.streetName == '' ? param.distictTo.districtName +', ' + param.distictTo.provinceName  :param.distictTo.streetName + ', '+ param.distictTo.districtName + ', ' + param.distictTo.provinceName,
+          name: LocationUtil.getFullAddressName(param.distictTo),
           lat: param.distictTo.latLang.latitude,
           lng: param.distictTo.latLang.longitude,
         );
         BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
         BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
+        
       }else{
         getfrom(newLocation);
       }
@@ -110,7 +110,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     fromLocation = from;
     fromAddress = Place(
       formattedAddress: fromLocation.districtName ,
-      name: fromLocation.streetName == '' ? fromLocation.districtName +', ' + fromLocation.provinceName  :fromLocation.streetName + ', '+ fromLocation.districtName + ', ' + fromLocation.provinceName,
+      name: LocationUtil.getFullAddressName(fromLocation),
       lat: fromLocation.latLang.latitude,
       lng: fromLocation.latLang.longitude
     );
@@ -125,7 +125,7 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerTo));
     toAddress = Place(
       formattedAddress: toLocation.districtName ,
-      name: toLocation.streetName == '' ? toLocation.districtName +', ' + toLocation.provinceName  :toLocation.streetName + ', '+ toLocation.districtName + ', ' + toLocation.provinceName,
+      name: LocationUtil.getFullAddressName(toLocation),
       lat: toLocation.latLang.latitude,
       lng: toLocation.latLang.longitude
     );

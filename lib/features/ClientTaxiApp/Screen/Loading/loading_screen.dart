@@ -140,19 +140,20 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
         BlocProvider.of<ClientServiceBloc>(context).add(ChangeClientServiceEvent(type: serviceInCourse.serviceType));
         Navigator.of(context).pushAndRemoveUntil(Routes.toHomePassengerPage(), (_) => false);
       }else{
-          InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
-          DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
-          InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
-          AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
-            availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
-            route: interprovincialRouteInServiceEntity,
-            documentId: serviceInCourse.serviceDocumentId,
-            fcm_token: null,
-            id: null,
-            routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
-            status: toInterprovincialStatusFromString(dataNecessaryRetrieve.status),
-            vehicleSeatLayout: null
-          );
+        InterprovincialClientDataFirebase interprovincialClientDataFirebase = getIt<InterprovincialClientDataFirebase>();
+        DataNecessaryRetrieve dataNecessaryRetrieve = await interprovincialClientDataFirebase.getDataNecessaryRetrieve( documentId: serviceInCourse.serviceDocumentId,passengerDocumentId: serviceInCourse.passengerDocumentId);
+        InterprovincialRouteInServiceEntity interprovincialRouteInServiceEntity = await serviceDataRemote.getInterprovincialRouteInServiceById( dataNecessaryRetrieve.serviceId );
+        AvailableRouteEntity availableRouteEntity = AvailableRouteEntity(
+          availableSeats:  int.parse(interprovincialRouteInServiceEntity.id),
+          route: interprovincialRouteInServiceEntity,
+          documentId: serviceInCourse.serviceDocumentId,
+          fcm_token: null,
+          id: null,
+          routeStartDateTime: interprovincialRouteInServiceEntity.dateStart,
+          status: toInterprovincialStatusFromString(dataNecessaryRetrieve.status),
+          vehicleSeatLayout: null,
+          serviceId: dataNecessaryRetrieve.serviceId
+        );
         if( serviceInCourse.passengerDocumentId != null ){
           LocationEntity currentlocation =  await LocationUtil.currentLocation();
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MapCoordenationDrivePage(
@@ -161,6 +162,7 @@ class _LoadingScreenState extends State<LoadingScreen> with WidgetsBindingObserv
             price: dataNecessaryRetrieve.negotiatedPrice,
             passengerDocumentId:serviceInCourse.passengerDocumentId,
             currentLocation: currentlocation,
+            seats: dataNecessaryRetrieve.seats,
             passengerPhone: data.cellphone,
           )), (_) => false);
         }else{

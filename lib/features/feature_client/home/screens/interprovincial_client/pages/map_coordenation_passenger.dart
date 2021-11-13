@@ -18,6 +18,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/interprovincial_client_bloc.dart';
 
 class MapCoordenationDrivePage extends StatefulWidget {
   final LocationEntity currentLocation;
@@ -26,7 +28,8 @@ class MapCoordenationDrivePage extends StatefulWidget {
   final double price;
   final String documentId;
   final String passengerPhone;
-  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation, this.passengerPhone}) : super(key: key);
+  final int seats;
+  MapCoordenationDrivePage(this.documentId, {Key key, @required this.availablesRoutesEntity,@required this.price, this.passengerDocumentId, this.currentLocation, this.passengerPhone, this.seats}) : super(key: key);
 
   @override
   _MapCoordenationDrivePageState createState() => _MapCoordenationDrivePageState();
@@ -47,7 +50,6 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     currenActual = widget.currentLocation;
-    AproxElement element;
     WidgetsBinding.instance.addPostFrameCallback((_)async {
       element = await pickUpApi.calculateMinutes( currenActual.latLang.latitude , currenActual.latLang.longitude, widget.availablesRoutesEntity.route.toLocation.latLang.latitude, widget.availablesRoutesEntity.route.toLocation.latLang.longitude);
       dynamic result = await Future.wait([
@@ -189,7 +191,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
             )
           ),
         ),
-        Positioned(
+        element != null ? Positioned(
           top: 25,
           right: 15,
           left: 15,
@@ -200,18 +202,18 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  element != null ? Text(
+                  Text(
                     'Llegarás a tu destino en '+ element.duration?.text +' aproximadamente. Recuerda acercarte a tu ruta, tambien puede llamar al conductor.',
                     style: TextStyle(color: Colors.black54, fontStyle: FontStyle.italic, ),
                     textAlign: TextAlign.justify,
-                  ) : Container(),
+                  ),
                 ],
               ),
             ),
           )
-        ),
+        ) : Container(),
         widget.availablesRoutesEntity.route.driverCellphone== null? Container(): Positioned(
-          bottom: 200,
+          bottom: 250,
           right: 11,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -272,7 +274,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
           bottom: 0,
           right: 15,
           left: 15,
-          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price,)
+          child: CardAvailiblesRoutes(availablesRoutesEntity: widget.availablesRoutesEntity ,price: widget.price, seats: widget.seats, passengerDocumentId: widget.passengerDocumentId)
         ),
       ],
     );
@@ -282,7 +284,9 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
 class CardAvailiblesRoutes extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
   final double price;
-  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.price}) : super(key: key);
+  final int seats; 
+  final String passengerDocumentId;
+  const CardAvailiblesRoutes({Key key,@required this.availablesRoutesEntity,@required this.price, this.seats, this.passengerDocumentId}) : super(key: key);
 
   @override
   _CardAvailiblesRoutesState createState() => _CardAvailiblesRoutesState();
@@ -310,7 +314,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                   )
                 ),
                 SizedBox(width: 10),
-                Text('PEN' + widget.price.toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
+                Text('PEN ' + (widget.price * widget.seats).toStringAsFixed(2) , style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold))
               ],
             ),
             Row(
@@ -369,9 +373,45 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                 Text(widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  child: Text('Cancelar viaje', style: TextStyle(color: Colors.grey)),
+                  onPressed: () => showQuestionTerminatedService(context)
+                )
+              ],
+            )
           ],
         ),
       ),
+    );
+  }
+  void showQuestionTerminatedService(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('¿Estas seguro de culminar cancelar su viaje?'),
+        actions: [
+          OutlineButton(
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.of(ctx).pop(),
+          ),
+          RaisedButton(
+            child: Text('Sí, culminar'),
+            onPressed: () async{
+              Navigator.of(ctx).pop();
+              BlocProvider.of<InterprovincialClientBloc>(context).add(
+                CancelTripInterprovincialClientEvent(
+                  passengerId: widget.passengerDocumentId,
+                  documentId: widget.availablesRoutesEntity.documentId,
+                  serviceId: widget.availablesRoutesEntity.serviceId
+                )
+              );
+            },
+          )
+        ],
+      )
     );
   }
 }

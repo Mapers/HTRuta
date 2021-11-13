@@ -214,7 +214,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Tarifa de viaje', style: textStyle,),
-                                Text('PEN${double.parse(detail.precio).toStringAsFixed(2)}', style: textStyle,),
+                                Text('PEN ${double.parse(detail.precio).toStringAsFixed(2)}', style: textStyle,),
                               ],
                             ),
                           ),
@@ -229,7 +229,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
                                       fontSize: 16
                                   ),
                                 ),
-                                Text('PEN${double.parse(detail.precio).toStringAsFixed(2)}',
+                                Text('PEN ${double.parse(detail.precio).toStringAsFixed(2)}',
                                     style: TextStyle(
                                         color: blackColor,
                                         fontSize: 16

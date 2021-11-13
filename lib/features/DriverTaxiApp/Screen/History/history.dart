@@ -548,7 +548,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('PEN250.0',style: textBoldBlack,),
+                          Text('PEN 250.0',style: textBoldBlack,),
                           Text('152.2 Km',style: textGrey,),
                         ],
                       ),
@@ -667,7 +667,7 @@ class _HistoryDriverScreenState extends State<HistoryDriverScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('PEN250.0',style: textBoldBlack,),
+                          Text('PEN 250.0',style: textBoldBlack,),
                           Text('2.2 Km',style: textGrey,),
                         ],
                       ),

@@ -110,7 +110,8 @@ class MapViewerUtil {
   }
 
   Future<Polyline> generatePolyline(String namePolylineId, LocationEntity from, LocationEntity to, { MaterialColor color }) async{
-    color ??= MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor));
+    // color ??= MaterialColor(primaryColor.value, ColorsUtil.getSwatch(primaryColor));
+    color ??= MaterialColor(Colors.blue.value, ColorsUtil.getSwatch(Colors.blue));
     PolylinePoints polylinePoints = PolylinePoints();
     PointLatLng fromPoint = PointLatLng(from.latLang.latitude, from.latLang.longitude);
     PointLatLng toPoint = PointLatLng(to.latLang.latitude, to.latLang.longitude);

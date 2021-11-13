@@ -70,7 +70,7 @@ class _ViewWhereabouthState extends State<ViewWhereabouth> {
         regionName: newPosition.administrativeArea,
         latLang: coordinates
       );
-      nameBoxWhaereabouthSelecter = locationWhereAbout.streetName == '' ? locationWhereAbout.districtName +', ' + locationWhereAbout.provinceName  :locationWhereAbout.streetName + ', '+ locationWhereAbout.districtName + ', ' + locationWhereAbout.provinceName;
+      nameBoxWhaereabouthSelecter = LocationUtil.getFullAddressName(locationWhereAbout);
       loading = false;
       if(!mounted) return;
       setState(() {});

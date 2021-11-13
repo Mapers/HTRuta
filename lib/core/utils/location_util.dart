@@ -88,4 +88,30 @@ class LocationUtil {
   }
 
   static double kilometersToMeters(double distanceInKms) => distanceInKms * 1000;
+
+  static String getFullAddressName(LocationEntity entity){
+    String fullAddress = '';
+    if(entity.streetName == ''){
+      if(entity.districtName.isNotEmpty){
+        fullAddress += entity.districtName + ', ';
+      }
+      if(entity.provinceName.isNotEmpty){
+        fullAddress += entity.provinceName + ', ';
+      }
+      if(entity.regionName.isNotEmpty){
+        fullAddress += entity.regionName;
+      }
+    }else{
+      if(entity.streetName.isNotEmpty){
+        fullAddress += entity.streetName + ', ';
+      }
+      if(entity.districtName.isNotEmpty){
+        fullAddress += entity.districtName + ', ';
+      }
+      if(entity.provinceName.isNotEmpty){
+        fullAddress += entity.provinceName;
+      }
+    }
+    return fullAddress;
+  }
 }

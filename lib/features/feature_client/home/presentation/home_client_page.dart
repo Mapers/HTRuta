@@ -53,11 +53,10 @@ class _HomeClientPageState extends State<HomeClientPage> {
                 icon: Icon(Icons.menu,size: 20.0,color: blackColor),
                 onPressed: (){
                   _scaffoldKey.currentState.openDrawer();
-                  }
+                }
               ),
             )
           )
-          // MenuButtonWidget(parentScaffoldKey: _scaffoldKey),
         ],
       ),
     );

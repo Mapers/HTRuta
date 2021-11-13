@@ -229,8 +229,9 @@ class _EditProfileState extends State<EditProfile> {
     selectedGender = widget.userData.sexo;
     birthdaySelected = DateTimeExtension.dateFromString(widget.userData.fechaNacimiento);
     newEmail = widget.userData.email;
-    Permission.camera.request();
-    Permission.photos.request();
+    Permission.camera.request().then((_){
+      Permission.photos.request();
+    });
   }
   @override
   Widget build(BuildContext context) {

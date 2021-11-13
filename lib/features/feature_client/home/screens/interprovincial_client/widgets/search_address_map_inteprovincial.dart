@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
 
 class SearchAddressMapInteprovicnial extends StatefulWidget {
   final ClientTaxiPlaceBloc placeBloc;
@@ -51,14 +52,14 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> w
       );
       if(widget.fromLocation){
         widget?.placeBloc?.selectFromLocation(Place(
-          name: locationEntity.streetName == '' ? locationEntity.districtName +', ' + locationEntity.provinceName + ', ' + locationEntity.regionName  :locationEntity.streetName + ', '+ locationEntity.districtName + ', ' + locationEntity.provinceName,
+          name: LocationUtil.getFullAddressName(locationEntity),
           formattedAddress: '',
           lat: coordinates.latitude,
           lng: coordinates.longitude
         ));
       }else{
         widget?.placeBloc?.selectLocation(Place(
-          name: locationEntity.streetName == '' ? locationEntity.districtName +', ' + locationEntity.provinceName + ', ' + locationEntity.regionName  :locationEntity.streetName + ', '+ locationEntity.districtName + ', ' + locationEntity.provinceName,
+          name: LocationUtil.getFullAddressName(locationEntity),
           formattedAddress: '',
           lat: coordinates.latitude,
           lng: coordinates.longitude

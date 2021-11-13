@@ -75,4 +75,10 @@ class InterprovincialClientRemoteDataSoruce {
       }
     );
   }
+
+  Future<void> cancelTrip({@required String serviceId}) async{
+    await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/driver/service/finish',
+      data: { 'service_id': serviceId }
+    );
+  }
 }

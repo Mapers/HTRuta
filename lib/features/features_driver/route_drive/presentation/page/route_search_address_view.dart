@@ -12,6 +12,7 @@ import 'package:HTRuta/features/features_driver/route_drive/presentation/page/ro
 import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:HTRuta/core/utils/location_util.dart';
 
 class RouteSearchAddressView extends StatefulWidget {
   final Function(LocationEntity) getTo;
@@ -141,12 +142,12 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                               districtName: newPosition.locality,
                               provinceName: newPosition.subAdministrativeArea,
                               regionName: newPosition.administrativeArea,
-                              latLang: LatLng(fromPlace.lat,fromPlace.lng)
+                              latLang: LatLng(fromPlace.lat,fromPlace.lng),
                             );
                             widget?.placeBloc?.selectFromLocation(
                               from
                             );
-                            fromController.text = from.streetName == '' ? from.districtName +', ' + from.provinceName  :from.streetName + ', '+ from.districtName + ', ' + from.provinceName;
+                            toController.text = LocationUtil.getFullAddressName(from);
                             widget.placeBloc.clearPlacesList();
                             if(toController.text.isEmpty){
                               nodeTo.requestFocus();
@@ -171,7 +172,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             widget?.placeBloc?.selectToLocation(
                               to
                             );
-                            toController.text = to.streetName == '' ? to.districtName +', ' + to.provinceName  :to.streetName + ', '+ to.districtName + ', ' + to.provinceName;
+                            toController.text = LocationUtil.getFullAddressName(to);
                             widget.placeBloc.clearPlacesList();
                             if(fromController.text.isEmpty){
                               nodeFrom.requestFocus();

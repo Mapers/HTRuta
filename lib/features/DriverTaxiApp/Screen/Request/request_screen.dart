@@ -414,7 +414,7 @@ class _RequestDriverScreenState extends State<RequestDriverScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text('PEN${taxi.price.toStringAsFixed(2)}',style: textBoldBlack,),
+                        Text('PEN ${taxi.price.toStringAsFixed(2)}',style: textBoldBlack,),
                         FutureBuilder<double>(
                           future: taxi.calculateDistance,
                           builder: (context, snapshot) {
