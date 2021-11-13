@@ -294,9 +294,9 @@ class _ListRequestsFullScreenDialogState extends State<ListRequestsFullScreenDia
               }else{
                 _loadingFullScreen.close();
               }
-              if(requestsNumber == 1){
+              // if(requestsNumber == 1){
                 Navigator.pop(context);
-              }
+              // }
             },
           )
         ],

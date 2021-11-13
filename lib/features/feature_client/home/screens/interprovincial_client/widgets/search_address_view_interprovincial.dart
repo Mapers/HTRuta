@@ -146,7 +146,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               regionName: newPosition.administrativeArea,
                               latLang: LatLng(fromPalce.lat,fromPalce.lng)
                             );
-                            fromController.text = LocationUtil.getFullAddressName(to);
+                            fromController.text = LocationUtil.getFullAddressName(from);
                             widget.placeBloc.clearPlacesList();
                             if(toController.text.isEmpty){
                               nodeTo.requestFocus();
