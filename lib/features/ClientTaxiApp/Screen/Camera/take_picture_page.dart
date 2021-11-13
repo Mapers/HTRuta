@@ -82,6 +82,7 @@ class _TakePicturePageState extends State<TakePicturePage> {
               height: 40,
               margin: EdgeInsets.only(bottom: 20),
               child: FloatingActionButton(
+                heroTag: 'btn2',
                 backgroundColor: Colors.white,
                 onPressed: (){
                   if(!switching){
@@ -93,6 +94,7 @@ class _TakePicturePageState extends State<TakePicturePage> {
             ),
             FloatingActionButton(
               backgroundColor: Colors.white,
+              heroTag: 'btn1',
               onPressed: (){
                 if(loading) return; 
                 _takePicture(context);
