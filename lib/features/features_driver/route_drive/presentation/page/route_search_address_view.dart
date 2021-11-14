@@ -136,7 +136,9 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             List<Placemark> placemarks = await placemarkFromCoordinates(fromPlace.lat, fromPlace.lng);
                             if (placemarks == null || placemarks.isEmpty) return;
                             Placemark newPosition = placemarks[0];
-                            
+                            if(placemarks.length > 1 && newPosition.locality == ''){
+                              newPosition = placemarks[1];
+                            }
                             from = LocationEntity(
                               streetName: newPosition.thoroughfare,
                               districtName: newPosition.locality,
@@ -147,7 +149,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             widget?.placeBloc?.selectFromLocation(
                               from
                             );
-                            toController.text = LocationUtil.getFullAddressName(from);
+                            fromController.text = LocationUtil.getFullAddressName(from);
                             widget.placeBloc.clearPlacesList();
                             if(toController.text.isEmpty){
                               nodeTo.requestFocus();
@@ -162,6 +164,9 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             List<Placemark> placemarks = await placemarkFromCoordinates(toPalce.lat, toPalce.lng);
                             if (placemarks == null || placemarks.isEmpty) return;
                             Placemark newPosition = placemarks[0];
+                            if(placemarks.length > 1 && newPosition.locality == ''){
+                              newPosition = placemarks[1];
+                            }
                             to = LocationEntity(
                               streetName: newPosition.thoroughfare,
                               districtName: newPosition.locality,
