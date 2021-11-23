@@ -22,7 +22,6 @@ class ServiceDataRemote{
       await _prefs.initPrefs();
       dynamic data = {
         'driver_id': _prefs.idChofer,
-        'passenger_id': user.id,
       };
       final result = await requestHttp.post('${Config.nuevaRutaApi}/interprovincial/recovery-last-flow',
         data: data

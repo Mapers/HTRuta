@@ -67,8 +67,7 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
                 child: Column(
                   children: [
-                    InputButton(
-                      enabled: false,
+                    InkWell(
                       onTap: () async {
                         final geoposition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         if(widget.routeDrive != null){
@@ -92,9 +91,26 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                             name: null
                           ));
                         }
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MapSelecctionFromToMapPage(la: geoposition.latitude ,lo: geoposition.longitude,getFromAndTo: getFromAndTo,)));
                       },
-                      hinText: 'Seleccionar origen-destino',
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(245, 245, 245, 1),
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              routerDrives == null ? 'Seleccionar origen-destino' : '${routerDrives.from.districtName} - ${routerDrives.to.districtName}', 
+                              style: TextStyle(color: Colors.grey, fontSize: 16)
+                            ),
+                            Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20)
+                          ],
+                        )
+                      ),
                     ),
                     PrincipalInput(
                       controller: nameConroller,
@@ -232,6 +248,9 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                         to: routerDrives.to,
                       );
                       BlocProvider.of<RouteDriveBloc>(context).add(AddDrivesRouteDriveEvent(routerDrive: routerDrive));
+                      var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
+                      bloc.selectFromLocation(null);
+                      bloc.selectToLocation(null);
                       Navigator.of(context).pop();
                     }else{
                       InterprovincialRouteEntity newRouterDrive = InterprovincialRouteEntity(
@@ -242,11 +261,11 @@ class _FormRouterDrivePageState extends State<FormRouterDrivePage> {
                         to: routerDrives.to,
                       );
                       BlocProvider.of<RouteDriveBloc>(context).add(EditDrivesRouteDriveEvent(routerDrive:  newRouterDrive));
+                      var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
+                      bloc.selectFromLocation(null);
+                      bloc.selectToLocation(null);
                       Navigator.of(context).pop();
                     }
-                    var bloc = Provider.of<DriverTaxiPlaceBloc>(context, listen: false);
-                    bloc.selectFromLocation(widget.routeDrive.from);
-                    bloc.selectToLocation(widget.routeDrive.to);
                   },
                   text: widget.statAddEdit?'Crear ruta':'Actualizar ruta',
                   color: primaryColor,

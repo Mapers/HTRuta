@@ -44,7 +44,7 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> w
       if (placemarks == null || placemarks.isEmpty) return;
       newPosition = placemarks[0];
       final locationEntity = LocationEntity(
-        streetName: newPosition.thoroughfare,
+        streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
         districtName: newPosition.locality,
         provinceName: newPosition.subAdministrativeArea,
         regionName: newPosition.administrativeArea,
@@ -162,7 +162,7 @@ class _SearchAddressMapTaxiState extends State<SearchAddressMapInteprovicnial> w
                       icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
                       onPressed: (){
                         LocationEntity  newLocartion = LocationEntity(
-                          streetName: newPosition.thoroughfare,
+                          streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
                           districtName: newPosition.locality,
                           provinceName: newPosition.subAdministrativeArea ,
                           regionName: newPosition.administrativeArea ,

@@ -140,7 +140,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               newPosition = placemarks[1];
                             }
                             from = LocationEntity(
-                              streetName: newPosition.thoroughfare,
+                              streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
                               districtName: newPosition.locality,
                               provinceName: newPosition.subAdministrativeArea,
                               regionName: newPosition.administrativeArea,
@@ -164,7 +164,7 @@ class _SearchAddressViewState extends State<SearchAddressViewInterprovincial> {
                               newPosition = placemarks[1];
                             }
                             to = LocationEntity(
-                              streetName: newPosition.thoroughfare,
+                              streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
                               districtName: newPosition.locality,
                               provinceName: newPosition.subAdministrativeArea,
                               regionName: newPosition.administrativeArea,

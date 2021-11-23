@@ -373,7 +373,7 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                 Text(widget.availablesRoutesEntity.routeStartDateTime.formatOnlyDate, style: TextStyle(color: Colors.black87, fontSize: 14)),
               ],
             ),
-            Row(
+            /* Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 OutlinedButton(
@@ -381,13 +381,13 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
                   onPressed: () => showQuestionTerminatedService(context)
                 )
               ],
-            )
+            ) */
           ],
         ),
       ),
     );
   }
-  void showQuestionTerminatedService(BuildContext context){
+  /* void showQuestionTerminatedService(BuildContext context){
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -413,5 +413,5 @@ class _CardAvailiblesRoutesState extends State<CardAvailiblesRoutes> {
         ],
       )
     );
-  }
+  } */
 }

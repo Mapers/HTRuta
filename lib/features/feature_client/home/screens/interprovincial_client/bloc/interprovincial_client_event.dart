@@ -29,12 +29,12 @@ class AcceptDataSolicitudInterprovincialClientEvent extends InterprovincialClien
   final InterprovincialRequestEntity interprovincialRequest;
   AcceptDataSolicitudInterprovincialClientEvent({@required this.serviceDocumentId, @required this.negotiationEntity, @required this.interprovincialRequest});
 }
-class CancelTripInterprovincialClientEvent extends InterprovincialClientEvent {
+/* class CancelTripInterprovincialClientEvent extends InterprovincialClientEvent {
   final String documentId;
   final String serviceId;
   final String passengerId;
   CancelTripInterprovincialClientEvent({@required this.documentId, @required this.serviceId, @required this.passengerId});
-}
+} */
 class RejecDataSolicitudInterprovincialClientEvent extends InterprovincialClientEvent {
   final NegotiationEntity negotiationEntity;
   RejecDataSolicitudInterprovincialClientEvent({@required this.negotiationEntity});

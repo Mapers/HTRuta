@@ -61,7 +61,7 @@ class InterprovincialDataFirestore{
     }
   }
 
-  Future<bool> cancelTrip({@required String documentId, @required String passengerId}) async{
+  /* Future<bool> cancelTrip({@required String documentId, @required String passengerId}) async{
     try {
       await firestore.collection('interprovincial_in_service').doc(documentId).collection('passengers').doc(passengerId).delete();
       return true;
@@ -69,7 +69,7 @@ class InterprovincialDataFirestore{
       Fluttertoast.showToast(msg: 'No se pudo realizar esta acción.',toastLength: Toast.LENGTH_SHORT);
       return false;
     }
-  }
+  } */
 
   Future<bool> deletePassenger({@required String documentId, @required String passengerId}) async{
     try {

@@ -34,7 +34,7 @@ class _PointMeetingDriveState extends State<PointMeetingDriveNegotation> {
         if (placemarks == null || placemarks.isEmpty) return;
         Placemark newPosition = placemarks.first;
         pointMeeting = LocationEntity(
-          streetName: newPosition.thoroughfare,
+          streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
           districtName: newPosition.locality,
           provinceName: newPosition.subAdministrativeArea ,
           regionName: newPosition.administrativeArea,

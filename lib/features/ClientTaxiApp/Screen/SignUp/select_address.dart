@@ -44,7 +44,7 @@ class _SelectAddressState extends State<SelectAddress> {
       if (placemarks == null || placemarks.isEmpty) return;
       final Placemark newPosition = placemarks[0];
       placeSelected = Place(
-        name: '${newPosition.name}, ${newPosition.thoroughfare}',
+        name: '${newPosition.name}, ${newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street}',
         formattedAddress: '',
         lat: coordinates.latitude,
         lng: coordinates.longitude

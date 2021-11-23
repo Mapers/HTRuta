@@ -140,7 +140,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                               newPosition = placemarks[1];
                             }
                             from = LocationEntity(
-                              streetName: newPosition.thoroughfare,
+                              streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
                               districtName: newPosition.locality,
                               provinceName: newPosition.subAdministrativeArea,
                               regionName: newPosition.administrativeArea,
@@ -154,6 +154,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             if(toController.text.isEmpty){
                               nodeTo.requestFocus();
                               inputFrom = false;
+                              inputTo = true;
                             }
                           }catch(_){}
                           return;
@@ -168,7 +169,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                               newPosition = placemarks[1];
                             }
                             to = LocationEntity(
-                              streetName: newPosition.thoroughfare,
+                              streetName: newPosition.thoroughfare.isNotEmpty ? newPosition.thoroughfare : newPosition.street,
                               districtName: newPosition.locality,
                               provinceName: newPosition.subAdministrativeArea,
                               regionName: newPosition.administrativeArea,
@@ -182,6 +183,7 @@ class _RouteSearchAddressViewState extends State<RouteSearchAddressView> {
                             if(fromController.text.isEmpty){
                               nodeFrom.requestFocus();
                               inputFrom = true;
+                              inputTo = false;
                             }
                           }catch(_){}
                           return;
