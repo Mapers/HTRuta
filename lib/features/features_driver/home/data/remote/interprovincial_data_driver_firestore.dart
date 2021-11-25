@@ -20,6 +20,7 @@ class InterprovincialDataDriverFirestore{
     @required InterprovincialRouteEntity interprovincialRoute,
     @required DateTime routeStartDateTime,
     @required int availableSeats,
+    @required int limitSeats
   }) async{
     LocationEntity fromLocation = interprovincialRoute.from;
     final _prefs = UserPreferences();
@@ -31,6 +32,7 @@ class InterprovincialDataDriverFirestore{
       'province_name': fromLocation.provinceName,
       'region_name': fromLocation.regionName,
       'available_seats': availableSeats,
+      'limit_seats': limitSeats,
       'date_start_service': routeStartDateTime,
       'fcm_token': _prefs.tokenPush
     });

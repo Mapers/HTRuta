@@ -12,6 +12,16 @@ String toStringFirebaseInterprovincialStatus(InterprovincialStatus status){
   }
   return null;
 }
+String toStringFirebaseIntHumanStatus(InterprovincialStatus status){
+  switch (status) {
+    case InterprovincialStatus.onWhereabouts:
+      return 'En paradero';
+    case InterprovincialStatus.inRoute:
+      return 'En ruta';
+    default:
+  }
+  return null;
+}
 
 InterprovincialStatus toInterprovincialStatusFromString(String status){
   switch (status) {

@@ -1,6 +1,9 @@
 import 'package:HTRuta/core/utils/extensions/datetime_extension.dart';
+import 'package:HTRuta/features/ClientTaxiApp/enums/type_interpronvincal_state_enum.dart';
 import 'package:HTRuta/features/features_driver/home/entities/interprovincial_route_in_service_entity.dart';
+import 'package:HTRuta/features/features_driver/home/screens/interprovincial/bloc/interprovincial_driver_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PositionedInfoRouteWidget extends StatelessWidget {
   final InterprovincialRouteInServiceEntity route;
@@ -64,6 +67,20 @@ class PositionedInfoRouteWidget extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+              BlocBuilder<InterprovincialDriverBloc, InterprovincialDriverState>(
+                builder: (ctx, state){
+                  DataInterprovincialDriverState data = state;
+                  return Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('${toStringFirebaseIntHumanStatus(data.status)}', style: TextStyle(fontWeight: FontWeight.w600),),
+                      ],
+                    ),
+                  );
+                }
               ),
               SizedBox(height: showDataTime ? 10 : 0),
               showDataTime ? Row(

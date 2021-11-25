@@ -38,18 +38,7 @@ class _PositionedSeatManagerWidgetState extends State<PositionedSeatManagerWidge
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    !status.contains(data.status) ? SizedBox(
-                      width: 120,
-                      child: OutlineButton.icon(
-                        icon: Icon(Icons.exposure_minus_1),
-                        label: Expanded(
-                          child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 11)),
-                        ),
-                        onPressed: (){
-                          BlocProvider.of<InterprovincialDriverBloc>(context).add(MinusOneAvailableSeatInterprovincialDriverEvent());
-                        },
-                      )
-                    ) : Container(),
+                    Container(width: 150),
                     Container(
                       width: 55,
                       height: 55,
@@ -68,18 +57,16 @@ class _PositionedSeatManagerWidgetState extends State<PositionedSeatManagerWidge
                         ],
                       ),
                     ),
-                    !status.contains(data.status) ? SizedBox(
-                      width: 120,
-                      child: OutlineButton.icon(
-                        icon: Icon(Icons.exposure_plus_1),
-                        label: Expanded(
-                          child: Text('Asiento disponible', style: TextStyle(color: Colors.black54, fontSize: 11)),
-                        ),
-                        onPressed: (){
-                          BlocProvider.of<InterprovincialDriverBloc>(context).add(PlusOneAvailableSeatInterprovincialDriverEvent(maxSeats: 60));
-                        },
+                    Container(
+                      width: 150,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Costo del pasaje:'),
+                          Text('PEN ${data.routeService.cost}', style: TextStyle(fontWeight: FontWeight.w500)),
+                        ],
                       )
-                    ) : Container(),
+                    )
                   ],
                 ),
                 widget.child ?? Container(),

@@ -54,13 +54,14 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           interprovincialRoute: event.interprovincialRoute,
           routeStartDateTime: event.dateTime,
           status: InterprovincialStatus.onWhereabouts,
-          availableSeats: event.availableSeats
+          availableSeats: event.availableSeats,
+          limitSeats: event.limitSeats
         );
         String serviceId = await interprovincialDriverDataRemote.createService(
           availableSeats: event.availableSeats,
           documentId: documentId,
           interprovincialRoute: event.interprovincialRoute,
-          startDateTime: event.dateTime
+          startDateTime: event.dateTime,
         );
         await interprovincialDataFirestore.addServiceIdToDocumentService(
           documentId: documentId,
@@ -80,7 +81,8 @@ class InterprovincialDriverBloc extends Bloc<InterprovincialDriverEvent, Interpr
           status: InterprovincialStatus.onWhereabouts,
           routeStartDateTime: event.dateTime,
           documentId: documentId,
-          availableSeats: event.availableSeats
+          availableSeats: event.availableSeats,
+          limitSeats: event.limitSeats
         );
       } on ServerException catch (e) {
         Fluttertoast.showToast(msg: 'No se pudo realizar esta acción. ${e.message}', toastLength: Toast.LENGTH_SHORT);

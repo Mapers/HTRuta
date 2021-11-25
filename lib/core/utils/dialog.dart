@@ -1,3 +1,4 @@
+import 'package:HTRuta/app/components/dialogs.dart';
 import 'package:flutter/material.dart';
 
 void showDialogUtil(context, {@required String title, @required String content, Function onClose}) {
@@ -159,6 +160,25 @@ Future<int> showDialogInputNumber({@required BuildContext context, @required Str
         RaisedButton(
           child: Text(confirmText),
           onPressed: (){
+            String numAsientosStr = textEditingController.text;
+            int numAsientosint = int.tryParse(numAsientosStr); 
+            if(numAsientosint == null){
+              Dialogs.alert(
+                context,
+                title: 'Atención',
+                message: 'Escriba un número'
+              );
+              return;
+              
+            }
+            if(numAsientosint < 0 || numAsientosint > 60){
+              Dialogs.alert(
+                context,
+                title: 'Atención',
+                message: 'Escriba un número entre 0 y 60'
+              );
+              return;
+            }
             Navigator.of(context).pop();
           },
         )

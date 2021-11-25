@@ -100,7 +100,7 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
       context: context,
       title: 'Ingrese los asientos disponibles',
       //! Se requiere el origin de los asientos totales del vehiculo
-      initialValue: 60,
+      initialValue: 4,
     );
     if(availableSeats == null){
       return;
@@ -168,7 +168,8 @@ class _RoutesInterprovincialCardWidgetState extends State<RoutesInterprovincialC
               BlocProvider.of<InterprovincialDriverBloc>(context).add(SelectRouteInterprovincialDriverEvent(
                 interprovincialRoute: interprovincialRoute,
                 dateTime: dateTime,
-                availableSeats: availableSeats
+                availableSeats: availableSeats,
+                limitSeats: availableSeats
               ));
             },
           )
