@@ -12,7 +12,7 @@ class InterprovincialClientDataFirebase {
   final PushMessage pushMessage;
   InterprovincialClientDataFirebase( {@required this.firestore, @required this.pushMessage,});
 
-  Future<String> addRequestClient({String documentId, InterprovincialRequestEntity request, bool update}) async{
+  Future<String> addRequestClient({String documentId, InterprovincialRequestEntity request, bool update, String names}) async{
     try {
       DocumentReference dr = await firestore.collection('interprovincial_in_service').doc(documentId);
       DocumentReference dRequests = await dr.collection('requests').add(request.toFirestore);
@@ -20,7 +20,7 @@ class InterprovincialClientDataFirebase {
       InterprovincialLocationDriverEntity interprovincialLocationDriver = InterprovincialLocationDriverEntity.fromJson(ds.data());
       pushMessage.sendPushMessage(
         token: interprovincialLocationDriver.fcmToken , // Token del dispositivo del chofer
-        title: 'Ha recibido una nueva solicitud',
+        title: 'Tiene una nueva solicitud de $names',
         description: 'Revise las solicitudes'
       );
       return dRequests.id;

@@ -74,14 +74,7 @@ class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, Interpr
         passengerDocumentId: onAcceptRequest.passenger.documentId
       );
 
-    }/* else if(event is CancelTripInterprovincialClientEvent){
-      await Future.wait([
-        interprovincialDataFirestore.cancelTrip(documentId: event.documentId, passengerId: event.passengerId),
-      ]);
-      yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.notEstablished
-      );
-    } */else if(event is RejecDataSolicitudInterprovincialClientEvent){
+    }else if(event is RejecDataSolicitudInterprovincialClientEvent){
       await serviceDataRemote.rejectRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId);
     }else if(event is SendQualificationInterprovincialClientEvent){
       await interprovincialClientRemote.qualificationRequest(qualification: event.qualificationEntity);

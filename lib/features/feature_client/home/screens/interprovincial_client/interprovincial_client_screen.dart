@@ -180,7 +180,6 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
             getFrom: getfrom,
             iselect: isSelect,
           ),
-          // ChangeServiceClientWidget(),
           CustomDropdownClient(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
@@ -234,7 +233,10 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                             borderRadius: BorderRadius.circular(10)
                           ),
                           height: 230,
-                          child: AvailableRoutesPage(),
+                          child: AvailableRoutesPage(
+                            fromLocation: fromAddress,
+                            toLocation: toAddress,
+                          ),
                         ),
                       ),
                       Positioned(

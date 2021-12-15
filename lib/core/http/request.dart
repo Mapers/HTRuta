@@ -70,4 +70,39 @@ class RequestHttp{
     }
     return response;
   }
+  Future<ResponseHttp> postForm(String url, { dynamic data = '' }) async {
+    ResponseHttp response;
+    try {
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      };
+      var request = http.Request('POST', Uri.parse(url));
+      request.bodyFields = data;
+      request.headers.addAll(headers);
+
+      http.StreamedResponse responseStream = await request.send();
+      switch (responseStream.statusCode) {
+        case 200:
+          try {
+            final body = await responseStream.stream.bytesToString();
+            response = ResponseHttp.fromJson(json.decode(body));
+          } catch (_) {
+            response = ResponseHttp.error('[Format]: Formato no válido.');
+          }
+          return response;
+        case 401:
+          response = ResponseHttp.error('No autorizado');
+          return response;
+        case 404:
+          response = ResponseHttp.error('Ruta no encontrada');
+          return response;
+        default:
+          response = ResponseHttp.error('Algo ha pasado');
+          return response;
+      }
+    } on SocketException catch (e) {
+      response = ResponseHttp.error(e.toString());
+    }
+    return response;
+  }
 }

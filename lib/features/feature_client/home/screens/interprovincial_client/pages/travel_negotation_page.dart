@@ -1,5 +1,6 @@
 import 'package:HTRuta/app/widgets/calculate_total.dart';
 import 'package:HTRuta/app/widgets/poin_meeting_client_await.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/feature_client/home/entities/meetin_drive_and_passenger_entity.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/bloc/meeting_drive_and_passenger_bloc.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/widgets/information_drive_negotation.dart';
@@ -23,7 +24,6 @@ import 'package:HTRuta/app/components/principal_button.dart';
 import 'package:HTRuta/data/remote/service_data_remote.dart';
 import 'package:HTRuta/core/utils/location_util.dart';
 import 'package:HTRuta/entities/location_entity.dart';
-import 'package:HTRuta/models/minutes_response.dart';
 import 'package:HTRuta/app/navigation/routes.dart';
 import 'package:HTRuta/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +34,9 @@ import 'package:flutter/material.dart';
 
 class TravelNegotationPage extends StatefulWidget {
   final AvailableRouteEntity availablesRoutesEntity;
-  const TravelNegotationPage({Key key, this.availablesRoutesEntity}) : super(key: key);
+  final Place fromLocation;
+  final Place toLocation;
+  const TravelNegotationPage({Key key, this.availablesRoutesEntity, this.fromLocation, this.toLocation}) : super(key: key);
 
   @override
   _TravelNegotationPageState createState() => _TravelNegotationPageState();
@@ -207,15 +209,15 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                   condition: InterprovincialRequestCondition.offer,
                                   documentId: null,
                                   passengerFcmToken: _prefs.tokenPush,
-                                  from: from.streetName + ' ' + from.districtName + ' ' + from.provinceName,
-                                  to: param.distictTo.districtName,
+                                  from: widget.fromLocation.name,
+                                  to: widget.toLocation.name,
                                   passengerId: user.id,
                                   fullNames: user.fullNames,
                                   price: double.parse(amount),
                                   seats: param.requiredSeats,
                                   pointMeeting: GeoPoint(poinMeeting.latLang.latitude, poinMeeting.latLang.longitude)
                                 );
-                                String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest);
+                                String requestDocumentId =  await interprovincialClientDataFirebase.addRequestClient(documentId: widget.availablesRoutesEntity.documentId ,request: interprovincialRequest, names: user.fullNames);
                                 NegotiationEntity negotiation = NegotiationEntity(
                                   serviceId: widget.availablesRoutesEntity.id,
                                   passengerId: user.id,
@@ -226,7 +228,7 @@ class _TravelNegotationPageState extends State<TravelNegotationPage> {
                                   to: widget.availablesRoutesEntity.route.toLocation
                                 );
                                 BlocProvider.of<InterprovincialClientBloc>(context).add(SendDataSolicitudInterprovincialClientEvent(negotiationEntity: negotiation));
-                                Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity), (_) => false);
+                                Navigator.of(context).pushAndRemoveUntil(Routes.toTravelNegotationPage(availablesRoutesEntity: widget.availablesRoutesEntity, fromLocation: widget.fromLocation, toLocation: widget.toLocation),(_) => false);
                               },
                             ),
                             SizedBox(height: 40,)

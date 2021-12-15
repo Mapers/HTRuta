@@ -7,7 +7,6 @@ import 'package:HTRuta/features/ClientTaxiApp/Apis/onboarding_api.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Model/onboarding_model.dart';
 import 'package:HTRuta/features/ClientTaxiApp/Screen/Loading/loading_screen.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
-import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/app_router.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';

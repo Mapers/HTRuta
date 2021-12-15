@@ -1,4 +1,5 @@
 import 'package:HTRuta/entities/service_in_course_entity.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Model/place_model.dart';
 import 'package:HTRuta/features/feature_client/home/entities/available_route_enity.dart';
 import 'package:HTRuta/features/feature_client/home/presentation/home_client_page.dart';
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/pages/availables_routes_page.dart';
@@ -17,7 +18,7 @@ class Routes {
   static Route toRouterDrivePage() => MaterialPageRoute(builder: (context)=> RouterDrivePage());
   static Route toAvailableRoutesPage() => MaterialPageRoute(builder: (context)=> AvailableRoutesPage());
   static Route toPickSeatPage() => MaterialPageRoute(builder: (context)=> PickSeatPage());
-  static Route toTravelNegotationPage({@required AvailableRouteEntity availablesRoutesEntity}) => MaterialPageRoute(builder: (context)=> TravelNegotationPage(availablesRoutesEntity: availablesRoutesEntity,));
+  static Route toTravelNegotationPage({@required AvailableRouteEntity availablesRoutesEntity, Place fromLocation, Place toLocation}) => MaterialPageRoute(builder: (context)=> TravelNegotationPage(availablesRoutesEntity: availablesRoutesEntity, fromLocation: fromLocation, toLocation: toLocation));
   static Route toListPassengersFullScreenDialog(String documentId, String serviceId) => MaterialPageRoute(builder: (context)=> ListPassengersFullScreenDialog(documentId: documentId, serviceId: serviceId), fullscreenDialog: true);
   static Route toListInterprovincialRequestFullScreenDialog(String documentId, String serviceId) => MaterialPageRoute(builder: (context)=> ListRequestsFullScreenDialog(documentId: documentId, serviceId: serviceId), fullscreenDialog: true);
   static Route toQualificationClientPage({@required String documentId, @required String passengerId, @required AvailableRouteEntity availablesRoutesEntity}) => MaterialPageRoute(builder: (context)=> QualificationClientPage(availablesRoutesEntity: availablesRoutesEntity,documentId: documentId,passengerId: passengerId, ));
