@@ -19,21 +19,27 @@ class InterprovincialClientRemoteDataSoruce {
 
   Future<List<AvailableRouteEntity>> getAvailablesRoutes({@required LocationEntity from,@required LocationEntity to,@required double radio,@required int seating, @required final List<int> paymentMethods}) async{
     List<AvailableRouteEntity> availablesRoutes = [];
-    int initial = 4;
-    do {
-      initial+=5;
-      ResponseHttp result = await requestHttp.post(
-        Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
-        data: {
-          'radio': initial,
-          'seating': seating,
-          'position_user': from.toMap,
-          'to': to.toMap,
-          'payment_methods': paymentMethods
-        }
-      );
-      availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
-    } while (availablesRoutes.isEmpty & (initial < 15));
+    //double latInicial = -6.305;
+    //double lngInicial = -77.89;
+    //double latFinal = -6.23;
+    //double lngFinal = -77.86;
+    ResponseHttp result = await requestHttp.postForm(
+      //Config.nuevaRutaApi + '/interprovincial/passenger/search-routes',
+      'http://23.254.217.21:8080/test_api/getubigeo',
+      data: {
+        'latInicio': from.latLang.latitude.toString(),
+        'longInicio': from.latLang.longitude.toString(),
+        'latFinal': to.latLang.latitude.toString(),
+        'longFinal': to.latLang.longitude.toString(),
+      }
+      /* data: {
+        'latInicio': latInicial.toString(),
+        'longInicio': lngInicial.toString(),
+        'latFinal': latFinal.toString(),
+        'longFinal': lngFinal.toString(),
+      } */
+    );
+    availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
     return availablesRoutes;
   }
 

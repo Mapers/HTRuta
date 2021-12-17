@@ -6,6 +6,7 @@ import 'package:HTRuta/features/feature_client/home/presentation/bloc/client_ser
 import 'package:HTRuta/features/feature_client/home/screens/interprovincial_client/interprovincial_client_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class HomeClientPage extends StatefulWidget {
   final bool rejected;
   const HomeClientPage({Key key, this.rejected = false}) : super(key: key);

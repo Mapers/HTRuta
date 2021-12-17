@@ -85,7 +85,11 @@ class RequestHttp{
         case 200:
           try {
             final body = await responseStream.stream.bytesToString();
-            response = ResponseHttp.fromJson(json.decode(body));
+            response = ResponseHttp.fromJson({
+              'success': true,
+              'error': null,
+              'data': json.decode(body)
+            });
           } catch (_) {
             response = ResponseHttp.error('[Format]: Formato no válido.');
           }
