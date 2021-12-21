@@ -37,8 +37,8 @@ class LocationEntity extends Equatable {
     return LocationEntity(
       districtName: dataJson['district_name'],
       latLang: LatLng(
-        double.parse(dataJson['latitude'] ?? '0'),
-        double.parse(dataJson['longitude'] ?? '0'),
+        dataJson['latitude'] ?? 0,
+        dataJson['longitude'] ?? 0,
       ),
       provinceName: dataJson['province_name'],
       regionName: dataJson['region_name'],

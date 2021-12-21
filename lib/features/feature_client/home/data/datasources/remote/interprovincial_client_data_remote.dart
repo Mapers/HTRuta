@@ -40,6 +40,7 @@ class InterprovincialClientRemoteDataSoruce {
       } */
     );
     availablesRoutes =  AvailableRouteEntity.fromListJson(result.data);
+    print(availablesRoutes);
     return availablesRoutes;
   }
 
