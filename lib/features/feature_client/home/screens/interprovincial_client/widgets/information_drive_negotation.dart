@@ -33,16 +33,16 @@ class _CardInformationDriveState extends State<InformationDriveNegotation> {
                 ],
               ),
               Row(
-                    children: [
-                      Icon(Icons.trip_origin, color: Colors.amber),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                            widget.availablesRoutesEntity.route.fromLocation.streetName,
-                            style: TextStyle(color: Colors.black87, fontSize: 14)),
-                      ),
-                    ],
+                children: [
+                  Icon(Icons.trip_origin, color: Colors.amber),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: Text(
+                        widget.availablesRoutesEntity.route.fromLocation.streetName,
+                        style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ),
+                ],
+              ),
               Row(
                 children: [
                   Icon(Icons.location_on, color: Colors.red),

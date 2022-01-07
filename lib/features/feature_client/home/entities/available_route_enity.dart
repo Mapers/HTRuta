@@ -61,7 +61,7 @@ class AvailableRouteEntity extends Equatable{
           ),
           provinceName: dataJson['vchProvinciaInicial'] ?? '',
           regionName: dataJson['vchRegionInicial'] ?? '',
-          streetName: dataJson['vchCalleInicial'] ?? '',
+          streetName: dataJson['vchDireccionInicial'] ?? '',
           zoom: 6.36
         ),
         toLocation: LocationEntity(
@@ -72,7 +72,7 @@ class AvailableRouteEntity extends Equatable{
           ),
           provinceName: dataJson['vchProvinciaInicial'] ?? '',
           regionName: dataJson['vchRegionInicial'] ?? '',
-          streetName: dataJson['vchCalleInicial'] ?? '',
+          streetName: dataJson['vchDireccionFinal'] ?? '',
           zoom: 6.36
         ),
         starts: 1.00,
