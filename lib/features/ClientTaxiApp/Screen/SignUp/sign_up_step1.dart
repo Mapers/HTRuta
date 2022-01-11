@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
-import 'package:HTRuta/app/styles/style.dart';
 import 'package:HTRuta/app/colors.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
-import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step2.dart';
 import 'package:HTRuta/app/components/dialogs.dart';
+import 'package:HTRuta/app/styles/style.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Apis/auth_api.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Components/ink_well_custom.dart';
+import 'package:HTRuta/features/ClientTaxiApp/Screen/SignUp/sign_up_step2.dart';
+import 'package:flutter/material.dart';
 
 class SignUpStep1 extends StatefulWidget {
   String phoneFromSignIn = '';
@@ -126,6 +126,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
                         onPressed: () async {
                           Dialogs.openLoadingDialog(context);
                           final String codeSent = await authApi.getVerificationCodeRegister(_phoneNumber);
+
                           if(codeSent.isEmpty){
                             Navigator.pop(context);
                             Dialogs.alert(context,title: 'Error', message: 'No se pudo enviar el código');

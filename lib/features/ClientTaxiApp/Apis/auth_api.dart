@@ -8,7 +8,6 @@ import 'package:HTRuta/features/ClientTaxiApp/utils/session.dart';
 import 'package:HTRuta/features/ClientTaxiApp/utils/user_preferences.dart';
 import 'package:HTRuta/features/DriverTaxiApp/Api/response/driver_data_response.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -73,7 +72,7 @@ class AuthApi{
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
-      final url = 'http://23.254.217.21:8000/api/auth/login';
+      final url = '${Config.apiHost}/auth/login';
       final response = await http.post(url,body: {'cellphone' : phoneNumber, 'code' : code, 'token': _prefs.tokenPush});
       if(response.statusCode == 200){
         final responseUsuario = userModelFromJson(response.body);
@@ -93,7 +92,7 @@ class AuthApi{
         }
         return true;
       }
-      throw ServerException(message: 'Ocurrió un error con el servidor');  
+      throw ServerException(message: 'Ocurrió un error con el servidor');
     }catch(e){
       return false;
     }
@@ -102,7 +101,7 @@ class AuthApi{
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
-      final url = 'http://23.254.217.21:8000/api/auth/loginDos';
+      final url = '${Config.apiHost}/api/auth/loginDos';
       final response = await http.post(url,body: {'cellphone' : phoneNumber, 'token': _prefs.tokenPush});
       if(response.statusCode == 200){
         final responseUsuario = userModelFromJson(response.body);
@@ -122,14 +121,14 @@ class AuthApi{
         }
         return true;
       }
-      throw ServerException(message: 'Ocurrió un error con el servidor');  
+      throw ServerException(message: 'Ocurrió un error con el servidor');
     }catch(e){
       return false;
     }
   }
   Future<String> getVerificationCode(String phoneNumber) async {
     try{
-      final response = await http.post('http://23.254.217.21:8000/api/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'true'});
+      final response = await http.post('${Config.apiHost}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'true'});
       if(response.statusCode == 200){
         final data = json.decode(response.body);
         if(data['success']){
@@ -146,7 +145,7 @@ class AuthApi{
   }
   Future<bool> getVerificationCodeNotification(String token, String code) async {
     try{
-      final response = await http.post('http://23.254.217.21:8000/api/auth/send-code-user/sms', body: {'tokenF' : token, 'code': code});
+      final response = await http.post('${Config.apiHost}/auth/send-code-user/sms', body: {'tokenF' : token, 'code': code});
       if(response.statusCode == 200){
         return true;
       }
@@ -157,7 +156,10 @@ class AuthApi{
   }
   Future<String> getVerificationCodeRegister(String phoneNumber) async {
     try{
-      final response = await http.post('http://23.254.217.21:8000/api/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'false'});
+      print('......');
+      final response = await http.post('${Config.apiHost}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'false'});
+      print(response);
+      print('.......');
       if(response.statusCode == 200){
         final data = json.decode(response.body);
         if(data['success']){
