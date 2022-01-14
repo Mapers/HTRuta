@@ -128,7 +128,7 @@ class AuthApi{
   }
   Future<String> getVerificationCode(String phoneNumber) async {
     try{
-      final response = await http.post('${Config.apiHost}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'true'});
+      final response = await http.post('${Config.nuevaRutaApi}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'true'});
       if(response.statusCode == 200){
         final data = json.decode(response.body);
         if(data['success']){
@@ -157,7 +157,7 @@ class AuthApi{
   Future<String> getVerificationCodeRegister(String phoneNumber) async {
     try{
       print('......');
-      final response = await http.post('${Config.apiHost}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'false'});
+      final response = await http.post('${Config.nuevaRutaApi}/auth/send-code/sms', body: {'cellphone' : phoneNumber, 'validateAuth': 'false'});
       print(response);
       print('.......');
       if(response.statusCode == 200){
