@@ -72,7 +72,7 @@ class AuthApi{
     try{
       final _prefs = UserPreferences();
       await _prefs.initPrefs();
-      final url = '${Config.apiHost}/auth/login';
+      final url = '${Config.nuevaRutaApi}/auth/login';
       final response = await http.post(url,body: {'cellphone' : phoneNumber, 'code' : code, 'token': _prefs.tokenPush});
       if(response.statusCode == 200){
         final responseUsuario = userModelFromJson(response.body);
