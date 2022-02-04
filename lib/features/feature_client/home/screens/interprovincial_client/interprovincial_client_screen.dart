@@ -23,13 +23,16 @@ import 'package:provider/provider.dart';
 
 class InterprovincialClientScreen extends StatefulWidget {
   final bool rejected;
-  InterprovincialClientScreen({Key key, this.rejected = false}) : super(key: key);
+  InterprovincialClientScreen({Key key, this.rejected = false})
+      : super(key: key);
 
   @override
-  _InterprovincialClientScreenState createState() => _InterprovincialClientScreenState();
+  _InterprovincialClientScreenState createState() =>
+      _InterprovincialClientScreenState();
 }
 
-class _InterprovincialClientScreenState extends State<InterprovincialClientScreen> {
+class _InterprovincialClientScreenState
+    extends State<InterprovincialClientScreen> {
   LocationEntity toLocation;
   LocationEntity fromLocation;
   Place fromAddress;
@@ -62,15 +65,20 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
       streetName: '',
     );
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_)async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final newLocation = await LocationUtil.currentLocation();
       location = newLocation;
-      currentPinLocationIcon = await BitmapDescriptor.fromAssetImage( ImageConfiguration(devicePixelRatio: 2.5),'assets/image/marker/ic_pick_48.png');
-      BlocProvider.of<InterprovincialClientBloc>(context).add(LoadInterprovincialClientEvent());
-      if(widget.rejected){
-        BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
+      currentPinLocationIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/image/marker/ic_pick_48.png');
+      BlocProvider.of<InterprovincialClientBloc>(context)
+          .add(LoadInterprovincialClientEvent());
+      if (widget.rejected) {
+        BlocProvider.of<InterprovincialClientBloc>(context)
+            .add(SearchcInterprovincialClientEvent());
         changeStateCircle();
-        DataAvailablesRoutes param = BlocProvider.of<AvailablesRoutesBloc>(context).state;
+        DataAvailablesRoutes param =
+            BlocProvider.of<AvailablesRoutesBloc>(context).state;
         seat = param.requiredSeats;
         getfrom(param.distictfrom);
         fromAddress = Place(
@@ -79,91 +87,104 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           lat: param.distictfrom.latLang.latitude,
           lng: param.distictfrom.latLang.longitude,
         );
-        getTo( param.distictTo);
+        getTo(param.distictTo);
         toAddress = Place(
           formattedAddress: param.distictTo.districtName,
           name: LocationUtil.getFullAddressName(param.distictTo),
           lat: param.distictTo.latLang.latitude,
           lng: param.distictTo.latLang.longitude,
         );
-        BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
-        BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(from: param.distictfrom ,to: param.distictTo ,radio: param.radio ,seating: param.requiredSeats , paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
-        
-      }else{
+        BlocProvider.of<InterprovincialClientBloc>(context)
+            .add(AvailablesInterprovincialClientEvent());
+        BlocProvider.of<AvailablesRoutesBloc>(context).add(
+            GetAvailablesRoutesEvent(
+                from: param.distictfrom,
+                to: param.distictTo,
+                radio: param.radio,
+                seating: param.requiredSeats,
+                paymentMethods: _prefs.getClientPaymentMethods
+                    .map((e) => int.parse(e))
+                    .toList()));
+      } else {
         getfrom(newLocation);
       }
     });
   }
 
-  void changeStateCircle(){
+  void changeStateCircle() {
     drawCircle = true;
-    setState(() {
-    });
+    setState(() {});
   }
-  void getfrom(LocationEntity from){
+
+  void getfrom(LocationEntity from) {
     Marker markerFrom = MapViewerUtil.generateMarker(
       latLng: from.latLang,
       nameMarkerId: 'FROM_POSITION_MARKER',
       icon: currentPinLocationIcon,
     );
-    BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerFrom));
+    BlocProvider.of<StateinputBloc>(context)
+        .add(AddMarkerStateinputEvent(markers: markerFrom));
     fromLocation = from;
     fromAddress = Place(
-      formattedAddress: fromLocation.districtName ,
-      name: LocationUtil.getFullAddressName(fromLocation),
-      lat: fromLocation.latLang.latitude,
-      lng: fromLocation.latLang.longitude
-    );
+        formattedAddress: fromLocation.districtName,
+        name: LocationUtil.getFullAddressName(fromLocation),
+        lat: fromLocation.latLang.latitude,
+        lng: fromLocation.latLang.longitude);
   }
-  void getTo( LocationEntity to){
+
+  void getTo(LocationEntity to) {
     toLocation = to;
     Marker markerTo = MapViewerUtil.generateMarker(
       latLng: to.latLang,
       nameMarkerId: 'TO_POSITION_MARKER',
       icon: currentPinLocationIcon,
     );
-    BlocProvider.of<StateinputBloc>(context).add(AddMarkerStateinputEvent(markers: markerTo));
+    BlocProvider.of<StateinputBloc>(context)
+        .add(AddMarkerStateinputEvent(markers: markerTo));
     toAddress = Place(
-      formattedAddress: toLocation.districtName ,
-      name: LocationUtil.getFullAddressName(toLocation),
-      lat: toLocation.latLang.latitude,
-      lng: toLocation.latLang.longitude
-    );
+        formattedAddress: toLocation.districtName,
+        name: LocationUtil.getFullAddressName(toLocation),
+        lat: toLocation.latLang.latitude,
+        lng: toLocation.latLang.longitude);
     setState(() {});
   }
-  void getSeating(int seating){
+
+  void getSeating(int seating) {
     seat = seating;
   }
+
   void onSearch() async {
-    if(toLocation.districtName == ''){
+    if (toLocation.districtName == '') {
       Fluttertoast.showToast(
-        msg: 'No se pudo ubicar el distrito del destino seleccionado, pruebe con otro punto',
+        msg:
+            'No se pudo ubicar el distrito del destino seleccionado, pruebe con otro punto',
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
       );
       return;
     }
-    BlocProvider.of<InterprovincialClientBloc>(context).add(AvailablesInterprovincialClientEvent());
-    BlocProvider.of<AvailablesRoutesBloc>(context).add(
-      GetAvailablesRoutesEvent(
+    BlocProvider.of<InterprovincialClientBloc>(context)
+        .add(AvailablesInterprovincialClientEvent());
+    BlocProvider.of<AvailablesRoutesBloc>(context).add(GetAvailablesRoutesEvent(
         from: fromLocation,
         to: toLocation,
         radio: initialCircularRadio,
         seating: seat,
-        paymentMethods: _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList())
-      );
+        paymentMethods:
+            _prefs.getClientPaymentMethods.map((e) => int.parse(e)).toList()));
   }
 
   void setCurrentPosition(LocationEntity location) async {
-    try{
+    try {
       Place fromPlace = Place(
         lat: location.latLang.latitude,
         lng: location.latLang.longitude,
         name: location.streetName ?? '',
         formattedAddress: location.streetName ?? '',
       );
-      Provider.of<ClientTaxiPlaceBloc>(context, listen: false).selectFromLocation(fromPlace);
-    }catch(_){}
+      Provider.of<ClientTaxiPlaceBloc>(context, listen: false)
+          .selectFromLocation(fromPlace);
+    } catch (_) {}
   }
 
   @override
@@ -183,12 +204,15 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
           CustomDropdownClient(),
           BlocBuilder<InterprovincialClientBloc, InterprovincialClientState>(
             builder: (context, state) {
-              if(state is DataInterprovincialClientState){
-                if(state.status == InterprovincialClientStatus.loading){
+              if (state is DataInterprovincialClientState) {
+                if (state.status == InterprovincialClientStatus.loading) {
                   return LoadingPositioned(label: state.loadingMessage);
-                }else if(state.status == InterprovincialClientStatus.notEstablished){
-                  return PositionedChooseRouteWidget(changeStateCircle: changeStateCircle);
-                }else if(state.status == InterprovincialClientStatus.searchInterprovincial){
+                } else if (state.status ==
+                    InterprovincialClientStatus.notEstablished) {
+                  return PositionedChooseRouteWidget(
+                      changeStateCircle: changeStateCircle);
+                } else if (state.status ==
+                    InterprovincialClientStatus.searchInterprovincial) {
                   return Stack(
                     children: [
                       Positioned(
@@ -196,29 +220,33 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         left: 20,
                         right: 20,
                         child: Container(
-                          child: SelectAddressWidget(
-                            fromAddress: fromAddress,
-                            toAddress: toAddress,
-                            onSearch: onSearch,
-                            getSeating: getSeating,
-                            onTapTo: (val){
-                              Navigator.of(context).push( MaterialPageRoute( builder: (context) =>
-                                SearchAddressScreenInterprovincial(
-                                  getTo: getTo,
-                                  getfrom: getfrom,
-                                  fromSelect: fromLocation,
-                                  toSelect: toLocation,
-                                  isSelect: val,
-                                  currentLocation: Position(longitude: location.latLang.longitude,latitude: location.latLang.latitude)
-                                ),
-                                  fullscreenDialog: true ));
-                            },
-                          )
-                        ),
+                            child: SelectAddressWidget(
+                          fromAddress: fromAddress,
+                          toAddress: toAddress,
+                          onSearch: onSearch,
+                          getSeating: getSeating,
+                          onTapTo: (val) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    SearchAddressScreenInterprovincial(
+                                        getTo: getTo,
+                                        getfrom: getfrom,
+                                        fromSelect: fromLocation,
+                                        toSelect: toLocation,
+                                        isSelect: val,
+                                        currentLocation: Position(
+                                            longitude:
+                                                location.latLang.longitude,
+                                            latitude:
+                                                location.latLang.latitude)),
+                                fullscreenDialog: true));
+                          },
+                        )),
                       ),
                     ],
                   );
-                } else if( state.status == InterprovincialClientStatus.availablesInterprovincial ){
+                } else if (state.status ==
+                    InterprovincialClientStatus.availablesInterprovincial) {
                   return Stack(
                     children: [
                       Positioned(
@@ -229,9 +257,8 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         child: Container(
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: Colors.black45,
-                            borderRadius: BorderRadius.circular(10)
-                          ),
+                              color: Colors.black45,
+                              borderRadius: BorderRadius.circular(10)),
                           height: 230,
                           child: AvailableRoutesPage(
                             fromLocation: fromAddress,
@@ -240,24 +267,23 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
                         ),
                       ),
                       Positioned(
-                        top: 52,
-                        right: 15,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black45,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            )
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.white),
-                            onPressed: (){
-                              BlocProvider.of<InterprovincialClientBloc>(context).add(SearchcInterprovincialClientEvent());
-                            }
-                          ),
-                        )
-                      ),
+                          top: 52,
+                          right: 15,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                )),
+                            child: IconButton(
+                                icon: Icon(Icons.close, color: Colors.white),
+                                onPressed: () {
+                                  BlocProvider.of<InterprovincialClientBloc>(
+                                          context)
+                                      .add(SearchcInterprovincialClientEvent());
+                                }),
+                          )),
                     ],
                   );
                 }
@@ -270,4 +296,3 @@ class _InterprovincialClientScreenState extends State<InterprovincialClientScree
     );
   }
 }
-
