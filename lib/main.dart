@@ -30,7 +30,7 @@ import 'app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ij.init();
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
@@ -49,31 +49,27 @@ class MyApp extends StatefulWidget {
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   int msgId = int.tryParse(message['msgId'].toString()) ?? 0;
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    'report_chanel',
-    'Canal Básico',
-    'Este es el canal Básico',
-    color: primaryColor,
-    enableVibration: true,
-    importance: Importance.max,
-    priority: Priority.max,
-    ticker: 'ticker'
-  );
+      'report_chanel', 'Canal Básico', 'Este es el canal Básico',
+      color: primaryColor,
+      enableVibration: true,
+      importance: Importance.max,
+      priority: Priority.max,
+      ticker: 'ticker');
   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
   var platformChannelSpecifics = NotificationDetails(
-    android: androidPlatformChannelSpecifics,
-    iOS: iOSPlatformChannelSpecifics
-  );
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics);
+  /*
   flutterLocalNotificationsPlugin.show(msgId,
     message['notification']['title'],
     message['notification']['body'],
     platformChannelSpecifics,
     payload: ''
-  );
+  );*/
   return Future<void>.value();
 }
 
 class _MyAppState extends State<MyApp> {
-
   PushNotificationProvider pushProvider;
 
   @override
@@ -81,12 +77,12 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     pushProvider = PushNotificationProvider();
     pushProvider.initNotifications(myBackgroundMessageHandler);
-    pushProvider.mensajes.listen((argumento) async{
+    pushProvider.mensajes.listen((argumento) async {
       Map notification = argumento['notification'];
-      if(notification == null) return;
+      if (notification == null) return;
       String title = notification['title'];
-      if(title == null) return;
-      if(title.contains('Rechazados')){
+      if (title == null) return;
+      if (title.contains('Rechazados')) {
         Navigator.pushNamed(context, AppRoute.sendDocumentScreen);
       }
     });
@@ -101,48 +97,66 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => RegistroProvider()),
-        ChangeNotifierProvider(create: (_) => ClientTaxiPlaceBloc()),
-        ChangeNotifierProvider(create: (_) => DriverTaxiPlaceBloc()),
-        ChangeNotifierProvider(create: (_) => PedidoProvider()),
-        ChangeNotifierProvider(create: (_) => OnBoardingProvider(),),
-        ChangeNotifierProvider(create: (_) => AppServicesProvider(),),
-        ChangeNotifierProvider(create: (_) => AvailabilityProvider(),),
-        ChangeNotifierProvider(create: (_) => UserProvider(),),
-      ],
-      child: MultiBlocProvider(
         providers: [
-          BlocProvider<RouteDriveBloc>(create: (_) => ij.getIt<RouteDriveBloc>()),
-          BlocProvider<DriverServiceBloc>(create: (_) => ij.getIt<DriverServiceBloc>()),
-          BlocProvider<InterprovincialDriverBloc>(create: (_) => ij.getIt<InterprovincialDriverBloc>()),
-          BlocProvider<ClientServiceBloc>(create: (_) => ij.getIt<ClientServiceBloc>()),
-          BlocProvider<InterprovincialDriverBloc>(create: (_) => ij.getIt<InterprovincialDriverBloc>()),
-          BlocProvider<InterprovincialClientBloc>(create: (_) => ij.getIt<InterprovincialClientBloc>()),
-          BlocProvider<InterprovincialClientLocationBloc>(create: (_) => ij.getIt<InterprovincialClientLocationBloc>()),
-          BlocProvider<StateinputBloc>(create: (_) => ij.getIt<StateinputBloc>()),
-          BlocProvider<AvailablesRoutesBloc>(create: (_) => ij.getIt<AvailablesRoutesBloc>()),
-          BlocProvider<CommentsDriveBloc>(create: (_) => ij.getIt<CommentsDriveBloc>()),
-          BlocProvider<MeetingDriveAndPassengerBloc>(create: (_) => ij.getIt<MeetingDriveAndPassengerBloc>()),
-          BlocProvider<PointMeetingDriveBloc>(create: (_) => ij.getIt<PointMeetingDriveBloc>()),
-          
+          ChangeNotifierProvider(create: (_) => RegistroProvider()),
+          ChangeNotifierProvider(create: (_) => ClientTaxiPlaceBloc()),
+          ChangeNotifierProvider(create: (_) => DriverTaxiPlaceBloc()),
+          ChangeNotifierProvider(create: (_) => PedidoProvider()),
+          ChangeNotifierProvider(
+            create: (_) => OnBoardingProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AppServicesProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AvailabilityProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => UserProvider(),
+          ),
         ],
-        child: MaterialApp(
-          title: 'MiRuta',
-          theme: appTheme,
-          localizationsDelegates: const [
-            GlobalWidgetsLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<RouteDriveBloc>(
+                create: (_) => ij.getIt<RouteDriveBloc>()),
+            BlocProvider<DriverServiceBloc>(
+                create: (_) => ij.getIt<DriverServiceBloc>()),
+            BlocProvider<InterprovincialDriverBloc>(
+                create: (_) => ij.getIt<InterprovincialDriverBloc>()),
+            BlocProvider<ClientServiceBloc>(
+                create: (_) => ij.getIt<ClientServiceBloc>()),
+            BlocProvider<InterprovincialDriverBloc>(
+                create: (_) => ij.getIt<InterprovincialDriverBloc>()),
+            BlocProvider<InterprovincialClientBloc>(
+                create: (_) => ij.getIt<InterprovincialClientBloc>()),
+            BlocProvider<InterprovincialClientLocationBloc>(
+                create: (_) => ij.getIt<InterprovincialClientLocationBloc>()),
+            BlocProvider<StateinputBloc>(
+                create: (_) => ij.getIt<StateinputBloc>()),
+            BlocProvider<AvailablesRoutesBloc>(
+                create: (_) => ij.getIt<AvailablesRoutesBloc>()),
+            BlocProvider<CommentsDriveBloc>(
+                create: (_) => ij.getIt<CommentsDriveBloc>()),
+            BlocProvider<MeetingDriveAndPassengerBloc>(
+                create: (_) => ij.getIt<MeetingDriveAndPassengerBloc>()),
+            BlocProvider<PointMeetingDriveBloc>(
+                create: (_) => ij.getIt<PointMeetingDriveBloc>()),
           ],
-          supportedLocales: [
-            const Locale('en', 'US'),
-            const Locale('es', 'ES')
-          ],
-          debugShowCheckedModeBanner: false,
-          onGenerateRoute: AppRoute.generateRoute,
-          home: SplashScreen(),
-        ),
-      )
-    );
+          child: MaterialApp(
+            title: 'MiRuta',
+            theme: appTheme,
+            localizationsDelegates: const [
+              GlobalWidgetsLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'),
+              const Locale('es', 'ES')
+            ],
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: AppRoute.generateRoute,
+            home: SplashScreen(),
+          ),
+        ));
   }
 }

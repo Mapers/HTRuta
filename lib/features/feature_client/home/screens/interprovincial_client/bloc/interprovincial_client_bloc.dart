@@ -17,67 +17,74 @@ import 'package:meta/meta.dart';
 part 'interprovincial_client_event.dart';
 part 'interprovincial_client_state.dart';
 
-class InterprovincialClientBloc extends Bloc<InterprovincialClientEvent, InterprovincialClientState> {
+class InterprovincialClientBloc
+    extends Bloc<InterprovincialClientEvent, InterprovincialClientState> {
   final InterprovincialClientRemoteDataSoruce interprovincialClientRemote;
   InterprovincialDataFirestore interprovincialDataFirestore;
   final ServiceDataRemote serviceDataRemote;
-  InterprovincialClientBloc({ @required this.interprovincialClientRemote, @required this.interprovincialDataFirestore, @required this.serviceDataRemote }) : super(DataInterprovincialClientState.initial());
+  InterprovincialClientBloc(
+      {@required this.interprovincialClientRemote,
+      @required this.interprovincialDataFirestore,
+      @required this.serviceDataRemote})
+      : super(DataInterprovincialClientState.initial());
   @override
   Stream<InterprovincialClientState> mapEventToState(
     InterprovincialClientEvent event,
   ) async* {
-    if(event is LoadInterprovincialClientEvent){
+    if (event is LoadInterprovincialClientEvent) {
       await Future.delayed(Duration(seconds: 2));
-      yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.notEstablished
-      );
-    }else if(event is InitialInterprovincialClientEvent){
+      yield DataInterprovincialClientState.initial()
+          .copyWith(status: InterprovincialClientStatus.notEstablished);
+    } else if (event is InitialInterprovincialClientEvent) {
+      yield DataInterprovincialClientState();
+      yield DataInterprovincialClientState.initial()
+          .copyWith(status: InterprovincialClientStatus.notEstablished);
+    } else if (event is SearchcInterprovincialClientEvent) {
+      yield DataInterprovincialClientState();
+      yield DataInterprovincialClientState.initial()
+          .copyWith(status: InterprovincialClientStatus.searchInterprovincial);
+    } else if (event is AvailablesInterprovincialClientEvent) {
       yield DataInterprovincialClientState();
       yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.notEstablished
-      );
-    }else if(event is SearchcInterprovincialClientEvent){
-      yield DataInterprovincialClientState();
-      yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.searchInterprovincial
-      );
-    }else if(event is AvailablesInterprovincialClientEvent){
-      yield DataInterprovincialClientState();
-      yield DataInterprovincialClientState.initial().copyWith(
-        status: InterprovincialClientStatus.availablesInterprovincial
-      );
-    }else if(event is DestinationInterprovincialClientEvent){
-      try{
-        List<Placemark> placemarkFrom = await placemarkFromCoordinates(event.to.latitude,event.to.longitude );
+          status: InterprovincialClientStatus.availablesInterprovincial);
+    } else if (event is DestinationInterprovincialClientEvent) {
+      try {
+        List<Placemark> placemarkFrom = await placemarkFromCoordinates(
+            event.to.latitude, event.to.longitude);
         Placemark placemark = placemarkFrom.first;
         yield DataInterprovincialClientState();
         yield DataInterprovincialClientState.initial().copyWith(
-          status: InterprovincialClientStatus.searchInterprovincial,
-          interprovincialRoute: InterprovincialRouteInServiceEntity.onlyLocation(
-            LocationEntity(
-              latLang: LatLng(event.to.latitude, event.to.longitude ),
-              regionName: placemark.administrativeArea,
-              provinceName: placemark.subAdministrativeArea,
-              districtName: placemark.locality ,
-              streetName: placemark.thoroughfare
-            )
-          )
-        );
-      }catch(_){}
-    }else if(event is SendDataSolicitudInterprovincialClientEvent){
-      await interprovincialClientRemote.sendRequest(negotiationEntity: event.negotiationEntity);
-    }else if(event is AcceptDataSolicitudInterprovincialClientEvent){
+            status: InterprovincialClientStatus.searchInterprovincial,
+            interprovincialRoute:
+                InterprovincialRouteInServiceEntity.onlyLocation(LocationEntity(
+                    latLang: LatLng(event.to.latitude, event.to.longitude),
+                    regionName: placemark.administrativeArea,
+                    provinceName: placemark.subAdministrativeArea,
+                    districtName: placemark.locality,
+                    streetName: placemark.thoroughfare)));
+      } catch (_) {}
+    } else if (event is SendDataSolicitudInterprovincialClientEvent) {
+      print('PRUEBA EVENTO');
+      await interprovincialClientRemote.sendRequest(
+          negotiationEntity: event.negotiationEntity);
+    } else if (event is AcceptDataSolicitudInterprovincialClientEvent) {
       DataInterprovincialClientState currentState = state;
-      final onAcceptRequest = await interprovincialDataFirestore.acceptRequest(documentId: event.serviceDocumentId, request: event.interprovincialRequest, origin: InterprovincialDataFirestoreOrigin.client);
-      await serviceDataRemote.acceptRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId, onAcceptRequest.passenger.documentId);
+      final onAcceptRequest = await interprovincialDataFirestore.acceptRequest(
+          documentId: event.serviceDocumentId,
+          request: event.interprovincialRequest,
+          origin: InterprovincialDataFirestoreOrigin.client);
+      await serviceDataRemote.acceptRequest(
+          event.negotiationEntity.serviceId,
+          event.negotiationEntity.passengerId,
+          onAcceptRequest.passenger.documentId);
       yield currentState.copyWith(
-        passengerDocumentId: onAcceptRequest.passenger.documentId
-      );
-
-    }else if(event is RejecDataSolicitudInterprovincialClientEvent){
-      await serviceDataRemote.rejectRequest(event.negotiationEntity.serviceId, event.negotiationEntity.passengerId);
-    }else if(event is SendQualificationInterprovincialClientEvent){
-      await interprovincialClientRemote.qualificationRequest(qualification: event.qualificationEntity);
+          passengerDocumentId: onAcceptRequest.passenger.documentId);
+    } else if (event is RejecDataSolicitudInterprovincialClientEvent) {
+      await serviceDataRemote.rejectRequest(event.negotiationEntity.serviceId,
+          event.negotiationEntity.passengerId);
+    } else if (event is SendQualificationInterprovincialClientEvent) {
+      await interprovincialClientRemote.qualificationRequest(
+          qualification: event.qualificationEntity);
     }
   }
 }
