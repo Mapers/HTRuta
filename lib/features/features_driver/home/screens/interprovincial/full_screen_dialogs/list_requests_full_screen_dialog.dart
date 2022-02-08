@@ -233,51 +233,55 @@ class _ListRequestsFullScreenDialogState
         context: context,
         builder: (ctx) => AlertDialog(
               title: Text('Enviar confraoferta'),
-              content: ListView(
-                shrinkWrap: true,
-                children: [
-                  PointMeetingDriveNegotation(
-                    interprovincialRequest: interprovincialRequest,
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          double newPrice =
-                              double.tryParse(textController.text);
-                          newPrice ??= interprovincialRequest.price;
-                          newPrice--;
-                          textController.text = newPrice.toStringAsFixed(2);
-                        },
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: TextField(
-                        controller: textController,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                      )),
-                      SizedBox(width: 20),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          double newPrice =
-                              double.tryParse(textController.text);
-                          newPrice ??= interprovincialRequest.price;
-                          newPrice++;
-                          textController.text = newPrice.toStringAsFixed(2);
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Si el pasajero acepta la contraoferta, este automaticamente se convertirá en pasajero.',
-                    style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                    textAlign: TextAlign.center,
-                  )
-                ],
+              content: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  //shrinkWrap: true,
+                  children: [
+                    PointMeetingDriveNegotation(
+                      interprovincialRequest: interprovincialRequest,
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            double newPrice =
+                                double.tryParse(textController.text);
+                            newPrice ??= interprovincialRequest.price;
+                            newPrice--;
+                            textController.text = newPrice.toStringAsFixed(2);
+                          },
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: TextField(
+                          controller: textController,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                        )),
+                        SizedBox(width: 20),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            double newPrice =
+                                double.tryParse(textController.text);
+                            newPrice ??= interprovincialRequest.price;
+                            newPrice++;
+                            textController.text = newPrice.toStringAsFixed(2);
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Si el pasajero acepta la contraoferta, este automaticamente se convertirá en pasajero.',
+                      style:
+                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
               ),
               actions: [
                 OutlineButton(
