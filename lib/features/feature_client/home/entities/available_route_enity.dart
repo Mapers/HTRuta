@@ -41,13 +41,13 @@ class AvailableRouteEntity extends Equatable {
 
   factory AvailableRouteEntity.fromJson(Map<String, dynamic> dataJson) {
     return AvailableRouteEntity(
-      id: dataJson['Id'].toString(),
+      id: dataJson['id'].toString(),
       availableSeats: dataJson['cantidadDisponible'] ?? 0,
       documentId: dataJson['IDocumento'],
       // status: dataJson['status'],
       status: toInterprovincialStatusFromString(dataJson['estadoServicio']),
       route: InterprovincialRouteInServiceEntity(
-          id: dataJson['id']?.toString(),
+          id: dataJson['id'] != null ? dataJson['id'].toString() : '',
           name: dataJson['name'] ?? '',
           driverPhone: dataJson['phone_number'] ?? '',
           driverCellphone: dataJson['phone_number'] ?? '',

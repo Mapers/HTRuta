@@ -152,7 +152,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
             height: MediaQuery.of(context).size.height,
           )
         ),
-        widget.availablesRoutesEntity.route.driverImage == null? Container() : Positioned(
+        /* widget.availablesRoutesEntity.route.driverImage == null? Container() : Positioned(
           top: 90,
           right: 15,
           child: Card(
@@ -190,7 +190,7 @@ class _MapCoordenationDrivePageState extends State<MapCoordenationDrivePage> wit
               ),
             )
           ),
-        ),
+        ), */
         element != null ? Positioned(
           top: 25,
           right: 15,
